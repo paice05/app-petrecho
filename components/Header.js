@@ -13,10 +13,7 @@ const iPhoneX = () =>
   Platform.OS === 'ios' && (height === 812 || width === 812 || height === 896 || width === 896);
 
 const BellButton = ({ isWhite, style, navigation }) => (
-  <TouchableOpacity
-    style={[styles.button, style]}
-    onPress={() => navigation.navigate('ClientForm')}
-  >
+  <TouchableOpacity style={[styles.button, style]}>
     <Icon
       family="NowExtra"
       size={16}
@@ -76,7 +73,7 @@ class Header extends React.Component {
           <BellButton key="chat-home" navigation={navigation} isWhite={white} />,
           <BasketButton key="basket-home" navigation={navigation} isWhite={white} />,
         ];
-      case 'Clients':
+      case 'Clientes':
         return [<NewClient key="basket-home" navigation={navigation} isWhite={white} />];
       case 'Deals':
         return [
