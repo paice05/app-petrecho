@@ -42,5 +42,11 @@ export default [
     description:
       'The smooth woven-wool is water resistant to ensure you stay pristine after a long-haul flight.',
     horizontal: true
+  },
+  {
+    title: 'Alexandre Barbosa',
+    subtitle: '14 991038089',
+    cta: 'Junho',
+    horizontal: true
   }
 ];

@@ -16,9 +16,11 @@ import Profile from '../screens/Profile';
 import React from 'react';
 import Register from '../screens/Register';
 import SettingsScreen from '../screens/Settings';
+import Clients from '../screens/Clients';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
+import ClientForm from '../screens/ClientForm';
 
 const { width } = Dimensions.get('screen');
 
@@ -147,6 +149,72 @@ function HomeStack(props) {
         }}
       />
       <Stack.Screen
+        name="ClientForm"
+        component={ClientForm}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header title="" back white transparent navigation={navigation} scene={scene} />
+          ),
+          headerTransparent: true,
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function ClientsStack(props) {
+  return (
+    <Stack.Navigator
+      initialRouteName="Clientes"
+      screenOptions={{
+        mode: 'card',
+        headerShown: 'screen',
+      }}
+    >
+      <Stack.Screen
+        name="Clientes"
+        component={Clients}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header back title="Clientes" navigation={navigation} scene={scene} />
+          ),
+          cardStyle: { backgroundColor: '#FFFFFF' },
+        }}
+      />
+      <Stack.Screen
+        name="Pro"
+        component={Pro}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header title="" back white transparent navigation={navigation} scene={scene} />
+          ),
+          headerTransparent: true,
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+function ClientFormStack(props) {
+  return (
+    <Stack.Navigator
+      initialRouteName="Novo cliente"
+      screenOptions={{
+        mode: 'card',
+        headerShown: 'screen',
+      }}
+    >
+      <Stack.Screen
+        name="Novo cliente"
+        component={ClientForm}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header back title="Clientes" navigation={navigation} scene={scene} />
+          ),
+          cardStyle: { backgroundColor: '#FFFFFF' },
+        }}
+      />
+      <Stack.Screen
         name="Pro"
         component={Pro}
         options={{
@@ -194,6 +262,20 @@ function AppStack(props) {
       <Drawer.Screen
         name="Home"
         component={HomeStack}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Drawer.Screen
+        name="Clientes"
+        component={ClientsStack}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Drawer.Screen
+        name="Novo cliente"
+        component={ClientFormStack}
         options={{
           headerShown: false,
         }}

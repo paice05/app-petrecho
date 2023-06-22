@@ -6,18 +6,12 @@ import { Card, Button } from '../components';
 import articles from '../constants/articles';
 const { width } = Dimensions.get('screen');
 
-class Home extends React.Component {
-  renderArticles = () => {
+class Clients extends React.Component {
+  renderClients = () => {
     return (
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.articles}>
         <Block flex>
-          <Card item={articles[0]} horizontal />
-          <Block flex row>
-            <Card item={articles[1]} style={{ marginRight: theme.SIZES.BASE }} />
-            <Card item={articles[2]} />
-          </Block>
-          <Card item={articles[3]} horizontal />
-          <Card item={articles[4]} full />
+          <Card item={articles[7]} horizontal />
         </Block>
       </ScrollView>
     );
@@ -25,15 +19,15 @@ class Home extends React.Component {
 
   render() {
     return (
-      <Block flex center style={styles.home}>
-        {this.renderArticles()}
+      <Block flex center style={styles.clients}>
+        {this.renderClients()}
       </Block>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  home: {
+  clients: {
     width: width,
   },
   articles: {
@@ -44,4 +38,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Home;
+export default Clients;
