@@ -23,43 +23,38 @@ const ClientForm = () => {
           <CustomInput placeholder="Digite o telefone do cliente" labelText="Telefone" />
         </Block>
 
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-          <CustomInput
-            placeholder="Escolha o mês de aniversáio"
-            labelText="Mês de aniversário"
-            options={['Janeiro', 'Fevereiro', 'Março']}
-          />
-        </Block>
-
         <Block flex center style={{ marginTop: 8 }}>
           <Select
             labelText="Mês de aniversário"
-            defaultIndex={''}
+            initialValue="Escolha um mês"
             options={['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio']}
           />
         </Block>
 
         <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-          <CustomInput placeholder="Escolha um tipo" labelText="Tipo de cliente" />
+          <Select
+            labelText="Tipo de cliente"
+            initialValue="Escolha um tipo"
+            options={['Cliente', 'Funcionário']}
+          />
         </Block>
       </Block>
-      <Block flex>
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-          <Button
-            textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
-            color="default"
-            style={styles.button}
-          >
-            Voltar
-          </Button>
-          <Button
-            textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
-            color="success"
-            style={styles.button}
-          >
-            Cadastrar
-          </Button>
-        </Block>
+
+      <Block style={styles.container}>
+        <Button
+          textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
+          color="default"
+          style={styles.button}
+        >
+          Voltar
+        </Button>
+        <Button
+          textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
+          color="success"
+          style={styles.button}
+        >
+          Cadastrar
+        </Button>
       </Block>
     </ScrollView>
   );
@@ -85,6 +80,13 @@ const styles = StyleSheet.create({
     paddingVertical: theme.SIZES.BASE,
     paddingHorizontal: 2,
     fontFamily: 'montserrat-regular',
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: theme.SIZES.BASE,
   },
 });
 

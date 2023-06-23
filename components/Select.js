@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { Block, Text } from 'galio-framework';
@@ -7,16 +7,23 @@ import { Block, Text } from 'galio-framework';
 import Icon from './Icon';
 import { nowTheme } from '../constants';
 
+const { width } = Dimensions.get('screen');
+
 class DropDown extends React.Component {
   state = {
     value: '',
   };
 
+  componentDidMount() {
+    const { initialValue } = this.props;
+
+    this.setState({ value: initialValue });
+  }
+
   handleOnSelect = (index, value) => {
     const { onSelect } = this.props;
 
     this.setState({ value: value });
-    onSelect && onSelect(index, value);
   };
 
   render() {
@@ -29,6 +36,7 @@ class DropDown extends React.Component {
       color,
       textStyle,
       style,
+      labelText,
       ...props
     } = this.props;
 
@@ -37,25 +45,29 @@ class DropDown extends React.Component {
     const textStyles = [styles.text, textStyle];
 
     return (
-      <ModalDropdown
-        style={modalStyles}
-        onSelect={this.handleOnSelect}
-        dropdownStyle={styles.dropdown}
-        dropdownTextStyle={{ paddingLeft: 16, fontSize: 12 }}
-        {...props}
-      >
-        <Block flex row middle space="between">
-          <Text size={12} style={textStyles}>
-            {this.state.value}
-          </Text>
-          <Icon
-            name={iconName || 'minimal-down2x'}
-            family={iconFamily || 'NowExtra'}
-            size={iconSize || 10}
-            color={iconColor || nowTheme.COLORS.WHITE}
-          />
-        </Block>
-      </ModalDropdown>
+      <Block style={styles.container}>
+        <Text> {labelText} </Text>
+        <ModalDropdown
+          style={modalStyles}
+          onSelect={this.handleOnSelect}
+          dropdownStyle={styles.dropdown}
+          dropdownTextStyle={{ paddingLeft: 16, fontSize: 12 }}
+          searchPlaceholder="Escolha um tipo"
+          {...props}
+        >
+          <Block flex row middle space="between">
+            <Text size={12} style={textStyles}>
+              {this.state.value}
+            </Text>
+            <Icon
+              name={iconName || 'minimal-down2x'}
+              family={iconFamily || 'NowExtra'}
+              size={iconSize || 10}
+              color={iconColor || nowTheme.COLORS.WHITE}
+            />
+          </Block>
+        </ModalDropdown>
+      </Block>
     );
   }
 }
@@ -70,8 +82,9 @@ DropDown.propTypes = {
 };
 
 const styles = StyleSheet.create({
+  container: { marginBottom: 16 },
   qty: {
-    width: 100,
+    width: width * 0.9,
     backgroundColor: nowTheme.COLORS.DEFAULT,
     paddingHorizontal: 16,
     paddingTop: 10,
@@ -89,7 +102,7 @@ const styles = StyleSheet.create({
   dropdown: {
     marginTop: 8,
     marginLeft: -16,
-    width: 100,
+    width: 500,
   },
 });
 
