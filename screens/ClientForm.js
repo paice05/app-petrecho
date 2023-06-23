@@ -7,121 +7,63 @@ import { Block, Text, Button as GaButton, theme } from 'galio-framework';
 // Now UI themed components
 import { Images, nowTheme, articles, tabs } from '../constants';
 import { Button, Select, Icon, Input, Header, Switch } from '../components';
+import CustomInput from '../components/CustomInput';
 
 const { width } = Dimensions.get('screen');
 
-class ClientForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      checkSelected: [],
-      'switch-1': true,
-      'switch-2': false,
-    };
-  }
-
-  renderInputs = () => {
-    return (
+const ClientForm = () => {
+  return (
+    <ScrollView showsVerticalScrollIndicator={false}>
       <Block flex style={styles.group}>
-        <Text size={16} style={styles.title}>
-          Nome
-        </Text>
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-          <Input
-            primary={this.state.primaryFocus}
-            right
-            placeholder="Digite o nome do cliente"
-            onFocus={() => this.setState({ primaryFocus: true })}
-            onBlur={() => this.setState({ primaryFocus: false })}
-            iconContent={<Block />}
-            shadowless
-          />
+        <Block style={{ paddingHorizontal: theme.SIZES.BASE, paddingTop: 50 }}>
+          <CustomInput placeholder="Digite seu nome" labelText="Nome" />
         </Block>
-        <Text size={16} style={styles.title}>
-          Telefone
-        </Text>
+
         <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-          <Input
-            primary={this.state.primaryFocus}
-            right
-            placeholder="Digite o telefone do cliente"
-            onFocus={() => this.setState({ primaryFocus: true })}
-            onBlur={() => this.setState({ primaryFocus: false })}
-            iconContent={<Block />}
-            shadowless
-          />
+          <CustomInput placeholder="Digite o telefone do cliente" labelText="Telefone" />
         </Block>
-        <Text size={16} style={styles.title}>
-          Mês de aniversário
-        </Text>
+
         <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-          <Input
-            success={this.state.successFocus}
-            right
-            shadowless
+          <CustomInput
             placeholder="Escolha o mês de aniversáio"
-            onFocus={() => this.setState({ successFocus: true })}
-            onBlur={() => this.setState({ successFocus: false })}
-            iconContent={<Block />}
+            labelText="Mês de aniversário"
+            options={['Janeiro', 'Fevereiro', 'Março']}
           />
         </Block>
-        <Text size={16} style={styles.title}>
-          Tipo de cliente
-        </Text>
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-          <Input
-            success={this.state.successFocus}
-            right
-            shadowless
-            placeholder="Escolha um tipo"
-            onFocus={() => this.setState({ successFocus: true })}
-            onBlur={() => this.setState({ successFocus: false })}
-            iconContent={<Block />}
+
+        <Block flex center style={{ marginTop: 8 }}>
+          <Select
+            labelText="Mês de aniversário"
+            defaultIndex={''}
+            options={['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio']}
           />
+        </Block>
+
+        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
+          <CustomInput placeholder="Escolha um tipo" labelText="Tipo de cliente" />
         </Block>
       </Block>
-    );
-  };
-
-  renderButtons = () => {
-    return (
       <Block flex>
         <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-          <Block center>
-            <Button
-              textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
-              color="success"
-              style={styles.button}
-            >
-              Voltar
-            </Button>
-            <Button
-              textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
-              color="success"
-              style={styles.button}
-            >
-              Cadastrar
-            </Button>
-          </Block>
+          <Button
+            textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
+            color="default"
+            style={styles.button}
+          >
+            Voltar
+          </Button>
+          <Button
+            textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
+            color="success"
+            style={styles.button}
+          >
+            Cadastrar
+          </Button>
         </Block>
       </Block>
-    );
-  };
-
-  render() {
-    return (
-      <Block flex center>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 30, width }}
-        >
-          {this.renderInputs()}
-          {this.renderButtons()}
-        </ScrollView>
-      </Block>
-    );
-  }
-}
+    </ScrollView>
+  );
+};
 
 const styles = StyleSheet.create({
   title: {
@@ -136,7 +78,13 @@ const styles = StyleSheet.create({
   },
   button: {
     marginBottom: theme.SIZES.BASE,
+    width: 100,
+  },
+  articles: {
     width: width - theme.SIZES.BASE * 2,
+    paddingVertical: theme.SIZES.BASE,
+    paddingHorizontal: 2,
+    fontFamily: 'montserrat-regular',
   },
 });
 

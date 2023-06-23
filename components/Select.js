@@ -9,7 +9,7 @@ import { nowTheme } from '../constants';
 
 class DropDown extends React.Component {
   state = {
-    value: 1
+    value: '',
   };
 
   handleOnSelect = (index, value) => {
@@ -66,7 +66,7 @@ DropDown.propTypes = {
   iconFamily: PropTypes.string,
   iconSize: PropTypes.number,
   color: PropTypes.string,
-  textStyle: PropTypes.any
+  textStyle: PropTypes.any,
 };
 
 const styles = StyleSheet.create({
@@ -80,17 +80,17 @@ const styles = StyleSheet.create({
     shadowColor: 'rgba(0, 0, 0, 0.1)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
-    shadowOpacity: 1
+    shadowOpacity: 1,
   },
   text: {
     color: nowTheme.COLORS.WHITE,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   dropdown: {
     marginTop: 8,
     marginLeft: -16,
-    width: 100
-  }
+    width: 100,
+  },
 });
 
 export default DropDown;

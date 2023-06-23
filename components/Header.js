@@ -43,12 +43,9 @@ const NewClient = ({ isWhite, style, navigation }) => (
     style={[styles.button, style]}
     onPress={() => navigation.navigate('ClientForm')}
   >
-    <Icon
-      family="NowExtra"
-      size={16}
-      name="basket2x"
-      color={nowTheme.COLORS[isWhite ? 'WHITE' : 'ICON']}
-    />
+    <Text size={16} color={nowTheme.COLORS[isWhite ? 'WHITE' : 'ICON']}>
+      Novo
+    </Text>
   </TouchableOpacity>
 );
 

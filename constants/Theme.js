@@ -42,16 +42,16 @@ const COLORS = {
   GITHUB: '#333333',
   BEHANCE: '#1769ff',
   REDDIT: '#ff4500',
-  GOOGLE: '#dd4b39'
+  GOOGLE: '#dd4b39',
 };
 
 const SIZES = {
   BASE: 16,
   FONT: 16,
-  OPACITY: 0.8
+  OPACITY: 0.8,
 };
 
 export default {
   COLORS,
-  SIZES
+  SIZES,
 };
