@@ -8,6 +8,7 @@ import { Block, Text, Button as GaButton, theme } from 'galio-framework';
 import { Images, nowTheme, articles, tabs } from '../constants';
 import { Button, Select, Icon, Input, Header, Switch } from '../components';
 import CustomInput from '../components/CustomInput';
+import { CustomSelectBottom } from '../components/CustomSelectBottom';
 
 const { width } = Dimensions.get('screen');
 
@@ -24,17 +25,30 @@ const ClientForm = () => {
         </Block>
 
         <Block flex center style={{ marginTop: 8 }}>
-          <Select
+          <CustomSelectBottom
             labelText="Mês de aniversário"
-            initialValue="Escolha um mês"
-            options={['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio']}
+            placeholder="Escolha um mês"
+            options={[
+              'Janeiro',
+              'Fevereiro',
+              'Março',
+              'Abril',
+              'Maio',
+              'Junho',
+              'Julho',
+              'Agosto',
+              'Setembro',
+              'Outubro',
+              'Novembro',
+              'Dezembro',
+            ]}
           />
         </Block>
 
         <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-          <Select
+          <CustomSelectBottom
             labelText="Tipo de cliente"
-            initialValue="Escolha um tipo"
+            placeholder="Escolha um tipo"
             options={['Cliente', 'Funcionário']}
           />
         </Block>
