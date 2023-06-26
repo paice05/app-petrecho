@@ -17,7 +17,6 @@ const Clients = () => {
 
 const styles = StyleSheet.create({
   card: {
-    width: width - theme.SIZES.BASE * 2,
     padding: 8
   },
 });
