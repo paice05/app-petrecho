@@ -37,6 +37,7 @@ class DropDown extends React.Component {
       textStyle,
       style,
       labelText,
+      labelStyle,
       ...props
     } = this.props;
 
@@ -44,9 +45,11 @@ class DropDown extends React.Component {
 
     const textStyles = [styles.text, textStyle];
 
+    const labelStyles = [styles.labelText];
+
     return (
       <Block style={styles.container}>
-        <Text> {labelText} </Text>
+        <Text style={labelStyles}> {labelText} </Text>
         <ModalDropdown
           style={modalStyles}
           onSelect={this.handleOnSelect}
@@ -85,11 +88,13 @@ const styles = StyleSheet.create({
   container: { marginBottom: 16 },
   qty: {
     width: width * 0.9,
-    backgroundColor: nowTheme.COLORS.DEFAULT,
+    backgroundColor: '#FFFFFF',
+    borderColor: nowTheme.COLORS.BORDER,
+    borderWidth: 1,
     paddingHorizontal: 16,
     paddingTop: 10,
     paddingBottom: 9.5,
-    borderRadius: 4,
+    borderRadius: 30,
     shadowColor: 'rgba(0, 0, 0, 0.1)',
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
@@ -100,9 +105,16 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   dropdown: {
-    marginTop: 8,
-    marginLeft: -16,
-    width: 500,
+    marginTop: 6,
+    marginLeft: -14,
+    width: 365,
+  },
+  labelText: {
+    fontWeight: '500',
+    fontSize: 14,
+    marginLeft: 10,
+    marginTop: 4,
+    marginBottom: 5,
   },
 });
 

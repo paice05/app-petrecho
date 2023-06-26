@@ -15,7 +15,7 @@ const ClientForm = () => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Block flex style={styles.group}>
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE, paddingTop: 50 }}>
+        <Block style={{ paddingHorizontal: theme.SIZES.BASE, paddingTop: 70 }}>
           <CustomInput placeholder="Digite seu nome" labelText="Nome" />
         </Block>
 

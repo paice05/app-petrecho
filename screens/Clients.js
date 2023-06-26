@@ -2,53 +2,29 @@ import React from 'react';
 import { StyleSheet, Dimensions, ScrollView } from 'react-native';
 import { Block, theme, Text, Card } from 'galio-framework';
 
-import articles from '../constants/articles';
-import { nowTheme } from '../constants';
+import CardClient from '../components/CardClient';
 const { width } = Dimensions.get('screen');
 
-class Clients extends React.Component {
-  renderClients = () => {
-    return (
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.articles}>
-        <Block flex>
-          <Card
-            flex
-            borderless
-            style={styles.card}
-            title="Alexandre Barbosa"
-            caption="14 99103-8089"
-            location="Bauru, SP"
-          />
-        </Block>
-      </ScrollView>
-    );
-  };
-
-  render() {
-    return (
-      <Block flex center style={styles.clients}>
-        {this.renderClients()}
-      </Block>
-    );
-  }
-}
+const Clients = () => {
+  return (
+    <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
+      <CardClient nome="Alexandre Barbosa" telefone="14 99103-8089" aniversario="Dezembro" />
+      <CardClient nome="Alexandre Barbosa" telefone="14 99103-8089" aniversario="Dezembro" />
+      <CardClient nome="Alexandre Barbosa" telefone="14 99103-8089" aniversario="Dezembro" />
+    </ScrollView>
+  );
+};
 
 const styles = StyleSheet.create({
-  clients: {
-    width: width,
-  },
-  articles: {
+  card: {
     width: width - theme.SIZES.BASE * 2,
     paddingVertical: theme.SIZES.BASE,
-    paddingHorizontal: 2,
-    fontFamily: 'montserrat-regular',
-  },
-  card: {
+    paddingHorizontal: 3,
     backgroundColor: theme.COLORS.WHITE,
-    marginVertical: theme.SIZES.BASE,
-    borderWidth: 0,
+    marginVertical: theme.SIZES.BASE * 3,
     minHeight: 114,
-    marginBottom: 4,
+    marginBottom: 10,
+    marginLeft: 20,
   },
 });
 
