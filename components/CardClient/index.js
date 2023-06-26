@@ -1,48 +1,67 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { theme, Card, Block, Text } from 'galio-framework';
+import { StyleSheet, Dimensions } from 'react-native';
+import { theme, Card, Block, Text, Button as GaButton } from 'galio-framework';
 
 import { nowTheme } from '../../constants';
 
+const { height, width } = Dimensions.get('window');
+
 const CardClient = ({ nome, telefone, aniversario }) => {
   const cardContainer = [styles.card, styles.shadow];
+
+  const isLargeName = nome.length > 20;
+
   return (
-    <Block card flex style={styles.card}>
-      <Block flex space="between" style={styles.cardDescription}>
-        <Block flex>
-          <Text style={styles.cardTitle}>{nome}</Text>
-          <Block flex>
-            <Text style={styles.cardSubtitle}>{telefone}</Text>
-          </Block>
-          <Block flex>
-            <Text style={styles.cardSubtitle}>{aniversario}</Text>
-          </Block>
+    <Block flex space="between" style={styles.container}>
+      <Block style={styles.wraper}>
+        <Text style={styles.cardTitle}>
+          {nome.slice(0, 20)}
+          {isLargeName ? '...' : ''}
+        </Text>
+
+        <Block row>
+          <GaButton
+            round
+            onlyIcon
+            shadowless
+            icon="edit"
+            iconFamily="Font-Awesome"
+            iconColor={theme.COLORS.WHITE}
+            iconSize={theme.SIZES.BASE * 0.5}
+            color={nowTheme.COLORS.SUCCESS}
+            style={[styles.social]}
+          />
+
+          <GaButton
+            round
+            onlyIcon
+            shadowless
+            icon="trash"
+            iconFamily="Font-Awesome"
+            iconColor={theme.COLORS.WHITE}
+            iconSize={theme.SIZES.BASE * 0.5}
+            color={nowTheme.COLORS.ERROR}
+            style={[styles.social]}
+          />
         </Block>
+      </Block>
+
+      <Block flex>
+        <Text style={styles.cardSubtitle}>{telefone}</Text>
+        <Text style={styles.cardSubtitle}>{aniversario}</Text>
       </Block>
     </Block>
   );
 };
 
 const styles = StyleSheet.create({
-  card: {
-    marginVertical: theme.SIZES.BASE,
-    backgroundColor: nowTheme.COLORS.BEHANCE,
-    borderRadius: 8,
-    borderStyle: 'solid',
-    borderWidth: 2,
-    borderColor: 'black',
-    minHeight: 114,
-    marginBottom: 4,
-    height: 120,
-    width: 370,
-    bor,
-  },
-  cardDescription: {
+  container: {
     padding: theme.SIZES.BASE / 2,
     borderRadius: 8,
     borderStyle: 'solid',
     borderWidth: 2,
     borderColor: 'black',
+    marginBottom: 16,
   },
   cardTitle: {
     paddingHorizontal: 9,
@@ -56,18 +75,15 @@ const styles = StyleSheet.create({
   },
   cardSubtitle: {
     paddingHorizontal: 9,
-    paddingTop: 7,
-    paddingBottom: 15,
-    fontSize: 32,
+    fontSize: 14,
     fontFamily: 'montserrat-regular',
     color: nowTheme.COLORS.BLACK,
   },
-  shadow: {
-    shadowColor: '#8898AA',
-    shadowOffset: { width: 0, height: 1 },
-    shadowRadius: 6,
-    shadowOpacity: 0.1,
-    elevation: 2,
+  wraper: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
 });
 

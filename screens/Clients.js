@@ -9,8 +9,8 @@ const Clients = () => {
   return (
     <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
       <CardClient nome="Alexandre Barbosa" telefone="14 99103-8089" aniversario="Dezembro" />
-      <CardClient nome="Alexandre Barbosa" telefone="14 99103-8089" aniversario="Dezembro" />
-      <CardClient nome="Alexandre Barbosa" telefone="14 99103-8089" aniversario="Dezembro" />
+      <CardClient nome="Matheus Paice" telefone="14 99802-2422" aniversario="Novembro" />
+      <CardClient nome="Ana Maria Braga da Silva Junior" telefone="14 99103-8089" aniversario="Dezembro" />
     </ScrollView>
   );
 };
@@ -18,13 +18,7 @@ const Clients = () => {
 const styles = StyleSheet.create({
   card: {
     width: width - theme.SIZES.BASE * 2,
-    paddingVertical: theme.SIZES.BASE,
-    paddingHorizontal: 3,
-    backgroundColor: theme.COLORS.WHITE,
-    marginVertical: theme.SIZES.BASE * 3,
-    minHeight: 114,
-    marginBottom: 10,
-    marginLeft: 20,
+    padding: 8
   },
 });
 
