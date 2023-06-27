@@ -3,6 +3,7 @@ import { StyleSheet, Dimensions } from 'react-native';
 import { theme, Card, Block, Text, Button as GaButton } from 'galio-framework';
 
 import { nowTheme } from '../../constants';
+import CustomInput from '../CustomInput';
 
 const { height, width } = Dimensions.get('window');
 
@@ -27,9 +28,10 @@ const CardClient = ({ nome, telefone, aniversario }) => {
             icon="edit"
             iconFamily="Font-Awesome"
             iconColor={theme.COLORS.WHITE}
-            iconSize={theme.SIZES.BASE * 0.5}
+            iconSize={theme.SIZES.BASE * 0.8}
             color={nowTheme.COLORS.SUCCESS}
             style={[styles.social]}
+            onPress={() => {}}
           />
 
           <GaButton

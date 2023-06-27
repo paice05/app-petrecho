@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Alert, Modal, StyleSheet, Text, Pressable, View } from 'react-native';
 import { theme } from 'galio-framework';
 
-const Articles = () => {
+const CustomEdit = () => {
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <View style={styles.centeredView}>
@@ -98,4 +98,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Articles;
+export default CustomEdit;
