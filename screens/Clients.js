@@ -1,10 +1,9 @@
 import React from 'react';
 import { StyleSheet, Dimensions, ScrollView } from 'react-native';
-import { Block, theme, Text, Card } from 'galio-framework';
 
 import CardClient from '../components/CardClient';
-import { CustomModal } from '../components/CustomEdit';
-const { width } = Dimensions.get('screen');
+
+import { PaginationSimple } from '../components/PaginationSimple';
 
 const Clients = () => {
   return (
@@ -16,6 +15,7 @@ const Clients = () => {
         telefone="14 99103-8089"
         aniversario="Dezembro"
       />
+      <PaginationSimple />
     </ScrollView>
   );
 };

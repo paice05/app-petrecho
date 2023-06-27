@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
 import { theme, Card, Block, Text, Button as GaButton } from 'galio-framework';
 
 import { nowTheme } from '../../constants';
 import CustomInput from '../CustomInput';
+import { Modal } from '../Modal';
 
 const { height, width } = Dimensions.get('window');
 
 const CardClient = ({ nome, telefone, aniversario }) => {
+  const [visible, setVisible] = useState(false);
+
+  const handleToggleVisible = () => setVisible(!visible);
+
   const cardContainer = [styles.card, styles.shadow];
 
   const isLargeName = nome.length > 20;
@@ -41,9 +46,10 @@ const CardClient = ({ nome, telefone, aniversario }) => {
             icon="trash"
             iconFamily="Font-Awesome"
             iconColor={theme.COLORS.WHITE}
-            iconSize={theme.SIZES.BASE * 0.5}
+            iconSize={theme.SIZES.BASE * 0.8}
             color={nowTheme.COLORS.ERROR}
             style={[styles.social]}
+            onPress={handleToggleVisible}
           />
         </Block>
       </Block>
@@ -52,6 +58,13 @@ const CardClient = ({ nome, telefone, aniversario }) => {
         <Text style={styles.cardSubtitle}>{telefone}</Text>
         <Text style={styles.cardSubtitle}>{aniversario}</Text>
       </Block>
+
+      <Modal
+        title="Deseja remover esse cliente?"
+        isVisible={visible}
+        handleConfirm={handleToggleVisible}
+        handleCancel={handleToggleVisible}
+      />
     </Block>
   );
 };
