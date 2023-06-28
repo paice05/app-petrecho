@@ -1,18 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ScrollView, StyleSheet, Dimensions } from 'react-native';
 
 // Galio components
 import { Block, Text, Button as GaButton, theme } from 'galio-framework';
 
 // Now UI themed components
-import { Images, nowTheme, articles, tabs } from '../constants';
-import { Button, Select, Icon, Input, Header, Switch } from '../components';
-import CustomInput from '../components/CustomInput';
-import { CustomSelectBottom } from '../components/CustomSelectBottom';
+import { Images, nowTheme, articles, tabs } from '../../constants';
+import { Button, Select, Icon, Input, Header, Switch } from '../../components';
+import CustomInput from '../../components/CustomInput';
+import { CustomSelectBottom } from '../../components/CustomSelectBottom';
 
 const { width } = Dimensions.get('screen');
 
-const ClientForm = () => {
+const ClientForm = ({ route, navigation }) => {
+  const params = route.params;
+
+  const isEditing = params?.itemId;
+
+  useEffect(() => {
+    if (isEditing) {
+    } // busca dados da API
+  }, []);
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Block flex style={styles.group}>
@@ -59,6 +68,7 @@ const ClientForm = () => {
           textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
           color="default"
           style={styles.button}
+          onPress={() => navigation.goBack()}
         >
           Voltar
         </Button>

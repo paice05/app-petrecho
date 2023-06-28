@@ -1,4 +1,8 @@
+import React from 'react';
 import { Animated, Dimensions, Easing } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createStackNavigator } from '@react-navigation/stack';
 // header for screens
 import { Header, Icon } from '../components';
 import { nowTheme, tabs } from '../constants';
@@ -9,18 +13,14 @@ import Components from '../screens/Components';
 // drawer
 import CustomDrawerContent from './Menu';
 // screens
+import Pro from '../screens/Pro';
+import SettingsScreen from '../screens/Settings';
 import Home from '../screens/Home';
 import Onboarding from '../screens/Onboarding';
-import Pro from '../screens/Pro';
 import Profile from '../screens/Profile';
-import React from 'react';
 import Register from '../screens/Register';
-import SettingsScreen from '../screens/Settings';
-import Clients from '../screens/Clients';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { createStackNavigator } from '@react-navigation/stack';
-import ClientForm from '../screens/ClientForm';
+import Clients from '../screens/Clients/List';
+import ClientForm from '../screens/Clients/Form';
 
 const { width } = Dimensions.get('screen');
 
@@ -166,9 +166,20 @@ function ClientsStack(props) {
         name="ClientForm"
         component={ClientForm}
         options={{
-          header: ({ navigation, scene }) => (
-            <Header title="Novo Cliente" back navigation={navigation} scene={scene} />
-          ),
+          header: ({ route, navigation, scene }) => {
+            const params = route.params;
+
+            const isEditing = params?.itemId;
+
+            return (
+              <Header
+                title={isEditing ? 'Atualizar cliente' : 'Novo Cliente'}
+                back
+                navigation={navigation}
+                scene={scene}
+              />
+            );
+          },
           headerTransparent: true,
         }}
       />

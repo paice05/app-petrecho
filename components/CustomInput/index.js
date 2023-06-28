@@ -5,19 +5,17 @@ import { nowTheme } from '../../constants';
 
 const CustomInput = ({ labelText, placeholder, options }) => {
   return (
-    <View>
-      <Input
-        placeholder={placeholder}
-        labelText={labelText}
-        label={labelText}
-        options={options}
-        placeholderTextColor={nowTheme.COLORS.MUTED}
-        style={styles.input}
-        color={nowTheme.COLORS.HEADER}
-        iconContent={<Block />}
-        shadowless
-      />
-    </View>
+    <Input
+      placeholder={placeholder}
+      labelText={labelText}
+      label={labelText}
+      options={options}
+      placeholderTextColor={nowTheme.COLORS.MUTED}
+      style={styles.input}
+      color={nowTheme.COLORS.HEADER}
+      iconContent={<Block />}
+      shadowless
+    />
   );
 };
 

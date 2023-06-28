@@ -3,12 +3,12 @@ import { StyleSheet, Dimensions } from 'react-native';
 import { theme, Card, Block, Text, Button as GaButton } from 'galio-framework';
 
 import { nowTheme } from '../../constants';
-import CustomInput from '../CustomInput';
 import { Modal } from '../Modal';
+import Icon from '../Icon';
 
 const { height, width } = Dimensions.get('window');
 
-const CardClient = ({ nome, telefone, aniversario }) => {
+const CardClient = ({ navigation, nome, telefone, aniversario, id }) => {
   const [visible, setVisible] = useState(false);
 
   const handleToggleVisible = () => setVisible(!visible);
@@ -36,7 +36,11 @@ const CardClient = ({ nome, telefone, aniversario }) => {
             iconSize={theme.SIZES.BASE * 0.8}
             color={nowTheme.COLORS.SUCCESS}
             style={[styles.social]}
-            onPress={() => {}}
+            onPress={() =>
+              navigation.navigate('ClientForm', {
+                itemId: id,
+              })
+            }
           />
 
           <GaButton
@@ -55,8 +59,14 @@ const CardClient = ({ nome, telefone, aniversario }) => {
       </Block>
 
       <Block flex>
-        <Text style={styles.cardSubtitle}>{telefone}</Text>
-        <Text style={styles.cardSubtitle}>{aniversario}</Text>
+        <Block row>
+          <Icon family="feather" name="smartphone" />
+          <Text style={styles.cardSubtitle}>{telefone}</Text>
+        </Block>
+        <Block row>
+          <Icon family="feather" name="calendar" />
+          <Text style={styles.cardSubtitle}>{aniversario}</Text>
+        </Block>
       </Block>
 
       <Modal
@@ -72,9 +82,9 @@ const CardClient = ({ nome, telefone, aniversario }) => {
 const styles = StyleSheet.create({
   container: {
     padding: theme.SIZES.BASE / 2,
-    borderRadius: 8,
+    borderRadius: 4,
     borderStyle: 'solid',
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: 'black',
     marginBottom: 16,
   },
@@ -86,7 +96,7 @@ const styles = StyleSheet.create({
     fontFamily: 'montserrat-regular',
     fontWeight: 'bold',
     textDecorationLine: 'underline',
-    color: nowTheme.COLORS.ICON,
+    color: nowTheme.COLORS.PRIMARY,
   },
   cardSubtitle: {
     paddingHorizontal: 9,
