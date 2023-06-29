@@ -22,6 +22,7 @@ import Register from '../screens/Register';
 import Clients from '../screens/Clients/List';
 import ClientForm from '../screens/Clients/Form';
 import SchedulesForm from '../screens/Schedules/Form';
+import { ScheduleList } from '../screens/Schedules/List';
 
 const { width } = Dimensions.get('screen');
 
@@ -199,7 +200,7 @@ function SchedulesStack(props) {
     >
       <Stack.Screen
         name="Agendamentos"
-        component={Agendamentos}
+        component={ScheduleList}
         options={{
           header: ({ navigation, scene }) => (
             <Header title="Agendamentos" navigation={navigation} scene={scene} />

@@ -1,9 +1,9 @@
-import { theme } from 'galio-framework';
+import { Block, theme } from 'galio-framework';
 import React from 'react';
 
 import { Modal as ModalRN, StyleSheet, Text, Pressable, View } from 'react-native';
 
-export const Modal = ({ isVisible, handleConfirm, handleCancel, title }) => {
+export const Modal = ({ isVisible, handleConfirm, handleCancel, title, children }) => {
   return (
     <ModalRN
       animationType="slide"
@@ -15,12 +15,18 @@ export const Modal = ({ isVisible, handleConfirm, handleCancel, title }) => {
         <View style={styles.modalView}>
           <Text style={styles.modalText}>{title}</Text>
           <View style={styles.modalButton}>
-            <Pressable style={[styles.button, styles.buttonClose]} onPress={handleCancel}>
-              <Text style={styles.textStyle}>Cancelar</Text>
-            </Pressable>
-            <Pressable style={[styles.button, styles.buttonEdit]} onPress={handleConfirm}>
-              <Text style={styles.textStyle}>Confirmar</Text>
-            </Pressable>
+            {!children ? (
+              <Block>
+                <Pressable style={[styles.button, styles.buttonClose]} onPress={handleCancel}>
+                  <Text style={styles.textStyle}>Cancelar</Text>
+                </Pressable>
+                <Pressable style={[styles.button, styles.buttonEdit]} onPress={handleConfirm}>
+                  <Text style={styles.textStyle}>Confirmar</Text>
+                </Pressable>
+              </Block>
+            ) : (
+              children
+            )}
           </View>
         </View>
       </View>

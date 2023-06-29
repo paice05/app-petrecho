@@ -49,6 +49,17 @@ const NewClient = ({ isWhite, style, navigation }) => (
   </TouchableOpacity>
 );
 
+const NewSchedule = ({ isWhite, style, navigation }) => (
+  <TouchableOpacity
+    style={[styles.button, style]}
+    onPress={() => navigation.navigate('ScheduleForm')}
+  >
+    <Text size={14} color={nowTheme.COLORS[isWhite ? 'WHITE' : 'ICON']}>
+      Novo
+    </Text>
+  </TouchableOpacity>
+);
+
 class Header extends React.Component {
   handleLeftPress = () => {
     const { back, navigation } = this.props;
@@ -70,6 +81,8 @@ class Header extends React.Component {
           <BellButton key="chat-home" navigation={navigation} isWhite={white} />,
           <BasketButton key="basket-home" navigation={navigation} isWhite={white} />,
         ];
+      case 'Agendamentos':
+        return [<NewSchedule key="basket-home" navigation={navigation} isWhite={white} style={{padding: 0}} />]
       case 'Clientes':
         return [<NewClient key="basket-home" navigation={navigation} isWhite={white} style={{padding: 0}} />];
       case 'Deals':

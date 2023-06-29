@@ -1,19 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Dimensions } from 'react-native';
+import { Calendar } from 'react-native-calendars';
 
 // Galio components
-import { Block, Button as GaButton, theme } from 'galio-framework';
+import { Block, Button as GaButton, Text, theme } from 'galio-framework';
 
 // Now UI themed components
 import { nowTheme } from '../../constants';
 import { Button, Select, Icon, Input, Header, Switch } from '../../components';
 import CustomInput from '../../components/CustomInput';
 import { CustomSelectBottom } from '../../components/CustomSelectBottom';
+import { Modal } from '../../components/Modal';
 
 const { width } = Dimensions.get('screen');
 
 const SchedulesForm = ({ route, navigation }) => {
   const params = route.params;
+
+  const [selected, setSelected] = useState('');
+  const [showDate, setShowDate] = useState(false);
 
   const isEditing = params?.itemId;
 
@@ -21,6 +26,8 @@ const SchedulesForm = ({ route, navigation }) => {
     if (isEditing) {
     } // busca dados da API
   }, []);
+
+  const handleToggleShowDate = () => setShowDate(!showDate);
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -32,6 +39,31 @@ const SchedulesForm = ({ route, navigation }) => {
         <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
           <CustomInput placeholder="Pesquise um serviço pelo nome" labelText="Serviço" />
         </Block>
+
+        <Button onPress={handleToggleShowDate}>
+          <Text> {selected || 'Selecionar data'} </Text>
+        </Button>
+
+        <Modal title="Selecione uma data" isVisible={showDate}>
+          <Calendar
+            onDayPress={(day) => {
+              setSelected(day.dateString);
+              handleToggleShowDate();
+            }}
+            markedDates={{
+              [selected]: { selected: true, disableTouchEvent: true, selectedDotColor: 'orange' },
+            }}
+          />
+        </Modal>
+
+        <CustomSelectBottom
+          labelText="Horário"
+          placeholder="Escolha um horário"
+          options={Array.from({ length: 48 }).map((_, index) => {
+            if (index % 2 === 0) return `${index}:00`;
+            else return `${index}:30`;
+          })}
+        />
       </Block>
 
       <Block style={styles.container}>
