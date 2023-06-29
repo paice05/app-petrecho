@@ -21,6 +21,7 @@ import Profile from '../screens/Profile';
 import Register from '../screens/Register';
 import Clients from '../screens/Clients/List';
 import ClientForm from '../screens/Clients/Form';
+import SchedulesForm from '../screens/Schedules/Form';
 
 const { width } = Dimensions.get('screen');
 
@@ -187,6 +188,51 @@ function ClientsStack(props) {
   );
 }
 
+function SchedulesStack(props) {
+  return (
+    <Stack.Navigator
+      initialRouteName="Agendamentos"
+      screenOptions={{
+        mode: 'card',
+        headerShown: 'screen',
+      }}
+    >
+      <Stack.Screen
+        name="Agendamentos"
+        component={Agendamentos}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header title="Agendamentos" navigation={navigation} scene={scene} />
+          ),
+          cardStyle: { backgroundColor: '#FFFFFF' },
+        }}
+      />
+
+      <Stack.Screen
+        name="ScheduleForm"
+        component={SchedulesForm}
+        options={{
+          header: ({ route, navigation, scene }) => {
+            const params = route.params;
+
+            const isEditing = params?.itemId;
+
+            return (
+              <Header
+                title={isEditing ? 'Atualizar agendamento' : 'Novo Agendamento'}
+                back
+                navigation={navigation}
+                scene={scene}
+              />
+            );
+          },
+          headerTransparent: true,
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
 function AppStack(props) {
   return (
     <Drawer.Navigator
@@ -228,6 +274,14 @@ function AppStack(props) {
       <Drawer.Screen
         name="Clientes"
         component={ClientsStack}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Drawer.Screen
+        name="Agendamentos"
+        component={SchedulesStack}
         options={{
           headerShown: false,
         }}

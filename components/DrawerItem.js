@@ -30,6 +30,16 @@ class DrawerItem extends React.Component {
             style={{ opacity: 0.5 }}
           />
         );
+      case 'Agendamentos':
+        return (
+          <Icon
+            name="calendar-602x"
+            family="NowExtra"
+            size={18}
+            color={focused ? nowTheme.COLORS.PRIMARY : 'black'}
+            style={{ opacity: 0.5 }}
+          />
+        );
       case 'Components':
         return (
           <Icon
