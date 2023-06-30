@@ -1,7 +1,14 @@
 import { Block, theme } from 'galio-framework';
 import React from 'react';
 
-import { Modal as ModalRN, StyleSheet, Text, Pressable, View } from 'react-native';
+import {
+  Modal as ModalRN,
+  StyleSheet,
+  Text,
+  Pressable,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 
 export const Modal = ({ isVisible, handleConfirm, handleCancel, title, children }) => {
   return (
@@ -11,30 +18,39 @@ export const Modal = ({ isVisible, handleConfirm, handleCancel, title, children 
       visible={isVisible}
       onRequestClose={handleCancel}
     >
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          <Text style={styles.modalText}>{title}</Text>
-          <View style={styles.modalButton}>
-            {!children ? (
-              <Block>
-                <Pressable style={[styles.button, styles.buttonClose]} onPress={handleCancel}>
-                  <Text style={styles.textStyle}>Cancelar</Text>
-                </Pressable>
-                <Pressable style={[styles.button, styles.buttonEdit]} onPress={handleConfirm}>
-                  <Text style={styles.textStyle}>Confirmar</Text>
-                </Pressable>
-              </Block>
-            ) : (
-              children
-            )}
+      <TouchableOpacity style={styles.modalContainer} onPress={handleCancel}>
+        <TouchableOpacity activeOpacity={1}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalText}>{title}</Text>
+              <View style={styles.modalButton}>
+                {!children ? (
+                  <Block>
+                    <Pressable style={[styles.button, styles.buttonClose]} onPress={handleCancel}>
+                      <Text style={styles.textStyle}>Cancelar</Text>
+                    </Pressable>
+                    <Pressable style={[styles.button, styles.buttonEdit]} onPress={handleConfirm}>
+                      <Text style={styles.textStyle}>Confirmar</Text>
+                    </Pressable>
+                  </Block>
+                ) : (
+                  children
+                )}
+              </View>
+            </View>
           </View>
-        </View>
-      </View>
+        </TouchableOpacity>
+      </TouchableOpacity>
     </ModalRN>
   );
 };
 
 const styles = StyleSheet.create({
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   centeredView: {
     flex: 1,
     justifyContent: 'center',

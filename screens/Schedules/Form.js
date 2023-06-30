@@ -11,7 +11,7 @@ import { Button, Select, Icon, Input, Header } from '../../components';
 import CustomInput from '../../components/CustomInput';
 import { CustomSelectHour } from '../../components/CustonSelectHour';
 import { Modal } from '../../components/Modal';
-import { Filters } from './Filters';
+import { Config } from './Config';
 
 const { width } = Dimensions.get('screen');
 
@@ -51,36 +51,14 @@ const SchedulesForm = ({ route, navigation }) => {
           <CustomInput placeholder="Pesquise um funcionário pelo nome" labelText="Funcionário" />
         </Block>
 
-        <Block flex>
-          <Text style={{ paddingHorizontal: 10, marginTop: 5 }}>Data</Text>
-          <Block row center>
-            <Button
-              onPress={handleToggleShowDate}
-              style={{
-                borderRadius: 30,
-                borderColor: nowTheme.COLORS.BORDER,
-                backgroundColor: '#FFFFFF',
-              }}
-            >
+        <Block flex row style={styles.wraperTime}>
+          <Block flex>
+            <Text>Data</Text>
+            <Button onPress={handleToggleShowDate} style={styles.buttonDate}>
               <Text> {selected || 'Selecionar data'} </Text>
             </Button>
-
-            <Modal title="Selecione uma data" isVisible={showDate}>
-              <Calendar
-                onDayPress={(day) => {
-                  setSelected(day.dateString);
-                  handleToggleShowDate();
-                }}
-                markedDates={{
-                  [selected]: {
-                    selected: true,
-                    disableTouchEvent: true,
-                    selectedDotColor: 'blue',
-                  },
-                }}
-              />
-            </Modal>
-
+          </Block>
+          <Block flex>
             <CustomSelectHour
               labelText="Horário"
               style={styles.optionsButton}
@@ -112,7 +90,7 @@ const SchedulesForm = ({ route, navigation }) => {
           </Block>
         </Block>
       </Block>
-      <Filters />
+      <Config />
       <Block style={styles.container}>
         <Button
           textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
@@ -130,11 +108,32 @@ const SchedulesForm = ({ route, navigation }) => {
           Cadastrar
         </Button>
       </Block>
+
+      <Modal title="Selecione uma data" isVisible={showDate}>
+        <Calendar
+          onDayPress={(day) => {
+            setSelected(day.dateString);
+            handleToggleShowDate();
+          }}
+          markedDates={{
+            [selected]: {
+              selected: true,
+              disableTouchEvent: true,
+              selectedDotColor: 'blue',
+            },
+          }}
+        />
+      </Modal>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  wraperTime: {
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    gap: 30,
+  },
   title: {
     fontFamily: 'montserrat-bold',
     paddingBottom: theme.SIZES.BASE,
@@ -143,7 +142,7 @@ const styles = StyleSheet.create({
     color: nowTheme.COLORS.HEADER,
   },
   group: {
-    paddingTop: theme.SIZES.BASE * 2,
+    // paddingTop: theme.SIZES.BASE * 2,
   },
   button: {
     marginBottom: theme.SIZES.BASE,
@@ -154,6 +153,14 @@ const styles = StyleSheet.create({
     paddingVertical: theme.SIZES.BASE,
     paddingHorizontal: 2,
     fontFamily: 'montserrat-regular',
+  },
+  buttonDate: {
+    borderRadius: 30,
+    borderColor: nowTheme.COLORS.BORDER,
+    backgroundColor: '#FFFFFF',
+    borderStyle: 'solid',
+    borderWidth: 1,
+    marginLeft: 0,
   },
   container: {
     display: 'flex',

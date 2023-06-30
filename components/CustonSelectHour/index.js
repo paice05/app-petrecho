@@ -35,7 +35,8 @@ const styles = StyleSheet.create({
     height: 44,
     backgroundColor: '#FFFFFF',
     width: width * 0.4,
-    marginBottom: 14,
+    marginTop: 8
+    // marginBottom: 14,
   },
   success: {
     borderColor: nowTheme.COLORS.INPUT_SUCCESS,

@@ -4,21 +4,16 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Button, Icon } from '../../components';
 import CustomInput from '../../components/CustomInput';
 
-export const Filters = () => {
+export const Config = () => {
   const [show, setShow] = useState(false);
 
   const handleToggleShow = () => setShow(!show);
 
   return (
     <Block>
-      <TouchableOpacity
-        onPress={handleToggleShow}
-        style={{ marginLeft: 10, marginTop: 15, marginRight: 220 }}
-      >
-        <Block style={show ? styles.containerOpen : styles.containerClose} row>
-          <Block row style={{ gap: 5 }}>
-            <Text> Configurações gerais </Text>
-          </Block>
+      <TouchableOpacity onPress={handleToggleShow}>
+        <Block flex row style={show ? styles.containerOpen : styles.containerClose}>
+          <Text> Configurações gerais </Text>
 
           <Icon
             name="chevron-down"
@@ -31,9 +26,13 @@ export const Filters = () => {
       </TouchableOpacity>
 
       {show && (
-        <Block row>
-          <CustomInput labelText="Desconto" placeholder="R$10,00" />
-          <CustomInput labelText="Adicional" placeholder="R$5,00" />
+        <Block flex row style={{ gap: 20 }}>
+          <Block flex>
+            <CustomInput labelText="Desconto" placeholder="R$10,00" />
+          </Block>
+          <Block flex>
+            <CustomInput labelText="Adicional" placeholder="R$5,00" />
+          </Block>
         </Block>
       )}
     </Block>
