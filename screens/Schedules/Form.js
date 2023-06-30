@@ -3,14 +3,15 @@ import { ScrollView, StyleSheet, Dimensions } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 
 // Galio components
-import { Block, Button as GaButton, Text, theme } from 'galio-framework';
+import { Block, Button as GaButton, Text, theme, Switch } from 'galio-framework';
 
 // Now UI themed components
 import { nowTheme } from '../../constants';
-import { Button, Select, Icon, Input, Header, Switch } from '../../components';
+import { Button, Select, Icon, Input, Header } from '../../components';
 import CustomInput from '../../components/CustomInput';
-import { CustomSelectBottom } from '../../components/CustomSelectBottom';
+import { CustomSelectHour } from '../../components/CustonSelectHour';
 import { Modal } from '../../components/Modal';
+import { Filters } from './Filters';
 
 const { width } = Dimensions.get('screen');
 
@@ -19,6 +20,8 @@ const SchedulesForm = ({ route, navigation }) => {
 
   const [selected, setSelected] = useState('');
   const [showDate, setShowDate] = useState(false);
+  const [checked, setChecked] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   const isEditing = params?.itemId;
 
@@ -29,10 +32,14 @@ const SchedulesForm = ({ route, navigation }) => {
 
   const handleToggleShowDate = () => setShowDate(!showDate);
 
+  const handleToggleSwitch = () => setChecked((previousState) => !previousState);
+
+  const handleToggleVisible = () => setVisible(!visible);
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Block flex style={styles.group}>
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE, paddingTop: 70 }}>
+        <Block style={{ paddingHorizontal: theme.SIZES.BASE, paddingTop: 50 }}>
           <CustomInput placeholder="Pesquise um cliente pelo nome" labelText="Cliente" />
         </Block>
 
@@ -40,32 +47,72 @@ const SchedulesForm = ({ route, navigation }) => {
           <CustomInput placeholder="Pesquise um serviço pelo nome" labelText="Serviço" />
         </Block>
 
-        <Button onPress={handleToggleShowDate}>
-          <Text> {selected || 'Selecionar data'} </Text>
-        </Button>
+        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
+          <CustomInput placeholder="Pesquise um funcionário pelo nome" labelText="Funcionário" />
+        </Block>
 
-        <Modal title="Selecione uma data" isVisible={showDate}>
-          <Calendar
-            onDayPress={(day) => {
-              setSelected(day.dateString);
-              handleToggleShowDate();
-            }}
-            markedDates={{
-              [selected]: { selected: true, disableTouchEvent: true, selectedDotColor: 'orange' },
-            }}
-          />
-        </Modal>
+        <Block flex>
+          <Text style={{ paddingHorizontal: 10, marginTop: 5 }}>Data</Text>
+          <Block row center>
+            <Button
+              onPress={handleToggleShowDate}
+              style={{
+                borderRadius: 30,
+                borderColor: nowTheme.COLORS.BORDER,
+                backgroundColor: '#FFFFFF',
+              }}
+            >
+              <Text> {selected || 'Selecionar data'} </Text>
+            </Button>
 
-        <CustomSelectBottom
-          labelText="Horário"
-          placeholder="Escolha um horário"
-          options={Array.from({ length: 48 }).map((_, index) => {
-            if (index % 2 === 0) return `${index}:00`;
-            else return `${index}:30`;
-          })}
-        />
+            <Modal title="Selecione uma data" isVisible={showDate}>
+              <Calendar
+                onDayPress={(day) => {
+                  setSelected(day.dateString);
+                  handleToggleShowDate();
+                }}
+                markedDates={{
+                  [selected]: {
+                    selected: true,
+                    disableTouchEvent: true,
+                    selectedDotColor: 'blue',
+                  },
+                }}
+              />
+            </Modal>
+
+            <CustomSelectHour
+              labelText="Horário"
+              style={styles.optionsButton}
+              placeholder="Escolha um horário"
+              options={Array.from({ length: 48 }).map((_, index) => {
+                if (index % 2 === 0) return `${index}:00`;
+                else return `${index}:30`;
+              })}
+            />
+          </Block>
+        </Block>
       </Block>
 
+      <Block flex style={styles.group}>
+        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
+          <Block row right>
+            <Switch
+              value={checked}
+              onChange={handleToggleSwitch}
+              trackColor={{ false: theme.COLORS.HEADER, true: theme.COLORS.HEADER }}
+            />
+            <Text
+              style={{ fontFamily: 'montserrat-regular', paddingBottom: 15, paddingHorizontal: 10 }}
+              size={14}
+              color={nowTheme.COLORS.TEXT}
+            >
+              Sessão de pacote
+            </Text>
+          </Block>
+        </Block>
+      </Block>
+      <Filters />
       <Block style={styles.container}>
         <Button
           textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
@@ -114,6 +161,20 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: theme.SIZES.BASE,
+  },
+  selectHour: {
+    borderRadius: 30,
+    borderColor: nowTheme.COLORS.BORDER,
+    height: 20 + 'important',
+    backgroundColor: '#FFFFFF',
+    width: width * 0.1,
+    marginBottom: 16,
+  },
+  optionsButton: {
+    width: 'auto',
+    height: 34,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
   },
 });
 
