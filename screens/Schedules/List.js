@@ -1,19 +1,35 @@
 import { Text } from 'galio-framework';
-import React from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import CardSchedule from '../../components/CardSchedule';
 import { PaginationSimple } from '../../components/PaginationSimple';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import { Modal } from '../../components/Modal';
 
 export const ScheduleList = ({ navigation }) => {
+  const [openCalendar, setOpenCalendar] = useState(false);
+  const [date, setDate] = useState('');
+
   return (
     <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
-      <Text>Modal - Calendario</Text>
-      <Calendar
-        onDayPress={(day) => {
-          console.log('Select day', day);
-        }}
-      />
+      <TouchableOpacity  onPress={() => setOpenCalendar(true)}>
+        <Text>{date || 'Selecionar um data'}</Text>
+      </TouchableOpacity>
+
+      <Modal
+        isVisible={openCalendar}
+        handleCancel={() => setOpenCalendar(false)}
+        handleConfirm={() => setOpenCalendar(false)}
+        title="Selecione um data"
+      >
+        <Calendar
+          onDayPress={(day) => {
+            setDate(day.dateString);
+            setOpenCalendar(false);
+          }}
+        />
+      </Modal>
+
       <CardSchedule
         navigation={navigation}
         id={1}
