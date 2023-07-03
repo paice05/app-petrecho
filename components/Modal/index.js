@@ -25,7 +25,7 @@ export const Modal = ({ isVisible, handleConfirm, handleCancel, title, children 
               <Text style={styles.modalText}>{title}</Text>
               <View style={styles.modalButton}>
                 {!children ? (
-                  <Block>
+                  <Block flex row>
                     <Pressable style={[styles.button, styles.buttonClose]} onPress={handleCancel}>
                       <Text style={styles.textStyle}>Cancelar</Text>
                     </Pressable>
@@ -79,15 +79,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: theme.SIZES.BASE,
+    //paddingHorizontal: theme.SIZES.BASE,
+    marginRight: 20,
   },
   button: {
     height: 40,
-    margin: 10,
-    width: '40%',
+    marginHorizontal: 5,
+    width: '50%',
     borderRadius: 20,
-    padding: 10,
-    elevation: 2,
+    elevation: 3,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   buttonOpen: {
     backgroundColor: '#CAD1D7',
