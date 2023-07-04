@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   menu: {
-    paddingHorizontal: theme.SIZES.BASE * 2.5,
+    // paddingHorizontal: theme.SIZES.BASE * 2.5,
     paddingTop: 8,
     paddingBottom: 16,
   },
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     backgroundColor: nowTheme.COLORS.ACTIVE,
     borderRadius: 21,
     marginRight: 9,
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
     paddingVertical: 3,
   },
   containerShadow: {

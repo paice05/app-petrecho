@@ -14,7 +14,7 @@ import { PaginationSimple } from '../../components/PaginationSimple';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import { Modal } from '../../components/Modal';
 import { nowTheme } from '../../constants';
-import ButtonToggleGroup from 'react-native-button-toggle-group';
+// import ButtonToggleGroup from 'react-native-button-toggle-group';
 import Tabs from '../../components/Tabs';
 import tabs from '../../constants';
 import dateFns from 'date-fns';
@@ -71,20 +71,6 @@ export const ScheduleList = ({ navigation, tabIndex }) => {
         />
       </Modal>
 
-      {/*  <ScrollView horizontal={true}>
-        <Block style={{ padding: 5 }}>
-          <ButtonToggleGroup
-            highlightBackgroundColor={'blue'}
-            highlightTextColor={'white'}
-            inactiveBackgroundColor={'transparent'}
-            inactiveTextColor={'grey'}
-            values={['DOM', 'SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB']}
-            value={value}
-            onSelect={(val) => setValue(val)}
-          />
-        </Block>
-      </ScrollView> */}
-
       <Tabs
         data={defaultWeek || []}
         initialIndex={tabIndex || defaultTab}
@@ -126,11 +112,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 5,
-    borderColor: nowTheme.COLORS.BORDER,
     backgroundColor: '#FFFFFF',
-    borderStyle: 'solid',
-    borderWidth: 1,
     padding: 5,
     marginBottom: 5,
     marginTop: 5,
