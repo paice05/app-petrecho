@@ -109,7 +109,13 @@ const SchedulesForm = ({ route, navigation }) => {
         </Button>
       </Block>
 
-      <Modal title="Selecione uma data" isVisible={showDate}>
+      <Modal
+        title="Selecione uma data"
+        isVisible={showDate}
+        onRequestClose={() => {
+          setShowDate(!showDate);
+        }}
+      >
         <Calendar
           onDayPress={(day) => {
             setSelected(day.dateString);
