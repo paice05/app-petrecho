@@ -11,6 +11,13 @@ const Clients = ({ navigation }) => {
   const [clients, setClients] = useState([]);
 
   useEffect(() => {
+    const fecthClients = navigation.addListener('focus', () => {
+      api.get('/users').then(({ data }) => {
+        setClients(data.data);
+      });
+    });
+  }, []);
+  /* useEffect(() => {
     const fecthClients = async () => {
       try {
         const response = await api.get('/users');
@@ -22,7 +29,7 @@ const Clients = ({ navigation }) => {
     };
 
     fecthClients();
-  }, []);
+  }, []); */
 
   return (
     <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>

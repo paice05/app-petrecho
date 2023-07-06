@@ -22,7 +22,22 @@ const optionsType = [
     title: 'Funcionário',
     data: 'pj',
   },
-]
+];
+
+const optionsBirthDate = [
+  { title: 'Janeiro', data: 'Janeiro' },
+  { title: 'Fevereiro', data: 'Fevereiro' },
+  { title: 'Março', data: 'Março' },
+  { title: 'Abril', data: 'Abril' },
+  { title: 'Maio', data: 'Maio' },
+  { title: 'Junho', data: 'Junho' },
+  { title: 'Julho', data: 'Julho' },
+  { title: 'Agosto', data: 'Agosto' },
+  { title: 'Setembro', data: 'Setembro' },
+  { title: 'Outubro', data: 'Outubro' },
+  { title: 'Novembro', data: 'Novembro' },
+  { title: 'Dezembro', data: 'Dezembro' },
+];
 
 const ClientForm = ({ route, navigation }) => {
   const params = route.params;
@@ -32,18 +47,36 @@ const ClientForm = ({ route, navigation }) => {
   const [fields, setFields] = useState({
     name: '',
     cellPhone: '',
-    birthDate: null,
+    birthDate: { title: '', data: '' },
     type: { title: '', data: '' },
   });
 
-  const handleSubmit = async () => {
+  const handleSubmitCreate = async () => {
     const payload = {
       ...fields,
       type: fields.type.data,
+      birthDate: fields.birthDate.data,
     };
 
     try {
       const response = await api.post('/users', payload);
+      console.log(response.data);
+      setFields(response.data);
+      navigation.goBack();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSubmitUpdate = async () => {
+    const payload = {
+      ...fields,
+      type: fields.type.data,
+      birthDate: fields.birthDate.data,
+    };
+
+    try {
+      const response = await api.put(`/users/${isEditing}`, payload);
       console.log(response.data);
       setFields(response.data);
       navigation.goBack();
@@ -61,7 +94,9 @@ const ClientForm = ({ route, navigation }) => {
           setFields({
             ...fields,
             name: response.data.name,
-            type: optionsType.find(item => item.data === response.data.type)
+            cellPhone: response.data.cellPhone,
+            birthDate: optionsBirthDate.find((item) => item.data === response.data.birthDate),
+            type: optionsType.find((item) => item.data === response.data.type),
           });
         } catch (error) {
           console.log({ error });
@@ -102,8 +137,8 @@ const ClientForm = ({ route, navigation }) => {
             labelText="Mês de aniversário"
             placeholder="Escolha um mês"
             value={fields.birthDate}
-            onSelect={(item, index) => setFields({ ...fields, birthDate: item })}
-            options={[]}
+            onChange={(item) => setFields({ ...fields, birthDate: item })}
+            options={optionsBirthDate}
           />
         </Block>
 
@@ -131,7 +166,7 @@ const ClientForm = ({ route, navigation }) => {
           textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
           color="success"
           style={styles.button}
-          onPress={handleSubmit}
+          onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
         >
           {isEditing ? 'Editar' : 'Cadastrar'}
         </Button>
