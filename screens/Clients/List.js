@@ -32,7 +32,7 @@ const Clients = ({ navigation }) => {
         return (
           <CardClient
             navigation={navigation}
-            id={1}
+            id={item.id}
             nome={item.name}
             telefone={item.cellPhone}
             aniversario={item.birthDate}

@@ -13,21 +13,37 @@ import { api } from '../../services/api';
 
 const { width } = Dimensions.get('screen');
 
+const optionsType = [
+  {
+    title: 'Cliente',
+    data: 'pf',
+  },
+  {
+    title: 'Funcionário',
+    data: 'pj',
+  },
+]
+
 const ClientForm = ({ route, navigation }) => {
   const params = route.params;
 
-  const isEditing = params?.id;
+  const isEditing = params?.itemId;
 
   const [fields, setFields] = useState({
     name: '',
     cellPhone: '',
-    birthDate: '',
-    type: '',
+    birthDate: null,
+    type: { title: '', data: '' },
   });
 
   const handleSubmit = async () => {
+    const payload = {
+      ...fields,
+      type: fields.type.data,
+    };
+
     try {
-      const response = await api.post('/users', fields);
+      const response = await api.post('/users', payload);
       console.log(response.data);
       setFields(response.data);
       navigation.goBack();
@@ -38,8 +54,27 @@ const ClientForm = ({ route, navigation }) => {
 
   useEffect(() => {
     if (isEditing) {
+      const fecthClients = async () => {
+        try {
+          const response = await api.get(`/users/${isEditing}`);
+
+          setFields({
+            ...fields,
+            name: response.data.name,
+            type: optionsType.find(item => item.data === response.data.type)
+          });
+        } catch (error) {
+          console.log({ error });
+        }
+      };
+
+      fecthClients();
     } // busca dados da API
   }, []);
+
+  useEffect(() => {
+    console.log({ fields });
+  }, [fields]);
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -68,20 +103,7 @@ const ClientForm = ({ route, navigation }) => {
             placeholder="Escolha um mês"
             value={fields.birthDate}
             onSelect={(item, index) => setFields({ ...fields, birthDate: item })}
-            options={[
-              'Janeiro',
-              'Fevereiro',
-              'Março',
-              'Abril',
-              'Maio',
-              'Junho',
-              'Julho',
-              'Agosto',
-              'Setembro',
-              'Outubro',
-              'Novembro',
-              'Dezembro',
-            ]}
+            options={[]}
           />
         </Block>
 
@@ -90,8 +112,8 @@ const ClientForm = ({ route, navigation }) => {
             labelText="Tipo de cliente"
             placeholder="Escolha um tipo"
             value={fields.type}
-            onSelect={(item, index) => setFields({ ...fields, type: item })}
-            options={['Cliente', 'Funcionário']}
+            onChange={(item) => setFields({ ...fields, type: item })}
+            options={optionsType}
           />
         </Block>
       </Block>

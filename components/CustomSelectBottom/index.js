@@ -7,9 +7,7 @@ import { nowTheme } from '../../constants';
 
 const { width } = Dimensions.get('window');
 
-export const CustomSelectBottom = ({ labelText, placeholder, options }) => {
-  const [value, setValue] = useState('');
-
+export const CustomSelectBottom = ({ labelText, placeholder, onChange, value, options }) => {
   return (
     <SafeAreaView>
       <Text>{labelText}</Text>
@@ -17,8 +15,10 @@ export const CustomSelectBottom = ({ labelText, placeholder, options }) => {
       <SelectList
         style={styles.input}
         placeHolder={placeholder}
-        onSelect={(item, index) => setValue(item)}
-        value={value}
+        onSelect={(item, index) => {
+          onChange(item);
+        }}
+        value={value?.title}
         data={options}
         headerTitle={labelText}
         listHeight={300}
