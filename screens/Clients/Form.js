@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Dimensions } from 'react-native';
 
 // Galio components
@@ -9,13 +9,32 @@ import { Images, nowTheme, articles, tabs } from '../../constants';
 import { Button, Select, Icon, Input, Header, Switch } from '../../components';
 import CustomInput from '../../components/CustomInput';
 import { CustomSelectBottom } from '../../components/CustomSelectBottom';
+import { api } from '../../services/api';
 
 const { width } = Dimensions.get('screen');
 
 const ClientForm = ({ route, navigation }) => {
   const params = route.params;
 
-  const isEditing = params?.itemId;
+  const isEditing = params?.id;
+
+  const [fields, setFields] = useState({
+    name: '',
+    cellPhone: '',
+    birthDate: '',
+    type: '',
+  });
+
+  const handleSubmit = async () => {
+    try {
+      const response = await api.post('/users', fields);
+      console.log(response.data);
+      setFields(response.data);
+      navigation.goBack();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     if (isEditing) {
@@ -26,17 +45,29 @@ const ClientForm = ({ route, navigation }) => {
     <ScrollView showsVerticalScrollIndicator={false}>
       <Block flex style={styles.group}>
         <Block style={{ paddingHorizontal: theme.SIZES.BASE, paddingTop: 70 }}>
-          <CustomInput placeholder="Digite seu nome" labelText="Nome" />
+          <CustomInput
+            placeholder="Digite seu nome"
+            labelText="Nome"
+            value={fields.name}
+            onChangeText={(value) => setFields({ ...fields, name: value })}
+          />
         </Block>
 
         <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-          <CustomInput placeholder="Digite o telefone do cliente" labelText="Telefone" />
+          <CustomInput
+            placeholder="Digite o telefone do cliente"
+            labelText="Telefone"
+            value={fields.cellPhone}
+            onChangeText={(value) => setFields({ ...fields, cellPhone: value })}
+          />
         </Block>
 
         <Block flex center style={{ marginTop: 8 }}>
           <CustomSelectBottom
             labelText="Mês de aniversário"
             placeholder="Escolha um mês"
+            value={fields.birthDate}
+            onSelect={(item, index) => setFields({ ...fields, birthDate: item })}
             options={[
               'Janeiro',
               'Fevereiro',
@@ -58,6 +89,8 @@ const ClientForm = ({ route, navigation }) => {
           <CustomSelectBottom
             labelText="Tipo de cliente"
             placeholder="Escolha um tipo"
+            value={fields.type}
+            onSelect={(item, index) => setFields({ ...fields, type: item })}
             options={['Cliente', 'Funcionário']}
           />
         </Block>
@@ -76,8 +109,9 @@ const ClientForm = ({ route, navigation }) => {
           textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
           color="success"
           style={styles.button}
+          onPress={handleSubmit}
         >
-          Cadastrar
+          {isEditing ? 'Editar' : 'Cadastrar'}
         </Button>
       </Block>
     </ScrollView>

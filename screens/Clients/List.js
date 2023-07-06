@@ -33,9 +33,9 @@ const Clients = ({ navigation }) => {
           <CardClient
             navigation={navigation}
             id={1}
-            nome="Alexandre Barbosa"
-            telefone="14 99103-8089"
-            aniversario="Dezembro"
+            nome={item.name}
+            telefone={item.cellPhone}
+            aniversario={item.birthDate}
           />
         );
       })}
