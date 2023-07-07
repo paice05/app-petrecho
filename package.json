@@ -30,6 +30,7 @@
     "expo-modules-core": "~1.2.7",
     "galio-framework": "0.8.0",
     "prop-types": "15.7.2",
+    "qs": "^6.11.2",
     "react": "18.2.0",
     "react-native": "0.71.8",
     "react-native-button-toggle-group": "^1.1.2",

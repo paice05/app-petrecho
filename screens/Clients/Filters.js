@@ -5,10 +5,24 @@ import { Button, Icon } from '../../components';
 import CustomInput from '../../components/CustomInput';
 import { CustomSelectBottom } from '../../components/CustomSelectBottom';
 
-export const Filters = () => {
+export const Filters = ({ fetchClients }) => {
   const [show, setShow] = useState(false);
 
+  const [fields, setFields] = useState({
+    name: '',
+  });
+
   const handleToggleShow = () => setShow(!show);
+
+  const handleSubmitFilter = () => {
+    fetchClients({
+      where: {
+        name: { $like: `%${fields.name}%` },
+      }
+    });
+
+    setShow(false);
+  };
 
   return (
     <Block>
@@ -17,7 +31,7 @@ export const Filters = () => {
           <Block row style={{ gap: 5 }}>
             <Icon name="filter" family="feather" size={15} color={'black'} />
             <Text> Filtros </Text>
-            <Text style={styles.count}> 2 </Text>
+            <Text style={styles.count}> 1 </Text>
           </Block>
 
           <Icon
@@ -32,7 +46,12 @@ export const Filters = () => {
 
       {show && (
         <Block>
-          <CustomInput labelText="Nome" placeholder="Digite o nome do cliente" />
+          <CustomInput
+            value={fields.name}
+            onChangeText={(value) => setFields({ ...fields, name: value })}
+            labelText="Nome"
+            placeholder="Digite o nome do cliente"
+          />
 
           <CustomSelectBottom
             labelText="Mês de aniversário"
@@ -71,7 +90,7 @@ export const Filters = () => {
               textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
               color="primary"
               style={styles.button}
-              onPress={handleToggleShow}
+              onPress={handleSubmitFilter}
             >
               Filtrar
             </Button>

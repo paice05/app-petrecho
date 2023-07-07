@@ -10,30 +10,53 @@ import { api } from '../../services/api';
 const Clients = ({ navigation }) => {
   const [clients, setClients] = useState([]);
 
-  useEffect(() => {
-    const fecthClients = navigation.addListener('focus', () => {
-      api.get('/users').then(({ data }) => {
+  const [pagination, setPagination] = useState({
+    currentPage: 0,
+    total: 0,
+    lastPage: 0,
+  });
+
+  const fetchClients = (params) => {
+    console.log(params)
+
+    api
+      .get('/users', {
+        params,
+      })
+      .then(({ data }) => {
+
+        console.log({ data });
+
+        setPagination({
+          currentPage: data.currentPage,
+          lastPage: data.lastPage,
+          total: data.total,
+        });
         setClients(data.data);
       });
+  };
+
+  useEffect(() => {
+    navigation.addListener('focus', () => {
+      fetchClients({});
     });
   }, []);
-  /* useEffect(() => {
-    const fecthClients = async () => {
-      try {
-        const response = await api.get('/users');
 
-        setClients(response.data.data);
-      } catch (error) {
-        console.log({ error });
-      }
-    };
+  const handleNextPage = () => {
+    if (pagination.currentPage === pagination.lastPage) return;
 
-    fecthClients();
-  }, []); */
+    fetchClients({ page: pagination.currentPage + 1 });
+  };
+
+  const handlePreviousPage = () => {
+    if (pagination.currentPage === 1) return;
+
+    fetchClients({ page: pagination.currentPage - 1 });
+  };
 
   return (
     <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
-      <Filters />
+      <Filters fetchClients={fetchClients} />
 
       {clients.map((item) => {
         return (
@@ -46,7 +69,13 @@ const Clients = ({ navigation }) => {
           />
         );
       })}
-      <PaginationSimple />
+      <PaginationSimple
+        currentPage={pagination.currentPage}
+        total={pagination.total}
+        lastPage={pagination.lastPage}
+        handleNextPage={handleNextPage}
+        handlePreviousPage={handlePreviousPage}
+      />
     </ScrollView>
   );
 };

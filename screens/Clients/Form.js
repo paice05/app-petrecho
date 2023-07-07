@@ -71,8 +71,8 @@ const ClientForm = ({ route, navigation }) => {
   const handleSubmitUpdate = async () => {
     const payload = {
       ...fields,
-      type: fields.type.data,
-      birthDate: fields.birthDate.data,
+      type: fields?.type?.data,
+      birthDate: fields?.birthDate?.data,
     };
 
     try {

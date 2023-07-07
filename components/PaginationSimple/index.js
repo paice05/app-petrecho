@@ -3,22 +3,34 @@ import React, { useState } from 'react';
 import { Block, Button as GButton } from 'galio-framework';
 import { StyleSheet, Text } from 'react-native';
 
-const Button = ({ label }) => {
+const Button = ({ label, onPress }) => {
   return (
-    <GButton textStyle={{ fontSize: 10 }} small center style={styles.optionsButton}>
+    <GButton
+      onPress={onPress}
+      textStyle={{ fontSize: 10 }}
+      small
+      center
+      style={styles.optionsButton}
+    >
       {label}
     </GButton>
   );
 };
 
-export const PaginationSimple = ({ currentPage = 1, total = 50, lastPage = 5 }) => {
+export const PaginationSimple = ({
+  currentPage = 0,
+  total = 0,
+  lastPage = 0,
+  handleNextPage,
+  handlePreviousPage,
+}) => {
   return (
     <Block row center>
-      <Button color="info" label={'Anterior'}></Button>
+      <Button color="info" label={'Anterior'} onPress={handlePreviousPage}></Button>
       <Text>
         Página {currentPage} de {lastPage}
       </Text>
-      <Button color="info" label={'Próxima'}></Button>
+      <Button color="info" label={'Próxima'} onPress={handleNextPage}></Button>
 
       <Text>Total: {total}</Text>
     </Block>
