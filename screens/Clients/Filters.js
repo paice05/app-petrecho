@@ -1,28 +1,55 @@
 import { Block, theme } from 'galio-framework';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Button, Icon } from '../../components';
 import CustomInput from '../../components/CustomInput';
 import { CustomSelectBottom } from '../../components/CustomSelectBottom';
 
-export const Filters = ({ fetchClients }) => {
+const initialFields = {
+  name: '',
+  type: { title: '', data: '' },
+};
+
+const optionsType = [
+  {
+    title: 'Cliente',
+    data: 'pf',
+  },
+  {
+    title: 'Funcionário',
+    data: 'pj',
+  },
+];
+
+export const Filters = ({ fetchClients, hasClean }) => {
   const [show, setShow] = useState(false);
 
-  const [fields, setFields] = useState({
-    name: '',
-  });
+  const [fields, setFields] = useState(initialFields);
 
   const handleToggleShow = () => setShow(!show);
 
   const handleSubmitFilter = () => {
     fetchClients({
       where: {
-        ...(fields?.name && { name: { $like: `%${fields.name}%` } }),
+        ...(fields?.name && { name: { $iLike: `%${fields.name}%` } }),
+        ...(fields?.type?.data && { type: { $iLike: `%${fields.type.data}%` } }),
       },
     });
 
     setShow(false);
   };
+
+  const handleClearFields = () => {
+    setFields(initialFields);
+  };
+
+  useEffect(() => {
+    handleClearFields();
+  }, [hasClean]);
+
+  const countFieldsPopulate = Object.values(fields).filter((item) =>
+    typeof item === 'object' ? item.data : item
+  ).length;
 
   return (
     <Block>
@@ -31,7 +58,10 @@ export const Filters = ({ fetchClients }) => {
           <Block row style={{ gap: 5 }}>
             <Icon name="filter" family="feather" size={15} color={'black'} />
             <Text> Filtros </Text>
-            <Text style={styles.count}> 1 </Text>
+            <Text style={countFieldsPopulate > 0 ? styles.count : {}}>
+              {' '}
+              {countFieldsPopulate || ''}{' '}
+            </Text>
           </Block>
 
           <Icon
@@ -75,7 +105,9 @@ export const Filters = ({ fetchClients }) => {
           <CustomSelectBottom
             labelText="Tipo de cliente"
             placeholder="Escolha um tipo"
-            options={['Cliente', 'Funcionário']}
+            value={fields.type}
+            onChange={(item) => setFields({ ...fields, type: item })}
+            options={optionsType}
           />
 
           <Block style={styles.wrapper}>
@@ -83,6 +115,7 @@ export const Filters = ({ fetchClients }) => {
               textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
               color="default"
               style={styles.button}
+              onPress={handleClearFields}
             >
               Limpar
             </Button>

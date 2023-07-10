@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, Dimensions, ScrollView, ActivityIndicator } from 'react-native';
 
 import CardClient from '../../components/CardClient';
 
 import { PaginationSimple } from '../../components/PaginationSimple';
 import { Filters } from './Filters';
 import { api } from '../../services/api';
+import { Text } from 'galio-framework';
 
 const Clients = ({ navigation }) => {
   const [clients, setClients] = useState([]);
+  const [hasClean, setHasClean] = useState(false);
 
   const [pagination, setPagination] = useState({
     currentPage: 0,
@@ -17,8 +19,6 @@ const Clients = ({ navigation }) => {
   });
 
   const fetchClients = (params) => {
-    console.log(params);
-
     api
       .get('/users', {
         params,
@@ -27,8 +27,6 @@ const Clients = ({ navigation }) => {
         },
       })
       .then(({ data }) => {
-        console.log({ data });
-
         setPagination({
           currentPage: data.currentPage,
           lastPage: data.lastPage,
@@ -38,11 +36,10 @@ const Clients = ({ navigation }) => {
       });
   };
 
-  useEffect(() => {
-    navigation.addListener('focus', () => {
-      fetchClients({});
-    });
-  }, []);
+  navigation.addListener('focus', () => {
+    setHasClean(!hasClean);
+    fetchClients({});
+  });
 
   const handleNextPage = () => {
     if (pagination.currentPage === pagination.lastPage) return;
@@ -58,7 +55,16 @@ const Clients = ({ navigation }) => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
-      <Filters fetchClients={fetchClients} />
+      <Filters fetchClients={fetchClients} hasClean={hasClean} />
+
+      <ActivityIndicator animating={true} />
+
+      {clients.length === 0 && (
+        <Text center style={{ marginTop: 20, marginBottom: 20 }}>
+          {' '}
+          Nenhum registro encontrado{' '}
+        </Text>
+      )}
 
       {clients.map((item) => {
         return (

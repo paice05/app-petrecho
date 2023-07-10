@@ -17,6 +17,13 @@ const CardClient = ({ navigation, nome, telefone, aniversario, id }) => {
 
   const isLargeName = nome.length > 20;
 
+  const handleDelete = () => {
+    // chamar a API
+    // talvez precise fazer um reload dos clientes de novo
+
+    handleToggleVisible()
+  }
+
   return (
     <Block flex space="between" style={styles.container}>
       <Block style={styles.wraper}>
@@ -72,7 +79,7 @@ const CardClient = ({ navigation, nome, telefone, aniversario, id }) => {
       <Modal
         title="Deseja remover esse cliente?"
         isVisible={visible}
-        handleConfirm={handleToggleVisible}
+        handleConfirm={handleDelete}
         handleCancel={handleToggleVisible}
       />
     </Block>

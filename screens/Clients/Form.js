@@ -60,7 +60,7 @@ const ClientForm = ({ route, navigation }) => {
 
     try {
       const response = await api.post('/users', payload);
-      console.log(response.data);
+     
       setFields(response.data);
       navigation.goBack();
     } catch (error) {
@@ -77,7 +77,7 @@ const ClientForm = ({ route, navigation }) => {
 
     try {
       const response = await api.put(`/users/${isEditing}`, payload);
-      console.log(response.data);
+     
       setFields(response.data);
       navigation.goBack();
     } catch (error) {
@@ -99,17 +99,13 @@ const ClientForm = ({ route, navigation }) => {
             type: optionsType.find((item) => item.data === response.data.type),
           });
         } catch (error) {
-          console.log({ error });
+          console.log(error);
         }
       };
 
       fecthClients();
     } // busca dados da API
   }, []);
-
-  useEffect(() => {
-    console.log({ fields });
-  }, [fields]);
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
