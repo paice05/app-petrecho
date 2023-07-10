@@ -17,8 +17,8 @@ export const Filters = ({ fetchClients }) => {
   const handleSubmitFilter = () => {
     fetchClients({
       where: {
-        name: { $like: `%${fields.name}%` },
-      }
+        ...(fields?.name && { name: { $like: `%${fields.name}%` } }),
+      },
     });
 
     setShow(false);

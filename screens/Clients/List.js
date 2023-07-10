@@ -17,14 +17,16 @@ const Clients = ({ navigation }) => {
   });
 
   const fetchClients = (params) => {
-    console.log(params)
+    console.log(params);
 
     api
       .get('/users', {
         params,
+        headers: {
+          'Content-Type': 'application/json',
+        },
       })
       .then(({ data }) => {
-
         console.log({ data });
 
         setPagination({
