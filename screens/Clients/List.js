@@ -20,6 +20,8 @@ const Clients = ({ navigation }) => {
   });
 
   const fetchClients = (params) => {
+    setIsLoading(true);
+
     api
       .get('/users', {
         params,
@@ -33,13 +35,8 @@ const Clients = ({ navigation }) => {
           lastPage: data.lastPage,
           total: data.total,
         });
-
-        setTimeout(() => {
-          setIsLoading(false);
-          setClients(data.data);
-        }, 3000);
-        //setClients(data.data);
-        //setIsLoading(true);
+        setClients(data.data);
+        setIsLoading(false);
       });
   };
 
@@ -47,6 +44,16 @@ const Clients = ({ navigation }) => {
     setHasClean(!hasClean);
     fetchClients({});
   });
+
+  const handleDelete = (id) => {
+    try {
+      api.delete(`/users/${id}`).then(() => {
+        setClients(clients.filter((item) => item.id !== id));
+      });
+    } catch (error) {
+      console.error('Ocorreu um erro na requisição:', error);
+    }
+  };
 
   const handleNextPage = () => {
     if (pagination.currentPage === pagination.lastPage) return;
@@ -82,6 +89,7 @@ const Clients = ({ navigation }) => {
                 nome={item.name}
                 telefone={item.cellPhone}
                 aniversario={item.birthDate}
+                handleDelete={handleDelete}
               />
             );
           })}

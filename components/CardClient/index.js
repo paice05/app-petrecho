@@ -9,30 +9,15 @@ import { api } from '../../services/api';
 
 const { height, width } = Dimensions.get('window');
 
-const CardClient = ({ navigation, nome, telefone, aniversario, id, route }) => {
-  const [post, setpost] = useState(null);
-
+const CardClient = ({ navigation, nome, telefone, aniversario, id, handleDelete }) => {
   const [visible, setVisible] = useState(false);
 
   const handleToggleVisible = () => setVisible(!visible);
 
   const isLargeName = nome.length > 20;
 
-  const handleDelete = async () => {
-    try {
-      const response = await api.delete(`/users/${id}`);
-      setpost(null);
-
-      if (response.status === 200) {
-        console.log(`Usuário deletado com sucesso! ${nome}`);
-      } else {
-        console.log('Ocorreu um erro ao deletar o usuário.');
-      }
-    } catch (error) {
-      console.error('Ocorreu um erro na requisição:', error);
-    }
-    // talvez precise fazer um reload dos clientes de novo
-
+  const handleSubmitDelete = () => {
+    handleDelete(id);
     handleToggleVisible();
   };
 
@@ -91,7 +76,7 @@ const CardClient = ({ navigation, nome, telefone, aniversario, id, route }) => {
       <Modal
         title="Deseja remover esse cliente?"
         isVisible={visible}
-        handleConfirm={handleDelete}
+        handleConfirm={handleSubmitDelete}
         handleCancel={handleToggleVisible}
       />
     </Block>
