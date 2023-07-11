@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Dimensions } from 'react-native';
+import { ScrollView, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 
 // Galio components
@@ -12,6 +12,7 @@ import CustomInput from '../../components/CustomInput';
 import { CustomSelectHour } from '../../components/CustonSelectHour';
 import { Modal } from '../../components/Modal';
 import { Config } from './Config';
+import { DateTimePicker } from '../../components/DatePiker';
 
 const { width } = Dimensions.get('screen');
 
@@ -22,6 +23,9 @@ const SchedulesForm = ({ route, navigation }) => {
   const [showDate, setShowDate] = useState(false);
   const [checked, setChecked] = useState(false);
   const [visible, setVisible] = useState(false);
+
+  const [visibleTime, setVisibleTime] = useState(false);
+  const [time, setTime] = useState(null);
 
   const isEditing = params?.itemId;
 
@@ -59,15 +63,12 @@ const SchedulesForm = ({ route, navigation }) => {
             </Button>
           </Block>
           <Block flex>
-            <CustomSelectHour
-              labelText="Horário"
-              style={styles.optionsButton}
-              placeholder="Escolha um horário"
-              options={Array.from({ length: 48 }).map((_, index) => {
-                if (index % 2 === 0) return `${index}:00`;
-                else return `${index}:30`;
-              })}
-            />
+            <TouchableOpacity onPress={() => setVisibleTime(true)}>
+              <Text> {time?.toString() || 'Selecione um horário'} </Text>
+            </TouchableOpacity>
+            {/* {visibleTime && (
+              <DateTimePicker onClose={() => setVisibleTime(false)} setTime={setTime} />
+            )} */}
           </Block>
         </Block>
       </Block>
