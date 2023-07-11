@@ -1,6 +1,6 @@
 import { Block, theme } from 'galio-framework';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Button, Icon } from '../../components';
 import CustomInput from '../../components/CustomInput';
 import { CustomSelectBottom } from '../../components/CustomSelectBottom';
@@ -8,6 +8,7 @@ import { CustomSelectBottom } from '../../components/CustomSelectBottom';
 const initialFields = {
   name: '',
   type: { title: '', data: '' },
+  birthDate: { title: '', data: '' },
 };
 
 const optionsType = [
@@ -21,21 +22,40 @@ const optionsType = [
   },
 ];
 
+const optionsBirthDate = [
+  { title: 'Janeiro', data: 'Janeiro' },
+  { title: 'Fevereiro', data: 'Fevereiro' },
+  { title: 'Março', data: 'Março' },
+  { title: 'Abril', data: 'Abril' },
+  { title: 'Maio', data: 'Maio' },
+  { title: 'Junho', data: 'Junho' },
+  { title: 'Julho', data: 'Julho' },
+  { title: 'Agosto', data: 'Agosto' },
+  { title: 'Setembro', data: 'Setembro' },
+  { title: 'Outubro', data: 'Outubro' },
+  { title: 'Novembro', data: 'Novembro' },
+  { title: 'Dezembro', data: 'Dezembro' },
+];
+
 export const Filters = ({ fetchClients, hasClean }) => {
   const [show, setShow] = useState(false);
-
   const [fields, setFields] = useState(initialFields);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleToggleShow = () => setShow(!show);
 
   const handleSubmitFilter = () => {
-    fetchClients({
-      where: {
-        ...(fields?.name && { name: { $iLike: `%${fields.name}%` } }),
-        ...(fields?.type?.data && { type: { $iLike: `%${fields.type.data}%` } }),
-      },
-    });
+    setTimeout(() => {
+      setIsLoading(false);
 
+      fetchClients({
+        where: {
+          ...(fields?.name && { name: { $iLike: `%${fields.name}%` } }),
+          ...(fields?.type?.data && { type: { $iLike: `%${fields.type.data}%` } }),
+          ...(fields?.birthDate?.data && { birthDate: { $iLike: `%${fields.birthDate.data}%` } }),
+        },
+      });
+    }, 3000);
     setShow(false);
   };
 
@@ -59,8 +79,7 @@ export const Filters = ({ fetchClients, hasClean }) => {
             <Icon name="filter" family="feather" size={15} color={'black'} />
             <Text> Filtros </Text>
             <Text style={countFieldsPopulate > 0 ? styles.count : {}}>
-              {' '}
-              {countFieldsPopulate || ''}{' '}
+              {countFieldsPopulate || ''}
             </Text>
           </Block>
 
@@ -86,20 +105,9 @@ export const Filters = ({ fetchClients, hasClean }) => {
           <CustomSelectBottom
             labelText="Mês de aniversário"
             placeholder="Escolha um mês"
-            options={[
-              'Janeiro',
-              'Fevereiro',
-              'Março',
-              'Abril',
-              'Maio',
-              'Junho',
-              'Julho',
-              'Agosto',
-              'Setembro',
-              'Outubro',
-              'Novembro',
-              'Dezembro',
-            ]}
+            value={fields.birthDate}
+            onChange={(item) => setFields({ ...fields, birthDate: item })}
+            options={optionsBirthDate}
           />
 
           <CustomSelectBottom
@@ -109,7 +117,6 @@ export const Filters = ({ fetchClients, hasClean }) => {
             onChange={(item) => setFields({ ...fields, type: item })}
             options={optionsType}
           />
-
           <Block style={styles.wrapper}>
             <Button
               textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
@@ -130,6 +137,7 @@ export const Filters = ({ fetchClients, hasClean }) => {
           </Block>
         </Block>
       )}
+      {/* {!isLoading ? <ActivityIndicator size="large" color="#0ff" /> : null} */}
     </Block>
   );
 };

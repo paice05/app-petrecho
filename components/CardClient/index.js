@@ -1,28 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
 import { theme, Card, Block, Text, Button as GaButton } from 'galio-framework';
 
 import { nowTheme } from '../../constants';
 import { Modal } from '../Modal';
 import Icon from '../Icon';
+import { api } from '../../services/api';
 
 const { height, width } = Dimensions.get('window');
 
-const CardClient = ({ navigation, nome, telefone, aniversario, id }) => {
+const CardClient = ({ navigation, nome, telefone, aniversario, id, route }) => {
+  const [post, setpost] = useState(null);
+
   const [visible, setVisible] = useState(false);
 
   const handleToggleVisible = () => setVisible(!visible);
 
-  const cardContainer = [styles.card, styles.shadow];
-
   const isLargeName = nome.length > 20;
 
-  const handleDelete = () => {
-    // chamar a API
+  const handleDelete = async () => {
+    try {
+      const response = await api.delete(`/users/${id}`);
+      setpost(null);
+
+      if (response.status === 200) {
+        console.log(`Usuário deletado com sucesso! ${nome}`);
+      } else {
+        console.log('Ocorreu um erro ao deletar o usuário.');
+      }
+    } catch (error) {
+      console.error('Ocorreu um erro na requisição:', error);
+    }
     // talvez precise fazer um reload dos clientes de novo
 
-    handleToggleVisible()
-  }
+    handleToggleVisible();
+  };
 
   return (
     <Block flex space="between" style={styles.container}>
