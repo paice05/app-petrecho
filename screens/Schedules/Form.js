@@ -12,6 +12,7 @@ import CustomInput from '../../components/CustomInput';
 import { CustomSelectHour } from '../../components/CustonSelectHour';
 import { Modal } from '../../components/Modal';
 import { Config } from './Config';
+import { AsyncSelect } from '../../components/AsyncSelect';
 import { DateTimePicker } from '../../components/DatePiker';
 //import DateTimePicker from '@react-native-community/datetimepicker';
 import { api } from '../../services/api';
@@ -108,8 +109,14 @@ const SchedulesForm = ({ route, navigation }) => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Block flex style={styles.group}>
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE, paddingTop: 50 }}>
-          <CustomInput placeholder="Pesquise um cliente pelo nome" labelText="Cliente" />
+        <Block style={{ paddingHorizontal: theme.SIZES.BASE, paddingTop: 80 }}>
+          <AsyncSelect
+            path="/users"
+            query={{ type: 'pf' }}
+            placeholder="Pesquise um cliente pelo nome"
+            labelText="Cliente"
+            // onChange={(item) => setFields({ ...fields, clients: [...fields.clients, item] })}
+          />
         </Block>
 
         <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
@@ -117,7 +124,13 @@ const SchedulesForm = ({ route, navigation }) => {
         </Block>
 
         <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-          <CustomInput placeholder="Pesquise um funcionário pelo nome" labelText="Funcionário" />
+          <AsyncSelect
+            path="/users"
+            query={{ type: 'pj' }}
+            placeholder="Pesquise um funcionário pelo nome"
+            labelText="Funcionário"
+            // onChange={(item) => setFields({ ...fields, employee: [...fields.clients, item] })}
+          />
         </Block>
 
         <Block flex row style={styles.wraperTime}>
