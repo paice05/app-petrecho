@@ -5,9 +5,6 @@ import { theme, Card, Block, Text, Button as GaButton } from 'galio-framework';
 import { nowTheme } from '../../constants';
 import { Modal } from '../Modal';
 import Icon from '../Icon';
-import { api } from '../../services/api';
-
-const { height, width } = Dimensions.get('window');
 
 const CardClient = ({ navigation, nome, telefone, aniversario, id, handleDelete }) => {
   const [visible, setVisible] = useState(false);
@@ -74,7 +71,7 @@ const CardClient = ({ navigation, nome, telefone, aniversario, id, handleDelete 
       </Block>
 
       <Modal
-        title="Deseja remover esse cliente?"
+        title={`Deseja remover esse cliente? \n\n${nome}`}
         isVisible={visible}
         handleConfirm={handleSubmitDelete}
         handleCancel={handleToggleVisible}

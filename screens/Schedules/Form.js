@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { ScrollView, StyleSheet, Dimensions, TouchableOpacity, Platform } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 
 // Galio components
@@ -13,21 +13,86 @@ import { CustomSelectHour } from '../../components/CustonSelectHour';
 import { Modal } from '../../components/Modal';
 import { Config } from './Config';
 import { DateTimePicker } from '../../components/DatePiker';
+//import DateTimePicker from '@react-native-community/datetimepicker';
+import { api } from '../../services/api';
 
 const { width } = Dimensions.get('screen');
 
 const SchedulesForm = ({ route, navigation }) => {
   const params = route.params;
 
+  const isEditing = params?.itemId;
+
   const [selected, setSelected] = useState('');
   const [showDate, setShowDate] = useState(false);
   const [checked, setChecked] = useState(false);
   const [visible, setVisible] = useState(false);
 
-  const [visibleTime, setVisibleTime] = useState(false);
-  const [time, setTime] = useState(null);
+  const [time, seTime] = useState(new Date());
+  const [mode, setMode] = useState('time');
+  const [show, setShow] = useState(false);
+  const [text, setText] = useState('');
 
-  const isEditing = params?.itemId;
+  const onChange = (event, selectedTime) => {
+    const currentTime = selectedTime || time;
+
+    let tempTime = new Date(currentTime);
+    let fTime = '' + tempTime.getHours() + ':' + tempTime.getMinutes();
+    setText(fTime);
+
+    console.log(fTime);
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const [fields, setFields] = useState({
+    userId: '',
+    serviceId: '',
+    employeeId: '',
+    createdAt: '',
+    sheduleAt: '',
+    discount: '',
+    addition: '',
+  });
+
+  const handleSubmitCreate = async () => {
+    const payload = {
+      ...fields,
+      createdAt: fields.createdAt,
+      sheduleAt: fields.sheduleAt,
+      discount: fields.discount,
+      addition: fields.addition,
+    };
+
+    try {
+      const response = await api.post('/schedules', payload);
+      setFields(response.data);
+      navigation.goBack();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSubmitUpdate = async () => {
+    const payload = {
+      ...fields,
+      createdAt: fields.createdAt,
+      sheduleAt: fields.sheduleAt,
+      discount: fields.discount,
+      addition: fields.addition,
+    };
+
+    try {
+      const response = await api.put(`/schedules/${isEditing}`, payload);
+      setFields(response.data);
+      navigation.goBack();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
     if (isEditing) {
@@ -63,12 +128,19 @@ const SchedulesForm = ({ route, navigation }) => {
             </Button>
           </Block>
           <Block flex>
-            <TouchableOpacity onPress={() => setVisibleTime(true)}>
-              <Text> {time?.toString() || 'Selecione um horário'} </Text>
-            </TouchableOpacity>
-            {/* {visibleTime && (
-              <DateTimePicker onClose={() => setVisibleTime(false)} setTime={setTime} />
-            )} */}
+            <Text>Horário</Text>
+            <Button onPress={() => showMode('time')} style={styles.buttonDate}>
+              <Text> {text || 'Selecione um horário'} </Text>
+            </Button>
+            {show && (
+              <DateTimePicker
+                value={time}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={onChange}
+              />
+            )}
           </Block>
         </Block>
       </Block>

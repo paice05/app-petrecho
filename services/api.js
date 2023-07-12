@@ -13,9 +13,9 @@ const tokenFake = {
 };
 
 export const api = axios.create({
-  baseURL: `http://${myIp.paice}:3333/api/v1`,
+  baseURL: `http://${myIp.ale}:3333/api/v1`,
   paramsSerializer: (params) => qs.stringify(params),
   headers: {
-    Authorization: `Bearer ${tokenFake.paice}`,
+    Authorization: `Bearer ${tokenFake.ale}`,
   },
 });

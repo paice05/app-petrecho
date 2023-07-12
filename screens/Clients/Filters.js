@@ -45,22 +45,21 @@ export const Filters = ({ fetchClients, hasClean }) => {
   const handleToggleShow = () => setShow(!show);
 
   const handleSubmitFilter = () => {
-    setTimeout(() => {
-      setIsLoading(false);
+    setIsLoading(false);
 
-      fetchClients({
-        where: {
-          ...(fields?.name && { name: { $iLike: `%${fields.name}%` } }),
-          ...(fields?.type?.data && { type: { $iLike: `%${fields.type.data}%` } }),
-          ...(fields?.birthDate?.data && { birthDate: { $iLike: `%${fields.birthDate.data}%` } }),
-        },
-      });
-    }, 3000);
+    fetchClients({
+      where: {
+        ...(fields?.name && { name: { $iLike: `%${fields.name}%` } }),
+        ...(fields?.type?.data && { type: { $iLike: `%${fields.type.data}%` } }),
+        ...(fields?.birthDate?.data && { birthDate: { $iLike: `%${fields.birthDate.data}%` } }),
+      },
+    });
     setShow(false);
   };
 
   const handleClearFields = () => {
     setFields(initialFields);
+    fetchClients();
   };
 
   useEffect(() => {
@@ -137,7 +136,6 @@ export const Filters = ({ fetchClients, hasClean }) => {
           </Block>
         </Block>
       )}
-      {/* {!isLoading ? <ActivityIndicator size="large" color="#0ff" /> : null} */}
     </Block>
   );
 };
