@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Dimensions } from 'react-native';
+import { ScrollView, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 
 // Galio components
@@ -13,6 +13,7 @@ import { CustomSelectHour } from '../../components/CustonSelectHour';
 import { Modal } from '../../components/Modal';
 import { Config } from './Config';
 import { AsyncSelect } from '../../components/AsyncSelect';
+import { DateTimePicker } from '../../components/DatePiker';
 
 const { width } = Dimensions.get('screen');
 
@@ -24,10 +25,8 @@ const SchedulesForm = ({ route, navigation }) => {
   const [checked, setChecked] = useState(false);
   const [visible, setVisible] = useState(false);
 
-  const [fields, setFields] = useState({
-    clients: [],
-    employee: []
-  });
+  const [visibleTime, setVisibleTime] = useState(false);
+  const [time, setTime] = useState(null);
 
   const isEditing = params?.itemId;
 
@@ -42,19 +41,16 @@ const SchedulesForm = ({ route, navigation }) => {
 
   const handleToggleVisible = () => setVisible(!visible);
 
-  console.log(JSON.stringify(fields));
-
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Block flex style={styles.group}>
         <Block style={{ paddingHorizontal: theme.SIZES.BASE, paddingTop: 80 }}>
           <AsyncSelect
             path="/users"
-            isMulti
             query={{ type: 'pf' }}
             placeholder="Pesquise um cliente pelo nome"
             labelText="Cliente"
-            onChange={(item) => setFields({ ...fields, clients: [...fields.clients, item] })}
+            // onChange={(item) => setFields({ ...fields, clients: [...fields.clients, item] })}
           />
         </Block>
 
@@ -66,10 +62,9 @@ const SchedulesForm = ({ route, navigation }) => {
           <AsyncSelect
             path="/users"
             query={{ type: 'pj' }}
-            isMulti={false}
             placeholder="Pesquise um funcionário pelo nome"
             labelText="Funcionário"
-            onChange={(item) => setFields({ ...fields, employee: [...fields.clients, item] })}
+            // onChange={(item) => setFields({ ...fields, employee: [...fields.clients, item] })}
           />
         </Block>
 
@@ -81,15 +76,12 @@ const SchedulesForm = ({ route, navigation }) => {
             </Button>
           </Block>
           <Block flex>
-            <CustomSelectHour
-              labelText="Horário"
-              style={styles.optionsButton}
-              placeholder="Escolha um horário"
-              options={Array.from({ length: 48 }).map((_, index) => {
-                if (index % 2 === 0) return `${index}:00`;
-                else return `${index}:30`;
-              })}
-            />
+            <TouchableOpacity onPress={() => setVisibleTime(true)}>
+              <Text> {time?.toString() || 'Selecione um horário'} </Text>
+            </TouchableOpacity>
+            {/* {visibleTime && (
+              <DateTimePicker onClose={() => setVisibleTime(false)} setTime={setTime} />
+            )} */}
           </Block>
         </Block>
       </Block>

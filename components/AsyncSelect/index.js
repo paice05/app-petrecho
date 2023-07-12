@@ -16,43 +16,37 @@ export function AsyncSelect({
   value = [],
   isMulti = false,
 }) {
-  const [selectedItems, setSelectedItems] = useState(value);
+  const [selectedItems, setSelectedItems] = useState(null);
   const [items, setItems] = useState([]);
   const [textName, setTextName] = useState('');
 
-  const debouncedValue = useDebounce(textName)
+  const debouncedValue = useDebounce(textName);
 
-  // useEffect(() => {
-  //   if (debouncedValue) {
-  //     api
-  //       .get(path, {
-  //         params: {
-  //           where: {
-  //             name: { $iLike: `%${debouncedValue}%` },
-  //             ...query,
-  //           },
-  //         },
-  //       })
-  //       .then(({ data }) => {
-  //         setItems(data.data);
-  //       });
-  //   }
-  // }, [debouncedValue]);
-
-  const handleChangeName = (text) => {
-    api
+  useEffect(() => {
+    if (debouncedValue) {
+      api
         .get(path, {
           params: {
             where: {
-              name: { $iLike: `%${text}%` },
+              name: { $iLike: `%${debouncedValue}%` },
               ...query,
             },
           },
         })
         .then(({ data }) => {
+          console.log(data.data);
           setItems(data.data);
         });
+    }
+  }, [debouncedValue]);
+
+  const handleChangeName = (text) => {
+    setTextName(text);
   };
+
+  useEffect(() => {
+    console.log({ items });
+  }, [items])
 
   return (
     <Block>
@@ -62,9 +56,9 @@ export function AsyncSelect({
         selectedItems={selectedItems}
         onItemSelect={(item) => {
           if (isMulti) setSelectedItems([...selectedItems, item]);
-          else selectedItems(item);
+          else setSelectedItems([item]);
 
-          onChange(item);
+          // onChange(item);
         }}
         containerStyle={{ padding: 5 }}
         onRemoveItem={(item, index) => {
@@ -82,9 +76,9 @@ export function AsyncSelect({
         itemTextStyle={{ color: '#222' }}
         itemsContainerStyle={{ maxHeight: 140, marginTop: 5 }}
         items={items}
-        defaultIndex={2}
+        // defaultIndex={2}
         // chip={true}
-        resetValue={false}
+        resetValue
         textInputProps={{
           placeholder: placeholder,
           underlineColorAndroid: 'transparent',
@@ -105,59 +99,43 @@ export function AsyncSelect({
 
       <ScrollView>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', paddingBottom: 10, marginTop: 5 }}>
-          {!Array.isArray(selectedItems) && (
-            <View
-            key={index}
-            style={{
-              width: item.name.length * 8 + 30,
-              justifyContent: 'center',
-              flex: 0,
-              backgroundColor: '#eee',
-              flexDirection: 'row',
-              alignItems: 'center',
-              margin: 5,
-              borderRadius: 15,
-            }}
-          >
-            <Text style={{ color: '#555' }}>{selectedItems.name}</Text>
-          </View>
-          )}
-          
-          {Array.isArray(selectedItems) && selectedItems.map((item, index) => {
-            return (
-              <View
-                key={index}
-                style={{
-                  width: item.name.length * 8 + 30,
-                  justifyContent: 'center',
-                  flex: 0,
-                  backgroundColor: '#eee',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  margin: 5,
-                  borderRadius: 15,
-                }}
-              >
-                <Text style={{ color: '#555' }}>{item.name}</Text>
-                <TouchableOpacity
-                  onPress={() =>
-                    setSelectedItems((prevState) => prevState.filter((v) => v.id !== item.id))
-                  }
+          {selectedItems &&
+            Array.isArray(selectedItems) &&
+            selectedItems.map((item, index) => {
+              return (
+                <View
+                  key={index}
                   style={{
-                    backgroundColor: '#f16d6b',
-                    alignItems: 'center',
+                    width: item.name.length * 8 + 30,
                     justifyContent: 'center',
-                    width: 20,
-                    height: 20,
-                    borderRadius: 100,
-                    marginLeft: 10,
+                    flex: 0,
+                    backgroundColor: '#eee',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    margin: 5,
+                    borderRadius: 15,
                   }}
                 >
-                  <Text>X</Text>
-                </TouchableOpacity>
-              </View>
-            );
-          })}
+                  <Text style={{ color: '#555' }}>{item.name}</Text>
+                  <TouchableOpacity
+                    onPress={() =>
+                      setSelectedItems((prevState) => prevState.filter((v) => v.id !== item.id))
+                    }
+                    style={{
+                      backgroundColor: '#f16d6b',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      width: 20,
+                      height: 20,
+                      borderRadius: 100,
+                      marginLeft: 10,
+                    }}
+                  >
+                    <Text>X</Text>
+                  </TouchableOpacity>
+                </View>
+              );
+            })}
         </View>
       </ScrollView>
     </Block>
