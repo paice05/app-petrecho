@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Dimensions, TouchableOpacity, Platform } from 'react-native';
+import { ScrollView, StyleSheet, Dimensions, TouchableOpacity, Platform, View } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 
 // Galio components
@@ -12,8 +12,8 @@ import CustomInput from '../../components/CustomInput';
 import { CustomSelectHour } from '../../components/CustonSelectHour';
 import { Modal } from '../../components/Modal';
 import { Config } from './Config';
-import { DateTimePicker } from '../../components/DatePiker';
-//import DateTimePicker from '@react-native-community/datetimepicker';
+//import { DateTimePicker } from '../../components/DatePiker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { api } from '../../services/api';
 
 const { width } = Dimensions.get('screen');
@@ -28,24 +28,21 @@ const SchedulesForm = ({ route, navigation }) => {
   const [checked, setChecked] = useState(false);
   const [visible, setVisible] = useState(false);
 
-  const [time, seTime] = useState(new Date());
-  const [mode, setMode] = useState('time');
-  const [show, setShow] = useState(false);
+  const [timePicker, setTimePicker] = useState(false);
+  const [time, setTime] = useState(new Date(Date.now()));
   const [text, setText] = useState('');
 
-  const onChange = (event, selectedTime) => {
-    const currentTime = selectedTime || time;
+  const showTimePicker = () => {
+    setTimePicker(true);
+  };
 
+  const onTimeSelected = (event, value) => {
+    const currentTime = value || time;
+    setTime(currentTime);
     let tempTime = new Date(currentTime);
     let fTime = '' + tempTime.getHours() + ':' + tempTime.getMinutes();
     setText(fTime);
-
-    console.log(fTime);
-  };
-
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
+    setTimePicker(false);
   };
 
   const [fields, setFields] = useState({
@@ -129,16 +126,24 @@ const SchedulesForm = ({ route, navigation }) => {
           </Block>
           <Block flex>
             <Text>Horário</Text>
-            <Button onPress={() => showMode('time')} style={styles.buttonDate}>
-              <Text> {text || 'Selecione um horário'} </Text>
-            </Button>
-            {show && (
+            {!timePicker && (
+              <View style={{ margin: 10 }}>
+                <Button
+                  title="Selecione um horário"
+                  style={styles.selectHour}
+                  onPress={showTimePicker}
+                >
+                  <Text style={{ color: 'black' }}>{text || 'Selecione um horário'}</Text>
+                </Button>
+              </View>
+            )}
+            {timePicker && (
               <DateTimePicker
                 value={time}
-                mode={mode}
+                mode={'time'}
+                display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                 is24Hour={true}
-                display="default"
-                onChange={onChange}
+                onChange={onTimeSelected}
               />
             )}
           </Block>
@@ -251,9 +256,11 @@ const styles = StyleSheet.create({
   selectHour: {
     borderRadius: 30,
     borderColor: nowTheme.COLORS.BORDER,
-    height: 20 + 'important',
     backgroundColor: '#FFFFFF',
-    width: width * 0.1,
+    borderStyle: 'solid',
+    borderWidth: 1,
+    marginLeft: -9,
+    marginTop: -2,
     marginBottom: 16,
   },
   optionsButton: {
