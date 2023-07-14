@@ -2,17 +2,26 @@ import React, { useState } from 'react';
 import { Block, Text } from 'galio-framework';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 
-export const DateTimePicker = ({ time = new Date(), setTime, onClose }) => {
+export const DateTimePicker = ({ onChange }) => {
+  const [time, setTime] = useState(new Date(Date.now()));
+
+  const onTimeSelected = (event, value) => {
+    setTime(value);
+    let tempTime = new Date(value);
+    let fTime = tempTime.getHours() + ':' + tempTime.getMinutes();
+    const [hour, minute] = tempTime.toLocaleTimeString('pt-Br').split(':');
+    const fullTime = `${hour}:${minute}`;
+    onChange(fullTime);
+  };
+
   return (
     <Block>
       <RNDateTimePicker
-        onTouchCancel={onClose}
-        onTouchEndCapture={onClose}
-        onTouchEnd={onClose}
-        is24Hour
         value={time}
-        onChange={(event, value) => setTime(value)}
-        mode="time"
+        mode={'time'}
+        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+        is24Hour={true}
+        onChange={onTimeSelected}
       />
     </Block>
   );

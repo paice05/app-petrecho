@@ -16,7 +16,7 @@ export function AsyncSelect({
   value = [],
   isMulti = false,
 }) {
-  const [selectedItems, setSelectedItems] = useState(null);
+  const [selectedItems, setSelectedItems] = useState([]);
   const [items, setItems] = useState([]);
   const [textName, setTextName] = useState('');
 
@@ -45,8 +45,8 @@ export function AsyncSelect({
   };
 
   useEffect(() => {
-    console.log({ items });
-  }, [items])
+    onChange(selectedItems);
+  }, [selectedItems]);
 
   return (
     <Block>
@@ -57,8 +57,6 @@ export function AsyncSelect({
         onItemSelect={(item) => {
           if (isMulti) setSelectedItems([...selectedItems, item]);
           else setSelectedItems([item]);
-
-          // onChange(item);
         }}
         containerStyle={{ padding: 5 }}
         onRemoveItem={(item, index) => {
@@ -78,7 +76,7 @@ export function AsyncSelect({
         items={items}
         // defaultIndex={2}
         // chip={true}
-        resetValue
+        // resetValue
         textInputProps={{
           placeholder: placeholder,
           underlineColorAndroid: 'transparent',

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Dimensions, TouchableOpacity, Platform } from 'react-native';
+import { ScrollView, StyleSheet, Dimensions, TouchableOpacity, Platform, View } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 
 // Galio components
@@ -14,7 +14,6 @@ import { Modal } from '../../components/Modal';
 import { Config } from './Config';
 import { AsyncSelect } from '../../components/AsyncSelect';
 import { DateTimePicker } from '../../components/DatePiker';
-//import DateTimePicker from '@react-native-community/datetimepicker';
 import { api } from '../../services/api';
 
 const { width } = Dimensions.get('screen');
@@ -26,51 +25,35 @@ const SchedulesForm = ({ route, navigation }) => {
 
   const [selected, setSelected] = useState('');
   const [showDate, setShowDate] = useState(false);
-  const [checked, setChecked] = useState(false);
   const [visible, setVisible] = useState(false);
 
-  const [time, seTime] = useState(new Date());
-  const [mode, setMode] = useState('time');
-  const [show, setShow] = useState(false);
-  const [text, setText] = useState('');
+  const [timePicker, setTimePicker] = useState(false);
 
-  const onChange = (event, selectedTime) => {
-    const currentTime = selectedTime || time;
-
-    let tempTime = new Date(currentTime);
-    let fTime = '' + tempTime.getHours() + ':' + tempTime.getMinutes();
-    setText(fTime);
-
-    console.log(fTime);
-  };
-
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
+  const showTimePicker = () => {
+    setTimePicker(true);
   };
 
   const [fields, setFields] = useState({
     userId: '',
-    serviceId: '',
+    services: [],
     employeeId: '',
-    createdAt: '',
-    sheduleAt: '',
-    discount: '',
-    addition: '',
+    date: null,
+    time: null,
+    discount: 0,
+    addition: 0,
+    isPackage: false,
   });
 
   const handleSubmitCreate = async () => {
+    const scheduleAt = new Date(`${fields.date} 12:00:00`);
+
     const payload = {
       ...fields,
-      createdAt: fields.createdAt,
-      sheduleAt: fields.sheduleAt,
-      discount: fields.discount,
-      addition: fields.addition,
+      scheduleAt,
     };
 
     try {
       const response = await api.post('/schedules', payload);
-      setFields(response.data);
       navigation.goBack();
     } catch (error) {
       console.log(error);
@@ -101,9 +84,6 @@ const SchedulesForm = ({ route, navigation }) => {
   }, []);
 
   const handleToggleShowDate = () => setShowDate(!showDate);
-
-  const handleToggleSwitch = () => setChecked((previousState) => !previousState);
-
   const handleToggleVisible = () => setVisible(!visible);
 
   return (
@@ -115,12 +95,20 @@ const SchedulesForm = ({ route, navigation }) => {
             query={{ type: 'pf' }}
             placeholder="Pesquise um cliente pelo nome"
             labelText="Cliente"
-            // onChange={(item) => setFields({ ...fields, clients: [...fields.clients, item] })}
+            onChange={([item]) => item && setFields({ ...fields, userId: item.id })}
           />
         </Block>
 
         <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-          <CustomInput placeholder="Pesquise um serviço pelo nome" labelText="Serviço" />
+          <AsyncSelect
+            isMulti
+            path="/services"
+            placeholder="Pesquise um serviço pelo nome"
+            labelText="Serviços"
+            onChange={(item) =>
+              item && setFields({ ...fields, services: item.map((service) => service.id) })
+            }
+          />
         </Block>
 
         <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
@@ -129,7 +117,7 @@ const SchedulesForm = ({ route, navigation }) => {
             query={{ type: 'pj' }}
             placeholder="Pesquise um funcionário pelo nome"
             labelText="Funcionário"
-            // onChange={(item) => setFields({ ...fields, employee: [...fields.clients, item] })}
+            onChange={([item]) => item && setFields({ ...fields, employeeId: item.id })}
           />
         </Block>
 
@@ -137,23 +125,30 @@ const SchedulesForm = ({ route, navigation }) => {
           <Block flex>
             <Text>Data</Text>
             <Button onPress={handleToggleShowDate} style={styles.buttonDate}>
-              <Text> {selected || 'Selecionar data'} </Text>
+              <Text> {fields.date || 'Selecionar data'} </Text>
             </Button>
           </Block>
           <Block flex>
             <Text>Horário</Text>
-            <Button onPress={() => showMode('time')} style={styles.buttonDate}>
-              <Text> {text || 'Selecione um horário'} </Text>
-            </Button>
-            {show && (
-              <DateTimePicker
-                value={time}
-                mode={mode}
-                is24Hour={true}
-                display="default"
-                onChange={onChange}
-              />
+            {!timePicker && (
+              <View style={{ margin: 10 }}>
+                <Button
+                  title="Selecione um horário"
+                  style={styles.selectHour}
+                  onPress={showTimePicker}
+                >
+                  <Text style={{ color: 'black' }}>{fields.time || 'Selecione um horário'}</Text>
+                </Button>
+              </View>
             )}
+            {timePicker && (
+              <DateTimePicker
+                onChange={(value) => {
+                  setFields({ ...fields, time: value });
+                  setTimePicker(false);
+                }}
+              />
+            )} 
           </Block>
         </Block>
       </Block>
@@ -162,8 +157,8 @@ const SchedulesForm = ({ route, navigation }) => {
         <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
           <Block row right>
             <Switch
-              value={checked}
-              onChange={handleToggleSwitch}
+              value={fields.isPackage}
+              onChange={() => setFields({ ...fields, isPackage: !fields.isPackage })}
               trackColor={{ false: theme.COLORS.HEADER, true: theme.COLORS.HEADER }}
             />
             <Text
@@ -176,7 +171,7 @@ const SchedulesForm = ({ route, navigation }) => {
           </Block>
         </Block>
       </Block>
-      <Config />
+      <Config setFields={setFields} fields={fields} />
       <Block style={styles.container}>
         <Button
           textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
@@ -190,8 +185,9 @@ const SchedulesForm = ({ route, navigation }) => {
           textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
           color="success"
           style={styles.button}
+          onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
         >
-          Cadastrar
+          {isEditing ? 'Editar' : 'Cadastrar'}
         </Button>
       </Block>
 
@@ -203,8 +199,11 @@ const SchedulesForm = ({ route, navigation }) => {
         }}
       >
         <Calendar
-          onDayPress={(day) => {
-            setSelected(day.dateString);
+          onDayPress={(value) => {
+            const [year, month, day] = value.dateString.split('-');
+
+            setFields({ ...fields, date: `${day}-${month}-${year}` });
+            setSelected(value.dateString);
             handleToggleShowDate();
           }}
           markedDates={{
@@ -264,9 +263,11 @@ const styles = StyleSheet.create({
   selectHour: {
     borderRadius: 30,
     borderColor: nowTheme.COLORS.BORDER,
-    height: 20 + 'important',
     backgroundColor: '#FFFFFF',
-    width: width * 0.1,
+    borderStyle: 'solid',
+    borderWidth: 1,
+    marginLeft: -9,
+    marginTop: -2,
     marginBottom: 16,
   },
   optionsButton: {

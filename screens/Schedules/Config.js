@@ -4,7 +4,7 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { Button, Icon } from '../../components';
 import CustomInput from '../../components/CustomInput';
 
-export const Config = () => {
+export const Config = ({ fields, setFields }) => {
   const [show, setShow] = useState(false);
 
   const handleToggleShow = () => setShow(!show);
@@ -28,10 +28,20 @@ export const Config = () => {
       {show && (
         <Block flex row style={{ gap: 20 }}>
           <Block flex>
-            <CustomInput labelText="Desconto" placeholder="R$10,00" />
+            <CustomInput
+              onChangeText={(text) => setFields({ ...fields, discount: text })}
+              labelText="Desconto"
+              placeholder="R$10,00"
+              value={fields.discount}
+            />
           </Block>
           <Block flex>
-            <CustomInput labelText="Adicional" placeholder="R$5,00" />
+            <CustomInput
+              onChangeText={(text) => setFields({ ...fields, addition: text })}
+              labelText="Adicional"
+              placeholder="R$5,00"
+              value={fields.addition}
+            />
           </Block>
         </Block>
       )}
