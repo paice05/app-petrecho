@@ -15,6 +15,7 @@ import { Config } from './Config';
 import { AsyncSelect } from '../../components/AsyncSelect';
 import { DateTimePicker } from '../../components/DatePiker';
 import { api } from '../../services/api';
+import { AsyncSelectMulti } from '../../components/AsyncSelectMulti';
 
 const { width } = Dimensions.get('screen');
 
@@ -45,7 +46,7 @@ const SchedulesForm = ({ route, navigation }) => {
   });
 
   const handleSubmitCreate = async () => {
-    const scheduleAt = new Date(`${fields.date} 12:00:00`);
+    const scheduleAt = new Date(`${fields.date} ${fields.time}:00`);
 
     const payload = {
       ...fields,
@@ -95,19 +96,20 @@ const SchedulesForm = ({ route, navigation }) => {
             query={{ type: 'pf' }}
             placeholder="Pesquise um cliente pelo nome"
             labelText="Cliente"
-            onChange={([item]) => item && setFields({ ...fields, userId: item.id })}
+            onChange={(item) => item && setFields({ ...fields, userId: item.value })}
           />
         </Block>
 
         <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-          <AsyncSelect
+          <AsyncSelectMulti
             isMulti
             path="/services"
             placeholder="Pesquise um serviço pelo nome"
             labelText="Serviços"
-            onChange={(item) =>
-              item && setFields({ ...fields, services: item.map((service) => service.id) })
-            }
+            value={fields.services}
+            onChange={(item) => {
+              setFields({ ...fields, services: item });
+            }}
           />
         </Block>
 
@@ -117,7 +119,7 @@ const SchedulesForm = ({ route, navigation }) => {
             query={{ type: 'pj' }}
             placeholder="Pesquise um funcionário pelo nome"
             labelText="Funcionário"
-            onChange={([item]) => item && setFields({ ...fields, employeeId: item.id })}
+            onChange={(item) => item && setFields({ ...fields, employeeId: item.value })}
           />
         </Block>
 
@@ -148,7 +150,7 @@ const SchedulesForm = ({ route, navigation }) => {
                   setTimePicker(false);
                 }}
               />
-            )} 
+            )}
           </Block>
         </Block>
       </Block>

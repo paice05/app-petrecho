@@ -2,19 +2,12 @@ import { Block, Text } from 'galio-framework';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 
-import { Dropdown } from 'react-native-element-dropdown';
+import { MultiSelect } from 'react-native-element-dropdown';
 import { api } from '../../services/api';
 import { nowTheme } from '../../constants';
 import { useDebounce } from '../hooks/useDebounce';
 
-export function AsyncSelect({
-  path,
-  query = {},
-  labelText,
-  placeholder,
-  onChange,
-  value = null,
-}) {
+export function AsyncSelectMulti({ path, query = {}, labelText, placeholder, onChange, value }) {
   const [selectedItems, setSelectedItems] = useState([]);
   const [items, setItems] = useState([]);
   const [textName, setTextName] = useState('');
@@ -45,25 +38,26 @@ export function AsyncSelect({
   return (
     <Block>
       <Text>{labelText}</Text>
-      <Dropdown
-          style={[styles.dropdown && { borderColor: 'blue' }]}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          iconStyle={styles.iconStyle}
-          data={items}
-          search
-          maxHeight={300}
-          labelField="label"
-          valueField="value"
-          placeholder={placeholder}
-          searchPlaceholder="Pesquisar um registro"
-          onChange={item => {
-            onChange(item)
-          }}
-          onChangeText={handleChangeName}  
-          // value={value}
-        />
+
+      <MultiSelect
+        style={styles.dropdown}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        inputSearchStyle={styles.inputSearchStyle}
+        iconStyle={styles.iconStyle}
+        selectedStyle={styles.selectedStyle}
+        search
+        data={items}
+        labelField="label"
+        valueField="value"
+        placeholder={placeholder}
+        searchPlaceholder="Pesquise um registro"
+        value={value}
+        onChange={(item) => {
+          onChange(item);
+        }}
+        onChangeText={handleChangeName}
+      />
     </Block>
   );
 }
@@ -104,6 +98,10 @@ const styles = StyleSheet.create({
   },
   inputSearchStyle: {
     height: 40,
+    fontSize: 16,
+  },
+  textSelectedStyle: {
+    marginRight: 5,
     fontSize: 16,
   },
 });

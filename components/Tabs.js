@@ -6,21 +6,21 @@ const { width } = Dimensions.get('screen');
 import nowTheme from '../constants/Theme';
 
 const defaultMenu = [
-  { id: 'music', title: 'Music', },
-  { id: 'beauty', title: 'Beauty', },
-  { id: 'fashion', title: 'Fashion', },
-  { id: 'motocycles', title: 'Motocycles', },
+  { id: 'music', title: 'Music' },
+  { id: 'beauty', title: 'Beauty' },
+  { id: 'fashion', title: 'Fashion' },
+  { id: 'motocycles', title: 'Motocycles' },
 ];
 
 export default class Tabs extends React.Component {
   static defaultProps = {
     data: defaultMenu,
     initialIndex: null,
-  }
+  };
 
   state = {
     active: null,
-  }
+  };
 
   componentDidMount() {
     const { initialIndex } = this.props;
@@ -36,7 +36,7 @@ export default class Tabs extends React.Component {
       toValue: 1,
       duration: 300,
       useNativeDriver: false,
-    }).start()
+    }).start();
   }
 
   menuRef = React.createRef();
@@ -44,51 +44,51 @@ export default class Tabs extends React.Component {
   onScrollToIndexFailed = () => {
     this.menuRef.current.scrollToIndex({
       index: 0,
-      viewPosition: 0.5
+      viewPosition: 0.5,
     });
-  }
+  };
 
   selectMenu = (id) => {
     this.setState({ active: id });
 
     this.menuRef.current.scrollToIndex({
-      index: this.props.data.findIndex(item => item.id === id),
-      viewPosition: 0.5
+      index: this.props.data.findIndex((item) => item.id === id),
+      viewPosition: 0.5,
     });
 
     this.animate();
     this.props.onChange && this.props.onChange(id);
-  }
+  };
 
   renderItem = (item) => {
     const isActive = this.state.active === item.id;
 
     const textColor = this.animatedValue.interpolate({
       inputRange: [0, 1],
-      outputRange: [nowTheme.COLORS.TEXT, isActive ? nowTheme.COLORS.WHITE : nowTheme.COLORS.SECONDARY],
+      outputRange: [
+        nowTheme.COLORS.TEXT,
+        isActive ? nowTheme.COLORS.WHITE : nowTheme.COLORS.SECONDARY,
+      ],
       extrapolate: 'clamp',
     });
 
     const containerStyles = [
       styles.titleContainer,
       !isActive && { backgroundColor: nowTheme.COLORS.TABS },
-      isActive && styles.containerShadow
+      isActive && styles.containerShadow,
     ];
 
     return (
       <Block style={containerStyles}>
         <Animated.Text
-          style={[
-            styles.menuTitle,
-            { color: textColor },
-            { fontFamily: 'montserrat-regular' },
-          ]}
-          onPress={() => this.selectMenu(item.id)}>
+          style={[styles.menuTitle, { color: textColor }, { fontFamily: 'montserrat-regular' }]}
+          onPress={() => this.selectMenu(item.id)}
+        >
           {item.title}
         </Animated.Text>
       </Block>
-    )
-  }
+    );
+  };
 
   renderMenu = () => {
     const { data, ...props } = this.props;
@@ -106,15 +106,11 @@ export default class Tabs extends React.Component {
         renderItem={({ item }) => this.renderItem(item)}
         contentContainerStyle={styles.menu}
       />
-    )
-  }
+    );
+  };
 
   render() {
-    return (
-      <Block style={styles.container}>
-        {this.renderMenu()}
-      </Block>
-    )
+    return <Block style={styles.container}>{this.renderMenu()}</Block>;
   }
 }
 
@@ -156,6 +152,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     paddingVertical: 8,
     paddingHorizontal: 12,
-    color: nowTheme.COLORS.MUTED
+    color: nowTheme.COLORS.MUTED,
   },
 });
