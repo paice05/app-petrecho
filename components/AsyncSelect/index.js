@@ -7,14 +7,7 @@ import { api } from '../../services/api';
 import { nowTheme } from '../../constants';
 import { useDebounce } from '../hooks/useDebounce';
 
-export function AsyncSelect({
-  path,
-  query = {},
-  labelText,
-  placeholder,
-  onChange,
-  value = null,
-}) {
+export function AsyncSelect({ path, query = {}, labelText, placeholder, onChange, value = null }) {
   const [selectedItems, setSelectedItems] = useState([]);
   const [items, setItems] = useState([]);
   const [textName, setTextName] = useState('');
@@ -43,42 +36,44 @@ export function AsyncSelect({
   };
 
   return (
-    <Block>
+    <View style={styles.container}>
       <Text>{labelText}</Text>
       <Dropdown
-          style={[styles.dropdown && { borderColor: 'blue' }]}
-          placeholderStyle={styles.placeholderStyle}
-          selectedTextStyle={styles.selectedTextStyle}
-          inputSearchStyle={styles.inputSearchStyle}
-          iconStyle={styles.iconStyle}
-          data={items}
-          search
-          maxHeight={300}
-          labelField="label"
-          valueField="value"
-          placeholder={placeholder}
-          searchPlaceholder="Pesquisar um registro"
-          onChange={item => {
-            onChange(item)
-          }}
-          onChangeText={handleChangeName}  
-          // value={value}
-        />
-    </Block>
+        style={styles.dropdown}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        inputSearchStyle={styles.inputSearchStyle}
+        iconStyle={styles.iconStyle}
+        data={items}
+        search
+        maxHeight={300}
+        labelField="label"
+        valueField="value"
+        placeholder={placeholder}
+        searchPlaceholder="Pesquisar um registro"
+        onChange={(item) => {
+          onChange(item);
+        }}
+        onChangeText={handleChangeName}
+        // value={value}
+      />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
-    padding: 16,
+    paddingBottom: 16,
   },
   dropdown: {
-    height: 50,
-    borderColor: 'gray',
-    borderWidth: 0.5,
-    borderRadius: 8,
+    height: 44,
+    backgroundColor: '#FFFFFF',
+    borderBottomColor: 'gray',
+    borderBottomWidth: 0.5,
+    borderRadius: 30,
+    borderColor: nowTheme.COLORS.BORDER,
     paddingHorizontal: 8,
+    paddingLeft: 15,
   },
   icon: {
     marginRight: 5,

@@ -55,6 +55,7 @@ const SchedulesForm = ({ route, navigation }) => {
 
     try {
       const response = await api.post('/schedules', payload);
+      setFields(response.data);
       navigation.goBack();
     } catch (error) {
       console.log(error);

@@ -1,7 +1,7 @@
 import { Block, Text } from 'galio-framework';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-
+import AntDesign from '@expo/vector-icons/AntDesign';
 import { MultiSelect } from 'react-native-element-dropdown';
 import { api } from '../../services/api';
 import { nowTheme } from '../../constants';
@@ -11,7 +11,7 @@ export function AsyncSelectMulti({ path, query = {}, labelText, placeholder, onC
   const [selectedItems, setSelectedItems] = useState([]);
   const [items, setItems] = useState([]);
   const [textName, setTextName] = useState('');
-
+  console.log({ item: items });
   const debouncedValue = useDebounce(textName);
 
   useEffect(() => {
@@ -35,8 +35,16 @@ export function AsyncSelectMulti({ path, query = {}, labelText, placeholder, onC
     setTextName(text);
   };
 
+  const renderItem = (item) => {
+    return (
+      <View style={styles.item}>
+        <Text style={styles.selectedTextStyle}>{item.label}</Text>
+      </View>
+    );
+  };
+
   return (
-    <Block>
+    <View style={styles.container}>
       <Text>{labelText}</Text>
 
       <MultiSelect
@@ -45,52 +53,56 @@ export function AsyncSelectMulti({ path, query = {}, labelText, placeholder, onC
         selectedTextStyle={styles.selectedTextStyle}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
-        selectedStyle={styles.selectedStyle}
         search
         data={items}
         labelField="label"
         valueField="value"
         placeholder={placeholder}
-        searchPlaceholder="Pesquise um registro"
+        searchPlaceholder="Pesquise um registro..."
         value={value}
         onChange={(item) => {
           onChange(item);
         }}
         onChangeText={handleChangeName}
+        // renderLeftIcon={() => (
+        //   <AntDesign style={styles.icon} color="black" name="Safety" size={20} />
+        // )}
+        selectedStyle={styles.selectedStyle}
+        renderItem={renderItem}
+        renderSelectedItem={(item, unSelect) => (
+          <TouchableOpacity onPress={() => unSelect && unSelect(item)}>
+            <View style={styles.selectedStyle}>
+              <Text style={styles.textSelectedStyle}>{item.label}</Text>
+              <AntDesign color="black" name="delete" size={17} />
+            </View>
+          </TouchableOpacity>
+        )}
       />
-    </Block>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
-    padding: 16,
+    paddingBottom: 16,
   },
   dropdown: {
-    height: 50,
-    borderColor: 'gray',
-    borderWidth: 0.5,
-    borderRadius: 8,
+    height: 44,
+    backgroundColor: '#FFFFFF',
+    borderBottomColor: 'gray',
+    borderBottomWidth: 0.5,
+    borderRadius: 30,
+    borderColor: nowTheme.COLORS.BORDER,
     paddingHorizontal: 8,
-  },
-  icon: {
-    marginRight: 5,
-  },
-  label: {
-    position: 'absolute',
-    backgroundColor: 'white',
-    left: 22,
-    top: 8,
-    zIndex: 999,
-    paddingHorizontal: 8,
-    fontSize: 14,
+    paddingLeft: 15,
   },
   placeholderStyle: {
     fontSize: 16,
   },
   selectedTextStyle: {
-    fontSize: 16,
+    fontSize: 18,
+    marginBottom: 10,
+    marginLeft: 5,
   },
   iconStyle: {
     width: 20,
@@ -99,6 +111,29 @@ const styles = StyleSheet.create({
   inputSearchStyle: {
     height: 40,
     fontSize: 16,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  selectedStyle: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 14,
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    marginTop: 8,
+    marginRight: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
   },
   textSelectedStyle: {
     marginRight: 5,
