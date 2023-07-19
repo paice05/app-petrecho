@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Dimensions, TouchableOpacity, Platform, View } from 'react-native';
 import { Calendar } from 'react-native-calendars';
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 // Galio components
 import { Block, Button as GaButton, Text, theme, Switch } from 'galio-framework';
@@ -50,12 +51,12 @@ const SchedulesForm = ({ route, navigation }) => {
 
     const payload = {
       ...fields,
+      services: fields.services.map((item) => item.value),
       scheduleAt,
     };
 
     try {
-      const response = await api.post('/schedules', payload);
-      setFields(response.data);
+      await api.post('/schedules', payload);
       navigation.goBack();
     } catch (error) {
       console.log(error);
@@ -109,9 +110,28 @@ const SchedulesForm = ({ route, navigation }) => {
             labelText="Serviços"
             value={fields.services}
             onChange={(item) => {
-              setFields({ ...fields, services: item });
+              setFields({ ...fields, services: [...fields.services, item] });
             }}
           />
+        </Block>
+        <Block>
+          {fields.services.map((item, index) => {
+            return (
+              <TouchableOpacity
+                onPress={() =>
+                  setFields({
+                    ...fields,
+                    services: fields.services.filter((service) => service.value !== item.value),
+                  })
+                }
+              >
+                <View style={styles.selectedStyle}>
+                  <Text style={styles.textSelectedStyle}>{item?.label}</Text>
+                  <AntDesign color="black" name="delete" size={17} />
+                </View>
+              </TouchableOpacity>
+            );
+          })}
         </Block>
 
         <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
@@ -278,6 +298,30 @@ const styles = StyleSheet.create({
     height: 34,
     paddingHorizontal: 10,
     paddingVertical: 10,
+  },
+  selectedStyle: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 14,
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    marginTop: 8,
+    marginRight: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
+  },
+  textSelectedStyle: {
+    marginRight: 5,
+    fontSize: 16,
   },
 });
 

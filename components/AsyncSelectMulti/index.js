@@ -11,7 +11,6 @@ export function AsyncSelectMulti({ path, query = {}, labelText, placeholder, onC
   const [selectedItems, setSelectedItems] = useState([]);
   const [items, setItems] = useState([]);
   const [textName, setTextName] = useState('');
-  console.log({ item: items });
   const debouncedValue = useDebounce(textName);
 
   useEffect(() => {
@@ -61,7 +60,8 @@ export function AsyncSelectMulti({ path, query = {}, labelText, placeholder, onC
         searchPlaceholder="Pesquise um registro..."
         value={value}
         onChange={(item) => {
-          onChange(item);
+          const id = item[item.length - 1];
+          onChange(items.find((item) => item.value === id));
         }}
         onChangeText={handleChangeName}
         // renderLeftIcon={() => (
@@ -69,14 +69,7 @@ export function AsyncSelectMulti({ path, query = {}, labelText, placeholder, onC
         // )}
         selectedStyle={styles.selectedStyle}
         renderItem={renderItem}
-        renderSelectedItem={(item, unSelect) => (
-          <TouchableOpacity onPress={() => unSelect && unSelect(item)}>
-            <View style={styles.selectedStyle}>
-              <Text style={styles.textSelectedStyle}>{item.label}</Text>
-              <AntDesign color="black" name="delete" size={17} />
-            </View>
-          </TouchableOpacity>
-        )}
+        renderSelectedItem={(item, unSelect) => <Text> </Text>}
       />
     </View>
   );
