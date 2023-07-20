@@ -47,7 +47,9 @@ const SchedulesForm = ({ route, navigation }) => {
   });
 
   const handleSubmitCreate = async () => {
-    const scheduleAt = new Date(`${fields.date} ${fields.time}:00`);
+    const [day, month, yaer] = fields.date.split('-');
+
+    const scheduleAt = new Date(`${yaer}-${month}-${day} ${fields.time}:00`);
 
     const payload = {
       ...fields,

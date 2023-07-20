@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Block, Text } from 'galio-framework';
+import { format } from 'date-fns';
 import { StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 
 import { api } from '../../services/api';
@@ -25,7 +26,7 @@ export const ScheduleList = ({ navigation }) => {
     lastPage: 0,
   });
 
-  const fetchSchedules = (params) => {
+  const fetchSchedules = (params = {}) => {
     setIsLoading(true);
 
     api
@@ -41,9 +42,10 @@ export const ScheduleList = ({ navigation }) => {
           lastPage: data.lastPage,
           total: data.total,
         });
-        setSchedules(data.data);
+        setSchedules(data);
         setIsLoading(false);
-      });
+      })
+      .catch((error) => console.log({ error }));
   };
 
   navigation.addListener('focus', () => {
@@ -115,7 +117,7 @@ export const ScheduleList = ({ navigation }) => {
             )}
 
             {schedules.map((item) => {
-              return <Text>Agendamentos</Text>;
+              return <Text>{format(new Date(item.scheduleAt), 'dd/MM/YYY HH:mm')}</Text>;
             })}
             <PaginationSimple
               currentPage={pagination.currentPage}
