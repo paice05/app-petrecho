@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Text } from 'galio-framework';
-import { StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { Block, Text } from 'galio-framework';
+import { StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 
+import { api } from '../../services/api';
 import CardSchedule from '../../components/CardSchedule';
 import { PaginationSimple } from '../../components/PaginationSimple';
 import { Modal } from '../../components/Modal';
@@ -12,8 +13,65 @@ import { nowTheme, tabs } from '../../constants';
 export const ScheduleList = ({ navigation }) => {
   const [openCalendar, setOpenCalendar] = useState(false);
   const [date, setDate] = useState(null);
+  const [schedules, setSchedules] = useState([]);
+  const [hasClean, setHasClean] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const defaultTab = tabs.week[new Date().getDay()].id;
+
+  const [pagination, setPagination] = useState({
+    currentPage: 0,
+    total: 0,
+    lastPage: 0,
+  });
+
+  const fetchSchedules = (params) => {
+    setIsLoading(true);
+
+    api
+      .get('/schedules', {
+        params,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(({ data }) => {
+        setPagination({
+          currentPage: data.currentPage,
+          lastPage: data.lastPage,
+          total: data.total,
+        });
+        setSchedules(data.data);
+        setIsLoading(false);
+      });
+  };
+
+  navigation.addListener('focus', () => {
+    setHasClean(!hasClean);
+    fetchSchedules({});
+  });
+
+  const handleDelete = (id) => {
+    try {
+      api.delete(`/schedules/${id}`).then(() => {
+        setSchedules(schedules.filter((item) => item.id !== id));
+      });
+    } catch (error) {
+      console.error('Ocorreu um erro na requisição:', error);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (pagination.currentPage === pagination.lastPage) return;
+
+    fetchSchedules({ page: pagination.currentPage + 1 });
+  };
+
+  const handlePreviousPage = () => {
+    if (pagination.currentPage === 1) return;
+
+    fetchSchedules({ page: pagination.currentPage - 1 });
+  };
 
   return (
     <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
@@ -45,15 +103,30 @@ export const ScheduleList = ({ navigation }) => {
         onChange={(id) => {}}
         selected={date && new Date(date).getDay()}
       />
+      <Block>
+        {isLoading ? (
+          <ActivityIndicator size="large" colo="#0000ff" />
+        ) : (
+          <Block>
+            {schedules.length === 0 && (
+              <Text center style={{ marginTop: 20, marginBottom: 20 }}>
+                Nenhum registro encontrado
+              </Text>
+            )}
 
-      <CardSchedule
-        navigation={navigation}
-        id={1}
-        nome="Alexandre Barbosa"
-        servico="Cabelo, barba"
-        horario="14:00"
-      />
-      <PaginationSimple />
+            {schedules.map((item) => {
+              return <Text>Agendamentos</Text>;
+            })}
+            <PaginationSimple
+              currentPage={pagination.currentPage}
+              total={pagination.total}
+              lastPage={pagination.lastPage}
+              handleNextPage={handleNextPage}
+              handlePreviousPage={handlePreviousPage}
+            />
+          </Block>
+        )}
+      </Block>
     </ScrollView>
   );
 };

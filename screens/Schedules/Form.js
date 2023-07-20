@@ -67,7 +67,7 @@ const SchedulesForm = ({ route, navigation }) => {
     const payload = {
       ...fields,
       createdAt: fields.createdAt,
-      sheduleAt: fields.sheduleAt,
+      scheduleAt: fields.scheduleAt,
       discount: fields.discount,
       addition: fields.addition,
     };
@@ -114,7 +114,7 @@ const SchedulesForm = ({ route, navigation }) => {
             }}
           />
         </Block>
-        <Block>
+        <Block style={styles.selectedMulti}>
           {fields.services.map((item, index) => {
             return (
               <TouchableOpacity
@@ -322,6 +322,13 @@ const styles = StyleSheet.create({
   textSelectedStyle: {
     marginRight: 5,
     fontSize: 16,
+  },
+  selectedMulti: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 15,
+    marginTop: -8,
   },
 });
 

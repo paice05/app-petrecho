@@ -64,9 +64,6 @@ export function AsyncSelectMulti({ path, query = {}, labelText, placeholder, onC
           onChange(items.find((item) => item.value === id));
         }}
         onChangeText={handleChangeName}
-        // renderLeftIcon={() => (
-        //   <AntDesign style={styles.icon} color="black" name="Safety" size={20} />
-        // )}
         selectedStyle={styles.selectedStyle}
         renderItem={renderItem}
         renderSelectedItem={(item, unSelect) => <Text> </Text>}
@@ -93,9 +90,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   selectedTextStyle: {
-    fontSize: 18,
-    marginBottom: 10,
-    marginLeft: 5,
+    fontSize: 14,
   },
   iconStyle: {
     width: 20,
@@ -107,6 +102,12 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 5,
+  },
+  item: {
+    padding: 17,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   selectedStyle: {
     flexDirection: 'row',

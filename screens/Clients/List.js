@@ -71,7 +71,7 @@ const Clients = ({ navigation }) => {
     <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
       <Filters fetchClients={fetchClients} hasClean={hasClean} />
       {isLoading ? (
-        <ActivityIndicator size="large" colo="#0000ff" />
+        <ActivityIndicator size="large" color="#0000ff" />
       ) : (
         <Block>
           {clients.length === 0 && (
