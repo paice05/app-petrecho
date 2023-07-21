@@ -117,7 +117,14 @@ export const ScheduleList = ({ navigation }) => {
             )}
 
             {schedules.map((item) => {
-              return <Text>{format(new Date(item.scheduleAt), 'dd/MM/YYY HH:mm')}</Text>;
+              return (
+                <CardSchedule
+                  navigation={navigation}
+                  nome={item.user.name}
+                  servico={item.services?.map((service) => service?.name).join(',')}
+                  horario={format(new Date(item.scheduleAt), 'HH:mm')}
+                />
+              );
             })}
             <PaginationSimple
               currentPage={pagination.currentPage}

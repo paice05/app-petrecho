@@ -8,14 +8,14 @@ import Icon from '../Icon';
 
 const { height, width } = Dimensions.get('window');
 
-const CardClient = ({ navigation, nome, servico, horario, id }) => {
-  const isLargeName = nome.length > 20;
+const CardSchedule = ({ navigation, nome, servico, horario, id }) => {
+  const isLargeName = nome?.length > 20;
 
   return (
     <Block flex space="between" style={styles.container}>
       <Block style={styles.wraper}>
         <Text style={styles.cardTitle}>
-          {nome.slice(0, 20)}
+          {nome?.slice(0, 20)}
           {isLargeName ? '...' : ''}
         </Text>
 
@@ -118,4 +118,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CardClient;
+export default CardSchedule;
