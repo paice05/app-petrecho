@@ -5,17 +5,9 @@ import { Block, theme } from 'galio-framework';
 const { width } = Dimensions.get('screen');
 import nowTheme from '../constants/Theme';
 
-const defaultMenu = [
-  { id: 'music', title: 'Music' },
-  { id: 'beauty', title: 'Beauty' },
-  { id: 'fashion', title: 'Fashion' },
-  { id: 'motocycles', title: 'Motocycles' },
-];
-
 export default class Tabs extends React.Component {
   static defaultProps = {
-    data: defaultMenu,
-    initialIndex: null,
+    data: [], // id, title
   };
 
   state = {
@@ -23,8 +15,12 @@ export default class Tabs extends React.Component {
   };
 
   componentDidMount() {
-    const { initialIndex } = this.props;
-    initialIndex && this.selectMenu(initialIndex);
+    const { selected } = this.props;
+    if (selected) this.selectMenu(selected);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.selected !== prevProps.selected) this.selectMenu(this.props.selected);
   }
 
   animatedValue = new Animated.Value(1);

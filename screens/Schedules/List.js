@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Block, Text } from 'galio-framework';
-import { format } from 'date-fns';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Block, Button, Text } from 'galio-framework';
+import { addDays, format } from 'date-fns';
 import { StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 
 import { api } from '../../services/api';
@@ -10,15 +10,14 @@ import { Modal } from '../../components/Modal';
 import Tabs from '../../components/Tabs';
 import { Calendar } from '../../components/Calendar';
 import { nowTheme, tabs } from '../../constants';
+import { useFocusEffect } from '@react-navigation/native';
 
 export const ScheduleList = ({ navigation }) => {
   const [openCalendar, setOpenCalendar] = useState(false);
-  const [date, setDate] = useState(null);
-  const [schedules, setSchedules] = useState([]);
-  const [hasClean, setHasClean] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [date, setDate] = useState(new Date());
 
-  const defaultTab = tabs.week[new Date().getDay()].id;
+  const [schedules, setSchedules] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [pagination, setPagination] = useState({
     currentPage: 0,
@@ -48,10 +47,12 @@ export const ScheduleList = ({ navigation }) => {
       .catch((error) => console.log({ error }));
   };
 
-  navigation.addListener('focus', () => {
-    setHasClean(!hasClean);
-    fetchSchedules({});
-  });
+  useFocusEffect(
+    useCallback(() => {
+      fetchSchedules();
+      setDate(new Date());
+    }, [])
+  );
 
   const handleDelete = (id) => {
     try {
@@ -78,33 +79,11 @@ export const ScheduleList = ({ navigation }) => {
   return (
     <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
       <TouchableOpacity style={styles.dateStyle} onPress={() => setOpenCalendar(true)}>
-        <Text>{date || 'Selecionar um data'}</Text>
+        <Text>{format(date, 'dd/MM/YYY')}</Text>
       </TouchableOpacity>
 
-      <Modal
-        isVisible={openCalendar}
-        handleCancel={() => setOpenCalendar(false)}
-        handleConfirm={() => setOpenCalendar(false)}
-        title="Selecione uma data para buscar seus agendamentos"
-        onRequestClose={() => {
-          Alert.alert('Modal será fechado.');
-          setOpenCalendar(!openCalendar);
-        }}
-      >
-        <Calendar
-          onChange={(value) => {
-            setDate(value);
-            setOpenCalendar(false);
-          }}
-        />
-      </Modal>
+      <Tabs data={tabs.week} selected={tabs.week[date.getDay()].id} />
 
-      <Tabs
-        data={tabs.week}
-        initialIndex={defaultTab}
-        onChange={(id) => {}}
-        selected={date && new Date(date).getDay()}
-      />
       <Block>
         {isLoading ? (
           <ActivityIndicator size="large" colo="#0000ff" />
@@ -136,6 +115,24 @@ export const ScheduleList = ({ navigation }) => {
           </Block>
         )}
       </Block>
+
+      <Modal
+        isVisible={openCalendar}
+        handleCancel={() => setOpenCalendar(false)}
+        handleConfirm={() => setOpenCalendar(false)}
+        title="Selecione uma data para buscar seus agendamentos"
+        onRequestClose={() => {
+          Alert.alert('Modal será fechado.');
+          setOpenCalendar(!openCalendar);
+        }}
+      >
+        <Calendar
+          onChange={(value) => {
+            setDate(new Date(`${value} 00:00:00`));
+            setOpenCalendar(false);
+          }}
+        />
+      </Modal>
     </ScrollView>
   );
 };

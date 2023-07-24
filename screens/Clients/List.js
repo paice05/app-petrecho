@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, Dimensions, ScrollView, ActivityIndicator } from 'react-native';
 
 import CardClient from '../../components/CardClient';
@@ -7,6 +7,7 @@ import { PaginationSimple } from '../../components/PaginationSimple';
 import { Filters } from './Filters';
 import { api } from '../../services/api';
 import { Block, Text } from 'galio-framework';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Clients = ({ navigation }) => {
   const [clients, setClients] = useState([]);
@@ -40,10 +41,12 @@ const Clients = ({ navigation }) => {
       });
   };
 
-  navigation.addListener('focus', () => {
-    setHasClean(!hasClean);
-    fetchClients({});
-  });
+  useFocusEffect(
+    useCallback(() => {
+      setHasClean(!hasClean);
+      fetchClients({});
+    }, [])
+  );
 
   const handleDelete = (id) => {
     try {
