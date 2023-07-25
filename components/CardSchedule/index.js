@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { theme, Card, Block, Text, Button as GaButton, Button } from 'galio-framework';
 
 import { nowTheme } from '../../constants';
@@ -14,10 +14,18 @@ const CardSchedule = ({ navigation, nome, servico, horario, id }) => {
   return (
     <Block flex space="between" style={styles.container}>
       <Block style={styles.wraper}>
-        <Text style={styles.cardTitle}>
-          {nome?.slice(0, 20)}
-          {isLargeName ? '...' : ''}
-        </Text>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('ScheduleForm', {
+              itemId: id,
+            })
+          }
+        >
+          <Text style={styles.cardTitle}>
+            {nome?.slice(0, 20)}
+            {isLargeName ? '...' : ''}
+          </Text>
+        </TouchableOpacity>
 
         <Block row>
           <Icon family="feather" name="clock" />
@@ -42,18 +50,6 @@ const CardSchedule = ({ navigation, nome, servico, horario, id }) => {
           style={styles.buttonCancel}
         >
           Cancelado
-        </Button>
-        <Button
-          textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
-          color="info"
-          style={styles.buttonEdit}
-          onPress={() =>
-            navigation.navigate('ScheduleForm', {
-              itemId: id,
-            })
-          }
-        >
-          Editar
         </Button>
         <Button
           textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}

@@ -7,8 +7,7 @@ import { api } from '../../services/api';
 import { nowTheme } from '../../constants';
 import { useDebounce } from '../hooks/useDebounce';
 
-export function AsyncSelect({ path, query = {}, labelText, placeholder, onChange, value = null }) {
-  const [selectedItems, setSelectedItems] = useState([]);
+export function AsyncSelect({ path, query = {}, labelText, placeholder, onChange, value }) {
   const [items, setItems] = useState([]);
   const [textName, setTextName] = useState('');
 
@@ -31,6 +30,10 @@ export function AsyncSelect({ path, query = {}, labelText, placeholder, onChange
     }
   }, [debouncedValue]);
 
+  useEffect(() => {
+    if (value) setItems([value]);
+  }, [value]);
+
   const handleChangeName = (text) => {
     setTextName(text);
   };
@@ -51,11 +54,9 @@ export function AsyncSelect({ path, query = {}, labelText, placeholder, onChange
         valueField="value"
         placeholder={placeholder}
         searchPlaceholder="Pesquisar um registro"
-        onChange={(item) => {
-          onChange(item);
-        }}
+        onChange={(item) => onChange(item)}
         onChangeText={handleChangeName}
-        // value={value}
+        value={value}
       />
     </View>
   );

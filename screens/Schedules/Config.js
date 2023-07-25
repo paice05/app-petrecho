@@ -32,7 +32,7 @@ export const Config = ({ fields, setFields }) => {
               onChangeText={(text) => setFields({ ...fields, discount: text })}
               labelText="Desconto"
               placeholder="R$10,00"
-              value={fields.discount}
+              value={fields.discount?.toString()}
             />
           </Block>
           <Block flex>
@@ -40,7 +40,7 @@ export const Config = ({ fields, setFields }) => {
               onChangeText={(text) => setFields({ ...fields, addition: text })}
               labelText="Adicional"
               placeholder="R$5,00"
-              value={fields.addition}
+              value={fields.addition?.toString()}
             />
           </Block>
         </Block>

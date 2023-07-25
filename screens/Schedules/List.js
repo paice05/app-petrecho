@@ -1,7 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Block, Button, Text } from 'galio-framework';
 import { addDays, format } from 'date-fns';
-import { StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import {
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+  Dimensions,
+} from 'react-native';
 
 import { api } from '../../services/api';
 import CardSchedule from '../../components/CardSchedule';
@@ -11,6 +18,8 @@ import Tabs from '../../components/Tabs';
 import { Calendar } from '../../components/Calendar';
 import { nowTheme, tabs } from '../../constants';
 import { useFocusEffect } from '@react-navigation/native';
+
+const { width } = Dimensions.get('window');
 
 const ScheduleList = ({ navigation }) => {
   const [openCalendar, setOpenCalendar] = useState(false);
@@ -95,17 +104,23 @@ const ScheduleList = ({ navigation }) => {
               </Text>
             )}
 
-            {schedules.map((item) => {
-              return (
-                <CardSchedule
-                  navigation={navigation}
-                  id={item.id}
-                  nome={item.user.name}
-                  servico={item.services?.map((service) => service?.name).join(',')}
-                  horario={format(new Date(item.scheduleAt), 'HH:mm')}
-                />
-              );
-            })}
+            {schedules
+              .sort((a, b) =>
+                format(new Date(a.scheduleAt), 'HH:mm') > format(new Date(b.scheduleAt), 'HH:mm')
+                  ? 1
+                  : -1
+              )
+              .map((item) => {
+                return (
+                  <CardSchedule
+                    navigation={navigation}
+                    id={item.id}
+                    nome={item.user.name}
+                    servico={item.services?.map((service) => service?.name).join(',')}
+                    horario={format(new Date(item.scheduleAt), 'HH:mm')}
+                  />
+                );
+              })}
             <PaginationSimple
               currentPage={pagination.currentPage}
               total={pagination.total}
@@ -142,6 +157,7 @@ const styles = StyleSheet.create({
   card: {
     padding: 5,
   },
+
   dateStyle: {
     display: 'flex',
     alignItems: 'center',

@@ -37,13 +37,13 @@ const SchedulesForm = ({ route, navigation }) => {
   };
 
   const [fields, setFields] = useState({
-    userId: '',
-    services: [],
-    employeeId: '',
+    user: null,
+    services: [], // value label
+    employee: null,
     date: null,
     time: null,
-    discount: 0,
-    addition: 0,
+    discount: null,
+    addition: null,
     isPackage: false,
   });
 
@@ -56,6 +56,8 @@ const SchedulesForm = ({ route, navigation }) => {
       ...fields,
       services: fields.services.map((item) => item.value),
       scheduleAt,
+      userId: fields.user.value,
+      employeeId: fields.employee.value,
     };
 
     try {
@@ -75,6 +77,8 @@ const SchedulesForm = ({ route, navigation }) => {
       ...fields,
       services: fields.services.map((item) => item.value),
       scheduleAt,
+      userId: fields.user.value,
+      employeeId: fields.employee.value,
     };
 
     try {
@@ -91,16 +95,14 @@ const SchedulesForm = ({ route, navigation }) => {
       const fetchSchedules = async () => {
         try {
           const response = await api.get(`/schedules/${isEditing}`);
-          console.log({ response });
           setFields({
-            ...fields,
-            userId: response.data.name,
-            services: fields.services.find((item) => item.data === response.data.services),
-            employeeId: response.data.employeeId,
+            user: { value: response.data.user.id, label: response.data.user.name },
+            services: response.data.services.map((item) => ({ value: item.id, label: item.name })),
+            employee: { value: response.data.employee.id, label: response.data.employee.name },
             date: format(new Date(response.data.scheduleAt), 'dd-MM-yyyy'),
             time: format(new Date(response.data.scheduleAt), 'HH:mm'),
-            discount: response.data.discount,
-            addition: response.data.addition,
+            discount: response.data.discount || null,
+            addition: response.data.addition || null,
             isPackage: response.data.isPackage,
           });
         } catch (error) {
@@ -124,7 +126,10 @@ const SchedulesForm = ({ route, navigation }) => {
             query={{ type: 'pf' }}
             placeholder="Pesquise um cliente pelo nome"
             labelText="Cliente"
-            onChange={(item) => item && setFields({ ...fields, userId: item.value })}
+            onChange={(item) =>
+              item && setFields({ ...fields, user: { value: item.value, label: item.label } })
+            }
+            value={fields.user}
           />
         </Block>
 
@@ -166,7 +171,10 @@ const SchedulesForm = ({ route, navigation }) => {
             query={{ type: 'pj' }}
             placeholder="Pesquise um funcionário pelo nome"
             labelText="Funcionário"
-            onChange={(item) => item && setFields({ ...fields, employeeId: item.value })}
+            onChange={(item) =>
+              item && setFields({ ...fields, employee: { value: item.value, label: item.label } })
+            }
+            value={fields.employee}
           />
         </Block>
 

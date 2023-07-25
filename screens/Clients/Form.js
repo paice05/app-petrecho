@@ -60,7 +60,7 @@ const ClientForm = ({ route, navigation }) => {
 
     try {
       const response = await api.post('/users', payload);
-     
+
       setFields(response.data);
       navigation.goBack();
     } catch (error) {
@@ -77,7 +77,7 @@ const ClientForm = ({ route, navigation }) => {
 
     try {
       const response = await api.put(`/users/${isEditing}`, payload);
-     
+
       setFields(response.data);
       navigation.goBack();
     } catch (error) {
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     color: nowTheme.COLORS.HEADER,
   },
   group: {
-    paddingTop: theme.SIZES.BASE * 2,
+    // paddingTop: theme.SIZES.BASE * 2,
   },
   button: {
     marginBottom: theme.SIZES.BASE,
