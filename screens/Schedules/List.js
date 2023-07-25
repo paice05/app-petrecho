@@ -12,7 +12,7 @@ import { Calendar } from '../../components/Calendar';
 import { nowTheme, tabs } from '../../constants';
 import { useFocusEffect } from '@react-navigation/native';
 
-export const ScheduleList = ({ navigation }) => {
+const ScheduleList = ({ navigation }) => {
   const [openCalendar, setOpenCalendar] = useState(false);
   const [date, setDate] = useState(new Date());
 
@@ -99,6 +99,7 @@ export const ScheduleList = ({ navigation }) => {
               return (
                 <CardSchedule
                   navigation={navigation}
+                  id={item.id}
                   nome={item.user.name}
                   servico={item.services?.map((service) => service?.name).join(',')}
                   horario={format(new Date(item.scheduleAt), 'HH:mm')}
@@ -178,3 +179,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
 });
+
+export default ScheduleList;

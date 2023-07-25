@@ -22,7 +22,7 @@ import Register from '../screens/Register';
 import Clients from '../screens/Clients/List';
 import ClientForm from '../screens/Clients/Form';
 import SchedulesForm from '../screens/Schedules/Form';
-import { ScheduleList } from '../screens/Schedules/List';
+import ScheduleList from '../screens/Schedules/List';
 
 const { width } = Dimensions.get('screen');
 

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Dimensions, TouchableOpacity, Platform, View } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import format from 'date-fns/format';
 
 // Galio components
 import { Block, Button as GaButton, Text, theme, Switch } from 'galio-framework';
@@ -47,9 +48,9 @@ const SchedulesForm = ({ route, navigation }) => {
   });
 
   const handleSubmitCreate = async () => {
-    const [day, month, yaer] = fields.date.split('-');
+    const [day, month, year] = fields.date.split('-');
 
-    const scheduleAt = new Date(`${yaer}-${month}-${day} ${fields.time}:00`);
+    const scheduleAt = new Date(`${year}-${month}-${day} ${fields.time}:00`);
 
     const payload = {
       ...fields,
@@ -66,12 +67,14 @@ const SchedulesForm = ({ route, navigation }) => {
   };
 
   const handleSubmitUpdate = async () => {
+    const [day, month, year] = fields.date.split('-');
+
+    const scheduleAt = new Date(`${year}-${month}-${day} ${fields.time}:00`);
+
     const payload = {
       ...fields,
-      createdAt: fields.createdAt,
-      scheduleAt: fields.scheduleAt,
-      discount: fields.discount,
-      addition: fields.addition,
+      services: fields.services.map((item) => item.value),
+      scheduleAt,
     };
 
     try {
@@ -85,6 +88,27 @@ const SchedulesForm = ({ route, navigation }) => {
 
   useEffect(() => {
     if (isEditing) {
+      const fetchSchedules = async () => {
+        try {
+          const response = await api.get(`/schedules/${isEditing}`);
+          console.log({ response });
+          setFields({
+            ...fields,
+            userId: response.data.name,
+            services: fields.services.find((item) => item.data === response.data.services),
+            employeeId: response.data.employeeId,
+            date: format(new Date(response.data.scheduleAt), 'dd-MM-yyyy'),
+            time: format(new Date(response.data.scheduleAt), 'HH:mm'),
+            discount: response.data.discount,
+            addition: response.data.addition,
+            isPackage: response.data.isPackage,
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      fetchSchedules();
     } // busca dados da API
   }, []);
 
@@ -117,7 +141,7 @@ const SchedulesForm = ({ route, navigation }) => {
           />
         </Block>
         <Block style={styles.selectedMulti}>
-          {fields.services.map((item, index) => {
+          {fields?.services?.map((item, index) => {
             return (
               <TouchableOpacity
                 onPress={() =>

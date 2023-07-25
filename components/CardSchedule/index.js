@@ -46,6 +46,18 @@ const CardSchedule = ({ navigation, nome, servico, horario, id }) => {
         <Button
           textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
           color="info"
+          style={styles.buttonEdit}
+          onPress={() =>
+            navigation.navigate('ScheduleForm', {
+              itemId: id,
+            })
+          }
+        >
+          Editar
+        </Button>
+        <Button
+          textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
+          color="info"
           style={styles.buttonConfirm}
         >
           Concluído
@@ -115,6 +127,15 @@ const styles = StyleSheet.create({
     borderStyle: 'solid',
     borderWidth: 1,
     borderColor: nowTheme.COLORS.MUTED,
+  },
+  buttonEdit: {
+    marginBottom: theme.SIZES.BASE,
+    width: 100,
+    borderRadius: 4,
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderColor: nowTheme.COLORS.WHITE,
+    backgroundColor: nowTheme.COLORS.BORDER,
   },
 });
 
