@@ -56,6 +56,16 @@ const ScheduleList = ({ navigation }) => {
       .catch((error) => console.log({ error }));
   };
 
+  const fetchChangeStatus = (id, payload) => {
+    try {
+      api.put(`/schedules/${id}/status`, payload).then(() => {
+        fetchSchedules();
+      });
+    } catch (error) {
+      console.error('Ocorreu um erro na requisição:', error);
+    }
+  };
+
   useFocusEffect(
     useCallback(() => {
       fetchSchedules();
@@ -83,6 +93,21 @@ const ScheduleList = ({ navigation }) => {
     if (pagination.currentPage === 1) return;
 
     fetchSchedules({ page: pagination.currentPage - 1 });
+  };
+
+  const handleFinished = (scheduleId) => {
+    const payload = {
+      status: 'finished',
+    };
+
+    fetchChangeStatus(scheduleId, payload);
+  };
+  const handleCanceled = (scheduleId) => {
+    const payload = {
+      status: 'canceled',
+    };
+
+    fetchChangeStatus(scheduleId, payload);
   };
 
   return (
@@ -118,6 +143,9 @@ const ScheduleList = ({ navigation }) => {
                     nome={item.user.name}
                     servico={item.services?.map((service) => service?.name).join(',')}
                     horario={format(new Date(item.scheduleAt), 'HH:mm')}
+                    status={item.status}
+                    onFinished={() => handleFinished(item.id)}
+                    onCanceled={() => handleCanceled(item.id)}
                   />
                 );
               })}

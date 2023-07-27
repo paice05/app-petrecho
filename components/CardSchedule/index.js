@@ -9,22 +9,31 @@ import { ScheduleItem } from '../ScheduleItem';
 
 const { height, width } = Dimensions.get('window');
 
-const CardSchedule = ({ navigation, nome, servico, horario, id }) => {
+const CardSchedule = ({
+  navigation,
+  nome,
+  servico,
+  horario,
+  id,
+  status,
+  onFinished,
+  onCanceled,
+}) => {
   const isLargeName = nome?.length > 20;
 
-  const fetchChangeStatus = (id) => {
-    const payload = {
-      status: 'pending',
-    };
-    try {
-      api.put(`/schedules/${id}/status`.then(() => {}));
-    } catch (error) {
-      console.error('Ocorreu um erro na requisição:', error);
-    }
-  };
-
   return (
-    <Block flex space="between" style={styles.container}>
+    <Block
+      flex
+      space="between"
+      style={{
+        ...styles.container,
+        ...(status === 'finished'
+          ? { borderColor: nowTheme.COLORS.SUCCESS }
+          : status === 'canceled'
+          ? { borderColor: nowTheme.COLORS.ERROR }
+          : { borderColor: nowTheme.COLORS.TUMBLR }),
+      }}
+    >
       <Block style={styles.wraper}>
         <TouchableOpacity
           onPress={() =>
@@ -52,7 +61,7 @@ const CardSchedule = ({ navigation, nome, servico, horario, id }) => {
         </Block>
       </Block>
       <Block style={styles.containerButton}>
-        {/* <Button
+        <Button
           textStyle={{
             fontFamily: 'montserrat-regular',
             fontSize: 12,
@@ -60,6 +69,7 @@ const CardSchedule = ({ navigation, nome, servico, horario, id }) => {
           }}
           color={nowTheme.COLORS.WHITE}
           style={styles.buttonCancel}
+          onPress={onCanceled}
         >
           Cancelado
         </Button>
@@ -67,9 +77,10 @@ const CardSchedule = ({ navigation, nome, servico, horario, id }) => {
           textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
           color="info"
           style={styles.buttonConfirm}
+          onPress={onFinished}
         >
           Concluído
-        </Button> */}
+        </Button>
       </Block>
     </Block>
   );
