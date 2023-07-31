@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 import format from 'date-fns/format';
@@ -9,10 +9,35 @@ import Icon from '../../components/Icon';
 import { nowTheme } from '../../constants';
 import { Modal } from '../../components/Modal';
 import { Calendar } from '../../components/Calendar';
+import { useFocusEffect } from '@react-navigation/native';
+import { api } from '../../services/api';
 
 const ReportList = ({ navigation }) => {
   const [openCalendar, setOpenCalendar] = useState(false);
   const [date, setDate] = useState(new Date());
+
+  const [valueEntry, setValueEntry] = useState(0);
+
+  const fetchReports = (params) => {
+    api
+      .get('/reports', {
+        params,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(({ data }) => {
+        console.log({ response: data.data });
+
+        setValueEntry(data.data.reduce((acc, cur) => acc + cur.entry, 0));
+      });
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchReports({});
+    }, [])
+  );
 
   return (
     <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
@@ -37,7 +62,7 @@ const ReportList = ({ navigation }) => {
         </TouchableOpacity>
       </Block>
       <Block>
-        <CardReport entryValue={'R$ 200,00'} outPutValue={'R$ 350,00'} />
+        <CardReport navigation={navigation} entryValue={valueEntry} outPutValue={'R$ 350,00'} />
       </Block>
 
       <Block style={styles.subtitleSchedules}>

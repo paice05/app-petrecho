@@ -11,7 +11,7 @@ const CardReport = ({ navigation, entryValue, outPutValue, id }) => {
           <Text>Ver mais</Text>
         </TouchableOpacity>
       </Block>
-      <Text style={styles.entryValue}>{entryValue}</Text>
+      <Text style={styles.entryValue}>R$ {Number(entryValue).toFixed(2).replace('.', ',')}</Text>
       <Block style={styles.wraper}>
         <Text style={{ fontSize: 16, paddingTop: 15 }}>Saída</Text>
         <TouchableOpacity>
