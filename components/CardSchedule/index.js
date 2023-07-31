@@ -5,7 +5,6 @@ import { theme, Card, Block, Text, Button as GaButton, Button } from 'galio-fram
 import { nowTheme } from '../../constants';
 import { Modal } from '../Modal';
 import Icon from '../Icon';
-import { ScheduleItem } from '../ScheduleItem';
 
 const { height, width } = Dimensions.get('window');
 

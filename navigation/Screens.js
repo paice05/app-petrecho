@@ -23,6 +23,9 @@ import Clients from '../screens/Clients/List';
 import ClientForm from '../screens/Clients/Form';
 import SchedulesForm from '../screens/Schedules/Form';
 import ScheduleList from '../screens/Schedules/List';
+import ReportList from '../screens/Reports/List';
+import EntryReport from '../screens/Reports/Entry';
+import ExitReport from '../screens/Reports/ExitReport';
 
 const { width } = Dimensions.get('screen');
 
@@ -234,6 +237,53 @@ function SchedulesStack(props) {
   );
 }
 
+function ReportsStack(props) {
+  return (
+    <Stack.Navigator
+      initialRouteName="Relatorios"
+      screenOptions={{
+        mode: 'card',
+        headerShown: 'screen',
+      }}
+    >
+      <Stack.Screen
+        name="Relatorios"
+        component={ReportList}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header title="Relatórios" navigation={navigation} scene={scene} />
+          ),
+          cardStyle: { backgroundColor: '#FFFFFF' },
+        }}
+      />
+      <Stack.Screen
+        name="EntryReports"
+        component={EntryReport}
+        options={{
+          header: ({ navigation, scene }) => {
+            return <Header title={'Entrada'} back navigation={navigation} scene={scene} />;
+          },
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        name="ExitReport"
+        component={ExitReport}
+        options={{
+          header: ({ route, navigation, scene }) => {
+            const params = route.params;
+
+            const isEditing = params?.itemId;
+
+            return <Header title={'Saída'} back navigation={navigation} scene={scene} />;
+          },
+          headerTransparent: true,
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
 function AppStack(props) {
   return (
     <Drawer.Navigator
@@ -287,7 +337,13 @@ function AppStack(props) {
           headerShown: false,
         }}
       />
-
+      <Drawer.Screen
+        name="Relatorios"
+        component={ReportsStack}
+        options={{
+          headerShown: false,
+        }}
+      />
       <Drawer.Screen
         name="Components"
         component={ComponentsStack}

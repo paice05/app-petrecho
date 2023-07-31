@@ -40,6 +40,16 @@ class DrawerItem extends React.Component {
             style={{ opacity: 0.5 }}
           />
         );
+      case 'Relatorios':
+        return (
+          <Icon
+            name="single-copy-042x"
+            family="NowExtra"
+            size={18}
+            color={focused ? nowTheme.COLORS.PRIMARY : 'black'}
+            style={{ opacity: 0.5 }}
+          />
+        );
       case 'Components':
         return (
           <Icon

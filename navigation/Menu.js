@@ -15,6 +15,7 @@ function CustomDrawerContent({ drawerPosition, navigation, profile, focused, sta
     'Home',
     'Clientes',
     'Agendamentos',
+    'Relatorios',
     'Components',
     'Articles',
     'Profile',
