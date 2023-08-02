@@ -167,10 +167,7 @@ class Header extends React.Component {
 
     return (
       <Block row style={styles.options}>
-        <Button
-          shadowless
-          style={[styles.tab, styles.divider]}
-        >
+        <Button shadowless style={[styles.tab, styles.divider]}>
           <Block row middle>
             <Icon
               name="bulb"

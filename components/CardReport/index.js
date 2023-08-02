@@ -14,7 +14,7 @@ const CardReport = ({ navigation, entryValue, outPutValue, id }) => {
       <Text style={styles.entryValue}>R$ {Number(entryValue).toFixed(2).replace('.', ',')}</Text>
       <Block style={styles.wraper}>
         <Text style={{ fontSize: 16, paddingTop: 15 }}>Saída</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('ExitReports')}>
           <Text>Ver mais</Text>
         </TouchableOpacity>
       </Block>

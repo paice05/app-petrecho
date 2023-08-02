@@ -24,8 +24,8 @@ import ClientForm from '../screens/Clients/Form';
 import SchedulesForm from '../screens/Schedules/Form';
 import ScheduleList from '../screens/Schedules/List';
 import ReportList from '../screens/Reports/List';
-import EntryReport from '../screens/Reports/Entry';
-import ExitReport from '../screens/Reports/ExitReport';
+import EntryReport from '../screens/Reports/EntryReports';
+import ExitReport from '../screens/Reports/ExitReports';
 
 const { width } = Dimensions.get('screen');
 
@@ -261,21 +261,17 @@ function ReportsStack(props) {
         component={EntryReport}
         options={{
           header: ({ navigation, scene }) => {
-            return <Header title={'Entrada'} back navigation={navigation} scene={scene} />;
+            return <Header title={'Entradas'} back navigation={navigation} scene={scene} />;
           },
           headerTransparent: true,
         }}
       />
       <Stack.Screen
-        name="ExitReport"
+        name="ExitReports"
         component={ExitReport}
         options={{
-          header: ({ route, navigation, scene }) => {
-            const params = route.params;
-
-            const isEditing = params?.itemId;
-
-            return <Header title={'Saída'} back navigation={navigation} scene={scene} />;
+          header: ({ navigation, scene }) => {
+            return <Header title={'Saídas'} back navigation={navigation} scene={scene} />;
           },
           headerTransparent: true,
         }}

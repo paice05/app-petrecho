@@ -1,27 +1,21 @@
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-import Icon from '../Icon';
 import { Block } from 'galio-framework';
 import { Divider } from '@rneui/themed';
 
-import { nowTheme } from '../../constants';
 import { theme } from 'galio-framework';
 
-const CardReportEntry = ({ navigation, id, data, servico, nome, value, totalValue }) => {
+const CardReportExit = ({ navigation, id, data, nome, value }) => {
   return (
-    <>
-      <Block flex space="between" style={styles.container}>
-        <Text style={styles.dateStyle}>{data}</Text>
-        <Block style={styles.wraper}>
-          <Text styles={{ fontSize: 14 }}>{servico}</Text>
-          <Text style={styles.entryValue}>{value}</Text>
-        </Block>
-
+    <Block flex space="between" style={styles.container}>
+      <Text style={styles.dateStyle}>{data}</Text>
+      <Block style={styles.wraper}>
         <Text style={styles.styleText}>{nome}</Text>
-        <Divider />
+        <Text style={styles.entryValue}>{value}</Text>
       </Block>
-    </>
+      <Divider />
+    </Block>
   );
 };
 
@@ -39,7 +33,7 @@ const styles = StyleSheet.create({
   },
   entryValue: {
     fontSize: 18,
-    color: '#00CED1',
+    color: '#B22222',
   },
   styleText: {
     fontSize: 14,
@@ -48,7 +42,7 @@ const styles = StyleSheet.create({
   dateStyle: {
     textAlign: 'center',
     fontSize: 16,
-  }
+  },
 });
 
-export default CardReportEntry;
+export default CardReportExit;
