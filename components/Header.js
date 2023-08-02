@@ -49,6 +49,17 @@ const NewClient = ({ isWhite, style, navigation }) => (
   </TouchableOpacity>
 );
 
+const NewService = ({ isWhite, style, navigation }) => (
+  <TouchableOpacity
+    style={[styles.button, style]}
+    onPress={() => navigation.navigate('ServiceForm')}
+  >
+    <Text size={14} color={nowTheme.COLORS[isWhite ? 'WHITE' : 'ICON']}>
+      Novo
+    </Text>
+  </TouchableOpacity>
+);
+
 const NewSchedule = ({ isWhite, style, navigation }) => (
   <TouchableOpacity
     style={[styles.button, style]}
@@ -93,6 +104,15 @@ class Header extends React.Component {
       case 'Clientes':
         return [
           <NewClient
+            key="basket-home"
+            navigation={navigation}
+            isWhite={white}
+            style={{ padding: 0 }}
+          />,
+        ];
+      case 'Serviços':
+        return [
+          <NewService
             key="basket-home"
             navigation={navigation}
             isWhite={white}

@@ -26,6 +26,8 @@ import ScheduleList from '../screens/Schedules/List';
 import ReportList from '../screens/Reports/List';
 import EntryReport from '../screens/Reports/EntryReports';
 import ExitReport from '../screens/Reports/ExitReports';
+import ServiceList from '../screens/Service/List';
+import ServiceForm from '../screens/Service/Form';
 
 const { width } = Dimensions.get('screen');
 
@@ -237,6 +239,51 @@ function SchedulesStack(props) {
   );
 }
 
+function ServicesStack(props) {
+  return (
+    <Stack.Navigator
+      initialRouteName="Serviços"
+      screenOptions={{
+        mode: 'card',
+        headerShown: 'screen',
+      }}
+    >
+      <Stack.Screen
+        name="Service"
+        component={ServiceList}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header title="Serviços" navigation={navigation} scene={scene} />
+          ),
+          cardStyle: { backgroundColor: '#FFFFFF' },
+        }}
+      />
+
+      <Stack.Screen
+        name="ServiceForm"
+        component={ServiceForm}
+        options={{
+          header: ({ route, navigation, scene }) => {
+            const params = route.params;
+
+            const isEditing = params?.itemId;
+
+            return (
+              <Header
+                title={isEditing ? 'Atualizar serviço' : 'Novo Serviço'}
+                back
+                navigation={navigation}
+                scene={scene}
+              />
+            );
+          },
+          headerTransparent: true,
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
 function ReportsStack(props) {
   return (
     <Stack.Navigator
@@ -333,6 +380,15 @@ function AppStack(props) {
           headerShown: false,
         }}
       />
+
+      <Drawer.Screen
+        name="Serviços"
+        component={ServicesStack}
+        options={{
+          headerShown: false,
+        }}
+      />
+
       <Drawer.Screen
         name="Relatorios"
         component={ReportsStack}
