@@ -1,36 +1,58 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { ScrollView, StyleSheet, Text } from 'react-native';
-import CardReportEntry from '../../components/CardReportEntry';
 import { Block } from 'galio-framework';
+import { useFocusEffect } from '@react-navigation/native';
+import { format } from 'date-fns';
+
+import CardReportEntry from '../../components/CardReportEntry';
+import { nowTheme } from '../../constants';
+import { api } from '../../services/api';
 
 const EntryReport = ({ navigation }) => {
+  const [valueEntry, setValueEntry] = useState([]);
+
+  const fetchReportsEntry = (params) => {
+    api
+      .get('/reports', {
+        params,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(({ data }) => {
+        console.log({ response: data.data });
+        setValueEntry(data.data);
+      })
+      .catch((error) => console.log({ error }));
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchReportsEntry({});
+    }, [])
+  );
+
   return (
     <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
       <Block>
-        <CardReportEntry
-          data={'28/07/23'}
-          servico={'Corte + Barba'}
-          value={'R$ 20,00'}
-          nome={'Alexandre Barbosa'}
-        />
+        <Block style={styles.wraperTotalValue}>
+          <Text style={styles.totalValueText}>Saldo total:</Text>
+          <Text style={styles.totalValue}>{'R$ 60,00'}</Text>
+        </Block>
 
-        <CardReportEntry
-          data={'29/07/23'}
-          servico={'Corte'}
-          value={'R$ 20,00'}
-          nome={'Arthur Barbosa'}
-        />
-
-        <CardReportEntry
-          data={'30/07/23'}
-          servico={'Unha + sobrancelha'}
-          value={'R$ 20,00'}
-          nome={'Ane Barbosa'}
-        />
-      </Block>
-      <Block style={styles.wraperTotalValue}>
-        <Text style={styles.totalValueText}>Valor total entradas:</Text>
-        <Text style={styles.totalValue}>{'R$ 60,00'}</Text>
+        {valueEntry.map((item) => {
+          console.log('item:', item);
+          return (
+            <CardReportEntry
+              navigation={navigation}
+              id={item.id}
+              data={format(new Date(item.createdAt), 'dd/MM/yyyy')}
+              servico={'Cabelo + Barba'}
+              value={`R$ ` + Number(item.entry).toFixed(2).replace('.', ',')}
+              nome={item.accountId}
+            />
+          );
+        })}
       </Block>
     </ScrollView>
   );
@@ -42,19 +64,25 @@ const styles = StyleSheet.create({
     marginTop: '18%',
   },
   totalValue: {
-    color: '#00CED1',
+    color: nowTheme.COLORS.BORDER_COLOR,
     fontSize: 20,
   },
   totalValueText: {
     fontSize: 16,
-    fontWeight: '500',
+    color: nowTheme.COLORS.BORDER_COLOR,
   },
   wraperTotalValue: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: 10,
+    padding: 10,
+    color: nowTheme.COLORS.BORDER_COLOR,
+    borderRadius: 4,
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderColor: '#00acc1',
+    backgroundColor: '#00acc1',
   },
 });
 

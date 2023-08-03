@@ -28,6 +28,7 @@ import EntryReport from '../screens/Reports/EntryReports';
 import ExitReport from '../screens/Reports/ExitReports';
 import ServiceList from '../screens/Service/List';
 import ServiceForm from '../screens/Service/Form';
+import RegisterExitForm from '../screens/Reports/FormRegisterExit';
 
 const { width } = Dimensions.get('screen');
 
@@ -319,6 +320,16 @@ function ReportsStack(props) {
         options={{
           header: ({ navigation, scene }) => {
             return <Header title={'Saídas'} back navigation={navigation} scene={scene} />;
+          },
+          headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        name="FormRegisterExits"
+        component={RegisterExitForm}
+        options={{
+          header: ({ navigation, scene }) => {
+            return <Header title={'Registrar saída'} back navigation={navigation} scene={scene} />;
           },
           headerTransparent: true,
         }}

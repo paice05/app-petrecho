@@ -17,6 +17,7 @@ const ReportList = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
 
   const [valueEntry, setValueEntry] = useState(0);
+  const [valueExit, setValueExit] = useState(0);
 
   const fetchReports = (params) => {
     api
@@ -27,9 +28,8 @@ const ReportList = ({ navigation }) => {
         },
       })
       .then(({ data }) => {
-        console.log({ response: data.data });
-
         setValueEntry(data.data.reduce((acc, cur) => acc + cur.entry, 0));
+        setValueExit(data.data.reduce((acc, cur) => acc + cur.out, 0));
       });
   };
 
@@ -62,7 +62,7 @@ const ReportList = ({ navigation }) => {
         </TouchableOpacity>
       </Block>
       <Block>
-        <CardReport navigation={navigation} entryValue={valueEntry} outPutValue={'R$ 350,00'} />
+        <CardReport navigation={navigation} entryValue={valueEntry} outPutValue={valueExit} />
       </Block>
 
       <Block style={styles.subtitleSchedules}>

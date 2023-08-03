@@ -1,14 +1,13 @@
 import React from 'react';
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-import Icon from '../Icon';
 import { Block } from 'galio-framework';
 import { Divider } from '@rneui/themed';
 
 import { nowTheme } from '../../constants';
 import { theme } from 'galio-framework';
 
-const CardReportEntry = ({ navigation, id, data, servico, nome, value, totalValue }) => {
+const CardReportEntry = ({ navigation, id, data, servico, nome, value }) => {
   return (
     <>
       <Block flex space="between" style={styles.container}>
@@ -48,7 +47,7 @@ const styles = StyleSheet.create({
   dateStyle: {
     textAlign: 'center',
     fontSize: 16,
-  }
+  },
 });
 
 export default CardReportEntry;

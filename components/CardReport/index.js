@@ -18,8 +18,10 @@ const CardReport = ({ navigation, entryValue, outPutValue, id }) => {
           <Text>Ver mais</Text>
         </TouchableOpacity>
       </Block>
-      <Text style={styles.outPutValue}>{outPutValue}</Text>
-      <Text style={styles.checkOut}>Registrar saída</Text>
+      <Text style={styles.outPutValue}>R$ {Number(outPutValue).toFixed(2).replace('.', ',')}</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('FormRegisterExits', { itemId: id })}>
+        <Text style={styles.checkOut}>Registrar saída</Text>
+      </TouchableOpacity>
     </Block>
   );
 };
