@@ -20,7 +20,6 @@ const EntryReport = ({ navigation }) => {
         },
       })
       .then(({ data }) => {
-        console.log({ response: data.data });
         setValueEntry(data.data);
       })
       .catch((error) => console.log({ error }));
@@ -40,19 +39,20 @@ const EntryReport = ({ navigation }) => {
           <Text style={styles.totalValue}>{'R$ 60,00'}</Text>
         </Block>
 
-        {valueEntry.map((item) => {
-          console.log('item:', item);
-          return (
-            <CardReportEntry
-              navigation={navigation}
-              id={item.id}
-              data={format(new Date(item.createdAt), 'dd/MM/yyyy')}
-              servico={'Cabelo + Barba'}
-              value={`R$ ` + Number(item.entry).toFixed(2).replace('.', ',')}
-              nome={item.accountId}
-            />
-          );
-        })}
+        {valueEntry
+          .filter((item) => item.entry)
+          .map((item) => {
+            return (
+              <CardReportEntry
+                navigation={navigation}
+                id={item.id}
+                data={format(new Date(item.createdAt), 'dd/MM/yyyy')}
+                servico={item.schedule?.services.map((item) => item.name).join(',')}
+                value={`R$ ` + Number(item.entry).toFixed(2).replace('.', ',')}
+                nome={item.schedule?.user.name}
+              />
+            );
+          })}
       </Block>
     </ScrollView>
   );

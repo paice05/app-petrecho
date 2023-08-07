@@ -1,14 +1,47 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import CardReportExit from '../../components/CardReportExit';
 import { Block } from 'galio-framework';
+import { useFocusEffect } from '@react-navigation/native';
+import { api } from '../../services/api';
+import { format } from 'date-fns';
 
 const ExitReport = () => {
+  const [valueOut, setValueOut] = useState([]);
+
+  const fetchReportsOut = (params) => {
+    api
+      .get('/reports', {
+        params,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(({ data }) => {
+        setValueOut(data.data);
+      })
+      .catch((error) => console.log({ error }));
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchReportsOut({});
+    }, [])
+  );
+
   return (
     <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
-      <Block>
-        <CardReportExit data={'29/07/23'} nome={'Alexandre Barbosa'} value={'R$ 20,00'} />
-      </Block>
+      {valueOut
+        .filter((item) => item.out)
+        .map((item) => (
+          <Block>
+            <CardReportExit
+              data={format(new Date(item.createdAt), 'dd/MM/YYY')}
+              nome={item.description}
+              value={`R$ ${Number(item.out).toFixed(2).replace('.', ',')}`}
+            />
+          </Block>
+        ))}
     </ScrollView>
   );
 };
