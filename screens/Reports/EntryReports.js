@@ -31,28 +31,32 @@ const EntryReport = ({ navigation }) => {
     }, [])
   );
 
+  const dataEntry = valueEntry.filter((item) => item.entry);
+
+  const totalValue = dataEntry.reduce((acc, cur) => acc + cur.entry, 0);
+
   return (
     <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
       <Block>
         <Block style={styles.wraperTotalValue}>
           <Text style={styles.totalValueText}>Saldo total:</Text>
-          <Text style={styles.totalValue}>{'R$ 60,00'}</Text>
+          <Text style={styles.totalValue}>{`R$ ${Number(totalValue)
+            .toFixed(2)
+            .replace('.', ',')}`}</Text>
         </Block>
 
-        {valueEntry
-          .filter((item) => item.entry)
-          .map((item) => {
-            return (
-              <CardReportEntry
-                navigation={navigation}
-                id={item.id}
-                data={format(new Date(item.createdAt), 'dd/MM/yyyy')}
-                servico={item.schedule?.services.map((item) => item.name).join(',')}
-                value={`R$ ` + Number(item.entry).toFixed(2).replace('.', ',')}
-                nome={item.schedule?.user.name}
-              />
-            );
-          })}
+        {dataEntry.map((item) => {
+          return (
+            <CardReportEntry
+              navigation={navigation}
+              id={item.id}
+              data={format(new Date(item.createdAt), 'dd/MM/yyyy')}
+              servico={item.schedule?.services.map((item) => item.name).join(',')}
+              value={`R$ ` + Number(item.entry).toFixed(2).replace('.', ',')}
+              nome={item.schedule?.user.name}
+            />
+          );
+        })}
       </Block>
     </ScrollView>
   );

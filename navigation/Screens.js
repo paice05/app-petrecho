@@ -29,12 +29,32 @@ import ExitReport from '../screens/Reports/ExitReports';
 import ServiceList from '../screens/Service/List';
 import ServiceForm from '../screens/Service/Form';
 import RegisterExitForm from '../screens/Reports/FormRegisterExit';
+import Login from '../screens/Login';
 
 const { width } = Dimensions.get('screen');
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
+function LoginStack(props) {
+  return (
+    <Stack.Navigator
+      initialRouteName="Login"
+      screenOptions={{
+        mode: 'card',
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{
+          backgroundColor: '#FFFFFF',
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
 function ComponentsStack(props) {
   return (
     <Stack.Navigator
@@ -367,7 +387,7 @@ function AppStack(props) {
           fontWeight: 'normal',
         },
       }}
-      initialRouteName="Home"
+      initialRouteName="Agendamentos"
     >
       <Drawer.Screen
         name="Home"
@@ -415,6 +435,13 @@ function AppStack(props) {
         }}
       />
       <Drawer.Screen
+        name="Login"
+        component={LoginStack}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Drawer.Screen
         name="Articles"
         component={ArticlesStack}
         options={{
@@ -449,7 +476,7 @@ export default function OnboardingStack(props) {
     >
       <Stack.Screen
         name="Onboarding"
-        component={Onboarding}
+        component={Login}
         option={{
           headerTransparent: true,
         }}
