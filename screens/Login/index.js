@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   StyleSheet,
   ImageBackground,
@@ -8,9 +8,12 @@ import {
   Keyboard,
 } from 'react-native';
 import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Button, Icon, Input } from '../../components';
 import { Images, nowTheme } from '../../constants';
+import { api } from '../../services/api';
+import { useFocusEffect } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -19,6 +22,29 @@ const DismissKeyboard = ({ children }) => (
 );
 
 const Login = ({ navigation }) => {
+  const [fields, setFields] = useState('');
+
+  const fetchLogin = (params) => {
+    api
+      .post('/auth', {
+        params,
+        Headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then(({ data }) => {
+        console.log({ data });
+        setFields(data);
+      })
+      .catch((error) => console.log({ error }));
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchLogin();
+    }, [])
+  );
+
   return (
     <DismissKeyboard>
       <Block flex middle>
@@ -52,6 +78,11 @@ const Login = ({ navigation }) => {
                           <Input
                             placeholder="Digite seu usuário"
                             style={styles.inputs}
+                            value={fields.cellPhone}
+                            onChange={(event) => {
+                              console.log(setFields);
+                              setFields('cellPhone', event.target.value);
+                            }}
                             iconContent={
                               <Icon
                                 size={16}

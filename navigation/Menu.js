@@ -11,17 +11,7 @@ const { width } = Dimensions.get('screen');
 
 function CustomDrawerContent({ drawerPosition, navigation, profile, focused, state, ...rest }) {
   const insets = useSafeArea();
-  const screens = [
-    'Home',
-    'Clientes',
-    'Agendamentos',
-    'Serviços',
-    'Relatorios',
-    'Components',
-    'Articles',
-    'Profile',
-    'Account',
-  ];
+  const screens = ['Agendamentos', 'Clientes', 'Relatorios', 'Serviços'];
   return (
     <Block style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
       <Block style={styles.header}>
@@ -51,21 +41,7 @@ function CustomDrawerContent({ drawerPosition, navigation, profile, focused, sta
                 marginHorizontal: 10,
               }}
             />
-            <Text
-              color={nowTheme.COLORS.BLACK}
-              style={{
-                marginTop: 30,
-                marginLeft: 20,
-                marginBottom: 10,
-                fontFamily: 'montserrat-regular',
-                fontWeight: '300',
-                fontSize: 12,
-              }}
-            >
-              DOCUMENTATION
-            </Text>
           </Block>
-          <DrawerCustomItem title="GETTING STARTED" navigation={navigation} />
           <DrawerCustomItem title="LOGOUT" navigation={navigation} />
         </ScrollView>
       </Block>
