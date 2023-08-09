@@ -37,9 +37,10 @@ export const Pagination = ({ total = 50, perPage = 5 }) => {
 
 const styles = StyleSheet.create({
   optionsButton: {
-    width: 'auto',
-    height: 34,
+    width: 100,
+    height: 35,
     paddingHorizontal: 10,
     paddingVertical: 10,
+    borderRadius: 10,
   },
 });

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Block, Button, Text } from 'galio-framework';
-import { addDays, format } from 'date-fns';
+import { addDays, format, subDays } from 'date-fns';
 import {
   StyleSheet,
   ScrollView,
@@ -40,7 +40,17 @@ const ScheduleList = ({ navigation }) => {
     api
       .request()
       .get('/schedules', {
-        params,
+        params: {
+          ...params,
+          where: {
+            scheduleAt: {
+              $between: [
+                new Date(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} 00:00:00`),
+                new Date(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} 23:59:59`),
+              ],
+            },
+          },
+        },
         headers: {
           'Content-Type': 'application/json',
         },
@@ -73,8 +83,7 @@ const ScheduleList = ({ navigation }) => {
   useFocusEffect(
     useCallback(() => {
       fetchSchedules();
-      setDate(new Date());
-    }, [])
+    }, [date])
   );
 
   const handleDelete = (id) => {
@@ -120,10 +129,23 @@ const ScheduleList = ({ navigation }) => {
   return (
     <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
       <TouchableOpacity style={styles.dateStyle} onPress={() => setOpenCalendar(true)}>
-        <Text>{format(date, 'dd/MM/YYY')}</Text>
+        <Text bold colo="#e6e6e6">
+          {format(date, 'dd  MMMM YYY')}
+        </Text>
       </TouchableOpacity>
 
-      <Tabs data={tabs.week} selected={tabs.week[date.getDay()].id} />
+      <Tabs
+        data={tabs.week}
+        selected={tabs.week[date.getDay()].id}
+        onChange={(id) => {
+          const currentDay = date.getDay();
+          const result = currentDay - id;
+
+          if (result > 0) setDate(subDays(date, result));
+          if (result < 0) setDate(addDays(date, result * -1));
+        }}
+        date={date}
+      />
 
       <Block>
         {isLoading ? (
@@ -148,8 +170,9 @@ const ScheduleList = ({ navigation }) => {
                     navigation={navigation}
                     id={item.id}
                     nome={item.user.name}
-                    servico={item.services?.map((service) => service?.name).join(',')}
+                    servico={item.services?.map((service) => service?.name).join(', ')}
                     horario={format(new Date(item.scheduleAt), 'HH:mm')}
+                    dia={format(new Date(item.scheduleAt), 'dd/MM/YYY')}
                     status={item.status}
                     onFinished={() => handleFinished(item.id)}
                     onCanceled={() => handleCanceled(item.id)}
@@ -190,17 +213,16 @@ const ScheduleList = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   card: {
-    padding: 5,
+    padding: 15,
+    backgroundColor: '#eee',
   },
 
   dateStyle: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
-    padding: 5,
-    marginBottom: 5,
-    marginTop: 5,
+    // backgroundColor: '#FFFFFF',
+    paddingVertical: 5,
   },
   containerButton: {
     display: 'flex',

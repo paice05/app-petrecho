@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
-import { theme, Card, Block, Text, Button as GaButton, Button } from 'galio-framework';
+import { theme, Card, Block, Text, Button } from 'galio-framework';
 
 import { nowTheme } from '../../constants';
 import { Modal } from '../Modal';
@@ -12,6 +12,7 @@ const CardSchedule = ({
   navigation,
   nome,
   servico,
+  dia,
   horario,
   id,
   status,
@@ -20,20 +21,15 @@ const CardSchedule = ({
 }) => {
   const isLargeName = nome?.length > 20;
 
+  const statusText = {
+    pending: 'Pendente',
+    finished: 'Finalizado',
+    canceled: 'Cancelado',
+  };
+
   return (
-    <Block
-      flex
-      space="between"
-      style={{
-        ...styles.container,
-        ...(status === 'finished'
-          ? { borderColor: nowTheme.COLORS.SUCCESS }
-          : status === 'canceled'
-          ? { borderColor: nowTheme.COLORS.ERROR }
-          : { borderColor: nowTheme.COLORS.TUMBLR }),
-      }}
-    >
-      <Block style={styles.wraper}>
+    <Block flex space="between" style={styles.container}>
+      <Block gap={5} style={styles.wrapperName}>
         <TouchableOpacity
           onPress={() =>
             navigation.navigate('ScheduleForm', {
@@ -41,119 +37,81 @@ const CardSchedule = ({
             })
           }
         >
-          <Text style={styles.cardTitle}>
+          <Text style={{ textDecorationLine: 'underline' }}>
             {nome?.slice(0, 20)}
             {isLargeName ? '...' : ''}
           </Text>
         </TouchableOpacity>
+        <Text color="gray">{servico}</Text>
+      </Block>
+      <Block row style={styles.wrapperInfo}>
+        <Block row gap={5}>
+          <Icon color="#c84648" name="calendar" family="feather" />
+          <Text bold size={12}>
+            {dia}
+          </Text>
+        </Block>
 
-        <Block row>
-          <Icon family="feather" name="clock" />
-          <Text style={styles.wraperHour}>{horario}</Text>
+        <Block row gap={5}>
+          <Icon color="#c84648" name="clock" family="feather" />
+          <Text bold size={12}>
+            {horario}
+          </Text>
+        </Block>
+
+        <Block row gap={5}>
+          <Icon color="#c84648" name="check-circle" family="feather" />
+          <Text bold size={12}>
+            {statusText[status] || 'Não definido'}
+          </Text>
         </Block>
       </Block>
 
-      <Block flex>
-        <Block row>
-          <Icon family="feather" name="scissors" style={{ marginTop: -10 }} />
-          <Text style={styles.cardSubtitle}>{servico}</Text>
+      {status === 'pending' && (
+        <Block row style={styles.wrapperButtons}>
+          <Button onPress={onCanceled} style={styles.button}>
+            <Text bold size={12}>
+              Cancelar
+            </Text>
+          </Button>
+          <Button onPress={onFinished} style={[styles.button, styles.primary]}>
+            <Text color="white" bold size={12}>
+              Confirmar
+            </Text>
+          </Button>
         </Block>
-      </Block>
-      <Block style={styles.containerButton}>
-        <Button
-          textStyle={{
-            fontFamily: 'montserrat-regular',
-            fontSize: 12,
-            color: nowTheme.COLORS.BEHANCE,
-          }}
-          color={nowTheme.COLORS.WHITE}
-          style={styles.buttonCancel}
-          onPress={onCanceled}
-        >
-          Cancelado
-        </Button>
-        <Button
-          textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
-          color="info"
-          style={styles.buttonConfirm}
-          onPress={onFinished}
-        >
-          Concluído
-        </Button>
-      </Block>
+      )}
     </Block>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: theme.SIZES.BASE / 2,
-    borderRadius: 4,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: nowTheme.COLORS.TUMBLR,
+    padding: 12,
+    borderRadius: 10,
     marginBottom: 16,
+    backgroundColor: '#fff',
   },
-  cardTitle: {
-    paddingHorizontal: 9,
-    paddingTop: 7,
-    paddingBottom: 15,
-    fontSize: 18,
-    fontFamily: 'montserrat-regular',
-    fontWeight: 'bold',
-    textDecorationLine: 'underline',
-    color: nowTheme.COLORS.BEHANCE,
+  wrapperName: {
+    paddingBottom: 20,
   },
-  cardSubtitle: {
-    paddingHorizontal: 9,
-    fontSize: 14,
-    fontFamily: 'montserrat-regular',
-    color: nowTheme.COLORS.BLACK,
-    marginTop: -12,
+  wrapperInfo: {
+    justifyContent: 'center',
+    gap: 25,
   },
-  wraperHour: {
-    paddingHorizontal: 9,
-    fontSize: 16,
-    fontWeight: 'bold',
-    fontFamily: 'montserrat-regular',
-    color: nowTheme.COLORS.BLACK,
-    marginTop: -5,
+  wrapperButtons: {
+    justifyContent: 'center',
+    gap: 15,
   },
-  wraper: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  containerButton: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: theme.SIZES.BASE,
-    marginTop: 10,
-    marginBottom: -15,
-  },
-  buttonConfirm: {
-    marginBottom: theme.SIZES.BASE,
+
+  button: {
+    borderRadius: 10,
     width: 100,
+    height: 35,
+    backgroundColor: '#eee',
   },
-  buttonCancel: {
-    marginBottom: theme.SIZES.BASE,
-    width: 100,
-    borderRadius: 4,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: nowTheme.COLORS.MUTED,
-  },
-  buttonEdit: {
-    marginBottom: theme.SIZES.BASE,
-    width: 100,
-    borderRadius: 4,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: nowTheme.COLORS.WHITE,
-    backgroundColor: nowTheme.COLORS.BORDER,
+  primary: {
+    backgroundColor: '#c84648',
   },
 });
 

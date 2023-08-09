@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyleSheet, Dimensions, FlatList, Animated } from 'react-native';
-import { Block, theme } from 'galio-framework';
+import { StyleSheet, Dimensions, FlatList, Animated, TouchableOpacity } from 'react-native';
+import { Block, Text, theme } from 'galio-framework';
 
 const { width } = Dimensions.get('screen');
 import nowTheme from '../constants/Theme';
+import { addDays, subDays } from 'date-fns';
 
 export default class Tabs extends React.Component {
   static defaultProps = {
@@ -58,30 +59,38 @@ export default class Tabs extends React.Component {
 
   renderItem = (item) => {
     const isActive = this.state.active === item.id;
-
-    const textColor = this.animatedValue.interpolate({
-      inputRange: [0, 1],
-      outputRange: [
-        nowTheme.COLORS.TEXT,
-        isActive ? nowTheme.COLORS.WHITE : nowTheme.COLORS.SECONDARY,
-      ],
-      extrapolate: 'clamp',
-    });
+    const { date } = this.props;
 
     const containerStyles = [
       styles.titleContainer,
-      !isActive && { backgroundColor: nowTheme.COLORS.TABS },
+      !isActive && { backgroundColor: '#e7e7e7' },
       isActive && styles.containerShadow,
     ];
 
+    const currentDay = date.getDay();
+    const result = currentDay - item.id;
+
+    let day = date.getDate();
+    if (result > 0) day = subDays(date, result).getDate();
+    if (result < 0) day = addDays(date, result * -1).getDate();
+
     return (
       <Block style={containerStyles}>
-        <Animated.Text
-          style={[styles.menuTitle, { color: textColor }, { fontFamily: 'montserrat-regular' }]}
-          onPress={() => this.selectMenu(item.id)}
-        >
-          {item.title}
-        </Animated.Text>
+        <Animated.View style={[styles.menuTitle]}>
+          <TouchableOpacity onPress={() => this.selectMenu(item.id)}>
+            <Text center color={isActive ? nowTheme.COLORS.WHITE : ''} size={8}>
+              {item.title}
+            </Text>
+            <Text
+              style={{ paddingHorizontal: 15 }}
+              center
+              color={isActive ? nowTheme.COLORS.WHITE : ''}
+              size={15}
+            >
+              {day}
+            </Text>
+          </TouchableOpacity>
+        </Animated.View>
       </Block>
     );
   };
@@ -113,7 +122,7 @@ export default class Tabs extends React.Component {
 const styles = StyleSheet.create({
   container: {
     width: width,
-    backgroundColor: theme.COLORS.WHITE,
+    // backgroundColor: theme.COLORS.WHITE,
     zIndex: 2,
   },
   shadow: {
@@ -124,14 +133,13 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   menu: {
-    // paddingHorizontal: theme.SIZES.BASE * 2.5,
-    paddingTop: 8,
-    paddingBottom: 16,
+    paddingHorizontal: 35,
+    paddingVertical: 8,
   },
   titleContainer: {
     alignItems: 'center',
     backgroundColor: nowTheme.COLORS.ACTIVE,
-    borderRadius: 21,
+    borderRadius: 10,
     marginRight: 9,
     // paddingHorizontal: 10,
     paddingVertical: 3,
@@ -142,12 +150,9 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     shadowOpacity: 0.1,
     elevation: 1,
+    color: nowTheme.COLORS.WHITE,
   },
   menuTitle: {
-    fontWeight: '600',
-    fontSize: 14,
     paddingVertical: 8,
-    paddingHorizontal: 12,
-    color: nowTheme.COLORS.MUTED,
   },
 });

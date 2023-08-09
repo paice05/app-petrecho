@@ -13,6 +13,7 @@ const EntryReport = ({ navigation }) => {
 
   const fetchReportsEntry = (params) => {
     api
+      .request()
       .get('/reports', {
         params,
         headers: {

@@ -1,10 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import CardReportExit from '../../components/CardReportExit';
-import { Block } from 'galio-framework';
 import { useFocusEffect } from '@react-navigation/native';
-import { api } from '../../services/api';
+import { Block } from 'galio-framework';
 import { format } from 'date-fns';
+
+import CardReportExit from '../../components/CardReportExit';
+import { api } from '../../services/api';
 
 const ExitReport = () => {
   const [valueOut, setValueOut] = useState([]);

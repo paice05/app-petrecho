@@ -141,6 +141,8 @@ const SchedulesForm = ({ route, navigation }) => {
             labelText="Serviços"
             value={fields.services}
             onChange={(item) => {
+              if (fields.services.some((service) => item.value === service.value)) return;
+
               setFields({ ...fields, services: [...fields.services, item] });
             }}
           />
