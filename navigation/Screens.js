@@ -390,23 +390,24 @@ function AppStack(props) {
       initialRouteName="Agendamentos"
     >
       <Drawer.Screen
-        name="Home"
-        component={HomeStack}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Drawer.Screen
-        name="Clientes"
-        component={ClientsStack}
+        name="Agendamentos"
+        component={SchedulesStack}
         options={{
           headerShown: false,
         }}
       />
 
       <Drawer.Screen
-        name="Agendamentos"
-        component={SchedulesStack}
+        name="Relatorios"
+        component={ReportsStack}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Drawer.Screen
+        name="Clientes"
+        component={ClientsStack}
         options={{
           headerShown: false,
         }}
@@ -421,12 +422,13 @@ function AppStack(props) {
       />
 
       <Drawer.Screen
-        name="Relatorios"
-        component={ReportsStack}
+        name="Home"
+        component={HomeStack}
         options={{
           headerShown: false,
         }}
       />
+
       <Drawer.Screen
         name="Components"
         component={ComponentsStack}

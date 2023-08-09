@@ -11,7 +11,7 @@ const { width } = Dimensions.get('screen');
 
 function CustomDrawerContent({ drawerPosition, navigation, profile, focused, state, ...rest }) {
   const insets = useSafeArea();
-  const screens = ['Agendamentos', 'Clientes', 'Relatorios', 'Serviços'];
+  const screens = ['Agendamentos', 'Relatorios', 'Clientes', 'Serviços'];
   return (
     <Block style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
       <Block style={styles.header}>
