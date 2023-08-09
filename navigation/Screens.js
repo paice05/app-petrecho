@@ -49,7 +49,7 @@ function LoginStack(props) {
         name="Login"
         component={Login}
         options={{
-          backgroundColor: '#FFFFFF',
+          backgroundColor: '#eee',
         }}
       />
     </Stack.Navigator>
@@ -71,7 +71,7 @@ function ComponentsStack(props) {
           header: ({ navigation, scene }) => (
             <Header title="Components" navigation={navigation} scene={scene} />
           ),
-          backgroundColor: '#FFFFFF',
+          backgroundColor: '#eee',
         }}
       />
     </Stack.Navigator>
@@ -94,7 +94,7 @@ function ArticlesStack(props) {
           header: ({ navigation, scene }) => (
             <Header title="Articles" navigation={navigation} scene={scene} />
           ),
-          backgroundColor: '#FFFFFF',
+          backgroundColor: '#eee',
         }}
       />
     </Stack.Navigator>
@@ -140,7 +140,7 @@ function ProfileStack(props) {
           header: ({ navigation, scene }) => (
             <Header transparent white title="Profile" navigation={navigation} scene={scene} />
           ),
-          cardStyle: { backgroundColor: '#FFFFFF' },
+          cardStyle: { backgroundColor: '#eee' },
           headerTransparent: true,
         }}
       />
@@ -163,7 +163,7 @@ function HomeStack(props) {
           header: ({ navigation, scene }) => (
             <Header title="Home" search options navigation={navigation} scene={scene} />
           ),
-          cardStyle: { backgroundColor: '#FFFFFF' },
+          cardStyle: { backgroundColor: '#eee' },
         }}
       />
     </Stack.Navigator>
@@ -186,7 +186,7 @@ function ClientsStack(props) {
           header: ({ navigation, scene }) => (
             <Header title="Clientes" navigation={navigation} scene={scene} />
           ),
-          cardStyle: { backgroundColor: '#FFFFFF' },
+          cardStyle: { backgroundColor: '#eee' },
         }}
       />
 
@@ -231,7 +231,7 @@ function SchedulesStack(props) {
           header: ({ navigation, scene }) => (
             <Header title="Agendamentos" navigation={navigation} scene={scene} />
           ),
-          cardStyle: { backgroundColor: '#FFFFFF' },
+          cardStyle: { backgroundColor: '#eee' },
         }}
       />
 
@@ -276,7 +276,7 @@ function ServicesStack(props) {
           header: ({ navigation, scene }) => (
             <Header title="Serviços" navigation={navigation} scene={scene} />
           ),
-          cardStyle: { backgroundColor: '#FFFFFF' },
+          cardStyle: { backgroundColor: '#eee' },
         }}
       />
 
@@ -321,7 +321,7 @@ function ReportsStack(props) {
           header: ({ navigation, scene }) => (
             <Header title="Relatórios" navigation={navigation} scene={scene} />
           ),
-          cardStyle: { backgroundColor: '#FFFFFF' },
+          cardStyle: { backgroundColor: '#eee' },
         }}
       />
       <Stack.Screen

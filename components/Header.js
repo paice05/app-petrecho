@@ -39,35 +39,35 @@ const BasketButton = ({ isWhite, style, navigation }) => (
 );
 
 const NewClient = ({ isWhite, style, navigation }) => (
-  <TouchableOpacity
-    style={[styles.button, style]}
-    onPress={() => navigation.navigate('ClientForm')}
-  >
-    <Text size={14} color={nowTheme.COLORS[isWhite ? 'WHITE' : 'ICON']}>
-      Novo
-    </Text>
+  <TouchableOpacity onPress={() => navigation.navigate('ClientForm')}>
+    <Block row center gap={3}>
+      <Icon size={14} family="feather" name="plus-circle" />
+      <Text bold size={12}>
+        CRIAR
+      </Text>
+    </Block>
   </TouchableOpacity>
 );
 
 const NewService = ({ isWhite, style, navigation }) => (
-  <TouchableOpacity
-    style={[styles.button, style]}
-    onPress={() => navigation.navigate('ServiceForm')}
-  >
-    <Text size={14} color={nowTheme.COLORS[isWhite ? 'WHITE' : 'ICON']}>
-      Novo
-    </Text>
+  <TouchableOpacity onPress={() => navigation.navigate('ServiceForm')}>
+    <Block row center gap={3}>
+      <Icon size={14} family="feather" name="plus-circle" />
+      <Text bold size={12}>
+        CRIAR
+      </Text>
+    </Block>
   </TouchableOpacity>
 );
 
 const NewSchedule = ({ isWhite, style, navigation }) => (
-  <TouchableOpacity
-    style={[styles.button, style]}
-    onPress={() => navigation.navigate('ScheduleForm')}
-  >
-    <Text size={14} color={nowTheme.COLORS[isWhite ? 'WHITE' : 'ICON']}>
-      Novo
-    </Text>
+  <TouchableOpacity onPress={() => navigation.navigate('ScheduleForm')}>
+    <Block row center gap={3}>
+      <Icon size={14} family="feather" name="plus-circle" />
+      <Text bold size={12}>
+        CRIAR
+      </Text>
+    </Block>
   </TouchableOpacity>
 );
 
