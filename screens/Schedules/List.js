@@ -38,6 +38,7 @@ const ScheduleList = ({ navigation }) => {
     setIsLoading(true);
 
     api
+      .request()
       .get('/schedules', {
         params,
         headers: {
@@ -58,9 +59,12 @@ const ScheduleList = ({ navigation }) => {
 
   const fetchChangeStatus = (id, payload) => {
     try {
-      api.put(`/schedules/${id}/status`, payload).then(() => {
-        fetchSchedules();
-      });
+      api
+        .request()
+        .put(`/schedules/${id}/status`, payload)
+        .then(() => {
+          fetchSchedules();
+        });
     } catch (error) {
       console.error('Ocorreu um erro na requisição:', error);
     }
@@ -75,9 +79,12 @@ const ScheduleList = ({ navigation }) => {
 
   const handleDelete = (id) => {
     try {
-      api.delete(`/schedules/${id}`).then(() => {
-        setSchedules(schedules.filter((item) => item.id !== id));
-      });
+      api
+        .request()
+        .delete(`/schedules/${id}`)
+        .then(() => {
+          setSchedules(schedules.filter((item) => item.id !== id));
+        });
     } catch (error) {
       console.error('Ocorreu um erro na requisição:', error);
     }

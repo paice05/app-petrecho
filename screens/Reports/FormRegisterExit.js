@@ -20,7 +20,7 @@ const RegisterExitForm = ({ navigation }) => {
 
   const handleSubmitRegister = async () => {
     try {
-      await api.post('/reports/register-out', fields);
+      await api.request().post('/reports/register-out', fields);
       navigation.goBack();
     } catch (error) {
       console.log(error);

@@ -4,6 +4,7 @@ import { Linking, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from './Icon';
 import React from 'react';
 import nowTheme from '../constants/Theme';
+import { clearCache } from '../services/cache';
 
 class DrawerItem extends React.Component {
   renderIcon = () => {
@@ -155,7 +156,18 @@ class DrawerItem extends React.Component {
     return (
       <TouchableOpacity
         style={{ height: 60 }}
-        onPress={() => navigation.navigate(title == 'LOGOUT' ? 'Onboarding' : title)}
+        onPress={() => {
+          if (title === 'LOGOUT') {
+            // limpar o token do cache
+            clearCache('token').then(() => {
+              navigation.navigate('Onboarding');
+            });
+
+            return;
+          }
+
+          navigation.navigate(title);
+        }}
       >
         <Block flex row style={containerStyles}>
           <Block middle flex={0.1} style={{ marginRight: 5 }}>

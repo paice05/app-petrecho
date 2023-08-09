@@ -24,6 +24,7 @@ const Clients = ({ navigation }) => {
     setIsLoading(true);
 
     api
+      .request()
       .get('/users', {
         params,
         headers: {
@@ -50,9 +51,12 @@ const Clients = ({ navigation }) => {
 
   const handleDelete = (id) => {
     try {
-      api.delete(`/users/${id}`).then(() => {
-        setClients(clients.filter((item) => item.id !== id));
-      });
+      api
+        .request()
+        .delete(`/users/${id}`)
+        .then(() => {
+          setClients(clients.filter((item) => item.id !== id));
+        });
     } catch (error) {
       console.error('Ocorreu um erro na requisição:', error);
     }

@@ -11,6 +11,7 @@ const ExitReport = () => {
 
   const fetchReportsOut = (params) => {
     api
+      .request()
       .get('/reports', {
         params,
         headers: {

@@ -16,6 +16,7 @@ export function AsyncSelect({ path, query = {}, labelText, placeholder, onChange
   useEffect(() => {
     if (debouncedValue) {
       api
+        .request()
         .get(path, {
           params: {
             where: {

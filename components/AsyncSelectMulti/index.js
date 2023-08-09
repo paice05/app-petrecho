@@ -16,6 +16,7 @@ export function AsyncSelectMulti({ path, query = {}, labelText, placeholder, onC
   useEffect(() => {
     if (debouncedValue) {
       api
+        .request()
         .get(path, {
           params: {
             where: {

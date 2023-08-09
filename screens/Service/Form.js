@@ -24,7 +24,7 @@ const ServiceForm = ({ route, navigation }) => {
 
   const handleSubmitCreate = async () => {
     try {
-      await api.post('/services', fields);
+      await api.request().post('/services', fields);
 
       navigation.goBack();
     } catch (error) {
@@ -34,7 +34,7 @@ const ServiceForm = ({ route, navigation }) => {
 
   const handleSubmitUpdate = async () => {
     try {
-      await api.put(`/services/${isEditing}`, fields);
+      await api.request().put(`/services/${isEditing}`, fields);
 
       navigation.goBack();
     } catch (error) {
@@ -46,7 +46,7 @@ const ServiceForm = ({ route, navigation }) => {
     if (isEditing) {
       const fecthServices = async () => {
         try {
-          const response = await api.get(`/services/${isEditing}`);
+          const response = await api.request().get(`/services/${isEditing}`);
 
           setFields({
             ...fields,

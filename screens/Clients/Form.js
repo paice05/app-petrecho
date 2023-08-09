@@ -59,7 +59,7 @@ const ClientForm = ({ route, navigation }) => {
     };
 
     try {
-      const response = await api.post('/users', payload);
+      const response = await api.request().post('/users', payload);
 
       setFields(response.data);
       navigation.goBack();
@@ -76,7 +76,7 @@ const ClientForm = ({ route, navigation }) => {
     };
 
     try {
-      const response = await api.put(`/users/${isEditing}`, payload);
+      const response = await api.request().put(`/users/${isEditing}`, payload);
 
       setFields(response.data);
       navigation.goBack();
@@ -89,7 +89,7 @@ const ClientForm = ({ route, navigation }) => {
     if (isEditing) {
       const fecthClients = async () => {
         try {
-          const response = await api.get(`/users/${isEditing}`);
+          const response = await api.request().get(`/users/${isEditing}`);
 
           setFields({
             ...fields,

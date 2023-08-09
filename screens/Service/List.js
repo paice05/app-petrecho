@@ -24,6 +24,7 @@ const Services = ({ navigation }) => {
     setIsLoading(true);
 
     api
+      .request()
       .get('/services', {
         params,
         headers: {
@@ -50,9 +51,12 @@ const Services = ({ navigation }) => {
 
   const handleDelete = (id) => {
     try {
-      api.delete(`/services/${id}`).then(() => {
-        setClients(services.filter((item) => item.id !== id));
-      });
+      api
+        .request()
+        .delete(`/services/${id}`)
+        .then(() => {
+          setClients(services.filter((item) => item.id !== id));
+        });
     } catch (error) {
       console.error('Ocorreu um erro na requisição:', error);
     }

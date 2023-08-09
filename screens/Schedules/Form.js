@@ -61,7 +61,7 @@ const SchedulesForm = ({ route, navigation }) => {
     };
 
     try {
-      await api.post('/schedules', payload);
+      await api.request().post('/schedules', payload);
       navigation.goBack();
     } catch (error) {
       console.log(error);
@@ -82,7 +82,7 @@ const SchedulesForm = ({ route, navigation }) => {
     };
 
     try {
-      const response = await api.put(`/schedules/${isEditing}`, payload);
+      const response = await api.request().put(`/schedules/${isEditing}`, payload);
       setFields(response.data);
       navigation.goBack();
     } catch (error) {
@@ -94,7 +94,7 @@ const SchedulesForm = ({ route, navigation }) => {
     if (isEditing) {
       const fetchSchedules = async () => {
         try {
-          const response = await api.get(`/schedules/${isEditing}`);
+          const response = await api.request().get(`/schedules/${isEditing}`);
           setFields({
             user: { value: response.data.user.id, label: response.data.user.name },
             services: response.data.services.map((item) => ({ value: item.id, label: item.name })),

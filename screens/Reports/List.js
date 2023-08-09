@@ -21,6 +21,7 @@ const ReportList = ({ navigation }) => {
 
   const fetchReports = (params) => {
     api
+      .request()
       .get('/reports', {
         params,
         headers: {

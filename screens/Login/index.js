@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   StyleSheet,
   ImageBackground,
@@ -8,12 +8,12 @@ import {
   Keyboard,
 } from 'react-native';
 import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { Button, Icon, Input } from '../../components';
 import { Images, nowTheme } from '../../constants';
 import { api } from '../../services/api';
 import { useFocusEffect } from '@react-navigation/native';
+import { getCache, setCache } from '../../services/cache';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -22,28 +22,39 @@ const DismissKeyboard = ({ children }) => (
 );
 
 const Login = ({ navigation }) => {
-  const [fields, setFields] = useState('');
+  const [fields, setFields] = useState({
+    username: '',
+    password: '',
+  });
+  const [isError, setIsError] = useState(false);
 
-  const fetchLogin = (params) => {
+  useEffect(() => {
+    getCache('token').then((response) => {
+      if (response) {
+        api.setToken(response);
+        navigation.navigate('App');
+      }
+    });
+  }, []);
+
+  const submitLogin = () => {
+    if (!fields.username || !fields.password) return;
+
+    setIsError(false);
+
     api
-      .post('/auth', {
-        params,
-        Headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+      .request()
+      .post('/auth', fields)
       .then(({ data }) => {
-        console.log({ data });
-        setFields(data);
+        if (data.token) {
+          api.setToken(data.token);
+          setCache('token', data.token).then(() => {
+            navigation.navigate('App');
+          });
+        }
       })
-      .catch((error) => console.log({ error }));
+      .catch((error) => setIsError(true));
   };
-
-  useFocusEffect(
-    useCallback(() => {
-      fetchLogin();
-    }, [])
-  );
 
   return (
     <DismissKeyboard>
@@ -78,11 +89,8 @@ const Login = ({ navigation }) => {
                           <Input
                             placeholder="Digite seu usuário"
                             style={styles.inputs}
-                            value={fields.cellPhone}
-                            onChange={(event) => {
-                              console.log(setFields);
-                              setFields('cellPhone', event.target.value);
-                            }}
+                            value={fields.username}
+                            onChangeText={(value) => setFields({ ...fields, username: value })}
                             iconContent={
                               <Icon
                                 size={16}
@@ -99,6 +107,8 @@ const Login = ({ navigation }) => {
                             placeholder="Senha"
                             password
                             viewPass
+                            value={fields.password}
+                            onChangeText={(value) => setFields({ ...fields, password: value })}
                             style={styles.inputs}
                             iconContent={
                               <Icon
@@ -111,10 +121,16 @@ const Login = ({ navigation }) => {
                             }
                           />
                         </Block>
+                        {isError && (
+                          <Text center color="red">
+                            {' '}
+                            Erro no login{' '}
+                          </Text>
+                        )}
                       </Block>
                       <Block center>
                         <Button
-                          onPress={() => navigation.navigate('App')}
+                          onPress={submitLogin}
                           color="primary"
                           round
                           style={styles.createButton}
