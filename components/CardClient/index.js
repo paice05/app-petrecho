@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { theme, Card, Block, Text, Button as GaButton } from 'galio-framework';
 
 import { nowTheme } from '../../constants';
@@ -20,96 +20,70 @@ const CardClient = ({ navigation, nome, telefone, aniversario, id, handleDelete 
 
   return (
     <Block flex space="between" style={styles.container}>
-      <Block style={styles.wraper}>
-        <Text style={styles.cardTitle}>
-          {nome.slice(0, 20)}
-          {isLargeName ? '...' : ''}
-        </Text>
-
-        <Block row>
-          <GaButton
-            round
-            onlyIcon
-            shadowless
-            icon="edit"
-            iconFamily="Font-Awesome"
-            iconColor={theme.COLORS.WHITE}
-            iconSize={theme.SIZES.BASE * 0.8}
-            color={nowTheme.COLORS.SUCCESS}
-            style={[styles.social]}
+      <Block row space="between">
+        <Block gap={5} style={styles.wrapperName}>
+          <TouchableOpacity
             onPress={() =>
               navigation.navigate('ClientForm', {
                 itemId: id,
               })
             }
-          />
-
-          <GaButton
-            round
-            onlyIcon
-            shadowless
-            icon="trash"
-            iconFamily="Font-Awesome"
-            iconColor={theme.COLORS.WHITE}
-            iconSize={theme.SIZES.BASE * 0.8}
-            color={nowTheme.COLORS.ERROR}
-            style={[styles.social]}
-            onPress={handleToggleVisible}
-          />
+          >
+            <Text style={{ textDecorationLine: 'underline' }}>
+              {nome?.slice(0, 20)}
+              {isLargeName ? '...' : ''}
+            </Text>
+          </TouchableOpacity>
+          <Text color="gray">Cliente</Text>
         </Block>
+        <TouchableOpacity style={styles.more}>
+          <Icon size={12} color={nowTheme.COLORS.PRIMARY} name="more-vertical" family="feather" />
+        </TouchableOpacity>
       </Block>
 
-      <Block flex>
-        <Block row>
-          <Icon family="feather" name="smartphone" />
-          <Text style={styles.cardSubtitle}>{telefone}</Text>
+      <Block row style={styles.wrapperInfo}>
+        <Block row gap={5}>
+          <Icon color={nowTheme.COLORS.PRIMARY} name="phone" family="feather" />
+          <Text bold size={12}>
+            {telefone}
+          </Text>
         </Block>
-        <Block row>
-          <Icon family="feather" name="calendar" />
-          <Text style={styles.cardSubtitle}>{aniversario}</Text>
+
+        <Block row gap={5}>
+          <Icon color={nowTheme.COLORS.PRIMARY} name="calendar" family="feather" />
+          <Text bold size={12}>
+            {aniversario}
+          </Text>
         </Block>
       </Block>
-
-      <Modal
-        title={`Deseja remover esse cliente? \n\n${nome}`}
-        isVisible={visible}
-        handleConfirm={handleSubmitDelete}
-        handleCancel={handleToggleVisible}
-      />
     </Block>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: theme.SIZES.BASE / 2,
-    borderRadius: 4,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: 'black',
+    padding: 12,
+    borderRadius: 10,
     marginBottom: 16,
+    backgroundColor: '#fff',
   },
-  cardTitle: {
-    paddingHorizontal: 9,
-    paddingTop: 7,
-    paddingBottom: 15,
-    fontSize: 18,
-    fontFamily: 'montserrat-regular',
-    fontWeight: 'bold',
-    textDecorationLine: 'underline',
-    color: nowTheme.COLORS.PRIMARY,
+  wrapperName: {
+    paddingBottom: 20,
   },
-  cardSubtitle: {
-    paddingHorizontal: 9,
-    fontSize: 14,
-    fontFamily: 'montserrat-regular',
-    color: nowTheme.COLORS.BLACK,
+  wrapperInfo: {
+    justifyContent: 'center',
+    gap: 25,
   },
-  wraper: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  more: {
+    width: 25,
+    height: 25,
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: nowTheme.COLORS.PRIMARY,
+    borderRadius: 3,
+    justifyContent: 'center',
     alignItems: 'center',
+    display: 'flex',
   },
 });
 

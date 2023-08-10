@@ -18,6 +18,8 @@ import Tabs from '../../components/Tabs';
 import { Calendar } from '../../components/Calendar';
 import { nowTheme, tabs } from '../../constants';
 import { useFocusEffect } from '@react-navigation/native';
+import { useRequestFindMany } from '../../components/hooks/useRequestFindMany';
+import { useRequestDestroy } from '../../components/hooks/useRequestDestroy';
 
 const { width } = Dimensions.get('window');
 
@@ -26,89 +28,83 @@ const ScheduleList = ({ navigation }) => {
   const [date, setDate] = useState(new Date());
 
   const [schedules, setSchedules] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   const [pagination, setPagination] = useState({
-    currentPage: 0,
+    currentPage: 1,
     total: 0,
     lastPage: 0,
   });
 
-  const fetchSchedules = (params = {}) => {
-    setIsLoading(true);
+  const {
+    execute: findMany,
+    response,
+    loading,
+  } = useRequestFindMany({
+    path: '/schedules',
+    defaultQuery: {
+      page: pagination.currentPage,
+      where: {
+        scheduleAt: {
+          $between: [
+            new Date(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} 00:00:00`),
+            new Date(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} 23:59:59`),
+          ],
+        },
+      },
+      order: [['scheduleAt', 'ASC']],
+    },
+  });
+  const { execute: destroy } = useRequestDestroy({
+    path: '/schedules',
+    callbackSuccess: () => findMany(),
+  });
 
-    api
-      .request()
-      .get('/schedules', {
-        params: {
-          ...params,
-          where: {
-            scheduleAt: {
-              $between: [
-                new Date(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} 00:00:00`),
-                new Date(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} 23:59:59`),
-              ],
-            },
-          },
-        },
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(({ data }) => {
-        setPagination({
-          currentPage: data.currentPage,
-          lastPage: data.lastPage,
-          total: data.total,
-        });
-        setSchedules(data);
-        setIsLoading(false);
-      })
-      .catch((error) => console.log({ error }));
-  };
+  useEffect(() => {
+    if (response) {
+      setPagination({
+        currentPage: response.currentPage,
+        lastPage: response.lastPage,
+        total: response.total,
+      });
+      setSchedules(response.data);
+    }
+  }, [response]);
 
   const fetchChangeStatus = (id, payload) => {
-    try {
-      api
-        .request()
-        .put(`/schedules/${id}/status`, payload)
-        .then(() => {
-          fetchSchedules();
-        });
-    } catch (error) {
-      console.error('Ocorreu um erro na requisição:', error);
-    }
+    api
+      .request()
+      .put(`/schedules/${id}/status`, payload)
+      .then(() => {
+        findMany();
+      });
   };
 
   useFocusEffect(
     useCallback(() => {
-      fetchSchedules();
+      findMany();
     }, [date])
   );
 
-  const handleDelete = (id) => {
-    try {
-      api
-        .request()
-        .delete(`/schedules/${id}`)
-        .then(() => {
-          setSchedules(schedules.filter((item) => item.id !== id));
-        });
-    } catch (error) {
-      console.error('Ocorreu um erro na requisição:', error);
-    }
-  };
+  const handleConfirmDelete = (id) =>
+    Alert.alert('Cuidado', 'você deseja remover esse agendamento?', [
+      {
+        text: 'Cancelar',
+        onPress: () => {},
+        style: 'cancel',
+      },
+      { text: 'Confirmar', onPress: () => destroy(id) },
+    ]);
 
   const handleNextPage = () => {
     if (pagination.currentPage === pagination.lastPage) return;
 
-    fetchSchedules({ page: pagination.currentPage + 1 });
+    findMany();
   };
 
   const handlePreviousPage = () => {
     if (pagination.currentPage === 1) return;
 
-    fetchSchedules({ page: pagination.currentPage - 1 });
+    findMany();
   };
 
   const handleFinished = (scheduleId) => {
@@ -124,6 +120,27 @@ const ScheduleList = ({ navigation }) => {
     };
 
     fetchChangeStatus(scheduleId, payload);
+  };
+  const handleRestore = (id) => {
+    console.log('restore');
+
+    api
+      .request()
+      .get(`/schedules/${id}/revert`)
+      .then(() => {
+        findMany({
+          page: pagination.currentPage,
+          where: {
+            scheduleAt: {
+              $between: [
+                new Date(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} 00:00:00`),
+                new Date(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} 23:59:59`),
+              ],
+            },
+          },
+          order: [['scheduleAt', 'ASC']],
+        });
+      });
   };
 
   return (
@@ -148,7 +165,7 @@ const ScheduleList = ({ navigation }) => {
       />
 
       <Block>
-        {isLoading ? (
+        {loading ? (
           <ActivityIndicator size="large" colo="#0000ff" />
         ) : (
           <Block>
@@ -176,6 +193,8 @@ const ScheduleList = ({ navigation }) => {
                     status={item.status}
                     onFinished={() => handleFinished(item.id)}
                     onCanceled={() => handleCanceled(item.id)}
+                    onDeleted={() => handleConfirmDelete(item.id)}
+                    onRevert={() => handleRestore(item.id)}
                   />
                 );
               })}
