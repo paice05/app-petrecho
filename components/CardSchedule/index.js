@@ -62,14 +62,20 @@ const CardSchedule = ({
                     itemId: id,
                   }),
                 text: 'Editar',
+                icon: 'edit',
+                color: nowTheme.COLORS.SWITCH_ON,
               },
               {
                 onSelect: onDeleted,
                 text: 'Deletar',
+                icon: 'trash-2',
+                color: nowTheme.COLORS.PRIMARY,
               },
               {
                 onSelect: onRevert,
                 text: 'Restaurar',
+                icon: 'refresh-cw',
+                color: nowTheme.COLORS.INFO,
                 disable: status === 'pending',
               },
             ]}

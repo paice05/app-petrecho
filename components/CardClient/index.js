@@ -37,10 +37,14 @@ const CardClient = ({ navigation, id, nome, tipo, telefone, aniversario, onDelet
                   itemId: id,
                 }),
               text: 'Editar',
+              icon: 'edit',
+              color: nowTheme.COLORS.SWITCH_ON,
             },
             {
               onSelect: onDeleted,
               text: 'Deletar',
+              icon: 'trash-2',
+              color: nowTheme.COLORS.PRIMARY,
             },
           ]}
         />

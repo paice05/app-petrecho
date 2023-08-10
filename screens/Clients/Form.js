@@ -108,9 +108,9 @@ const ClientForm = ({ route, navigation }) => {
   }, []);
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <Block flex style={styles.group}>
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE, paddingTop: 70 }}>
+    <ScrollView showsVerticalScrollIndicator={true}>
+      <Block flex>
+        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
           <CustomInput
             placeholder="Digite seu nome"
             labelText="Nome"
@@ -176,12 +176,10 @@ const styles = StyleSheet.create({
     fontFamily: 'montserrat-bold',
     paddingBottom: theme.SIZES.BASE,
     paddingHorizontal: theme.SIZES.BASE * 2,
-    marginTop: 44,
+    // marginTop: 44,
     color: nowTheme.COLORS.HEADER,
   },
-  group: {
-    // paddingTop: theme.SIZES.BASE * 2,
-  },
+
   button: {
     marginBottom: theme.SIZES.BASE,
     width: 100,

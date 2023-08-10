@@ -1,6 +1,7 @@
-// SimpleMenu.js
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
+
+import { StyleSheet, View } from 'react-native';
+import { Block, Text } from 'galio-framework';
 import {
   Menu,
   MenuProvider,
@@ -9,9 +10,9 @@ import {
   MenuTrigger,
   renderers,
 } from 'react-native-popup-menu';
+
 import Icon from '../Icon';
 import { nowTheme } from '../../constants';
-import { Block } from 'galio-framework';
 
 const { SlideInMenu } = renderers;
 
@@ -40,7 +41,12 @@ const SimpleMenu = ({ items = [] }) => {
                 key={key}
                 style={{ paddingVertical: 15 }}
                 onSelect={item.onSelect}
-                text={item.text}
+                children={
+                  <Block row gap={7}>
+                    {item.icon && <Icon color={item.color} name={item.icon} family="feather" />}
+                    <Text color={item.color}>{item.text}</Text>
+                  </Block>
+                }
               />
             ))}
         </MenuOptions>

@@ -3,6 +3,7 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Block, Text, Button as GaButton } from 'galio-framework';
 
 import Menu from '../Menu';
+import { nowTheme } from '../../constants';
 
 const CardService = ({ navigation, id, nome, valor, onDeleted }) => {
   const isLargeName = nome.length > 20;
@@ -33,10 +34,14 @@ const CardService = ({ navigation, id, nome, valor, onDeleted }) => {
                   itemId: id,
                 }),
               text: 'Editar',
+              icon: 'edit',
+              color: nowTheme.COLORS.SWITCH_ON,
             },
             {
               onSelect: onDeleted,
               text: 'Deletar',
+              icon: 'trash-2',
+              color: nowTheme.COLORS.PRIMARY,
             },
           ]}
         />

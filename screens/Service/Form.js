@@ -62,7 +62,7 @@ const ServiceForm = ({ route, navigation }) => {
   }, []);
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView showsVerticalScrollIndicator={true}>
       <Block flex style={styles.group}>
         <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
           <CustomInput
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     color: nowTheme.COLORS.HEADER,
   },
   group: {
-    paddingTop: theme.SIZES.BASE * 4,
+    // paddingTop: theme.SIZES.BASE,
   },
   button: {
     marginBottom: theme.SIZES.BASE,

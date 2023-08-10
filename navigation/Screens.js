@@ -208,7 +208,6 @@ function ClientsStack(props) {
               />
             );
           },
-          headerTransparent: true,
         }}
       />
     </Stack.Navigator>
@@ -231,6 +230,7 @@ function SchedulesStack(props) {
           header: ({ navigation, scene }) => (
             <Header title="Agendamentos" navigation={navigation} scene={scene} />
           ),
+
           cardStyle: { backgroundColor: '#eee' },
         }}
       />
@@ -253,7 +253,6 @@ function SchedulesStack(props) {
               />
             );
           },
-          headerTransparent: true,
         }}
       />
     </Stack.Navigator>
@@ -298,7 +297,7 @@ function ServicesStack(props) {
               />
             );
           },
-          headerTransparent: true,
+          // headerTransparent: true,
         }}
       />
     </Stack.Navigator>

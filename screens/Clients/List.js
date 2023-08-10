@@ -81,6 +81,7 @@ const Clients = ({ navigation }) => {
           {clients.map((item) => {
             return (
               <CardClient
+                key={item.id}
                 navigation={navigation}
                 id={item.id}
                 nome={item.name}

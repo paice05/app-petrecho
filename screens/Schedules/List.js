@@ -173,6 +173,7 @@ const ScheduleList = ({ navigation }) => {
               .map((item) => {
                 return (
                   <CardSchedule
+                    key={item.id}
                     navigation={navigation}
                     id={item.id}
                     nome={item.user.name}

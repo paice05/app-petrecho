@@ -120,7 +120,7 @@ const SchedulesForm = ({ route, navigation }) => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Block flex style={styles.group}>
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE, paddingTop: 80 }}>
+        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
           <AsyncSelect
             path="/users"
             query={{ type: 'pf' }}
@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
     color: nowTheme.COLORS.HEADER,
   },
   group: {
-    // paddingTop: theme.SIZES.BASE * 2,
+    paddingTop: theme.SIZES.BASE,
   },
   button: {
     marginBottom: theme.SIZES.BASE,

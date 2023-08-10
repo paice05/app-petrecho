@@ -135,6 +135,7 @@ const styles = StyleSheet.create({
   menu: {
     paddingHorizontal: 35,
     paddingVertical: 8,
+    marginBottom: 20,
   },
   titleContainer: {
     alignItems: 'center',

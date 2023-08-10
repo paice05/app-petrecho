@@ -262,6 +262,7 @@ class Header extends React.Component {
       title
     );
     const headerStyles = [
+      { height: 100 },
       !noShadow ? styles.shadow : null,
       transparent ? { backgroundColor: 'rgba(0,0,0,0)' } : null,
     ];
@@ -312,10 +313,10 @@ const styles = StyleSheet.create({
     fontFamily: 'montserrat-regular',
   },
   navbar: {
-    paddingVertical: 0,
-    paddingBottom: theme.SIZES.BASE * 1.5,
-    paddingTop: iPhoneX ? theme.SIZES.BASE * 2 : theme.SIZES.BASE,
-    zIndex: 5,
+    // paddingVertical: 0,
+    // paddingBottom: theme.SIZES.BASE * 1.5,
+    // zIndex: 5,
+    paddingTop: 70,
   },
   shadow: {
     backgroundColor: theme.COLORS.WHITE,

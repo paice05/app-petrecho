@@ -81,6 +81,7 @@ const Services = ({ navigation }) => {
           {services.map((item) => {
             return (
               <CardService
+                key={item.id}
                 navigation={navigation}
                 id={item.id}
                 nome={item.name}
