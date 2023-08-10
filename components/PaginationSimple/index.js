@@ -1,19 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { Block, Button as GButton } from 'galio-framework';
-import { StyleSheet, Text } from 'react-native';
+import { Block, Text } from 'galio-framework';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import { nowTheme } from '../../constants';
 
 const Button = ({ label, onPress }) => {
   return (
-    <GButton
-      onPress={onPress}
-      textStyle={{ fontSize: 10 }}
-      small
-      center
-      style={styles.optionsButton}
-    >
-      {label}
-    </GButton>
+    <TouchableOpacity onPress={onPress}>
+      <Text color={nowTheme.COLORS.PRIMARY} style={styles.text}>
+        {label}
+      </Text>
+    </TouchableOpacity>
   );
 };
 
@@ -38,11 +35,8 @@ export const PaginationSimple = ({
 };
 
 const styles = StyleSheet.create({
-  optionsButton: {
-    width: 'auto',
-    height: 34,
+  text: {
+    textDecorationLine: 'underline',
     paddingHorizontal: 10,
-    paddingVertical: 10,
-    borderRadius: 10,
   },
 });
