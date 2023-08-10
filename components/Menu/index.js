@@ -33,14 +33,16 @@ const SimpleMenu = ({ items = [] }) => {
           }
         />
         <MenuOptions>
-          {items.map((item, key) => (
-            <MenuOption
-              key={key}
-              style={{ paddingVertical: 15 }}
-              onSelect={item.onSelect}
-              text={item.text}
-            />
-          ))}
+          {items
+            .filter((item) => !item.disable)
+            .map((item, key) => (
+              <MenuOption
+                key={key}
+                style={{ paddingVertical: 15 }}
+                onSelect={item.onSelect}
+                text={item.text}
+              />
+            ))}
         </MenuOptions>
       </Menu>
     </View>

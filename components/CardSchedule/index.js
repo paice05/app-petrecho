@@ -57,39 +57,24 @@ const CardSchedule = ({
 
         <Block>
           <Menu
-            items={
-              status === 'pending'
-                ? [
-                    {
-                      onSelect: () =>
-                        navigation.navigate('ScheduleForm', {
-                          itemId: id,
-                        }),
-                      text: 'Editar',
-                    },
-                    {
-                      onSelect: onDeleted,
-                      text: 'Deletar',
-                    },
-                  ]
-                : [
-                    {
-                      onSelect: () =>
-                        navigation.navigate('ScheduleForm', {
-                          itemId: id,
-                        }),
-                      text: 'Editar',
-                    },
-                    {
-                      onSelect: onDeleted,
-                      text: 'Deletar',
-                    },
-                    {
-                      onSelect: onRevert,
-                      text: 'Restaurar',
-                    },
-                  ]
-            }
+            items={[
+              {
+                onSelect: () =>
+                  navigation.navigate('ScheduleForm', {
+                    itemId: id,
+                  }),
+                text: 'Editar',
+              },
+              {
+                onSelect: onDeleted,
+                text: 'Deletar',
+              },
+              {
+                onSelect: onRevert,
+                text: 'Restaurar',
+                disable: status === 'pending',
+              },
+            ]}
           />
         </Block>
       </Block>

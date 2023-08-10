@@ -13,7 +13,7 @@ class API {
 
   request() {
     return axios.create({
-      baseURL: `http://${myIp.ale}:3333/api/v1`,
+      baseURL: `http://${myIp.paice}:3333/api/v1`,
       paramsSerializer: (params) => qs.stringify(params),
       headers: {
         Authorization: `Bearer ${this.token}`,

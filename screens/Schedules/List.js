@@ -56,7 +56,7 @@ const ScheduleList = ({ navigation }) => {
   });
   const { execute: destroy } = useRequestDestroy({
     path: '/schedules',
-    callbackSuccess: () => findMany(),
+    callbackSuccess: findMany,
   });
 
   useEffect(() => {
@@ -98,13 +98,13 @@ const ScheduleList = ({ navigation }) => {
   const handleNextPage = () => {
     if (pagination.currentPage === pagination.lastPage) return;
 
-    findMany();
+    findMany({ page: pagination.currentPage + 1 });
   };
 
   const handlePreviousPage = () => {
     if (pagination.currentPage === 1) return;
 
-    findMany();
+    findMany({ page: pagination.currentPage - 1 });
   };
 
   const handleFinished = (scheduleId) => {
@@ -128,18 +128,7 @@ const ScheduleList = ({ navigation }) => {
       .request()
       .get(`/schedules/${id}/revert`)
       .then(() => {
-        findMany({
-          page: pagination.currentPage,
-          where: {
-            scheduleAt: {
-              $between: [
-                new Date(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} 00:00:00`),
-                new Date(`${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} 23:59:59`),
-              ],
-            },
-          },
-          order: [['scheduleAt', 'ASC']],
-        });
+        findMany();
       });
   };
 

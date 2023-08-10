@@ -5,18 +5,14 @@ import { theme, Card, Block, Text, Button as GaButton } from 'galio-framework';
 import { nowTheme } from '../../constants';
 import { Modal } from '../Modal';
 import Icon from '../Icon';
+import Menu from '../Menu';
 
-const CardService = ({ navigation, nome, valor, id, handleDelete }) => {
+const CardService = ({ navigation, nome, valor, id, onDeleted }) => {
   const [visible, setVisible] = useState(false);
 
   const handleToggleVisible = () => setVisible(!visible);
 
   const isLargeName = nome.length > 20;
-
-  const handleSubmitDelete = () => {
-    handleDelete(id);
-    handleToggleVisible();
-  };
 
   return (
     <Block flex space="between" style={styles.container}>
@@ -36,9 +32,21 @@ const CardService = ({ navigation, nome, valor, id, handleDelete }) => {
           </TouchableOpacity>
           <Text color="gray">R$ {Number(valor).toFixed(2).replace('.', ',')}</Text>
         </Block>
-        <TouchableOpacity style={styles.more}>
-          <Icon size={12} color={nowTheme.COLORS.PRIMARY} name="more-vertical" family="feather" />
-        </TouchableOpacity>
+        <Menu
+          items={[
+            {
+              onSelect: () =>
+                navigation.navigate('ServiceForm', {
+                  itemId: id,
+                }),
+              text: 'Editar',
+            },
+            {
+              onSelect: onDeleted,
+              text: 'Deletar',
+            },
+          ]}
+        />
       </Block>
     </Block>
   );

@@ -49,7 +49,6 @@ const ServiceForm = ({ route, navigation }) => {
           const response = await api.request().get(`/services/${isEditing}`);
 
           setFields({
-            ...fields,
             name: response.data.name,
             price: response.data.price,
           });
@@ -65,7 +64,7 @@ const ServiceForm = ({ route, navigation }) => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Block flex style={styles.group}>
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE, paddingTop: 70 }}>
+        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
           <CustomInput
             placeholder="Digite o nome do serviço"
             labelText="Nome"
@@ -74,11 +73,11 @@ const ServiceForm = ({ route, navigation }) => {
           />
         </Block>
 
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE, paddingTop: 70 }}>
+        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
           <CustomInput
             placeholder="Digite o valor do serviço"
             labelText="Valor"
-            value={fields.price}
+            value={fields.price.toString()}
             onChangeText={(value) => setFields({ ...fields, price: value })}
           />
         </Block>
@@ -115,7 +114,7 @@ const styles = StyleSheet.create({
     color: nowTheme.COLORS.HEADER,
   },
   group: {
-    // paddingTop: theme.SIZES.BASE * 2,
+    paddingTop: theme.SIZES.BASE * 4,
   },
   button: {
     marginBottom: theme.SIZES.BASE,

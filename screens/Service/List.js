@@ -1,18 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Dimensions, ScrollView, ActivityIndicator } from 'react-native';
+import { StyleSheet, Dimensions, ScrollView, ActivityIndicator, Alert } from 'react-native';
 
 import CardService from '../../components/CardService';
 
 import { PaginationSimple } from '../../components/PaginationSimple';
 import { Filters } from './Filters';
-import { api } from '../../services/api';
+
 import { Block, Text } from 'galio-framework';
 import { useFocusEffect } from '@react-navigation/native';
+import { useRequestFindMany } from '../../components/hooks/useRequestFindMany';
+import { useRequestDestroy } from '../../components/hooks/useRequestDestroy';
 
 const Services = ({ navigation }) => {
   const [services, setServices] = useState([]);
   const [hasClean, setHasClean] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
   const [pagination, setPagination] = useState({
     currentPage: 0,
@@ -20,64 +21,53 @@ const Services = ({ navigation }) => {
     lastPage: 0,
   });
 
-  const fetchServices = (params) => {
-    setIsLoading(true);
+  const { execute: findMany, response, loading } = useRequestFindMany({ path: '/services' });
+  const { execute: destroy } = useRequestDestroy({ path: '/services', callbackSuccess: findMany });
 
-    api
-      .request()
-      .get('/services', {
-        params,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(({ data }) => {
-        setPagination({
-          currentPage: data.currentPage,
-          lastPage: data.lastPage,
-          total: data.total,
-        });
-        setServices(data.data);
-        setIsLoading(false);
+  useEffect(() => {
+    if (response) {
+      setPagination({
+        currentPage: response.currentPage,
+        lastPage: response.lastPage,
+        total: response.total,
       });
-  };
+      setServices(response.data);
+    }
+  }, [response]);
 
   useFocusEffect(
     useCallback(() => {
       setHasClean(!hasClean);
-      fetchServices({});
+      findMany();
     }, [])
   );
-
-  const handleDelete = (id) => {
-    try {
-      api
-        .request()
-        .delete(`/services/${id}`)
-        .then(() => {
-          setClients(services.filter((item) => item.id !== id));
-        });
-    } catch (error) {
-      console.error('Ocorreu um erro na requisição:', error);
-    }
-  };
 
   const handleNextPage = () => {
     if (pagination.currentPage === pagination.lastPage) return;
 
-    fetchClients({ page: pagination.currentPage + 1 });
+    findMany({ page: pagination.currentPage + 1 });
   };
 
   const handlePreviousPage = () => {
     if (pagination.currentPage === 1) return;
 
-    fetchClients({ page: pagination.currentPage - 1 });
+    findMany({ page: pagination.currentPage - 1 });
   };
+
+  const handleConfirmDelete = (id) =>
+    Alert.alert('Cuidado', 'você deseja remover esse serviço?', [
+      {
+        text: 'Cancelar',
+        onPress: () => {},
+        style: 'cancel',
+      },
+      { text: 'Confirmar', onPress: () => destroy(id) },
+    ]);
 
   return (
     <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
-      <Filters fetchServices={fetchServices} hasClean={hasClean} />
-      {isLoading ? (
+      <Filters fetchServices={findMany} hasClean={hasClean} />
+      {loading ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
         <Block>
@@ -95,7 +85,7 @@ const Services = ({ navigation }) => {
                 id={item.id}
                 nome={item.name}
                 valor={item.price}
-                handleDelete={handleDelete}
+                onDeleted={() => handleConfirmDelete(item.id)}
               />
             );
           })}

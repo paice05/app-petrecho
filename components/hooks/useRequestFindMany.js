@@ -14,8 +14,8 @@ export const useRequestFindMany = ({ path, defaultQuery = {} }) => {
       .request()
       .get(path, {
         params: {
-          ...params,
           ...defaultQuery,
+          ...params,
         },
       })
       .then(({ data }) => {
