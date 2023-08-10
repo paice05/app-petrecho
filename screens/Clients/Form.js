@@ -48,7 +48,7 @@ const ClientForm = ({ route, navigation }) => {
     name: '',
     cellPhone: '',
     birthDate: { title: '', data: '' },
-    type: { title: '', data: '' },
+    type: isEditing ? { title: '', data: '' } : { title: 'Cliente', data: 'pf' },
   });
 
   const handleSubmitCreate = async () => {

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Dimensions, ScrollView, ActivityIndicator } from 'react-native';
+import { StyleSheet, Dimensions, ScrollView, ActivityIndicator, Alert } from 'react-native';
 
 import CardClient from '../../components/CardClient';
 
@@ -8,11 +8,12 @@ import { Filters } from './Filters';
 import { api } from '../../services/api';
 import { Block, Text } from 'galio-framework';
 import { useFocusEffect } from '@react-navigation/native';
+import { useRequestFindMany } from '../../components/hooks/useRequestFindMany';
+import { useRequestDestroy } from '../../components/hooks/useRequestDestroy';
 
 const Clients = ({ navigation }) => {
   const [clients, setClients] = useState([]);
   const [hasClean, setHasClean] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
   const [pagination, setPagination] = useState({
     currentPage: 0,
@@ -20,64 +21,53 @@ const Clients = ({ navigation }) => {
     lastPage: 0,
   });
 
-  const fetchClients = (params) => {
-    setIsLoading(true);
+  const { execute: findMany, response, loading } = useRequestFindMany({ path: '/users' });
+  const { execute: destroy } = useRequestDestroy({ path: '/users', callbackSuccess: findMany });
 
-    api
-      .request()
-      .get('/users', {
-        params,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(({ data }) => {
-        setPagination({
-          currentPage: data.currentPage,
-          lastPage: data.lastPage,
-          total: data.total,
-        });
-        setClients(data.data);
-        setIsLoading(false);
+  useEffect(() => {
+    if (response) {
+      setPagination({
+        currentPage: response.currentPage,
+        lastPage: response.lastPage,
+        total: response.total,
       });
-  };
+      setClients(response.data);
+    }
+  }, [response]);
 
   useFocusEffect(
     useCallback(() => {
       setHasClean(!hasClean);
-      fetchClients({});
+      findMany();
     }, [])
   );
-
-  const handleDelete = (id) => {
-    try {
-      api
-        .request()
-        .delete(`/users/${id}`)
-        .then(() => {
-          setClients(clients.filter((item) => item.id !== id));
-        });
-    } catch (error) {
-      console.error('Ocorreu um erro na requisição:', error);
-    }
-  };
 
   const handleNextPage = () => {
     if (pagination.currentPage === pagination.lastPage) return;
 
-    fetchClients({ page: pagination.currentPage + 1 });
+    findMany({ page: pagination.currentPage + 1 });
   };
 
   const handlePreviousPage = () => {
     if (pagination.currentPage === 1) return;
 
-    fetchClients({ page: pagination.currentPage - 1 });
+    findMany({ page: pagination.currentPage - 1 });
   };
+
+  const handleConfirmDelete = (id) =>
+    Alert.alert('Cuidado', 'você deseja remover esse cliente?', [
+      {
+        text: 'Cancelar',
+        onPress: () => {},
+        style: 'cancel',
+      },
+      { text: 'Confirmar', onPress: () => destroy(id) },
+    ]);
 
   return (
     <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
-      <Filters fetchClients={fetchClients} hasClean={hasClean} />
-      {isLoading ? (
+      {/* <Filters fetchClients={findMany} hasClean={hasClean} /> */}
+      {loading ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
         <Block>
@@ -96,7 +86,8 @@ const Clients = ({ navigation }) => {
                 nome={item.name}
                 telefone={item.cellPhone}
                 aniversario={item.birthDate}
-                handleDelete={handleDelete}
+                tipo={item.type === 'pj' ? 'Funcionário' : 'Cliente'}
+                onDeleted={() => handleConfirmDelete(item.id)}
               />
             );
           })}

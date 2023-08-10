@@ -1,17 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
-import { theme, Card, Block, Text, Button as GaButton } from 'galio-framework';
+import React from 'react';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Block, Text, Button as GaButton } from 'galio-framework';
 
-import { nowTheme } from '../../constants';
-import { Modal } from '../Modal';
-import Icon from '../Icon';
 import Menu from '../Menu';
 
-const CardService = ({ navigation, nome, valor, id, onDeleted }) => {
-  const [visible, setVisible] = useState(false);
-
-  const handleToggleVisible = () => setVisible(!visible);
-
+const CardService = ({ navigation, id, nome, valor, onDeleted }) => {
   const isLargeName = nome.length > 20;
 
   return (
@@ -61,17 +54,6 @@ const styles = StyleSheet.create({
   },
   wrapperName: {
     paddingBottom: 20,
-  },
-  more: {
-    width: 25,
-    height: 25,
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: nowTheme.COLORS.PRIMARY,
-    borderRadius: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
-    display: 'flex',
   },
 });
 

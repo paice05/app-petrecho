@@ -66,7 +66,7 @@ const Services = ({ navigation }) => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
-      <Filters fetchServices={findMany} hasClean={hasClean} />
+      {/* <Filters fetchServices={findMany} hasClean={hasClean} /> */}
       {loading ? (
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (

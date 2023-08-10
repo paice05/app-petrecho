@@ -1,22 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
-import { theme, Card, Block, Text, Button as GaButton } from 'galio-framework';
+import React from 'react';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Block, Text } from 'galio-framework';
 
 import { nowTheme } from '../../constants';
-import { Modal } from '../Modal';
+
 import Icon from '../Icon';
+import Menu from '../Menu';
 
-const CardClient = ({ navigation, nome, telefone, aniversario, id, handleDelete }) => {
-  const [visible, setVisible] = useState(false);
-
-  const handleToggleVisible = () => setVisible(!visible);
-
+const CardClient = ({ navigation, id, nome, tipo, telefone, aniversario, onDeleted }) => {
   const isLargeName = nome.length > 20;
-
-  const handleSubmitDelete = () => {
-    handleDelete(id);
-    handleToggleVisible();
-  };
 
   return (
     <Block flex space="between" style={styles.container}>
@@ -34,11 +26,24 @@ const CardClient = ({ navigation, nome, telefone, aniversario, id, handleDelete 
               {isLargeName ? '...' : ''}
             </Text>
           </TouchableOpacity>
-          <Text color="gray">Cliente</Text>
+          <Text color="gray">{tipo}</Text>
         </Block>
-        <TouchableOpacity style={styles.more}>
-          <Icon size={12} color={nowTheme.COLORS.PRIMARY} name="more-vertical" family="feather" />
-        </TouchableOpacity>
+
+        <Menu
+          items={[
+            {
+              onSelect: () =>
+                navigation.navigate('ClientForm', {
+                  itemId: id,
+                }),
+              text: 'Editar',
+            },
+            {
+              onSelect: onDeleted,
+              text: 'Deletar',
+            },
+          ]}
+        />
       </Block>
 
       <Block row style={styles.wrapperInfo}>
@@ -73,17 +78,6 @@ const styles = StyleSheet.create({
   wrapperInfo: {
     justifyContent: 'center',
     gap: 25,
-  },
-  more: {
-    width: 25,
-    height: 25,
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: nowTheme.COLORS.PRIMARY,
-    borderRadius: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
-    display: 'flex',
   },
 });
 

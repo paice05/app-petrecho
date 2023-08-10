@@ -1,21 +1,19 @@
-import React, { useState } from 'react';
-import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
-import { theme, Card, Block, Text, Button } from 'galio-framework';
+import React from 'react';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Block, Text, Button } from 'galio-framework';
 
 import { nowTheme } from '../../constants';
-import { Modal } from '../Modal';
+
 import Icon from '../Icon';
 import Menu from '../Menu';
 
-const { height, width } = Dimensions.get('window');
-
 const CardSchedule = ({
   navigation,
+  id,
   nome,
   servico,
   dia,
   horario,
-  id,
   status,
   onFinished,
   onCanceled,
@@ -137,17 +135,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     gap: 15,
   },
-  more: {
-    width: 25,
-    height: 25,
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: nowTheme.COLORS.PRIMARY,
-    borderRadius: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
-    display: 'flex',
-  },
+
   button: {
     borderRadius: 10,
     width: 100,
