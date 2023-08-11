@@ -29,9 +29,8 @@ const RegisterExitForm = ({ navigation }) => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <Block flex style={styles.group}>
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE, paddingTop: 70 }}>
-          <Text style={styles.title}>Preencha os dados do registro de saída</Text>
+      <Block flex>
+        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
           <CustomInput
             placeholder="Digite a descrição"
             labelText="Descrição"

@@ -66,39 +66,12 @@ const ReportList = ({ navigation }) => {
         <CardReport navigation={navigation} entryValue={valueEntry} outPutValue={valueExit} />
       </Block>
 
-      <Block style={styles.subtitleSchedules}>
-        <Text>Agendamentos confirmados</Text>
-        <Text> 65 </Text>
-      </Block>
-
-      <Block style={styles.subtitleSchedules}>
-        <Text>Agendamentos cancelados</Text>
-        <Text> 5 </Text>
-      </Block>
-
-      <Text style={{ fontSize: 18, color: '#87CEFA', marginTop: 20, fontWeight: 'bold' }}>
-        Top 5 serviços
-      </Text>
-      <Block>
-        <CustomFlatList
-          data={[
-            { key: '1 - Corte degrade' },
-            { key: '2 - Corte degrade + Barba' },
-            { key: '3 - Barba' },
-            { key: '4 - Corte social' },
-            { key: '5 - Corte social + Barba' },
-          ]}
-          renderItem={({ item }) => <Text style={styles.item}>{item.key}</Text>}
-          style={styles.item}
-        />
-      </Block>
       <Modal
         isVisible={openCalendar}
         handleCancel={() => setOpenCalendar(false)}
         handleConfirm={() => setOpenCalendar(false)}
         title="Selecione uma data para buscar seus agendamentos"
         onRequestClose={() => {
-          Alert.alert('Modal será fechado.');
           setOpenCalendar(!openCalendar);
         }}
       >
@@ -129,7 +102,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 5,
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+
     padding: 5,
     marginBottom: 10,
   },

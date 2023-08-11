@@ -49,7 +49,7 @@ const EntryReport = ({ navigation }) => {
         {dataEntry.map((item) => {
           return (
             <CardReportEntry
-              navigation={navigation}
+              key={item.id}
               id={item.id}
               data={format(new Date(item.createdAt), 'dd/MM/yyyy')}
               servico={item.schedule?.services.map((item) => item.name).join(',')}
@@ -66,7 +66,6 @@ const EntryReport = ({ navigation }) => {
 const styles = StyleSheet.create({
   card: {
     padding: 8,
-    marginTop: '18%',
   },
   totalValue: {
     color: nowTheme.COLORS.BORDER_COLOR,

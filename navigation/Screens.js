@@ -330,7 +330,6 @@ function ReportsStack(props) {
           header: ({ navigation, scene }) => {
             return <Header title={'Entradas'} back navigation={navigation} scene={scene} />;
           },
-          headerTransparent: true,
         }}
       />
       <Stack.Screen
@@ -340,7 +339,6 @@ function ReportsStack(props) {
           header: ({ navigation, scene }) => {
             return <Header title={'Saídas'} back navigation={navigation} scene={scene} />;
           },
-          headerTransparent: true,
         }}
       />
       <Stack.Screen
@@ -350,7 +348,6 @@ function ReportsStack(props) {
           header: ({ navigation, scene }) => {
             return <Header title={'Registrar saída'} back navigation={navigation} scene={scene} />;
           },
-          headerTransparent: true,
         }}
       />
     </Stack.Navigator>

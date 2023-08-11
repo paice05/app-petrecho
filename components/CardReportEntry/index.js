@@ -1,23 +1,22 @@
 import React from 'react';
-import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 
 import { Block } from 'galio-framework';
 import { Divider } from '@rneui/themed';
 
-import { nowTheme } from '../../constants';
 import { theme } from 'galio-framework';
 
-const CardReportEntry = ({ navigation, id, data, servico, nome, value }) => {
+const CardReportEntry = ({ id, data, servico, nome, value }) => {
   return (
     <>
       <Block flex space="between" style={styles.container}>
         <Text style={styles.dateStyle}>{data}</Text>
+        <Text style={styles.styleText}>{nome}</Text>
         <Block style={styles.wraper}>
           <Text styles={{ fontSize: 14 }}>{servico}</Text>
           <Text style={styles.entryValue}>{value}</Text>
         </Block>
 
-        <Text style={styles.styleText}>{nome}</Text>
         <Divider />
       </Block>
     </>

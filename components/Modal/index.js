@@ -9,18 +9,19 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 export const Modal = ({ isVisible, handleConfirm, handleCancel, title, children }) => {
   return (
-    <ModalRN
-      animationType="slide"
-      transparent={true}
-      visible={isVisible}
-      onRequestClose={handleCancel}
-    >
-      <TouchableOpacity style={styles.modalContainer} onPress={handleCancel}>
-        <TouchableOpacity activeOpacity={1}>
-          <View style={styles.centeredView}>
+    <View>
+      <ModalRN
+        animationType="slide"
+        transparent={true}
+        visible={isVisible}
+        onRequestClose={handleCancel}
+      >
+        <TouchableOpacity style={styles.modalContainer} onPress={handleCancel}>
+          <TouchableOpacity style={styles.modal} activeOpacity={1}>
             <View style={styles.modalView}>
               <Text style={styles.modalText}>{title}</Text>
               <View style={styles.modalButton}>
@@ -38,10 +39,10 @@ export const Modal = ({ isVisible, handleConfirm, handleCancel, title, children 
                 )}
               </View>
             </View>
-          </View>
+          </TouchableOpacity>
         </TouchableOpacity>
-      </TouchableOpacity>
-    </ModalRN>
+      </ModalRN>
+    </View>
   );
 };
 
@@ -50,7 +51,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
+  modal: {},
   centeredView: {
     flex: 1,
     justifyContent: 'center',

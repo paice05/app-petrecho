@@ -176,8 +176,8 @@ const ScheduleList = ({ navigation }) => {
                     key={item.id}
                     navigation={navigation}
                     id={item.id}
-                    nome={item.user.name}
-                    servico={item.services?.map((service) => service?.name).join(', ')}
+                    nome={item?.user?.name || '(Esse cliente não existe)'}
+                    servico={item?.services?.map((service) => service?.name).join(', ')}
                     horario={format(new Date(item.scheduleAt), 'HH:mm')}
                     dia={format(new Date(item.scheduleAt), 'dd/MM/YYY')}
                     status={item.status}

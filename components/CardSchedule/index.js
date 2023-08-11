@@ -20,7 +20,7 @@ const CardSchedule = ({
   onDeleted,
   onRevert,
 }) => {
-  const isLargeName = nome?.length > 20;
+  const isLargeName = nome?.length > 30;
 
   const statusText = {
     pending: 'Pendente',
@@ -46,7 +46,7 @@ const CardSchedule = ({
             }
           >
             <Text style={{ textDecorationLine: 'underline' }}>
-              {nome?.slice(0, 20)}
+              {nome?.slice(0, 30)}
               {isLargeName ? '...' : ''}
             </Text>
           </TouchableOpacity>
