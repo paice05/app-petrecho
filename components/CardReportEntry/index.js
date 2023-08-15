@@ -1,20 +1,33 @@
 import React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import { Block } from 'galio-framework';
+import { Text, Block } from 'galio-framework';
 import { Divider } from '@rneui/themed';
 
 import { theme } from 'galio-framework';
+import { nowTheme } from '../../constants';
 
-const CardReportEntry = ({ id, data, servico, nome, value }) => {
+const CardReportEntry = ({ id, data, servico, nome, value, addition, discount }) => {
   return (
     <>
       <Block flex space="between" style={styles.container}>
-        <Text style={styles.dateStyle}>{data}</Text>
-        <Text style={styles.styleText}>{nome}</Text>
-        <Block style={styles.wraper}>
-          <Text styles={{ fontSize: 14 }}>{servico}</Text>
-          <Text style={styles.entryValue}>{value}</Text>
+        <Text center>{data}</Text>
+        <Text color={nowTheme.COLORS.PRIMARY} bold>
+          {nome}
+        </Text>
+        <Text color="gray" size={12}>
+          {servico}
+        </Text>
+        <Block row space="between">
+          <Block row middle gap={6}>
+            <Text color="gray" size={12}>
+              Adicional: {addition}
+            </Text>
+            <Text color="gray" size={12}>
+              Desconto: {discount}
+            </Text>
+          </Block>
+          <Text size={16}>{value}</Text>
         </Block>
 
         <Divider />
@@ -27,6 +40,9 @@ const styles = StyleSheet.create({
   container: {
     padding: theme.SIZES.BASE / 2,
     marginBottom: 16,
+    padding: 12,
+    borderRadius: 10,
+    backgroundColor: '#fff',
   },
   wraper: {
     display: 'flex',

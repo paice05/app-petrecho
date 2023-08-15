@@ -1,18 +1,19 @@
 import React from 'react';
-import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
-import { Block } from 'galio-framework';
+import { Text, Block } from 'galio-framework';
 import { Divider } from '@rneui/themed';
 
 import { theme } from 'galio-framework';
+import { nowTheme } from '../../constants';
 
 const CardReportExit = ({ navigation, id, data, nome, value }) => {
   return (
     <Block flex space="between" style={styles.container}>
-      <Text style={styles.dateStyle}>{data}</Text>
-      <Block style={styles.wraper}>
-        <Text style={styles.styleText}>{nome}</Text>
-        <Text style={styles.entryValue}>{value}</Text>
+      <Text center>{data}</Text>
+      <Block row space="between">
+        <Text color={nowTheme.COLORS.PRIMARY}>{nome}</Text>
+        <Text size={16}>{value}</Text>
       </Block>
       <Divider />
     </Block>
@@ -23,6 +24,9 @@ const styles = StyleSheet.create({
   container: {
     padding: theme.SIZES.BASE / 2,
     marginBottom: 16,
+    padding: 12,
+    borderRadius: 10,
+    backgroundColor: '#fff',
   },
   wraper: {
     display: 'flex',

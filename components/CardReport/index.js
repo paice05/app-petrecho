@@ -34,10 +34,7 @@ const CardReport = ({ navigation, entryValue, outPutValue, id }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: theme.SIZES.BASE / 2,
-    marginBottom: 16,
-  },
+  container: {},
   wrapper: {
     padding: 12,
     borderRadius: 10,

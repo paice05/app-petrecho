@@ -39,22 +39,17 @@ const EntryReport = ({ navigation }) => {
   return (
     <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
       <Block>
-        <Block style={styles.wraperTotalValue}>
-          <Text style={styles.totalValueText}>Saldo total:</Text>
-          <Text style={styles.totalValue}>{`R$ ${Number(totalValue)
-            .toFixed(2)
-            .replace('.', ',')}`}</Text>
-        </Block>
-
         {dataEntry.map((item) => {
           return (
             <CardReportEntry
               key={item.id}
               id={item.id}
               data={format(new Date(item.createdAt), 'dd/MM/yyyy')}
-              servico={item.schedule?.services.map((item) => item.name).join(',')}
+              servico={item.schedule?.services.map((item) => item.name).join(', ')}
               value={`R$ ` + Number(item.entry).toFixed(2).replace('.', ',')}
               nome={item.schedule?.user.name}
+              addition={`R$ ` + Number(item.schedule.addition).toFixed(2).replace('.', ',')}
+              discount={`R$ ` + Number(item.schedule.discount).toFixed(2).replace('.', ',')}
             />
           );
         })}

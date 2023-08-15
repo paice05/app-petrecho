@@ -51,7 +51,6 @@ const ExitReport = () => {
 const styles = StyleSheet.create({
   card: {
     padding: 8,
-    marginTop: '18%',
   },
   totalValue: {
     color: '#00CED1',

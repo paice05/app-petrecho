@@ -256,6 +256,7 @@ const SchedulesForm = ({ route, navigation }) => {
         onRequestClose={() => {
           setShowDate(!showDate);
         }}
+        handleCancel={() => setShowDate(false)}
       >
         <Calendar
           onDayPress={(value) => {

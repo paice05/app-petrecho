@@ -11,6 +11,7 @@ const CardSchedule = ({
   navigation,
   id,
   nome,
+  funcionario,
   servico,
   dia,
   horario,
@@ -50,7 +51,9 @@ const CardSchedule = ({
               {isLargeName ? '...' : ''}
             </Text>
           </TouchableOpacity>
-          <Text color="gray">{servico}</Text>
+          <Text size={12} color="gray">
+            {servico}
+          </Text>
         </Block>
 
         <Block>
