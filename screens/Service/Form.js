@@ -19,7 +19,7 @@ const ServiceForm = ({ route, navigation }) => {
 
   const [fields, setFields] = useState({
     name: '',
-    price: 0,
+    price: '',
   });
 
   const handleSubmitCreate = async () => {

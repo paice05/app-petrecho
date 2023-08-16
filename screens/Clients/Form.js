@@ -95,13 +95,22 @@ const ClientForm = ({ route, navigation }) => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={true}>
-      <Block flex>
+      <Block flex style={styles.cardContainer}>
         <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
           <CustomInput
             placeholder="Digite seu nome"
             labelText="Nome"
             value={fields.name}
             onChangeText={(value) => setFields({ ...fields, name: value })}
+            iconContent={
+              <Icon
+                size={16}
+                color="#ABD5BD"
+                name="user"
+                family="feather"
+                style={styles.inputIcons}
+              />
+            }
           />
         </Block>
 
@@ -111,6 +120,15 @@ const ClientForm = ({ route, navigation }) => {
             labelText="Telefone"
             value={fields.cellPhone}
             onChangeText={(value) => setFields({ ...fields, cellPhone: value })}
+            iconContent={
+              <Icon
+                size={16}
+                color="#ABD5BD"
+                name="phone"
+                family="feather"
+                style={styles.inputIcons}
+              />
+            }
           />
         </Block>
 
@@ -137,7 +155,12 @@ const ClientForm = ({ route, navigation }) => {
 
       <Block style={styles.container}>
         <Button
-          textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
+          textStyle={{
+            fontFamily: 'montserrat-regular',
+            fontSize: 12,
+            fontWeight: 'bold',
+            color: 'black',
+          }}
           color="default"
           style={styles.button}
           onPress={() => navigation.goBack()}
@@ -145,9 +168,14 @@ const ClientForm = ({ route, navigation }) => {
           Voltar
         </Button>
         <Button
-          textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
+          textStyle={{
+            fontFamily: 'montserrat-regular',
+            fontSize: 12,
+            color: 'white',
+            fontWeight: 'bold',
+          }}
           color="success"
-          style={styles.button}
+          style={styles.primary}
           onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
         >
           {isEditing ? 'Editar' : 'Cadastrar'}
@@ -165,10 +193,19 @@ const styles = StyleSheet.create({
     // marginTop: 44,
     color: nowTheme.COLORS.HEADER,
   },
-
   button: {
     marginBottom: theme.SIZES.BASE,
-    width: 100,
+    borderRadius: 10,
+    width: 120,
+    height: 40,
+    backgroundColor: '#eee',
+  },
+  primary: {
+    marginBottom: theme.SIZES.BASE,
+    borderRadius: 10,
+    width: 120,
+    height: 40,
+    backgroundColor: '#c84648',
   },
   articles: {
     width: width - theme.SIZES.BASE * 2,
@@ -182,6 +219,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: theme.SIZES.BASE,
+  },
+  cardContainer: {
+    padding: 12,
+    margin: 15,
+    paddingBottom: 25,
+    borderRadius: 10,
+    marginBottom: 16,
+    backgroundColor: '#fff',
+  },
+  inputIcons: {
+    marginRight: 12,
+    color: nowTheme.COLORS.ICON_INPUT,
   },
 });
 
