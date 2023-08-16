@@ -20,6 +20,9 @@ import { nowTheme, tabs } from '../../constants';
 import { useFocusEffect } from '@react-navigation/native';
 import { useRequestFindMany } from '../../components/hooks/useRequestFindMany';
 import { useRequestDestroy } from '../../components/hooks/useRequestDestroy';
+import { ScheduleCard } from '../../components/ScheduleCard/ScheduleCard';
+import { Navigation } from '../../components/Navigation';
+import { formartDate } from '../../utils/formartDate';
 
 const { width } = Dimensions.get('window');
 
@@ -136,7 +139,7 @@ const ScheduleList = ({ navigation }) => {
     <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
       <TouchableOpacity style={styles.dateStyle} onPress={() => setOpenCalendar(true)}>
         <Text bold colo="#e6e6e6">
-          {format(date, 'dd  MMMM YYY')}
+          {formartDate(date, 'dd  MMMM YYY')}
         </Text>
       </TouchableOpacity>
 
@@ -153,52 +156,75 @@ const ScheduleList = ({ navigation }) => {
         date={date}
       />
 
-      <Block>
-        {loading ? (
-          <ActivityIndicator size="large" colo="#0000ff" />
-        ) : (
-          <Block>
-            {schedules.length === 0 && (
-              <Text center style={{ marginTop: 20, marginBottom: 20 }}>
-                Nenhum registro encontrado
-              </Text>
-            )}
+      <Navigation
+        items={[
+          {
+            title: 'Lista',
+            children: (
+              <Block>
+                {loading ? (
+                  <ActivityIndicator size="large" colo="#0000ff" />
+                ) : (
+                  <Block style={{ marginVertical: 20 }}>
+                    {schedules.length === 0 && (
+                      <Text center style={{ marginTop: 20, marginBottom: 20 }}>
+                        Nenhum registro encontrado
+                      </Text>
+                    )}
 
-            {schedules
-              .sort((a, b) =>
-                format(new Date(a.scheduleAt), 'HH:mm') > format(new Date(b.scheduleAt), 'HH:mm')
-                  ? 1
-                  : -1
-              )
-              .map((item) => {
-                return (
-                  <CardSchedule
-                    key={item.id}
-                    navigation={navigation}
-                    id={item.id}
-                    nome={item?.user?.name || '(Esse cliente não existe)'}
-                    funcionario={item?.employee?.name || '(Esse funcionário não existe)'}
-                    servico={item?.services?.map((service) => service?.name).join(', ')}
-                    horario={format(new Date(item.scheduleAt), 'HH:mm')}
-                    dia={format(new Date(item.scheduleAt), 'dd/MM/YYY')}
-                    status={item.status}
-                    onFinished={() => handleFinished(item.id)}
-                    onCanceled={() => handleCanceled(item.id)}
-                    onDeleted={() => handleConfirmDelete(item.id)}
-                    onRevert={() => handleRestore(item.id)}
+                    {schedules
+                      .sort((a, b) =>
+                        formartDate(a.scheduleAt, 'HH:mm') > formartDate(b.scheduleAt, 'HH:mm')
+                          ? 1
+                          : -1
+                      )
+                      .map((item) => {
+                        return (
+                          <CardSchedule
+                            key={item.id}
+                            navigation={navigation}
+                            id={item.id}
+                            nome={item?.user?.name || '(Esse cliente não existe)'}
+                            funcionario={item?.employee?.name || '(Esse funcionário não existe)'}
+                            servico={item?.services?.map((service) => service?.name).join(', ')}
+                            horario={formartDate(item.scheduleAt, 'HH:mm')}
+                            dia={formartDate(item.scheduleAt, 'dd/MM/YYY')}
+                            status={item.status}
+                            onFinished={() => handleFinished(item.id)}
+                            onCanceled={() => handleCanceled(item.id)}
+                            onDeleted={() => handleConfirmDelete(item.id)}
+                            onRevert={() => handleRestore(item.id)}
+                          />
+                        );
+                      })}
+                    <PaginationSimple
+                      currentPage={pagination.currentPage}
+                      total={pagination.total}
+                      lastPage={pagination.lastPage}
+                      handleNextPage={handleNextPage}
+                      handlePreviousPage={handlePreviousPage}
+                    />
+                  </Block>
+                )}
+              </Block>
+            ),
+          },
+          {
+            title: 'Horários',
+            children: (
+              <Block>
+                {loading ? (
+                  <ActivityIndicator size="large" colo="#0000ff" />
+                ) : (
+                  <ScheduleCard
+                    payload={schedules.map((item) => formartDate(item.scheduleAt, 'HH:mm'))}
                   />
-                );
-              })}
-            <PaginationSimple
-              currentPage={pagination.currentPage}
-              total={pagination.total}
-              lastPage={pagination.lastPage}
-              handleNextPage={handleNextPage}
-              handlePreviousPage={handlePreviousPage}
-            />
-          </Block>
-        )}
-      </Block>
+                )}
+              </Block>
+            ),
+          },
+        ]}
+      />
 
       <Modal
         isVisible={openCalendar}

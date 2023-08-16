@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import CardReportEntry from '../../components/CardReportEntry';
 import { nowTheme } from '../../constants';
 import { api } from '../../services/api';
+import { formartDate } from '../../utils/formartDate';
 
 const EntryReport = ({ navigation }) => {
   const [valueEntry, setValueEntry] = useState([]);
@@ -44,7 +45,7 @@ const EntryReport = ({ navigation }) => {
             <CardReportEntry
               key={item.id}
               id={item.id}
-              data={format(new Date(item.createdAt), 'dd/MM/yyyy')}
+              data={formartDate(item.createdAt, 'dd/MM/yyyy')}
               servico={item.schedule?.services.map((item) => item.name).join(', ')}
               value={`R$ ` + Number(item.entry).toFixed(2).replace('.', ',')}
               nome={item.schedule?.user.name}

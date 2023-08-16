@@ -10,7 +10,9 @@ import { nowTheme } from '../../constants';
 const CardReportExit = ({ navigation, id, data, nome, value }) => {
   return (
     <Block flex space="between" style={styles.container}>
-      <Text center>{data}</Text>
+      <Text center style={{ marginBottom: 16 }}>
+        {data}
+      </Text>
       <Block row space="between">
         <Text color={nowTheme.COLORS.PRIMARY}>{nome}</Text>
         <Text size={16}>{value}</Text>

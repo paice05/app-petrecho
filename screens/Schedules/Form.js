@@ -18,6 +18,7 @@ import { AsyncSelect } from '../../components/AsyncSelect';
 import { DateTimePicker } from '../../components/DatePiker';
 import { api } from '../../services/api';
 import { AsyncSelectMulti } from '../../components/AsyncSelectMulti';
+import { formartDate } from '../../utils/formartDate';
 
 const { width } = Dimensions.get('screen');
 
@@ -99,8 +100,8 @@ const SchedulesForm = ({ route, navigation }) => {
             user: { value: response.data.user.id, label: response.data.user.name },
             services: response.data.services.map((item) => ({ value: item.id, label: item.name })),
             employee: { value: response.data.employee.id, label: response.data.employee.name },
-            date: format(new Date(response.data.scheduleAt), 'dd-MM-yyyy'),
-            time: format(new Date(response.data.scheduleAt), 'HH:mm'),
+            date: formartDate(response.data.scheduleAt, 'dd-MM-yyyy'),
+            time: formartDate(response.data.scheduleAt, 'HH:mm'),
             discount: response.data.discount || null,
             addition: response.data.addition || null,
             isPackage: response.data.isPackage,

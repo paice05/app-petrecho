@@ -1,29 +1,24 @@
 {
   "expo": {
-    "name": "Now UI React Native",
-    "slug": "now-ui-react-native",
+    "name": "Meu Petrecho",
+    "slug": "Meu Petrecho",
     "privacy": "public",
-    "platforms": [
-      "ios",
-      "android"
-    ],
+    "platforms": ["ios", "android"],
     "version": "1.4.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/imgs/icon-splash2.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/imgs/splash.jpeg",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
-    "description": "Now UI React Native, based on Now UI Design System. Coded by Creative Tim"
+    "description": "Uma ferramenta essencial para seu dia a dia"
   }
 }
