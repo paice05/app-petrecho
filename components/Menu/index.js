@@ -34,7 +34,9 @@ const SimpleMenu = ({ children, items = [] }) => {
             )
           }
         />
-        <MenuOptions customStyles={{ optionsContainer: { maxHeight: 200 } }}>
+        <MenuOptions
+          customStyles={{ optionsContainer: { maxHeight: 200, paddingBottom: 25, paddingLeft: 5 } }}
+        >
           <ScrollView>
             {items
               .filter((item) => !item.disable)

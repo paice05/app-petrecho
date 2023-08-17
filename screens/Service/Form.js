@@ -6,9 +6,10 @@ import { Block, theme } from 'galio-framework';
 
 // Now UI themed components
 import { nowTheme } from '../../constants';
-import { Button, S } from '../../components';
+import { Button, Icon } from '../../components';
 import CustomInput from '../../components/CustomInput';
 import { api } from '../../services/api';
+import Theme from '../../constants/Theme';
 
 const { width } = Dimensions.get('screen');
 
@@ -63,13 +64,22 @@ const ServiceForm = ({ route, navigation }) => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={true}>
-      <Block flex style={styles.group}>
+      <Block flex style={styles.cardContainer}>
         <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
           <CustomInput
             placeholder="Digite o nome do serviço"
             labelText="Nome"
             value={fields.name}
             onChangeText={(value) => setFields({ ...fields, name: value })}
+            iconContent={
+              <Icon
+                size={16}
+                color="#ADB5BD"
+                name="file-text"
+                family="feather"
+                style={styles.inputIcons}
+              />
+            }
           />
         </Block>
 
@@ -79,23 +89,40 @@ const ServiceForm = ({ route, navigation }) => {
             labelText="Valor"
             value={fields.price.toString()}
             onChangeText={(value) => setFields({ ...fields, price: value })}
+            iconContent={
+              <Icon
+                size={16}
+                color="#ADB5BD"
+                name="dollar-sign"
+                family="feather"
+                style={styles.inputIcons}
+              />
+            }
           />
         </Block>
       </Block>
 
       <Block style={styles.container}>
         <Button
-          textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
-          color="default"
+          textStyle={{
+            fontFamily: 'montserrat-regular',
+            fontSize: 12,
+            fontWeight: 'bold',
+            color: 'black',
+          }}
           style={styles.button}
           onPress={() => navigation.goBack()}
         >
           Voltar
         </Button>
         <Button
-          textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
-          color="success"
-          style={styles.button}
+          textStyle={{
+            fontFamily: 'montserrat-regular',
+            fontSize: 12,
+            color: 'white',
+            fontWeight: 'bold',
+          }}
+          style={styles.primary}
           onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
         >
           {isEditing ? 'Editar' : 'Cadastrar'}
@@ -113,12 +140,29 @@ const styles = StyleSheet.create({
     marginTop: 44,
     color: nowTheme.COLORS.HEADER,
   },
-  group: {
-    // paddingTop: theme.SIZES.BASE,
+  cardContainer: {
+    padding: 12,
+    margin: 15,
+    paddingBottom: 25,
+    borderRadius: 10,
+    marginBottom: 16,
+    backgroundColor: '#fff',
   },
   button: {
     marginBottom: theme.SIZES.BASE,
-    width: 100,
+    borderRadius: 10,
+    width: 120,
+    height: 40,
+    backgroundColor: '#eee',
+    borderWidth: 1,
+    borderColor: Theme.COLORS.BORDER,
+  },
+  primary: {
+    marginBottom: theme.SIZES.BASE,
+    borderRadius: 10,
+    width: 120,
+    height: 40,
+    backgroundColor: '#c84648',
   },
   articles: {
     width: width - theme.SIZES.BASE * 2,
@@ -132,6 +176,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: theme.SIZES.BASE,
+  },
+  inputIcons: {
+    marginRight: 12,
+    color: nowTheme.COLORS.ICON_INPUT,
   },
 });
 

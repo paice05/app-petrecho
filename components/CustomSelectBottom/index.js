@@ -7,7 +7,15 @@ import { nowTheme } from '../../constants';
 
 const { width } = Dimensions.get('window');
 
-export const CustomSelectBottom = ({ labelText, placeholder, onChange, value, options }) => {
+export const CustomSelectBottom = ({
+  labelText,
+  placeholder,
+  onChange,
+  value,
+  options,
+  textStyle,
+  itemTextStyle,
+}) => {
   return (
     <SafeAreaView>
       <Text>{labelText}</Text>
@@ -22,6 +30,8 @@ export const CustomSelectBottom = ({ labelText, placeholder, onChange, value, op
         data={options}
         headerTitle={labelText}
         listHeight={300}
+        textStyle={textStyle}
+        itemTextStyle={itemTextStyle}
         // showSearch
       />
     </SafeAreaView>
@@ -31,10 +41,11 @@ export const CustomSelectBottom = ({ labelText, placeholder, onChange, value, op
 const styles = StyleSheet.create({
   input: {
     borderRadius: 30,
+    borderWidth: 1,
     borderColor: nowTheme.COLORS.BORDER,
     height: 44,
     backgroundColor: '#FFFFFF',
-    width: width * 0.9,
+    width: width * 0.8,
     marginBottom: 16,
   },
   success: {

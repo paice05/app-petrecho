@@ -11,6 +11,7 @@ import CustomInput from '../../components/CustomInput';
 import { CustomSelectBottom } from '../../components/CustomSelectBottom';
 import { api } from '../../services/api';
 import { optionsBirthDate } from '../../constants/month';
+import Theme from '../../constants/Theme';
 
 const { width } = Dimensions.get('screen');
 
@@ -133,22 +134,26 @@ const ClientForm = ({ route, navigation }) => {
         </Block>
 
         <Block flex center style={{ marginTop: 8 }}>
+          <Text style={styles.styleLabelText}>Mês de aniversário</Text>
           <CustomSelectBottom
-            labelText="Mês de aniversário"
+            //labelText="Mês de aniversário"
             placeholder="Escolha um mês"
             value={fields.birthDate}
             onChange={(item) => setFields({ ...fields, birthDate: item })}
             options={optionsBirthDate}
+            textStyle={{ fontSize: 14, marginLeft: 10 }}
           />
         </Block>
 
         <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
+          <Text style={styles.styleLabelText}>Tipo de cliente</Text>
           <CustomSelectBottom
-            labelText="Tipo de cliente"
+            //labelText="Tipo de cliente"
             placeholder="Escolha um tipo"
             value={fields.type}
             onChange={(item) => setFields({ ...fields, type: item })}
             options={optionsType}
+            textStyle={{ fontSize: 14, marginLeft: 10 }}
           />
         </Block>
       </Block>
@@ -161,7 +166,6 @@ const ClientForm = ({ route, navigation }) => {
             fontWeight: 'bold',
             color: 'black',
           }}
-          color="default"
           style={styles.button}
           onPress={() => navigation.goBack()}
         >
@@ -174,7 +178,6 @@ const ClientForm = ({ route, navigation }) => {
             color: 'white',
             fontWeight: 'bold',
           }}
-          color="success"
           style={styles.primary}
           onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
         >
@@ -199,6 +202,8 @@ const styles = StyleSheet.create({
     width: 120,
     height: 40,
     backgroundColor: '#eee',
+    borderWidth: 1,
+    borderColor: Theme.COLORS.BORDER,
   },
   primary: {
     marginBottom: theme.SIZES.BASE,
@@ -231,6 +236,13 @@ const styles = StyleSheet.create({
   inputIcons: {
     marginRight: 12,
     color: nowTheme.COLORS.ICON_INPUT,
+  },
+  styleLabelText: {
+    fontSize: 14,
+    alignSelf: 'flex-start',
+    marginLeft: 16,
+    fontWeight: 500,
+    marginBottom: -6,
   },
 });
 
