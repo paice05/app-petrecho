@@ -19,7 +19,7 @@ export const DateTimePicker = ({ onChange }) => {
       <RNDateTimePicker
         value={time}
         mode={'time'}
-        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+        display={'default'}
         is24Hour={true}
         onChange={onTimeSelected}
       />

@@ -40,7 +40,7 @@ const BasketButton = ({ isWhite, style, navigation }) => (
 
 const NewClient = ({ isWhite, style, navigation }) => (
   <TouchableOpacity onPress={() => navigation.navigate('ClientForm')}>
-    <Block row center gap={3}>
+    <Block row center gap={3} style={{ padding: 8 }}>
       <Icon size={14} family="feather" name="plus-circle" />
       <Text bold size={12}>
         CRIAR

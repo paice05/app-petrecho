@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native';
 
 import { SelectList } from 'react-native-select-bottom-list';
 import { nowTheme } from '../../constants';
+import Icon from '../Icon';
 
 const { width } = Dimensions.get('window');
 
@@ -30,8 +31,9 @@ export const CustomSelectBottom = ({
         data={options}
         headerTitle={labelText}
         listHeight={300}
-        textStyle={textStyle}
+        textStyle={{ fontSize: 14, marginLeft: 18, color: nowTheme.COLORS.BORDER }}
         itemTextStyle={itemTextStyle}
+        renderIcon={() => <Icon family="feather" name="user" />}
         // showSearch
       />
     </SafeAreaView>
@@ -47,6 +49,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     width: width * 0.8,
     marginBottom: 16,
+    paddingHorizontal: 20,
+
+    display: 'flex',
+    flexDirection: 'row-reverse',
   },
   success: {
     borderColor: nowTheme.COLORS.INPUT_SUCCESS,

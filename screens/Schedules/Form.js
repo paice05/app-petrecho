@@ -148,7 +148,7 @@ const SchedulesForm = ({ route, navigation }) => {
             }}
           />
         </Block>
-        <Block style={styles.selectedMulti}>
+        <Text style={styles.selectedMulti}>
           {fields?.services?.map((item, index) => {
             return (
               <TouchableOpacity
@@ -166,7 +166,7 @@ const SchedulesForm = ({ route, navigation }) => {
               </TouchableOpacity>
             );
           })}
-        </Block>
+        </Text>
 
         <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
           <AsyncSelect
@@ -362,11 +362,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   selectedMulti: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 15,
-    marginTop: -8,
+    padding: 8,
   },
 });
 

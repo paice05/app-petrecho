@@ -141,7 +141,6 @@ const ClientForm = ({ route, navigation }) => {
             value={fields.birthDate}
             onChange={(item) => setFields({ ...fields, birthDate: item })}
             options={optionsBirthDate}
-            textStyle={{ fontSize: 14, marginLeft: 10 }}
           />
         </Block>
 
@@ -153,7 +152,6 @@ const ClientForm = ({ route, navigation }) => {
             value={fields.type}
             onChange={(item) => setFields({ ...fields, type: item })}
             options={optionsType}
-            textStyle={{ fontSize: 14, marginLeft: 10 }}
           />
         </Block>
       </Block>
@@ -192,7 +190,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'montserrat-bold',
     paddingBottom: theme.SIZES.BASE,
-    paddingHorizontal: theme.SIZES.BASE * 2,
+
     // marginTop: 44,
     color: nowTheme.COLORS.HEADER,
   },
@@ -226,11 +224,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.SIZES.BASE,
   },
   cardContainer: {
-    padding: 12,
     margin: 15,
-    paddingBottom: 25,
     borderRadius: 10,
-    marginBottom: 16,
     backgroundColor: '#fff',
   },
   inputIcons: {
