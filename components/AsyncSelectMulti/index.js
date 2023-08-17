@@ -1,13 +1,22 @@
-import { Block, Text } from 'galio-framework';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import AntDesign from '@expo/vector-icons/AntDesign';
+import { StyleSheet, View } from 'react-native';
+import { Text } from 'galio-framework';
 import { MultiSelect } from 'react-native-element-dropdown';
-import { api } from '../../services/api';
+
 import { nowTheme } from '../../constants';
 import { useDebounce } from '../hooks/useDebounce';
+import { api } from '../../services/api';
+import IconExtra from '../Icon';
 
-export function AsyncSelectMulti({ path, query = {}, labelText, placeholder, onChange, value }) {
+export function AsyncSelectMulti({
+  path,
+  query = {},
+  labelText,
+  placeholder,
+  onChange,
+  value,
+  icon,
+}) {
   const [selectedItems, setSelectedItems] = useState([]);
   const [items, setItems] = useState([]);
   const [textName, setTextName] = useState('');
@@ -45,7 +54,9 @@ export function AsyncSelectMulti({ path, query = {}, labelText, placeholder, onC
 
   return (
     <View style={styles.container}>
-      <Text>{labelText}</Text>
+      <Text bold style={{ marginLeft: 20, marginBottom: 5 }}>
+        {labelText}
+      </Text>
 
       <MultiSelect
         style={styles.dropdown}
@@ -68,6 +79,15 @@ export function AsyncSelectMulti({ path, query = {}, labelText, placeholder, onC
         selectedStyle={styles.selectedStyle}
         renderItem={renderItem}
         renderSelectedItem={(item, unSelect) => <Text> </Text>}
+        renderLeftIcon={() => (
+          <IconExtra
+            size={16}
+            color={nowTheme.COLORS.PRIMARY}
+            name={icon}
+            family="feather"
+            style={styles.icon}
+          />
+        )}
       />
     </View>
   );
@@ -75,20 +95,22 @@ export function AsyncSelectMulti({ path, query = {}, labelText, placeholder, onC
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: 16,
+    // paddingBottom: 16,
+  },
+  icon: {
+    marginRight: 10,
   },
   dropdown: {
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: nowTheme.COLORS.BORDER,
     height: 44,
     backgroundColor: '#FFFFFF',
-    borderBottomColor: 'gray',
-    borderBottomWidth: 0.5,
-    borderRadius: 30,
-    borderColor: nowTheme.COLORS.BORDER,
-    paddingHorizontal: 8,
-    paddingLeft: 15,
+    paddingHorizontal: 10,
   },
   placeholderStyle: {
-    fontSize: 16,
+    fontSize: 14,
+    color: 'gray',
   },
   selectedTextStyle: {
     fontSize: 14,
@@ -101,9 +123,7 @@ const styles = StyleSheet.create({
     height: 40,
     fontSize: 16,
   },
-  icon: {
-    marginRight: 5,
-  },
+
   item: {
     padding: 17,
     flexDirection: 'row',

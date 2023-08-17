@@ -1,13 +1,14 @@
-import { Block, Text } from 'galio-framework';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-
+import { StyleSheet, View } from 'react-native';
+import { Text } from 'galio-framework';
 import { Dropdown } from 'react-native-element-dropdown';
+
 import { api } from '../../services/api';
 import { nowTheme } from '../../constants';
 import { useDebounce } from '../hooks/useDebounce';
+import IconExtra from '../Icon';
 
-export function AsyncSelect({ path, query = {}, labelText, placeholder, onChange, value }) {
+export function AsyncSelect({ path, query = {}, labelText, placeholder, onChange, value, icon }) {
   const [items, setItems] = useState([]);
   const [textName, setTextName] = useState('');
 
@@ -41,7 +42,9 @@ export function AsyncSelect({ path, query = {}, labelText, placeholder, onChange
 
   return (
     <View style={styles.container}>
-      <Text>{labelText}</Text>
+      <Text bold style={{ marginLeft: 20, marginBottom: 5 }}>
+        {labelText}
+      </Text>
       <Dropdown
         style={styles.dropdown}
         placeholderStyle={styles.placeholderStyle}
@@ -58,6 +61,15 @@ export function AsyncSelect({ path, query = {}, labelText, placeholder, onChange
         onChange={(item) => onChange(item)}
         onChangeText={handleChangeName}
         value={value}
+        renderLeftIcon={() => (
+          <IconExtra
+            size={16}
+            color={nowTheme.COLORS.PRIMARY}
+            name={icon}
+            family="feather"
+            style={styles.icon}
+          />
+        )}
       />
     </View>
   );
@@ -65,21 +77,20 @@ export function AsyncSelect({ path, query = {}, labelText, placeholder, onChange
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: 16,
-  },
-  dropdown: {
-    height: 44,
-    backgroundColor: '#FFFFFF',
-    borderBottomColor: 'gray',
-    borderBottomWidth: 0.5,
-    borderRadius: 30,
-    borderColor: nowTheme.COLORS.BORDER,
-    paddingHorizontal: 8,
-    paddingLeft: 15,
+    // paddingBottom: 16,
   },
   icon: {
-    marginRight: 5,
+    marginRight: 10,
   },
+  dropdown: {
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: nowTheme.COLORS.BORDER,
+    height: 44,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 10,
+  },
+
   label: {
     position: 'absolute',
     backgroundColor: 'white',
@@ -90,7 +101,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   placeholderStyle: {
-    fontSize: 16,
+    fontSize: 14,
+    color: 'gray',
   },
   selectedTextStyle: {
     fontSize: 16,

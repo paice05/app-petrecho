@@ -1,8 +1,10 @@
-import { Block, theme } from 'galio-framework';
 import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Block, Text } from 'galio-framework';
+
 import { Button, Icon } from '../../components';
 import CustomInput from '../../components/CustomInput';
+import { nowTheme } from '../../constants';
 
 export const Config = ({ fields, setFields }) => {
   const [show, setShow] = useState(false);
@@ -12,35 +14,53 @@ export const Config = ({ fields, setFields }) => {
   return (
     <Block>
       <TouchableOpacity onPress={handleToggleShow}>
-        <Block flex row style={show ? styles.containerOpen : styles.containerClose}>
-          <Text> Configurações gerais </Text>
+        <Block row space="between" style={show ? styles.containerOpen : styles.containerClose}>
+          <Text color={nowTheme.COLORS.PRIMARY}> Configurações gerais </Text>
 
           <Icon
             name="chevron-down"
             family="feather"
             size={18}
-            color={'black'}
+            color={nowTheme.COLORS.PRIMARY}
             style={show ? styles.iconRotate : {}}
           />
         </Block>
       </TouchableOpacity>
 
       {show && (
-        <Block flex row style={{ gap: 20 }}>
-          <Block flex>
+        <Block row gap={10}>
+          <Block flex={1}>
             <CustomInput
               onChangeText={(text) => setFields({ ...fields, discount: text })}
               labelText="Desconto"
-              placeholder="R$10,00"
+              placeholder="10,00"
               value={fields.discount?.toString()}
+              iconContent={
+                <Icon
+                  size={16}
+                  color={nowTheme.COLORS.PRIMARY}
+                  name="dollar-sign"
+                  family="feather"
+                  style={styles.inputIcons}
+                />
+              }
             />
           </Block>
-          <Block flex>
+          <Block flex={1}>
             <CustomInput
               onChangeText={(text) => setFields({ ...fields, addition: text })}
               labelText="Adicional"
-              placeholder="R$5,00"
+              placeholder="5,00"
               value={fields.addition?.toString()}
+              iconContent={
+                <Icon
+                  size={16}
+                  color={nowTheme.COLORS.PRIMARY}
+                  name="dollar-sign"
+                  family="feather"
+                  style={styles.inputIcons}
+                />
+              }
             />
           </Block>
         </Block>
@@ -50,35 +70,7 @@ export const Config = ({ fields, setFields }) => {
 };
 
 const styles = StyleSheet.create({
-  containerOpen: {
-    justifyContent: 'space-between',
-  },
-  containerClose: {
-    justifyContent: 'space-between',
-    marginBottom: 16,
-  },
   iconRotate: {
     transform: 'rotate(180deg)',
-  },
-  wrapper: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    // paddingHorizontal: theme.SIZES.BASE,
-  },
-  button: {
-    marginBottom: theme.SIZES.BASE,
-    width: 100,
-  },
-  count: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-
-    borderRadius: 20,
-    borderStyle: 'solid',
-    borderWidth: 1,
-    borderColor: '#666eee',
   },
 });

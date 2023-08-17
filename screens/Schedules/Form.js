@@ -1,24 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Dimensions, TouchableOpacity, Platform, View } from 'react-native';
+import { ScrollView, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import format from 'date-fns/format';
+import { Block, Text, Switch } from 'galio-framework';
 
-// Galio components
-import { Block, Button as GaButton, Text, theme, Switch } from 'galio-framework';
-
-// Now UI themed components
-import { nowTheme } from '../../constants';
-import { Button, Select, Icon, Input, Header } from '../../components';
-import CustomInput from '../../components/CustomInput';
-import { CustomSelectHour } from '../../components/CustonSelectHour';
+import { Button, Icon } from '../../components';
 import { Modal } from '../../components/Modal';
-import { Config } from './Config';
 import { AsyncSelect } from '../../components/AsyncSelect';
 import { DateTimePicker } from '../../components/DatePiker';
-import { api } from '../../services/api';
 import { AsyncSelectMulti } from '../../components/AsyncSelectMulti';
 import { formartDate } from '../../utils/formartDate';
+import { nowTheme } from '../../constants';
+import { api } from '../../services/api';
+import { Config } from './Config';
 
 const { width } = Dimensions.get('screen');
 
@@ -29,26 +22,46 @@ const SchedulesForm = ({ route, navigation }) => {
 
   const [selected, setSelected] = useState('');
   const [showDate, setShowDate] = useState(false);
-  const [visible, setVisible] = useState(false);
-
   const [timePicker, setTimePicker] = useState(false);
-
-  const showTimePicker = () => {
-    setTimePicker(true);
-  };
+  const [errors, setErrors] = useState({});
 
   const [fields, setFields] = useState({
     user: null,
     services: [], // value label
     employee: null,
-    date: null,
-    time: null,
+    date: formartDate(new Date(), 'dd-MM-yyyy'),
+    time: formartDate(new Date(), 'HH:mm'),
     discount: null,
     addition: null,
     isPackage: false,
   });
 
+  useEffect(() => {
+    if (isEditing) {
+      const fetchSchedule = async () => {
+        try {
+          const response = await api.request().get(`/schedules/${isEditing}`);
+          setFields({
+            user: { value: response.data.user.id, label: response.data.user.name },
+            services: response.data.services.map((item) => ({ value: item.id, label: item.name })),
+            employee: { value: response.data.employee.id, label: response.data.employee.name },
+            date: formartDate(response.data.scheduleAt, 'dd-MM-yyyy'),
+            time: formartDate(response.data.scheduleAt, 'HH:mm'),
+            discount: response.data.discount || null,
+            addition: response.data.addition || null,
+            isPackage: response.data.isPackage,
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      fetchSchedule();
+    } // busca dados da API
+  }, []);
+
   const handleSubmitCreate = async () => {
+    if (!fields.user) setErrors({ client: 'O campo clien' });
     const [day, month, year] = fields.date.split('-');
 
     const scheduleAt = new Date(`${year}-${month}-${day} ${fields.time}:00`);
@@ -70,6 +83,7 @@ const SchedulesForm = ({ route, navigation }) => {
   };
 
   const handleSubmitUpdate = async () => {
+    if (!fields.user) setErrors({ client: 'O campo clien' });
     const [day, month, year] = fields.date.split('-');
 
     const scheduleAt = new Date(`${year}-${month}-${day} ${fields.time}:00`);
@@ -83,123 +97,126 @@ const SchedulesForm = ({ route, navigation }) => {
     };
 
     try {
-      const response = await api.request().put(`/schedules/${isEditing}`, payload);
-      setFields(response.data);
+      await api.request().put(`/schedules/${isEditing}`, payload);
       navigation.goBack();
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    if (isEditing) {
-      const fetchSchedules = async () => {
-        try {
-          const response = await api.request().get(`/schedules/${isEditing}`);
-          setFields({
-            user: { value: response.data.user.id, label: response.data.user.name },
-            services: response.data.services.map((item) => ({ value: item.id, label: item.name })),
-            employee: { value: response.data.employee.id, label: response.data.employee.name },
-            date: formartDate(response.data.scheduleAt, 'dd-MM-yyyy'),
-            time: formartDate(response.data.scheduleAt, 'HH:mm'),
-            discount: response.data.discount || null,
-            addition: response.data.addition || null,
-            isPackage: response.data.isPackage,
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      };
-
-      fetchSchedules();
-    } // busca dados da API
-  }, []);
-
   const handleToggleShowDate = () => setShowDate(!showDate);
-  const handleToggleVisible = () => setVisible(!visible);
+  const showTimePicker = () => {
+    setTimePicker(true);
+  };
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <Block flex style={styles.group}>
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-          <AsyncSelect
-            path="/users"
-            query={{ type: 'pf' }}
-            placeholder="Pesquise um cliente pelo nome"
-            labelText="Cliente"
-            onChange={(item) =>
-              item && setFields({ ...fields, user: { value: item.value, label: item.label } })
-            }
-            value={fields.user}
-          />
-        </Block>
+      <Block gap={15} flex style={styles.group}>
+        <AsyncSelect
+          path="/users"
+          query={{ type: 'pf' }}
+          placeholder="Pesquise um cliente"
+          labelText="Cliente"
+          onChange={(item) =>
+            item && setFields({ ...fields, user: { value: item.value, label: item.label } })
+          }
+          value={fields.user}
+          icon="user"
+        />
 
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-          <AsyncSelectMulti
-            isMulti
-            path="/services"
-            placeholder="Pesquise um serviço pelo nome"
-            labelText="Serviços"
-            value={fields.services}
-            onChange={(item) => {
-              if (fields.services.some((service) => item.value === service.value)) return;
+        <AsyncSelectMulti
+          isMulti
+          path="/services"
+          placeholder="Pesquise um serviço"
+          labelText="Serviços"
+          value={fields.services}
+          onChange={(item) => {
+            if (fields.services.some((service) => item.value === service.value)) return;
 
-              setFields({ ...fields, services: [...fields.services, item] });
-            }}
-          />
-        </Block>
-        <Text style={styles.selectedMulti}>
-          {fields?.services?.map((item, index) => {
-            return (
-              <TouchableOpacity
-                onPress={() =>
-                  setFields({
-                    ...fields,
-                    services: fields.services.filter((service) => service.value !== item.value),
-                  })
-                }
-              >
-                <View style={styles.selectedStyle}>
-                  <Text style={styles.textSelectedStyle}>{item?.label}</Text>
-                  <AntDesign color="black" name="delete" size={17} />
-                </View>
-              </TouchableOpacity>
-            );
-          })}
-        </Text>
+            setFields({ ...fields, services: [...fields.services, item] });
+          }}
+          icon="tool"
+        />
 
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-          <AsyncSelect
-            path="/users"
-            query={{ type: 'pj' }}
-            placeholder="Pesquise um funcionário pelo nome"
-            labelText="Funcionário"
-            onChange={(item) =>
-              item && setFields({ ...fields, employee: { value: item.value, label: item.label } })
-            }
-            value={fields.employee}
-          />
-        </Block>
-
-        <Block flex row style={styles.wraperTime}>
-          <Block flex>
-            <Text>Data</Text>
-            <Button onPress={handleToggleShowDate} style={styles.buttonDate}>
-              <Text> {fields.date || 'Selecionar data'} </Text>
-            </Button>
-          </Block>
-          <Block flex>
-            <Text>Horário</Text>
-            {!timePicker && (
-              <View style={{ margin: 10 }}>
-                <Button
-                  title="Selecione um horário"
-                  style={styles.selectHour}
-                  onPress={showTimePicker}
+        {fields?.services?.length > 0 && (
+          <Text style={styles.selectedMulti}>
+            {fields?.services?.map((item, index) => {
+              return (
+                <TouchableOpacity
+                  onPress={() =>
+                    setFields({
+                      ...fields,
+                      services: fields.services.filter((service) => service.value !== item.value),
+                    })
+                  }
                 >
-                  <Text style={{ color: 'black' }}>{fields.time || 'Selecione um horário'}</Text>
-                </Button>
-              </View>
+                  <Block
+                    row
+                    gap={5}
+                    middle
+                    style={{
+                      margin: 5,
+                      borderWidth: 1,
+                      borderColor: 'gray',
+                      padding: 5,
+                      borderRadius: 5,
+                    }}
+                  >
+                    <Text color="gray" size={14}>
+                      {item?.label}
+                    </Text>
+                    <Icon
+                      size={14}
+                      color={nowTheme.COLORS.PRIMARY}
+                      name="trash-2"
+                      family="feather"
+                    />
+                  </Block>
+                </TouchableOpacity>
+              );
+            })}
+          </Text>
+        )}
+
+        <AsyncSelect
+          path="/users"
+          query={{ type: 'pj' }}
+          placeholder="Pesquise um funcionário"
+          labelText="Funcionário"
+          onChange={(item) =>
+            item && setFields({ ...fields, employee: { value: item.value, label: item.label } })
+          }
+          value={fields.employee}
+          icon="user"
+        />
+
+        <Block row space="between" gap={10}>
+          <Block flex={1}>
+            <Text bold style={{ marginLeft: 20, marginBottom: 5 }}>
+              Data
+            </Text>
+            <TouchableOpacity onPress={handleToggleShowDate} style={styles.buttonDate}>
+              <Block row gap={10}>
+                <Icon size={16} color={nowTheme.COLORS.PRIMARY} name="calendar" family="feather" />
+                <Text size={14} color="gray">
+                  {fields.date}
+                </Text>
+              </Block>
+            </TouchableOpacity>
+          </Block>
+          <Block flex={1}>
+            <Text bold style={{ marginLeft: 20, marginBottom: 5 }}>
+              Horário
+            </Text>
+            {!timePicker && (
+              <TouchableOpacity style={styles.buttonDate} onPress={showTimePicker}>
+                <Block row gap={10}>
+                  <Icon size={16} color={nowTheme.COLORS.PRIMARY} name="clock" family="feather" />
+                  <Text size={14} color="gray">
+                    {fields.time}
+                  </Text>
+                </Block>
+              </TouchableOpacity>
             )}
             {timePicker && (
               <DateTimePicker
@@ -211,44 +228,37 @@ const SchedulesForm = ({ route, navigation }) => {
             )}
           </Block>
         </Block>
-      </Block>
 
-      <Block flex style={styles.group}>
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-          <Block row right>
-            <Switch
-              value={fields.isPackage}
-              onChange={() => setFields({ ...fields, isPackage: !fields.isPackage })}
-              trackColor={{ false: theme.COLORS.HEADER, true: theme.COLORS.HEADER }}
-            />
-            <Text
-              style={{ fontFamily: 'montserrat-regular', paddingBottom: 15, paddingHorizontal: 10 }}
-              size={14}
-              color={nowTheme.COLORS.TEXT}
-            >
-              Sessão de pacote
-            </Text>
-          </Block>
+        <Block row right>
+          <Switch
+            value={fields.isPackage}
+            onChange={() => setFields({ ...fields, isPackage: !fields.isPackage })}
+            trackColor={{ false: nowTheme.COLORS.HEADER, true: nowTheme.COLORS.PRIMARY }}
+          />
+          <Text
+            style={{ paddingBottom: 15, paddingHorizontal: 10 }}
+            size={14}
+            color={nowTheme.COLORS.PRIMARY}
+          >
+            Sessão de pacote
+          </Text>
         </Block>
-      </Block>
-      <Config setFields={setFields} fields={fields} />
-      <Block style={styles.container}>
-        <Button
-          textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
-          color="default"
-          style={styles.button}
-          onPress={() => navigation.goBack()}
-        >
-          Voltar
-        </Button>
-        <Button
-          textStyle={{ fontFamily: 'montserrat-regular', fontSize: 12 }}
-          color="success"
-          style={styles.button}
-          onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
-        >
-          {isEditing ? 'Editar' : 'Cadastrar'}
-        </Button>
+
+        <Config setFields={setFields} fields={fields} />
+
+        <Block row space="between">
+          <Button style={styles.button} onPress={() => navigation.goBack()}>
+            <Text bold>Voltar</Text>
+          </Button>
+          <Button
+            style={styles.primary}
+            onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
+          >
+            <Text bold color="#fff">
+              {isEditing ? 'Atualizar' : 'Cadastrar'}
+            </Text>
+          </Button>
+        </Block>
       </Block>
 
       <Modal
@@ -281,45 +291,53 @@ const SchedulesForm = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  wraperTime: {
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    gap: 30,
-  },
   title: {
     fontFamily: 'montserrat-bold',
-    paddingBottom: theme.SIZES.BASE,
-    paddingHorizontal: theme.SIZES.BASE * 2,
+    paddingBottom: nowTheme.SIZES.BASE,
+    paddingHorizontal: nowTheme.SIZES.BASE * 2,
     marginTop: 44,
     color: nowTheme.COLORS.HEADER,
   },
   group: {
-    paddingTop: theme.SIZES.BASE,
+    margin: 15,
+    borderRadius: 10,
+    backgroundColor: '#fff',
+    padding: 8,
   },
   button: {
-    marginBottom: theme.SIZES.BASE,
-    width: 100,
+    marginBottom: nowTheme.SIZES.BASE,
+    borderRadius: 10,
+    width: 120,
+    height: 40,
+    backgroundColor: '#eee',
+  },
+  primary: {
+    marginBottom: nowTheme.SIZES.BASE,
+    borderRadius: 10,
+    width: 120,
+    height: 40,
+    backgroundColor: '#c84648',
   },
   articles: {
-    width: width - theme.SIZES.BASE * 2,
-    paddingVertical: theme.SIZES.BASE,
+    width: width - nowTheme.SIZES.BASE * 2,
+    paddingVertical: nowTheme.SIZES.BASE,
     paddingHorizontal: 2,
     fontFamily: 'montserrat-regular',
   },
   buttonDate: {
     borderRadius: 30,
-    borderColor: nowTheme.COLORS.BORDER,
-    backgroundColor: '#FFFFFF',
-    borderStyle: 'solid',
     borderWidth: 1,
-    marginLeft: 0,
+    borderColor: nowTheme.COLORS.BORDER,
+    height: 44,
+    backgroundColor: '#FFFFFF',
+    padding: 12,
   },
   container: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: theme.SIZES.BASE,
+    paddingHorizontal: nowTheme.SIZES.BASE,
   },
   selectHour: {
     borderRadius: 30,
