@@ -75,9 +75,9 @@ export default class Tabs extends React.Component {
     if (result < 0) day = addDays(date, result * -1).getDate();
 
     return (
-      <Block style={containerStyles}>
-        <Animated.View style={[styles.menuTitle]}>
-          <TouchableOpacity onPress={() => this.selectMenu(item.id)}>
+      <TouchableOpacity onPress={() => this.selectMenu(item.id)}>
+        <Block style={containerStyles}>
+          <Animated.View style={[styles.menuTitle]}>
             <Text center color={isActive ? nowTheme.COLORS.WHITE : ''} size={8}>
               {item.title}
             </Text>
@@ -89,9 +89,9 @@ export default class Tabs extends React.Component {
             >
               {day}
             </Text>
-          </TouchableOpacity>
-        </Animated.View>
-      </Block>
+          </Animated.View>
+        </Block>
+      </TouchableOpacity>
     );
   };
 

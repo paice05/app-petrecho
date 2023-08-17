@@ -23,7 +23,6 @@ const SchedulesForm = ({ route, navigation }) => {
   const [selected, setSelected] = useState('');
   const [showDate, setShowDate] = useState(false);
   const [timePicker, setTimePicker] = useState(false);
-  const [errors, setErrors] = useState({});
 
   const [fields, setFields] = useState({
     user: null,
@@ -61,7 +60,6 @@ const SchedulesForm = ({ route, navigation }) => {
   }, []);
 
   const handleSubmitCreate = async () => {
-    if (!fields.user) setErrors({ client: 'O campo clien' });
     const [day, month, year] = fields.date.split('-');
 
     const scheduleAt = new Date(`${year}-${month}-${day} ${fields.time}:00`);
@@ -83,7 +81,6 @@ const SchedulesForm = ({ route, navigation }) => {
   };
 
   const handleSubmitUpdate = async () => {
-    if (!fields.user) setErrors({ client: 'O campo clien' });
     const [day, month, year] = fields.date.split('-');
 
     const scheduleAt = new Date(`${year}-${month}-${day} ${fields.time}:00`);
