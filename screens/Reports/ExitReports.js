@@ -45,8 +45,8 @@ const ExitReport = ({ route }) => {
       {valueOut.length === 0 ? <Text> Nenhum relatório encontrado no mês selecionado </Text> : null}
       {valueOut
         .filter((item) => item.out)
-        .map((item) => (
-          <Block>
+        .map((item, index) => (
+          <Block key={index}>
             <CardReportExit
               data={formartDate(item.createdAt, 'dd/MM/YYY')}
               nome={item.description}
