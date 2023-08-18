@@ -3,13 +3,19 @@ import { StyleSheet, TouchableOpacity } from 'react-native';
 import { theme, Block, Text, Button } from 'galio-framework';
 import { nowTheme } from '../../constants';
 
-const CardReport = ({ navigation, entryValue, outPutValue, id }) => {
+const CardReport = ({ navigation, date, entryValue, outPutValue, id }) => {
   return (
     <Block flex space="between" style={styles.container}>
       <Block style={styles.wrapper}>
         <Block row space="between">
           <Text size={16}>Entrada</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('EntryReports')}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('EntryReports', {
+                date,
+              })
+            }
+          >
             <Text color={nowTheme.COLORS.PRIMARY}>Ver mais</Text>
           </TouchableOpacity>
         </Block>
@@ -18,7 +24,13 @@ const CardReport = ({ navigation, entryValue, outPutValue, id }) => {
       <Block style={styles.wrapper}>
         <Block row space="between">
           <Text size={16}>Saída</Text>
-          <TouchableOpacity onPress={() => navigation.navigate('ExitReports')}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('ExitReports', {
+                date,
+              })
+            }
+          >
             <Text color={nowTheme.COLORS.PRIMARY}>Ver mais</Text>
           </TouchableOpacity>
         </Block>
