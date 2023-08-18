@@ -190,6 +190,7 @@ const ScheduleList = ({ navigation }) => {
                             horario={formartDate(item.scheduleAt, 'HH:mm')}
                             dia={formartDate(item.scheduleAt, 'dd/MM/YYY')}
                             status={item.status}
+                            pacote={item.isPackage}
                             onFinished={() => handleFinished(item.id)}
                             onCanceled={() => handleCanceled(item.id)}
                             onDeleted={() => handleConfirmDelete(item.id)}

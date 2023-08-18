@@ -16,6 +16,7 @@ const CardSchedule = ({
   dia,
   horario,
   status,
+  pacote,
   onFinished,
   onCanceled,
   onDeleted,
@@ -46,10 +47,18 @@ const CardSchedule = ({
               })
             }
           >
-            <Text style={{ textDecorationLine: 'underline' }}>
-              {nome?.slice(0, 30)}
-              {isLargeName ? '...' : ''}
-            </Text>
+            <Block row style={{ alignItems: 'center' }}>
+              <Text style={{ textDecorationLine: 'underline' }}>
+                {nome?.slice(0, 30)}
+                {isLargeName ? '...' : ''}
+              </Text>
+              {pacote ? (
+                <Text color="gray" size={10}>
+                  {' '}
+                  (pacote)
+                </Text>
+              ) : null}
+            </Block>
           </TouchableOpacity>
           <Text size={12} color="gray">
             {servico}
@@ -112,12 +121,12 @@ const CardSchedule = ({
         <Block row style={styles.wrapperButtons}>
           <Button onPress={onCanceled} style={styles.button}>
             <Text bold size={12}>
-              Cancelar
+              Cancelou
             </Text>
           </Button>
           <Button onPress={onFinished} style={[styles.button, styles.primary]}>
             <Text color="white" bold size={12}>
-              Confirmar
+              Finalizado
             </Text>
           </Button>
         </Block>
