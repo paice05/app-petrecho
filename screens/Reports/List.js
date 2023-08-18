@@ -35,7 +35,6 @@ const ReportList = ({ navigation }) => {
 
   useEffect(() => {
     if (response) {
-      console.log({ response });
       setValueEntry(response.data.reduce((acc, cur) => acc + cur.entry, 0));
       setValueExit(response.data.reduce((acc, cur) => acc + cur.out, 0));
     }

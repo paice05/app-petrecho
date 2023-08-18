@@ -125,8 +125,6 @@ const ScheduleList = ({ navigation }) => {
     fetchChangeStatus(scheduleId, payload);
   };
   const handleRestore = (id) => {
-    console.log('restore');
-
     api
       .request()
       .get(`/schedules/${id}/revert`)
