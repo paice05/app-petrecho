@@ -22,16 +22,15 @@ const SchedulesForm = ({ route, navigation }) => {
 
   const [selected, setSelected] = useState('');
   const [showDate, setShowDate] = useState(false);
-  const [timePicker, setTimePicker] = useState(false);
 
   const [fields, setFields] = useState({
     user: null,
     services: [], // value label
     employee: null,
     date: formartDate(new Date(), 'dd-MM-yyyy'),
-    time: formartDate(new Date(), 'HH:mm'),
-    discount: null,
-    addition: null,
+    time: new Date(),
+    discount: 0,
+    addition: 0,
     isPackage: false,
   });
 
@@ -45,10 +44,20 @@ const SchedulesForm = ({ route, navigation }) => {
             services: response.data.services.map((item) => ({ value: item.id, label: item.name })),
             employee: { value: response.data.employee.id, label: response.data.employee.name },
             date: formartDate(response.data.scheduleAt, 'dd-MM-yyyy'),
-            time: formartDate(response.data.scheduleAt, 'HH:mm'),
-            discount: response.data.discount || null,
-            addition: response.data.addition || null,
+            time: new Date(response.data.scheduleAt),
             isPackage: response.data.isPackage,
+            discount:
+              Number(response.data.discount).toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                currencyDisplay: 'symbol',
+              }) || null,
+            addition:
+              Number(response.data.addition).toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                currencyDisplay: 'symbol',
+              }) || null,
           });
         } catch (error) {
           console.log(error);
@@ -60,9 +69,13 @@ const SchedulesForm = ({ route, navigation }) => {
   }, []);
 
   const handleSubmitCreate = async () => {
+    console.log({ fields });
+
     const [day, month, year] = fields.date.split('-');
 
-    const scheduleAt = new Date(`${year}-${month}-${day} ${fields.time}:00`);
+    const scheduleAt = new Date(`${year}-${month}-${day} ${formartDate(fields.time, 'HH:mm')}:00`);
+    const discount = fields.discount.toString().replace('R$', '').replace(',', '.');
+    const addition = fields.addition.toString().replace('R$', '').replace(',', '.');
 
     const payload = {
       ...fields,
@@ -70,6 +83,8 @@ const SchedulesForm = ({ route, navigation }) => {
       scheduleAt,
       userId: fields.user.value,
       employeeId: fields.employee.value,
+      discount,
+      addition,
     };
 
     try {
@@ -83,7 +98,9 @@ const SchedulesForm = ({ route, navigation }) => {
   const handleSubmitUpdate = async () => {
     const [day, month, year] = fields.date.split('-');
 
-    const scheduleAt = new Date(`${year}-${month}-${day} ${fields.time}:00`);
+    const scheduleAt = new Date(`${year}-${month}-${day} ${formartDate(fields.time, 'HH:mm')}:00`);
+    const discount = fields?.discount.replace('R$', '').replace(',', '.');
+    const addition = fields?.addition.replace('R$', '').replace(',', '.');
 
     const payload = {
       ...fields,
@@ -91,6 +108,8 @@ const SchedulesForm = ({ route, navigation }) => {
       scheduleAt,
       userId: fields.user.value,
       employeeId: fields.employee.value,
+      discount,
+      addition,
     };
 
     try {
@@ -102,9 +121,6 @@ const SchedulesForm = ({ route, navigation }) => {
   };
 
   const handleToggleShowDate = () => setShowDate(!showDate);
-  const showTimePicker = () => {
-    setTimePicker(true);
-  };
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -136,27 +152,25 @@ const SchedulesForm = ({ route, navigation }) => {
         />
 
         {fields?.services?.length > 0 && (
-          <Text style={styles.selectedMulti}>
+          <Block flex={1} style={{ paddingHorizontal: 20 }}>
             {fields?.services?.map((item, index) => {
               return (
                 <TouchableOpacity
+                  key={index}
                   onPress={() =>
                     setFields({
                       ...fields,
                       services: fields.services.filter((service) => service.value !== item.value),
                     })
                   }
+                  style={{ flex: 1 }}
                 >
                   <Block
                     row
                     gap={5}
-                    middle
                     style={{
-                      margin: 5,
-                      borderWidth: 1,
-                      borderColor: 'gray',
-                      padding: 5,
-                      borderRadius: 5,
+                      paddingBottom: 7,
+                      paddingRight: 15,
                     }}
                   >
                     <Text color="gray" size={14}>
@@ -172,7 +186,7 @@ const SchedulesForm = ({ route, navigation }) => {
                 </TouchableOpacity>
               );
             })}
-          </Text>
+          </Block>
         )}
 
         <AsyncSelect
@@ -195,9 +209,7 @@ const SchedulesForm = ({ route, navigation }) => {
             <TouchableOpacity onPress={handleToggleShowDate} style={styles.buttonDate}>
               <Block row gap={10}>
                 <Icon size={16} color={nowTheme.COLORS.PRIMARY} name="calendar" family="feather" />
-                <Text size={14} color="gray">
-                  {fields.date}
-                </Text>
+                <Text size={14}>{fields.date}</Text>
               </Block>
             </TouchableOpacity>
           </Block>
@@ -205,24 +217,11 @@ const SchedulesForm = ({ route, navigation }) => {
             <Text bold style={{ marginLeft: 20, marginBottom: 5 }}>
               Horário
             </Text>
-            {!timePicker && (
-              <TouchableOpacity style={styles.buttonDate} onPress={showTimePicker}>
-                <Block row gap={10}>
-                  <Icon size={16} color={nowTheme.COLORS.PRIMARY} name="clock" family="feather" />
-                  <Text size={14} color="gray">
-                    {fields.time}
-                  </Text>
-                </Block>
-              </TouchableOpacity>
-            )}
-            {timePicker && (
-              <DateTimePicker
-                onChange={(value) => {
-                  setFields({ ...fields, time: value });
-                  setTimePicker(false);
-                }}
-              />
-            )}
+
+            <DateTimePicker
+              value={fields.time}
+              onChange={(time) => setFields({ ...fields, time })}
+            />
           </Block>
         </Block>
 
@@ -237,7 +236,7 @@ const SchedulesForm = ({ route, navigation }) => {
             size={14}
             color={nowTheme.COLORS.PRIMARY}
           >
-            Sessão de pacote
+            sessão de pacote
           </Text>
         </Block>
 
@@ -288,13 +287,6 @@ const SchedulesForm = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontFamily: 'montserrat-bold',
-    paddingBottom: nowTheme.SIZES.BASE,
-    paddingHorizontal: nowTheme.SIZES.BASE * 2,
-    marginTop: 44,
-    color: nowTheme.COLORS.HEADER,
-  },
   group: {
     margin: 15,
     borderRadius: 10,
@@ -315,12 +307,7 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: '#c84648',
   },
-  articles: {
-    width: width - nowTheme.SIZES.BASE * 2,
-    paddingVertical: nowTheme.SIZES.BASE,
-    paddingHorizontal: 2,
-    fontFamily: 'montserrat-regular',
-  },
+
   buttonDate: {
     borderRadius: 30,
     borderWidth: 1,
@@ -328,56 +315,6 @@ const styles = StyleSheet.create({
     height: 44,
     backgroundColor: '#FFFFFF',
     padding: 12,
-  },
-  container: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: nowTheme.SIZES.BASE,
-  },
-  selectHour: {
-    borderRadius: 30,
-    borderColor: nowTheme.COLORS.BORDER,
-    backgroundColor: '#FFFFFF',
-    borderStyle: 'solid',
-    borderWidth: 1,
-    marginLeft: -9,
-    marginTop: -2,
-    marginBottom: 16,
-  },
-  optionsButton: {
-    width: 'auto',
-    height: 34,
-    paddingHorizontal: 10,
-    paddingVertical: 10,
-  },
-  selectedStyle: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 14,
-    backgroundColor: 'white',
-    shadowColor: '#000',
-    marginTop: 8,
-    marginRight: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 1.41,
-
-    elevation: 2,
-  },
-  textSelectedStyle: {
-    marginRight: 5,
-    fontSize: 16,
-  },
-  selectedMulti: {
-    padding: 8,
   },
 });
 

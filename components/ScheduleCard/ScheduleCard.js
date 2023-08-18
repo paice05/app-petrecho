@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 16,
     borderRadius: 8,
-    marginVertical: 20,
+    marginVertical: 10,
   },
   heading: {
     fontSize: 18,

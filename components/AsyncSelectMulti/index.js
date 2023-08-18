@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   },
   inputSearchStyle: {
     height: 40,
-    fontSize: 16,
+    fontSize: 14,
   },
 
   item: {
@@ -152,6 +152,6 @@ const styles = StyleSheet.create({
   },
   textSelectedStyle: {
     marginRight: 5,
-    fontSize: 16,
+    fontSize: 14,
   },
 });

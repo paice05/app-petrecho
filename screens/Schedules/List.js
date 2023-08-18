@@ -165,7 +165,7 @@ const ScheduleList = ({ navigation }) => {
                 {loading ? (
                   <ActivityIndicator size="large" colo="#0000ff" />
                 ) : (
-                  <Block style={{ marginVertical: 20 }}>
+                  <Block style={{ marginVertical: 10 }}>
                     {schedules.length === 0 && (
                       <Text center style={{ marginTop: 20, marginBottom: 20 }}>
                         Nenhum registro encontrado
