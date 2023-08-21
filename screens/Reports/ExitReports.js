@@ -1,44 +1,54 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { Block } from 'galio-framework';
-import { format } from 'date-fns';
+import { Block, Text } from 'galio-framework';
+import { lastDayOfMonth } from 'date-fns';
 
 import CardReportExit from '../../components/CardReportExit';
-import { api } from '../../services/api';
+import { useRequestFindMany } from '../../components/hooks/useRequestFindMany';
+import { formartDate } from '../../utils/formartDate';
+import { optionsBirthDate } from '../../constants/month';
 
-const ExitReport = () => {
+const ExitReport = ({ route }) => {
+  const { date } = route.params;
+
   const [valueOut, setValueOut] = useState([]);
 
-  const fetchReportsOut = (params) => {
-    api
-      .request()
-      .get('/reports', {
-        params,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(({ data }) => {
-        setValueOut(data.data);
-      })
-      .catch((error) => console.log({ error }));
-  };
+  const { execute, response } = useRequestFindMany({ path: '/reports' });
+
+  useEffect(() => {
+    if (response) {
+      setValueOut(response.data);
+    }
+  }, [response]);
 
   useFocusEffect(
     useCallback(() => {
-      fetchReportsOut({});
-    }, [])
+      const month = optionsBirthDate.findIndex((item) => item.title === date) + 1;
+
+      const start = new Date(`${new Date().getFullYear()}-${month}-1 00:00:00`);
+      const lastDay = formartDate(lastDayOfMonth(start), 'YYY-MM-dd');
+      const end = new Date(`${lastDay} 23:59:59`);
+
+      execute({
+        where: {
+          createdAt: {
+            $between: [start, end],
+          },
+        },
+      });
+    }, [date])
   );
 
   return (
     <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
+      {valueOut.length === 0 ? <Text> Nenhum relatório encontrado no mês selecionado </Text> : null}
       {valueOut
         .filter((item) => item.out)
-        .map((item) => (
-          <Block>
+        .map((item, index) => (
+          <Block key={index}>
             <CardReportExit
-              data={format(new Date(item.createdAt), 'dd/MM/YYY')}
+              data={formartDate(item.createdAt, 'dd/MM/YYY')}
               nome={item.description}
               value={`R$ ${Number(item.out).toFixed(2).replace('.', ',')}`}
             />

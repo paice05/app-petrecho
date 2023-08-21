@@ -125,8 +125,6 @@ const ScheduleList = ({ navigation }) => {
     fetchChangeStatus(scheduleId, payload);
   };
   const handleRestore = (id) => {
-    console.log('restore');
-
     api
       .request()
       .get(`/schedules/${id}/revert`)
@@ -165,7 +163,7 @@ const ScheduleList = ({ navigation }) => {
                 {loading ? (
                   <ActivityIndicator size="large" colo="#0000ff" />
                 ) : (
-                  <Block style={{ marginVertical: 20 }}>
+                  <Block style={{ marginVertical: 10 }}>
                     {schedules.length === 0 && (
                       <Text center style={{ marginTop: 20, marginBottom: 20 }}>
                         Nenhum registro encontrado
@@ -190,6 +188,7 @@ const ScheduleList = ({ navigation }) => {
                             horario={formartDate(item.scheduleAt, 'HH:mm')}
                             dia={formartDate(item.scheduleAt, 'dd/MM/YYY')}
                             status={item.status}
+                            pacote={item.isPackage}
                             onFinished={() => handleFinished(item.id)}
                             onCanceled={() => handleCanceled(item.id)}
                             onDeleted={() => handleConfirmDelete(item.id)}

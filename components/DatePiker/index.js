@@ -1,28 +1,49 @@
 import React, { useState } from 'react';
-import { Block, Text } from 'galio-framework';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
+import { Block, Text } from 'galio-framework';
 
-export const DateTimePicker = ({ onChange }) => {
-  const [time, setTime] = useState(new Date(Date.now()));
+import IconExtra from '../Icon';
+import { formartDate } from '../../utils/formartDate';
+import { nowTheme } from '../../constants';
+
+export const DateTimePicker = ({ onChange, value = new Date() }) => {
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const onTimeSelected = (event, value) => {
-    setTime(value);
-    let tempTime = new Date(value);
-    let fTime = tempTime.getHours() + ':' + tempTime.getMinutes();
-    const [hour, minute] = tempTime.toLocaleTimeString('pt-Br').split(':');
-    const fullTime = `${hour}:${minute}`;
-    onChange(fullTime);
+    setShowDatePicker(false);
+
+    onChange(new Date(value));
   };
 
   return (
     <Block>
-      <RNDateTimePicker
-        value={time}
-        mode={'time'}
-        display={'default'}
-        is24Hour={true}
-        onChange={onTimeSelected}
-      />
+      <TouchableOpacity style={styles.buttonDate} onPress={() => setShowDatePicker(true)}>
+        <Block row gap={10}>
+          <IconExtra size={16} color={nowTheme.COLORS.PRIMARY} name="clock" family="feather" />
+          <Text size={14}>{formartDate(value, 'HH:mm')}</Text>
+        </Block>
+      </TouchableOpacity>
+      {showDatePicker && (
+        <RNDateTimePicker
+          value={value}
+          mode={'time'}
+          display={'default'}
+          is24Hour={true}
+          onChange={onTimeSelected}
+        />
+      )}
     </Block>
   );
 };
+
+const styles = StyleSheet.create({
+  buttonDate: {
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: nowTheme.COLORS.BORDER,
+    height: 44,
+    backgroundColor: '#FFFFFF',
+    padding: 12,
+  },
+});

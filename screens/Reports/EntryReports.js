@@ -1,45 +1,54 @@
-import React, { useCallback, useState } from 'react';
-import { ScrollView, StyleSheet, Text } from 'react-native';
-import { Block } from 'galio-framework';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ScrollView, StyleSheet } from 'react-native';
+import { Block, Text } from 'galio-framework';
 import { useFocusEffect } from '@react-navigation/native';
-import { format } from 'date-fns';
+import { lastDayOfMonth } from 'date-fns';
 
 import CardReportEntry from '../../components/CardReportEntry';
-import { nowTheme } from '../../constants';
-import { api } from '../../services/api';
+import { useRequestFindMany } from '../../components/hooks/useRequestFindMany';
 import { formartDate } from '../../utils/formartDate';
+import { nowTheme } from '../../constants';
+import { optionsBirthDate } from '../../constants/month';
 
-const EntryReport = ({ navigation }) => {
+const EntryReport = ({ route }) => {
+  const { date } = route.params;
+
   const [valueEntry, setValueEntry] = useState([]);
 
-  const fetchReportsEntry = (params) => {
-    api
-      .request()
-      .get('/reports', {
-        params,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(({ data }) => {
-        setValueEntry(data.data);
-      })
-      .catch((error) => console.log({ error }));
-  };
+  const { execute, response } = useRequestFindMany({ path: '/reports' });
+
+  useEffect(() => {
+    if (response) {
+      setValueEntry(response.data);
+    }
+  }, [response]);
 
   useFocusEffect(
     useCallback(() => {
-      fetchReportsEntry({});
-    }, [])
+      const month = optionsBirthDate.findIndex((item) => item.title === date) + 1;
+
+      const start = new Date(`${new Date().getFullYear()}-${month}-1 00:00:00`);
+      const lastDay = formartDate(lastDayOfMonth(start), 'YYY-MM-dd');
+      const end = new Date(`${lastDay} 23:59:59`);
+
+      execute({
+        where: {
+          createdAt: {
+            $between: [start, end],
+          },
+        },
+      });
+    }, [date])
   );
 
-  const dataEntry = valueEntry.filter((item) => item.entry);
-
-  const totalValue = dataEntry.reduce((acc, cur) => acc + cur.entry, 0);
+  const dataEntry = valueEntry.filter((item) => item.entry) || [];
 
   return (
     <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
       <Block>
+        {dataEntry.length === 0 ? (
+          <Text> Nenhum relatório encontrado no mês selecionado </Text>
+        ) : null}
         {dataEntry.map((item) => {
           return (
             <CardReportEntry

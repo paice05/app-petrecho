@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     color: 'gray',
   },
   selectedTextStyle: {
-    fontSize: 16,
+    fontSize: 14,
   },
   iconStyle: {
     width: 20,
@@ -113,6 +113,6 @@ const styles = StyleSheet.create({
   },
   inputSearchStyle: {
     height: 40,
-    fontSize: 16,
+    fontSize: 14,
   },
 });

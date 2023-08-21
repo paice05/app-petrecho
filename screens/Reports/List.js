@@ -1,13 +1,14 @@
-import React, { useCallback, useState } from 'react';
-import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { StyleSheet, ScrollView } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { Block, Text, theme } from 'galio-framework';
+import { Block, Text } from 'galio-framework';
+import { lastDayOfMonth } from 'date-fns';
 
-import { api } from '../../services/api';
 import CardReport from '../../components/CardReport';
-import { CustomSelectBottom } from '../../components/CustomSelectBottom';
 import SimpleMenu from '../../components/Menu';
+import { useRequestFindMany } from '../../components/hooks/useRequestFindMany';
 import { nowTheme } from '../../constants';
+import { formartDate } from '../../utils/formartDate';
 
 const optionsBirthDate = [
   { title: 'Janeiro', data: 'Janeiro' },
@@ -30,25 +31,31 @@ const ReportList = ({ navigation }) => {
   const [valueEntry, setValueEntry] = useState(0);
   const [valueExit, setValueExit] = useState(0);
 
-  const fetchReports = (params) => {
-    api
-      .request()
-      .get('/reports', {
-        params,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(({ data }) => {
-        setValueEntry(data.data.reduce((acc, cur) => acc + cur.entry, 0));
-        setValueExit(data.data.reduce((acc, cur) => acc + cur.out, 0));
-      });
-  };
+  const { execute, response } = useRequestFindMany({ path: '/reports' });
+
+  useEffect(() => {
+    if (response) {
+      setValueEntry(response.data.reduce((acc, cur) => acc + cur.entry, 0));
+      setValueExit(response.data.reduce((acc, cur) => acc + cur.out, 0));
+    }
+  }, [response]);
 
   useFocusEffect(
     useCallback(() => {
-      fetchReports({});
-    }, [])
+      const month = optionsBirthDate.findIndex((item) => item.title === date) + 1;
+
+      const start = new Date(`${new Date().getFullYear()}-${month}-1 00:00:00`);
+      const lastDay = formartDate(lastDayOfMonth(start), 'YYY-MM-dd');
+      const end = new Date(`${lastDay} 23:59:59`);
+
+      execute({
+        where: {
+          createdAt: {
+            $between: [start, end],
+          },
+        },
+      });
+    }, [date])
   );
 
   return (
@@ -69,7 +76,12 @@ const ReportList = ({ navigation }) => {
         </SimpleMenu>
       </Block>
 
-      <CardReport navigation={navigation} entryValue={valueEntry} outPutValue={valueExit} />
+      <CardReport
+        navigation={navigation}
+        date={date}
+        entryValue={valueEntry}
+        outPutValue={valueExit}
+      />
     </ScrollView>
   );
 };

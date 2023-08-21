@@ -11,7 +11,7 @@ export const Navigation = ({ items = [] }) => {
     <Block>
       <Block row center>
         {items.map((item, index) => (
-          <Block row center>
+          <Block key={index} row center>
             <TouchableOpacity style={styles.button} onPress={() => setActive(index)}>
               <Text size={16} color={index === active && nowTheme.COLORS.PRIMARY}>
                 {item.title}
