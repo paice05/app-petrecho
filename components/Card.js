@@ -105,16 +105,7 @@ class Card extends React.Component {
   }
 }
 
-Card.propTypes = {
-  item: PropTypes.object,
-  horizontal: PropTypes.bool,
-  full: PropTypes.bool,
-  ctaColor: PropTypes.string,
-  imageStyle: PropTypes.any,
-  ctaRight: PropTypes.bool,
-  titleStyle: PropTypes.any,
-  textBodyStyle: PropTypes.any,
-};
+Card.propTypes = {};
 
 const styles = StyleSheet.create({
   card: {

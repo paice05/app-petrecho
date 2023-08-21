@@ -7,7 +7,7 @@ export const useRequestDestroy = ({ path, callbackSuccess }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState();
 
-  const destroy = (id) => {
+  const execute = (id) => {
     api
       .request()
       .delete(`${path}/${id}`)
@@ -27,7 +27,7 @@ export const useRequestDestroy = ({ path, callbackSuccess }) => {
   };
 
   return {
-    execute: destroy,
+    execute,
     response,
     error,
     loading,

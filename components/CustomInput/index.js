@@ -1,23 +1,28 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Block, Input } from 'galio-framework';
+import { Block, Input, Text } from 'galio-framework';
 import { nowTheme } from '../../constants';
 
 const CustomInput = ({ labelText, placeholder, options, value, onChangeText, iconContent }) => {
   return (
-    <Input
-      placeholder={placeholder}
-      labelText={labelText}
-      label={labelText}
-      options={options}
-      value={value}
-      onChangeText={onChangeText}
-      placeholderTextColor={nowTheme.COLORS.MUTED}
-      style={styles.input}
-      color={nowTheme.COLORS.HEADER}
-      iconContent={iconContent}
-      shadowless
-    />
+    <Block>
+      <Text bold style={{ marginLeft: 20 }}>
+        {labelText}
+      </Text>
+      <Input
+        placeholder={placeholder}
+        // labelText={labelText}
+        // label={labelText}
+        options={options}
+        value={value}
+        onChangeText={onChangeText}
+        placeholderTextColor={nowTheme.COLORS.MUTED}
+        style={styles.input}
+        color={nowTheme.COLORS.HEADER}
+        iconContent={iconContent}
+        shadowless
+      />
+    </Block>
   );
 };
 

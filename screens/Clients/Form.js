@@ -96,28 +96,24 @@ const ClientForm = ({ route, navigation }) => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={true}>
-      <Block flex style={styles.cardContainer}>
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-          <CustomInput
-            placeholder="Digite seu nome"
-            labelText="Nome"
-            value={fields.name}
-            onChangeText={(value) => setFields({ ...fields, name: value })}
-            iconContent={<Icon size={16} name="user" family="feather" style={styles.inputIcons} />}
-          />
-        </Block>
+      <Block flex gap={10} style={styles.cardContainer}>
+        <CustomInput
+          placeholder="Digite seu nome"
+          labelText="Nome"
+          value={fields.name}
+          onChangeText={(value) => setFields({ ...fields, name: value })}
+          iconContent={<Icon size={16} name="user" family="feather" style={styles.inputIcons} />}
+        />
 
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-          <CustomInput
-            placeholder="Digite o telefone do cliente"
-            labelText="Telefone"
-            value={fields.cellPhone}
-            onChangeText={(value) => setFields({ ...fields, cellPhone: value })}
-            iconContent={<Icon size={16} name="phone" family="feather" style={styles.inputIcons} />}
-          />
-        </Block>
+        <CustomInput
+          placeholder="Digite o telefone do cliente"
+          labelText="Telefone"
+          value={fields.cellPhone}
+          onChangeText={(value) => setFields({ ...fields, cellPhone: value })}
+          iconContent={<Icon size={16} name="phone" family="feather" style={styles.inputIcons} />}
+        />
 
-        <Block flex center style={{ marginTop: 8 }}>
+        <Block flex center>
           <Text style={styles.styleLabelText}>Mês de aniversário</Text>
           <CustomSelectBottom
             //labelText="Mês de aniversário"
@@ -128,7 +124,7 @@ const ClientForm = ({ route, navigation }) => {
           />
         </Block>
 
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
+        <Block>
           <Text style={styles.styleLabelText}>Tipo de cliente</Text>
           <CustomSelectBottom
             //labelText="Tipo de cliente"
@@ -173,7 +169,7 @@ const ClientForm = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   title: {
     fontFamily: 'montserrat-bold',
-    paddingBottom: theme.SIZES.BASE,
+    // paddingBottom: theme.SIZES.BASE,
 
     // marginTop: 44,
     color: nowTheme.COLORS.HEADER,
@@ -196,7 +192,7 @@ const styles = StyleSheet.create({
   },
   articles: {
     width: width - theme.SIZES.BASE * 2,
-    paddingVertical: theme.SIZES.BASE,
+    // paddingVertical: theme.SIZES.BASE,
     paddingHorizontal: 2,
     fontFamily: 'montserrat-regular',
   },
@@ -206,12 +202,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: theme.SIZES.BASE,
-    paddingBottom: 20,
+    // paddingBottom: 20,
   },
   cardContainer: {
     margin: 15,
     borderRadius: 10,
     backgroundColor: '#fff',
+    padding: 10,
   },
   inputIcons: {
     marginRight: 12,
@@ -222,7 +219,6 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginLeft: 14,
     fontWeight: 500,
-    marginBottom: -12,
   },
 });
 

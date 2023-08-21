@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
+import { StyleSheet, Vibration } from 'react-native';
 import { Button } from 'galio-framework';
 
 import nowTheme from '../constants/Theme';
@@ -18,7 +17,7 @@ class ArButton extends React.Component {
         : color && { backgroundColor: colorStyle },
       round && { borderRadius: nowTheme.SIZES.BASE * 2 },
       !shadowless && styles.shadow,
-      { ...style }
+      { ...style },
     ];
 
     return (
@@ -27,6 +26,14 @@ class ArButton extends React.Component {
         shadowless
         textStyle={{ fontSize: fontSize || 12, fontWeight: '700' }}
         {...props}
+        onPress={() => {
+          const vibrationDuration = 100;
+
+          // Faz o dispositivo vibrar
+          Vibration.vibrate(vibrationDuration);
+
+          this.props.onPress();
+        }}
       >
         {children}
       </Button>
@@ -34,29 +41,13 @@ class ArButton extends React.Component {
   }
 }
 
-ArButton.propTypes = {
-  small: PropTypes.bool,
-  shadowless: PropTypes.bool,
-  color: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      'default',
-      'primary',
-      'info',
-      'error',
-      'success',
-      'warning',
-      'simple',
-      'neutral'
-    ])
-  ])
-};
+ArButton.propTypes = {};
 
 const styles = StyleSheet.create({
   smallButton: {
     width: 75,
-    height: 28
-  }
+    height: 28,
+  },
 });
 
 export default ArButton;

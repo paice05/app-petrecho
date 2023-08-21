@@ -75,14 +75,7 @@ class DropDown extends React.Component {
   }
 }
 
-DropDown.propTypes = {
-  onSelect: PropTypes.func,
-  iconName: PropTypes.string,
-  iconFamily: PropTypes.string,
-  iconSize: PropTypes.number,
-  color: PropTypes.string,
-  textStyle: PropTypes.any,
-};
+DropDown.propTypes = {};
 
 const styles = StyleSheet.create({
   container: { marginBottom: 16 },

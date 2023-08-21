@@ -1,27 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
+import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { Block, Text, Switch } from 'galio-framework';
 
-import { Button, Icon } from '../../components';
 import { Modal } from '../../components/Modal';
+import { useToggle } from '../../components/hooks/useToggle';
 import { AsyncSelect } from '../../components/AsyncSelect';
+import { Button, Icon } from '../../components';
 import { DateTimePicker } from '../../components/DatePiker';
 import { AsyncSelectMulti } from '../../components/AsyncSelectMulti';
+import { useRequestFindOne } from '../../components/hooks/useRequestFindOne';
+import { useRequestCreate } from '../../components/hooks/useRequestCreate';
+import { useRequestUpdate } from '../../components/hooks/useRequestUpdate';
 import { formartDate } from '../../utils/formartDate';
 import { nowTheme } from '../../constants';
-import { api } from '../../services/api';
 import { Config } from './Config';
-
-const { width } = Dimensions.get('screen');
+import { useValidateRequiredFields } from '../../components/hooks/useValidateRequiredFields';
 
 const SchedulesForm = ({ route, navigation }) => {
   const params = route.params;
 
   const isEditing = params?.itemId;
 
-  const [selected, setSelected] = useState('');
-  const [showDate, setShowDate] = useState(false);
+  // const [selected, setSelected] = useState('');
 
   const [fields, setFields] = useState({
     user: null,
@@ -34,38 +35,57 @@ const SchedulesForm = ({ route, navigation }) => {
     isPackage: false,
   });
 
-  useEffect(() => {
-    if (isEditing) {
-      const fetchSchedule = async () => {
-        try {
-          const response = await api.request().get(`/schedules/${isEditing}`);
-          setFields({
-            user: { value: response.data.user.id, label: response.data.user.name },
-            services: response.data.services.map((item) => ({ value: item.id, label: item.name })),
-            employee: { value: response.data.employee.id, label: response.data.employee.name },
-            date: formartDate(response.data.scheduleAt, 'dd-MM-yyyy'),
-            time: new Date(response.data.scheduleAt),
-            isPackage: response.data.isPackage,
-            discount:
-              Number(response.data.discount).toLocaleString('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-                currencyDisplay: 'symbol',
-              }) || null,
-            addition:
-              Number(response.data.addition).toLocaleString('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-                currencyDisplay: 'symbol',
-              }) || null,
-          });
-        } catch (error) {
-          console.log(error);
-        }
-      };
+  const { validate } = useValidateRequiredFields({ fields: ['user', 'services', 'employee'] });
 
-      fetchSchedule();
-    } // busca dados da API
+  const { toggle, onChangeToggle } = useToggle();
+
+  const { execute: execFindOne, response } = useRequestFindOne({
+    path: '/schedules',
+    id: params?.itemId,
+  });
+
+  const { execute: execCreate, response: responseCreated } = useRequestCreate({
+    path: '/schedules',
+  });
+
+  const { execute: execUpdate, response: responseUpdate } = useRequestUpdate({
+    path: '/schedules',
+    id: params?.itemId,
+  });
+
+  useEffect(() => {
+    if (responseCreated) navigation.goBack();
+    if (responseUpdate) navigation.goBack();
+  }, [responseCreated, responseUpdate]);
+
+  useEffect(() => {
+    if (response) {
+      console.log({ response });
+      setFields({
+        user: { value: response.user.id, label: response.user.name },
+        services: response.services.map((item) => ({ value: item.id, label: item.name })),
+        employee: { value: response.employee.id, label: response.employee.name },
+        date: formartDate(response.scheduleAt, 'dd-MM-yyyy'),
+        time: new Date(response.scheduleAt),
+        isPackage: response.isPackage,
+        discount:
+          Number(response.discount).toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+            currencyDisplay: 'symbol',
+          }) || null,
+        addition:
+          Number(response.addition).toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+            currencyDisplay: 'symbol',
+          }) || null,
+      });
+    }
+  }, [response]);
+
+  useEffect(() => {
+    if (isEditing) execFindOne();
   }, []);
 
   const handleSubmitCreate = async () => {
@@ -77,20 +97,17 @@ const SchedulesForm = ({ route, navigation }) => {
 
     const payload = {
       ...fields,
-      services: fields.services.map((item) => item.value),
+      services: fields?.services.map((item) => item.value),
       scheduleAt,
-      userId: fields.user.value,
-      employeeId: fields.employee.value,
+      userId: fields?.user.value,
+      employeeId: fields?.employee.value,
       discount,
       addition,
     };
 
-    try {
-      await api.request().post('/schedules', payload);
-      navigation.goBack();
-    } catch (error) {
-      console.log(error);
-    }
+    const validation = validate(payload);
+
+    execCreate(payload);
   };
 
   const handleSubmitUpdate = async () => {
@@ -110,15 +127,8 @@ const SchedulesForm = ({ route, navigation }) => {
       addition,
     };
 
-    try {
-      await api.request().put(`/schedules/${isEditing}`, payload);
-      navigation.goBack();
-    } catch (error) {
-      console.log(error);
-    }
+    execUpdate(payload);
   };
-
-  const handleToggleShowDate = () => setShowDate(!showDate);
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -204,7 +214,7 @@ const SchedulesForm = ({ route, navigation }) => {
             <Text bold style={{ marginLeft: 20, marginBottom: 5 }}>
               Data
             </Text>
-            <TouchableOpacity onPress={handleToggleShowDate} style={styles.buttonDate}>
+            <TouchableOpacity onPress={onChangeToggle} style={styles.buttonDate}>
               <Block row gap={10}>
                 <Icon size={16} color={nowTheme.COLORS.PRIMARY} name="calendar" family="feather" />
                 <Text size={14}>{fields.date}</Text>
@@ -257,27 +267,25 @@ const SchedulesForm = ({ route, navigation }) => {
 
       <Modal
         title="Selecione uma data"
-        isVisible={showDate}
-        onRequestClose={() => {
-          setShowDate(!showDate);
-        }}
-        handleCancel={() => setShowDate(false)}
+        isVisible={toggle}
+        onRequestClose={onChangeToggle}
+        handleCancel={onChangeToggle}
       >
         <Calendar
           onDayPress={(value) => {
             const [year, month, day] = value.dateString.split('-');
 
             setFields({ ...fields, date: `${day}-${month}-${year}` });
-            setSelected(value.dateString);
-            handleToggleShowDate();
+            onChangeToggle();
+            // setSelected(value.dateString);
           }}
-          markedDates={{
-            [selected]: {
-              selected: true,
-              disableTouchEvent: true,
-              selectedDotColor: 'blue',
-            },
-          }}
+          // markedDates={{
+          //   [selected]: {
+          //     selected: true,
+          //     disableTouchEvent: true,
+          //     selectedDotColor: 'blue',
+          //   },
+          // }}
         />
       </Modal>
     </ScrollView>

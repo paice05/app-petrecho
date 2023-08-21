@@ -2,24 +2,21 @@ import React, { useState } from 'react';
 
 import { api } from '../../services/api';
 
-export const useRequestFindMany = ({ path, defaultQuery = {} }) => {
+export const useRequestCreate = ({ path }) => {
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState();
 
-  const execute = (params = {}) => {
+  const execute = (payload, params = {}) => {
     setLoading(true);
 
     api
       .request()
-      .get(path, {
-        params: {
-          ...defaultQuery,
-          ...params,
-        },
+      .post(path, payload, {
+        params,
       })
-      .then(({ data }) => {
-        setResponse(data);
+      .then(() => {
+        setResponse(true);
 
         setError(false);
         setLoading(false);

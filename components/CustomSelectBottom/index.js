@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Dimensions, StyleSheet, Text } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native';
+import { Text } from 'galio-framework';
 
 import { SelectList } from 'react-native-select-bottom-list';
 import { nowTheme } from '../../constants';
@@ -19,7 +20,7 @@ export const CustomSelectBottom = ({
 }) => {
   return (
     <SafeAreaView>
-      <Text>{labelText}</Text>
+      <Text bold>{labelText}</Text>
 
       <SelectList
         style={styles.input}
@@ -47,8 +48,8 @@ const styles = StyleSheet.create({
     borderColor: nowTheme.COLORS.BORDER,
     height: 44,
     backgroundColor: '#FFFFFF',
-    width: width * 0.8,
-    marginBottom: 16,
+    width: width * 0.9,
+    // marginBottom: 16,
     paddingHorizontal: 20,
 
     display: 'flex',

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { api } from '../../services/api';
 
-export const useRequestFindMany = ({ path, defaultQuery = {} }) => {
+export const useRequestFindOne = ({ path, id, defaultQuery = {} }) => {
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState();
@@ -12,7 +12,7 @@ export const useRequestFindMany = ({ path, defaultQuery = {} }) => {
 
     api
       .request()
-      .get(path, {
+      .get(`${path}/${id}`, {
         params: {
           ...defaultQuery,
           ...params,
