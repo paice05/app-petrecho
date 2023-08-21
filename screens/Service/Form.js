@@ -100,33 +100,33 @@ const ServiceForm = ({ route, navigation }) => {
             }
           />
         </Block>
-      </Block>
 
-      <Block style={styles.container}>
-        <Button
-          textStyle={{
-            fontFamily: 'montserrat-regular',
-            fontSize: 12,
-            fontWeight: 'bold',
-            color: 'black',
-          }}
-          style={styles.button}
-          onPress={() => navigation.goBack()}
-        >
-          Voltar
-        </Button>
-        <Button
-          textStyle={{
-            fontFamily: 'montserrat-regular',
-            fontSize: 12,
-            color: 'white',
-            fontWeight: 'bold',
-          }}
-          style={styles.primary}
-          onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
-        >
-          {isEditing ? 'Editar' : 'Cadastrar'}
-        </Button>
+        <Block style={styles.container}>
+          <Button
+            textStyle={{
+              fontFamily: 'montserrat-regular',
+              fontSize: 12,
+              fontWeight: 'bold',
+              color: 'black',
+            }}
+            style={styles.button}
+            onPress={() => navigation.goBack()}
+          >
+            Voltar
+          </Button>
+          <Button
+            textStyle={{
+              fontFamily: 'montserrat-regular',
+              fontSize: 12,
+              color: 'white',
+              fontWeight: 'bold',
+            }}
+            style={styles.primary}
+            onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
+          >
+            {isEditing ? 'Editar' : 'Cadastrar'}
+          </Button>
+        </Block>
       </Block>
     </ScrollView>
   );
@@ -176,6 +176,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: theme.SIZES.BASE,
+    paddingTop: 15,
   },
   inputIcons: {
     marginRight: 12,

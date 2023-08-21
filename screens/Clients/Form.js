@@ -103,15 +103,7 @@ const ClientForm = ({ route, navigation }) => {
             labelText="Nome"
             value={fields.name}
             onChangeText={(value) => setFields({ ...fields, name: value })}
-            iconContent={
-              <Icon
-                size={16}
-                color="#ABD5BD"
-                name="user"
-                family="feather"
-                style={styles.inputIcons}
-              />
-            }
+            iconContent={<Icon size={16} name="user" family="feather" style={styles.inputIcons} />}
           />
         </Block>
 
@@ -121,15 +113,7 @@ const ClientForm = ({ route, navigation }) => {
             labelText="Telefone"
             value={fields.cellPhone}
             onChangeText={(value) => setFields({ ...fields, cellPhone: value })}
-            iconContent={
-              <Icon
-                size={16}
-                color="#ABD5BD"
-                name="phone"
-                family="feather"
-                style={styles.inputIcons}
-              />
-            }
+            iconContent={<Icon size={16} name="phone" family="feather" style={styles.inputIcons} />}
           />
         </Block>
 
@@ -154,33 +138,33 @@ const ClientForm = ({ route, navigation }) => {
             options={optionsType}
           />
         </Block>
-      </Block>
 
-      <Block style={styles.container}>
-        <Button
-          textStyle={{
-            fontFamily: 'montserrat-regular',
-            fontSize: 12,
-            fontWeight: 'bold',
-            color: 'black',
-          }}
-          style={styles.button}
-          onPress={() => navigation.goBack()}
-        >
-          Voltar
-        </Button>
-        <Button
-          textStyle={{
-            fontFamily: 'montserrat-regular',
-            fontSize: 12,
-            color: 'white',
-            fontWeight: 'bold',
-          }}
-          style={styles.primary}
-          onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
-        >
-          {isEditing ? 'Editar' : 'Cadastrar'}
-        </Button>
+        <Block style={styles.buttonContainer}>
+          <Button
+            textStyle={{
+              fontFamily: 'montserrat-regular',
+              fontSize: 12,
+              fontWeight: 'bold',
+              color: 'black',
+            }}
+            style={styles.button}
+            onPress={() => navigation.goBack()}
+          >
+            Voltar
+          </Button>
+          <Button
+            textStyle={{
+              fontFamily: 'montserrat-regular',
+              fontSize: 12,
+              color: 'white',
+              fontWeight: 'bold',
+            }}
+            style={styles.primary}
+            onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
+          >
+            {isEditing ? 'Editar' : 'Cadastrar'}
+          </Button>
+        </Block>
       </Block>
     </ScrollView>
   );
@@ -216,12 +200,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 2,
     fontFamily: 'montserrat-regular',
   },
-  container: {
+  buttonContainer: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: theme.SIZES.BASE,
+    paddingBottom: 20,
   },
   cardContainer: {
     margin: 15,
@@ -230,14 +215,14 @@ const styles = StyleSheet.create({
   },
   inputIcons: {
     marginRight: 12,
-    color: nowTheme.COLORS.ICON_INPUT,
+    color: nowTheme.COLORS.PRIMARY,
   },
   styleLabelText: {
     fontSize: 14,
     alignSelf: 'flex-start',
-    marginLeft: 16,
+    marginLeft: 14,
     fontWeight: 500,
-    marginBottom: -6,
+    marginBottom: -12,
   },
 });
 

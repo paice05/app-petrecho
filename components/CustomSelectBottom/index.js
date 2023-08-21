@@ -33,7 +33,7 @@ export const CustomSelectBottom = ({
         listHeight={300}
         textStyle={{ fontSize: 14, marginLeft: 18, color: nowTheme.COLORS.BORDER }}
         itemTextStyle={itemTextStyle}
-        renderIcon={() => <Icon family="feather" name="user" />}
+        renderIcon={() => <Icon family="feather" name="user" color={nowTheme.COLORS.PRIMARY} />}
         // showSearch
       />
     </SafeAreaView>
