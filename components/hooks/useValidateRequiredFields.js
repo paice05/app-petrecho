@@ -1,29 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export const useValidateRequiredFields = ({ fields = [] }) => {
+  const [errors, setErrors] = useState(
+    fields.reduce((acc, cur) => {
+      return {
+        ...acc,
+        [cur]: false,
+      };
+    }, {})
+  );
+
   const validate = (values) => {
     const validate = fields.filter((item) => {
-      if (Array.isArray(values[item])) return values[item].length === 0;
-
-      if (typeof values[item] === 'object') return Object.values(values[item]).length === 0;
+      if (Array.isArray(values[item]) && !values[item].length) return true;
 
       return !values[item];
     });
 
     if (validate.length) {
-      return {
-        errors: true,
-        fields: validate,
-      };
+      setErrors(validate.reduce((acc, cur) => ({ ...acc, [cur]: true }), {}));
+    } else {
+      setErrors(
+        fields.reduce((acc, cur) => {
+          return {
+            ...acc,
+            [cur]: false,
+          };
+        }, {})
+      );
     }
-
-    return {
-      errors: false,
-      fields: [],
-    };
   };
 
   return {
     validate,
+    errors,
   };
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { Block, Text, Switch } from 'galio-framework';
 
@@ -22,8 +22,6 @@ const SchedulesForm = ({ route, navigation }) => {
 
   const isEditing = params?.itemId;
 
-  // const [selected, setSelected] = useState('');
-
   const [fields, setFields] = useState({
     user: null,
     services: [], // value label
@@ -35,11 +33,17 @@ const SchedulesForm = ({ route, navigation }) => {
     isPackage: false,
   });
 
-  const { validate } = useValidateRequiredFields({ fields: ['user', 'services', 'employee'] });
+  const { validate, errors } = useValidateRequiredFields({
+    fields: ['user', 'services', 'employee', 'date', 'time'],
+  });
 
   const { toggle, onChangeToggle } = useToggle();
 
-  const { execute: execFindOne, response } = useRequestFindOne({
+  const {
+    execute: execFindOne,
+    response,
+    loading,
+  } = useRequestFindOne({
     path: '/schedules',
     id: params?.itemId,
   });
@@ -60,7 +64,6 @@ const SchedulesForm = ({ route, navigation }) => {
 
   useEffect(() => {
     if (response) {
-      console.log({ response });
       setFields({
         user: { value: response.user.id, label: response.user.name },
         services: response.services.map((item) => ({ value: item.id, label: item.name })),
@@ -88,9 +91,14 @@ const SchedulesForm = ({ route, navigation }) => {
     if (isEditing) execFindOne();
   }, []);
 
-  const handleSubmitCreate = async () => {
-    const [day, month, year] = fields.date.split('-');
+  useEffect(() => {
+    validate(fields);
+  }, [fields]);
 
+  const handleSubmitCreate = async () => {
+    if (Object.values(errors).filter(Boolean).length) return;
+
+    const [day, month, year] = fields.date.split('-');
     const scheduleAt = new Date(`${year}-${month}-${day} ${formartDate(fields.time, 'HH:mm')}:00`);
     const discount = fields.discount.toString().replace('R$', '').replace(',', '.');
     const addition = fields.addition.toString().replace('R$', '').replace(',', '.');
@@ -105,14 +113,13 @@ const SchedulesForm = ({ route, navigation }) => {
       addition,
     };
 
-    const validation = validate(payload);
-
     execCreate(payload);
   };
 
   const handleSubmitUpdate = async () => {
-    const [day, month, year] = fields.date.split('-');
+    if (Object.values(errors).filter(Boolean).length) return;
 
+    const [day, month, year] = fields.date.split('-');
     const scheduleAt = new Date(`${year}-${month}-${day} ${formartDate(fields.time, 'HH:mm')}:00`);
     const discount = fields?.discount.replace('R$', '').replace(',', '.');
     const addition = fields?.addition.replace('R$', '').replace(',', '.');
@@ -130,34 +137,55 @@ const SchedulesForm = ({ route, navigation }) => {
     execUpdate(payload);
   };
 
+  if (loading)
+    return (
+      <Block>
+        <ActivityIndicator size="large" colo="#0000ff" />
+      </Block>
+    );
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Block gap={15} flex style={styles.group}>
-        <AsyncSelect
-          path="/users"
-          query={{ type: 'pf' }}
-          placeholder="Pesquise um cliente"
-          labelText="Cliente"
-          onChange={(item) =>
-            item && setFields({ ...fields, user: { value: item.value, label: item.label } })
-          }
-          value={fields.user}
-          icon="user"
-        />
+        <Block>
+          <AsyncSelect
+            path="/users"
+            query={{ type: 'pf' }}
+            placeholder="Pesquise um cliente"
+            labelText="Cliente"
+            onChange={(item) =>
+              item && setFields({ ...fields, user: { value: item.value, label: item.label } })
+            }
+            value={fields.user}
+            icon="user"
+          />
+          {errors?.['user'] && (
+            <Text center size={12} color={nowTheme.COLORS.PRIMARY}>
+              campo obrigatório
+            </Text>
+          )}
+        </Block>
 
-        <AsyncSelectMulti
-          isMulti
-          path="/services"
-          placeholder="Pesquise um serviço"
-          labelText="Serviços"
-          value={fields.services}
-          onChange={(item) => {
-            if (fields.services.some((service) => item.value === service.value)) return;
+        <Block>
+          <AsyncSelectMulti
+            isMulti
+            path="/services"
+            placeholder="Pesquise um serviço"
+            labelText="Serviços"
+            value={fields.services}
+            onChange={(item) => {
+              if (fields.services.some((service) => item.value === service.value)) return;
 
-            setFields({ ...fields, services: [...fields.services, item] });
-          }}
-          icon="tool"
-        />
+              setFields({ ...fields, services: [...fields.services, item] });
+            }}
+            icon="tool"
+          />
+          {errors?.['services'] && (
+            <Text center size={12} color={nowTheme.COLORS.PRIMARY}>
+              campo obrigatório
+            </Text>
+          )}
+        </Block>
 
         {fields?.services?.length > 0 && (
           <Block flex={1} style={{ paddingHorizontal: 20 }}>
@@ -197,17 +225,24 @@ const SchedulesForm = ({ route, navigation }) => {
           </Block>
         )}
 
-        <AsyncSelect
-          path="/users"
-          query={{ type: 'pj' }}
-          placeholder="Pesquise um funcionário"
-          labelText="Funcionário"
-          onChange={(item) =>
-            item && setFields({ ...fields, employee: { value: item.value, label: item.label } })
-          }
-          value={fields.employee}
-          icon="user"
-        />
+        <Block>
+          <AsyncSelect
+            path="/users"
+            query={{ type: 'pj' }}
+            placeholder="Pesquise um funcionário"
+            labelText="Funcionário"
+            onChange={(item) =>
+              item && setFields({ ...fields, employee: { value: item.value, label: item.label } })
+            }
+            value={fields.employee}
+            icon="user"
+          />
+          {errors?.['employee'] && (
+            <Text center size={12} color={nowTheme.COLORS.PRIMARY}>
+              campo obrigatório
+            </Text>
+          )}
+        </Block>
 
         <Block row space="between" gap={10}>
           <Block flex={1}>
@@ -277,15 +312,7 @@ const SchedulesForm = ({ route, navigation }) => {
 
             setFields({ ...fields, date: `${day}-${month}-${year}` });
             onChangeToggle();
-            // setSelected(value.dateString);
           }}
-          // markedDates={{
-          //   [selected]: {
-          //     selected: true,
-          //     disableTouchEvent: true,
-          //     selectedDotColor: 'blue',
-          //   },
-          // }}
         />
       </Modal>
     </ScrollView>
