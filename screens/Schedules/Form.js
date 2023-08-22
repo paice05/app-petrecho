@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import { Calendar } from 'react-native-calendars';
+import React, { useEffect, useState } from 'react';
 import { Block, Text, Switch } from 'galio-framework';
+import { Calendar } from 'react-native-calendars';
 
-import { Modal } from '../../components/Modal';
-import { useToggle } from '../../components/hooks/useToggle';
-import { AsyncSelect } from '../../components/AsyncSelect';
-import { Button, Icon } from '../../components';
-import { DateTimePicker } from '../../components/DatePiker';
-import { AsyncSelectMulti } from '../../components/AsyncSelectMulti';
+import { useValidateRequiredFields } from '../../components/hooks/useValidateRequiredFields';
 import { useRequestFindOne } from '../../components/hooks/useRequestFindOne';
 import { useRequestCreate } from '../../components/hooks/useRequestCreate';
 import { useRequestUpdate } from '../../components/hooks/useRequestUpdate';
+import { AsyncSelectMulti } from '../../components/AsyncSelectMulti';
+import { DateTimePicker } from '../../components/DatePiker';
+import { Button, Icon } from '../../components';
+import { AsyncSelect } from '../../components/AsyncSelect';
+import { useToggle } from '../../components/hooks/useToggle';
+import { Modal } from '../../components/Modal';
+
 import { formartDate } from '../../utils/formartDate';
 import { nowTheme } from '../../constants';
 import { Config } from './Config';
-import { useValidateRequiredFields } from '../../components/hooks/useValidateRequiredFields';
 
 const SchedulesForm = ({ route, navigation }) => {
   const params = route.params;
-
   const isEditing = params?.itemId;
 
   const [fields, setFields] = useState({
@@ -160,7 +160,7 @@ const SchedulesForm = ({ route, navigation }) => {
             icon="user"
           />
           {errors?.['user'] && (
-            <Text center size={12} color={nowTheme.COLORS.PRIMARY}>
+            <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
               campo obrigatório
             </Text>
           )}
@@ -181,7 +181,7 @@ const SchedulesForm = ({ route, navigation }) => {
             icon="tool"
           />
           {errors?.['services'] && (
-            <Text center size={12} color={nowTheme.COLORS.PRIMARY}>
+            <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
               campo obrigatório
             </Text>
           )}
@@ -201,19 +201,12 @@ const SchedulesForm = ({ route, navigation }) => {
                   }
                   style={{ flex: 1 }}
                 >
-                  <Block
-                    row
-                    gap={5}
-                    style={{
-                      paddingBottom: 7,
-                      paddingRight: 15,
-                    }}
-                  >
-                    <Text color="gray" size={14}>
+                  <Block row gap={5} style={styles.serviceItem}>
+                    <Text color="gray" size={16}>
                       {item?.label}
                     </Text>
                     <Icon
-                      size={14}
+                      size={16}
                       color={nowTheme.COLORS.PRIMARY}
                       name="trash-2"
                       family="feather"
@@ -238,7 +231,7 @@ const SchedulesForm = ({ route, navigation }) => {
             icon="user"
           />
           {errors?.['employee'] && (
-            <Text center size={12} color={nowTheme.COLORS.PRIMARY}>
+            <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
               campo obrigatório
             </Text>
           )}
@@ -246,18 +239,18 @@ const SchedulesForm = ({ route, navigation }) => {
 
         <Block row space="between" gap={10}>
           <Block flex={1}>
-            <Text bold style={{ marginLeft: 20, marginBottom: 5 }}>
+            <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
               Data
             </Text>
             <TouchableOpacity onPress={onChangeToggle} style={styles.buttonDate}>
               <Block row gap={10}>
                 <Icon size={16} color={nowTheme.COLORS.PRIMARY} name="calendar" family="feather" />
-                <Text size={14}>{fields.date}</Text>
+                <Text size={16}>{fields.date}</Text>
               </Block>
             </TouchableOpacity>
           </Block>
           <Block flex={1}>
-            <Text bold style={{ marginLeft: 20, marginBottom: 5 }}>
+            <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
               Horário
             </Text>
 
@@ -276,7 +269,7 @@ const SchedulesForm = ({ route, navigation }) => {
           />
           <Text
             style={{ paddingBottom: 15, paddingHorizontal: 10 }}
-            size={14}
+            size={16}
             color={nowTheme.COLORS.PRIMARY}
           >
             sessão de pacote
@@ -287,13 +280,15 @@ const SchedulesForm = ({ route, navigation }) => {
 
         <Block row space="between">
           <Button style={styles.button} onPress={() => navigation.goBack()}>
-            <Text bold>Voltar</Text>
+            <Text size={16} bold>
+              Voltar
+            </Text>
           </Button>
           <Button
             style={styles.primary}
             onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
           >
-            <Text bold color="#fff">
+            <Text size={16} bold color="#fff">
               {isEditing ? 'Atualizar' : 'Cadastrar'}
             </Text>
           </Button>
@@ -325,6 +320,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: '#fff',
     padding: 8,
+  },
+  serviceItem: {
+    paddingBottom: 7,
+    paddingRight: 15,
+    alignItems: 'center',
   },
   button: {
     marginBottom: nowTheme.SIZES.BASE,

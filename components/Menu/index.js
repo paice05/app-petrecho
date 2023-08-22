@@ -25,7 +25,7 @@ const SimpleMenu = ({ children, items = [] }) => {
             children || (
               <Block style={styles.more} middle>
                 <Icon
-                  size={12}
+                  size={20}
                   color={nowTheme.COLORS.PRIMARY}
                   name="more-vertical"
                   family="feather"
@@ -53,9 +53,13 @@ const SimpleMenu = ({ children, items = [] }) => {
                     item.onSelect(item.text);
                   }}
                   children={
-                    <Block row gap={7}>
-                      {item.icon && <Icon color={item.color} name={item.icon} family="feather" />}
-                      <Text color={item.color}>{item.text}</Text>
+                    <Block row gap={7} style={{ alignItems: 'center' }}>
+                      {item.icon && (
+                        <Icon size={18} color={item.color} name={item.icon} family="feather" />
+                      )}
+                      <Text size={18} color={item.color}>
+                        {item.text}
+                      </Text>
                     </Block>
                   }
                 />
@@ -71,8 +75,8 @@ export default SimpleMenu;
 
 const styles = StyleSheet.create({
   more: {
-    width: 25,
-    height: 25,
+    width: 35,
+    height: 35,
     borderWidth: 1,
     borderStyle: 'solid',
     borderColor: nowTheme.COLORS.PRIMARY,

@@ -53,19 +53,19 @@ const CardSchedule = ({
             }}
           >
             <Block row style={{ alignItems: 'center' }}>
-              <Text style={{ textDecorationLine: 'underline' }}>
+              <Text size={18} style={{ textDecorationLine: 'underline' }}>
                 {nome?.slice(0, 30)}
                 {isLargeName ? '...' : ''}
               </Text>
               {pacote ? (
-                <Text color="gray" size={10}>
+                <Text color="gray" size={12}>
                   {' '}
                   (pacote)
                 </Text>
               ) : null}
             </Block>
           </TouchableOpacity>
-          <Text size={12} color="gray">
+          <Text size={16} color="gray">
             {servico}
           </Text>
         </Block>
@@ -100,23 +100,23 @@ const CardSchedule = ({
         </Block>
       </Block>
       <Block row style={styles.wrapperInfo}>
-        <Block row gap={5}>
+        <Block row gap={5} style={styles.actionIcon}>
           <Icon color={nowTheme.COLORS.PRIMARY} name="calendar" family="feather" />
-          <Text bold size={12}>
+          <Text bold size={14}>
             {dia}
           </Text>
         </Block>
 
-        <Block row gap={5}>
+        <Block row gap={5} style={styles.actionIcon}>
           <Icon color={nowTheme.COLORS.PRIMARY} name="clock" family="feather" />
-          <Text bold size={12}>
+          <Text bold size={14}>
             {horario}
           </Text>
         </Block>
 
-        <Block row gap={5}>
+        <Block row gap={5} style={styles.actionIcon}>
           <Icon color={nowTheme.COLORS.PRIMARY} name={icon[status] || ''} family="feather" />
-          <Text bold size={12}>
+          <Text bold size={14}>
             {statusText[status] || 'Não definido'}
           </Text>
         </Block>
@@ -125,12 +125,12 @@ const CardSchedule = ({
       {status === 'pending' && (
         <Block row style={styles.wrapperButtons}>
           <Button onPress={onCanceled} style={styles.button}>
-            <Text bold size={12}>
+            <Text bold size={16}>
               Cancelar
             </Text>
           </Button>
           <Button onPress={onFinished} style={[styles.button, styles.primary]}>
-            <Text color="white" bold size={12}>
+            <Text color="white" bold size={16}>
               Confirmar
             </Text>
           </Button>
@@ -167,6 +167,9 @@ const styles = StyleSheet.create({
   },
   primary: {
     backgroundColor: '#c84648',
+  },
+  actionIcon: {
+    alignItems: 'center',
   },
 });
 

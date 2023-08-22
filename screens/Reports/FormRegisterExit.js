@@ -52,7 +52,7 @@ const RegisterExitForm = ({ navigation }) => {
               }
             />
             {errors?.['description'] && (
-              <Text center size={12} color={nowTheme.COLORS.PRIMARY}>
+              <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
                 campo obrigatório
               </Text>
             )}
@@ -69,7 +69,7 @@ const RegisterExitForm = ({ navigation }) => {
               }
             />
             {errors?.['value'] && (
-              <Text center size={12} color={nowTheme.COLORS.PRIMARY}>
+              <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
                 campo obrigatório
               </Text>
             )}
@@ -80,7 +80,7 @@ const RegisterExitForm = ({ navigation }) => {
           <Button
             textStyle={{
               fontFamily: 'montserrat-regular',
-              fontSize: 12,
+              fontSize: 16,
               fontWeight: 'bold',
               color: 'black',
             }}
@@ -92,7 +92,7 @@ const RegisterExitForm = ({ navigation }) => {
           <Button
             textStyle={{
               fontFamily: 'montserrat-regular',
-              fontSize: 12,
+              fontSize: 16,
               color: 'white',
               fontWeight: 'bold',
             }}

@@ -6,7 +6,7 @@ import { nowTheme } from '../../constants';
 const CustomInput = ({ labelText, placeholder, options, value, onChangeText, iconContent }) => {
   return (
     <Block>
-      <Text bold style={{ marginLeft: 20 }}>
+      <Text size={16} bold style={{ marginLeft: 20 }}>
         {labelText}
       </Text>
       <Input
@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     borderColor: nowTheme.COLORS.BORDER,
     height: 44,
     backgroundColor: '#FFFFFF',
+    fontSize: 16,
   },
 });
 

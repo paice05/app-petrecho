@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, Vibration } from 'react-native';
 import { Block, Text } from 'galio-framework';
 
 import { Button, Icon } from '../../components';
@@ -10,13 +10,21 @@ import { CustomInputMask } from '../../components/CustomInputMask';
 export const Config = ({ fields, setFields }) => {
   const [show, setShow] = useState(false);
 
-  const handleToggleShow = () => setShow(!show);
+  const handleToggleShow = () => {
+    const vibrationDuration = 100;
 
+    // Faz o dispositivo vibrar
+    Vibration.vibrate(vibrationDuration);
+
+    setShow(!show);
+  };
   return (
     <Block gap={20}>
       <TouchableOpacity onPress={handleToggleShow}>
         <Block row space="between" style={show ? styles.containerOpen : styles.containerClose}>
-          <Text color={nowTheme.COLORS.PRIMARY}> configurações gerais </Text>
+          <Text size={16} color={nowTheme.COLORS.PRIMARY}>
+            configurações gerais
+          </Text>
 
           <Icon
             name="chevron-down"
@@ -31,7 +39,7 @@ export const Config = ({ fields, setFields }) => {
       {show && (
         <Block row gap={10}>
           <Block flex={1}>
-            <Text bold style={{ marginLeft: 20, marginBottom: 5 }}>
+            <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
               Desconto
             </Text>
             <CustomInputMask
@@ -40,7 +48,7 @@ export const Config = ({ fields, setFields }) => {
             />
           </Block>
           <Block flex={1}>
-            <Text bold style={{ marginLeft: 20, marginBottom: 5 }}>
+            <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
               Adicional
             </Text>
             <CustomInputMask

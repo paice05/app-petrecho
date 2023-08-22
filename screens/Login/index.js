@@ -121,9 +121,9 @@ const Login = ({ navigation }) => {
                           />
                         </Block>
                         {isError && (
-                          <Text center color="red">
-                            {' '}
-                            Erro no login{' '}
+                          <Text center size={12} color="red">
+                            Desculpe, mas as informações de login que você inseriu estão incorretas.
+                            Por favor, verifique o nome de usuário e senha e tente novamente.
                           </Text>
                         )}
                       </Block>
@@ -134,11 +134,7 @@ const Login = ({ navigation }) => {
                           round
                           style={styles.createButton}
                         >
-                          <Text
-                            style={{ fontFamily: 'montserrat-bold' }}
-                            size={14}
-                            color={nowTheme.COLORS.WHITE}
-                          >
+                          <Text bold size={14} color={nowTheme.COLORS.WHITE}>
                             Entrar
                           </Text>
                         </Button>
@@ -211,7 +207,10 @@ const styles = StyleSheet.create({
     paddingTop: 6,
   },
   createButton: {
-    width: width * 0.5,
+    marginBottom: nowTheme.SIZES.BASE,
+    borderRadius: 10,
+    width: 120,
+    height: 40,
     backgroundColor: nowTheme.COLORS.PRIMARY,
   },
   cardTitle: {

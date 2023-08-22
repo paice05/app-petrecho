@@ -94,14 +94,14 @@ export default class Tabs extends React.Component {
       >
         <Block style={containerStyles}>
           <Animated.View style={[styles.menuTitle]}>
-            <Text center color={isActive ? nowTheme.COLORS.WHITE : ''} size={8}>
+            <Text center color={isActive ? nowTheme.COLORS.WHITE : ''} size={10}>
               {item.title}
             </Text>
             <Text
               style={{ paddingHorizontal: 15 }}
               center
               color={isActive ? nowTheme.COLORS.WHITE : ''}
-              size={15}
+              size={18}
             >
               {day}
             </Text>

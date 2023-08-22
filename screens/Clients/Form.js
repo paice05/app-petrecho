@@ -119,7 +119,7 @@ const ClientForm = ({ route, navigation }) => {
             iconContent={<Icon size={16} name="user" family="feather" style={styles.inputIcons} />}
           />
           {errors?.['name'] && (
-            <Text center size={12} color={nowTheme.COLORS.PRIMARY}>
+            <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
               campo obrigatório
             </Text>
           )}
@@ -134,7 +134,9 @@ const ClientForm = ({ route, navigation }) => {
         />
 
         <Block gap={-12} marginBottom={8}>
-          <Text style={styles.styleLabelText}>Mês de aniversário</Text>
+          <Text bold size={16} style={styles.styleLabelText}>
+            Mês de aniversário
+          </Text>
           <CustomSelectBottom
             placeholder="Escolha um mês"
             value={fields.birthDate}
@@ -144,7 +146,9 @@ const ClientForm = ({ route, navigation }) => {
         </Block>
 
         <Block gap={-12} marginBottom={10}>
-          <Text style={styles.styleLabelText}>Tipo de cliente</Text>
+          <Text bold size={16} style={styles.styleLabelText}>
+            Tipo de cliente
+          </Text>
           <CustomSelectBottom
             placeholder="Escolha um tipo"
             value={fields.type}
@@ -155,14 +159,16 @@ const ClientForm = ({ route, navigation }) => {
 
         <Block row center style={styles.buttonContainer}>
           <Button style={styles.button} onPress={() => navigation.goBack()}>
-            <Text bold>Voltar</Text>
+            <Text size={16} bold>
+              Voltar
+            </Text>
           </Button>
           <Button
             style={styles.primary}
             onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
           >
-            <Text bold color="#fff">
-              {isEditing ? 'Editar' : 'Cadastrar'}
+            <Text size={16} bold color="#fff">
+              {isEditing ? 'Atualizar' : 'Cadastrar'}
             </Text>
           </Button>
         </Block>
@@ -202,10 +208,8 @@ const styles = StyleSheet.create({
     color: nowTheme.COLORS.PRIMARY,
   },
   styleLabelText: {
-    fontSize: 14,
     alignSelf: 'flex-start',
     marginLeft: 22,
-    fontWeight: 'bold',
   },
 });
 

@@ -9,11 +9,10 @@ export const Navigation = ({ items = [] }) => {
 
   return (
     <Block>
-      <Block row center>
+      <Block row center gap={20} style={styles.container}>
         {items.map((item, index) => (
-          <Block key={index} row center>
+          <Block key={index}>
             <TouchableOpacity
-              style={styles.button}
               onPress={() => {
                 const vibrationDuration = 100;
 
@@ -23,11 +22,14 @@ export const Navigation = ({ items = [] }) => {
                 setActive(index);
               }}
             >
-              <Text size={16} color={index === active && nowTheme.COLORS.PRIMARY}>
+              <Text
+                style={index === 0 ? styles.divider : {}}
+                size={18}
+                color={index === active && nowTheme.COLORS.PRIMARY}
+              >
                 {item.title}
               </Text>
             </TouchableOpacity>
-            {index < items.length - 1 && <Block style={styles.divider} />}
           </Block>
         ))}
       </Block>
@@ -38,12 +40,11 @@ export const Navigation = ({ items = [] }) => {
 
 const styles = StyleSheet.create({
   divider: {
-    backgroundColor: 'gray',
-    width: 1,
-    height: 20,
-    marginHorizontal: 20,
+    borderColor: 'gray',
+    borderRightWidth: 1,
+    paddingRight: 20,
   },
-  button: {
+  container: {
     padding: 8,
   },
 });

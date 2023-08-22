@@ -9,7 +9,7 @@ const IconNowExtra = createIconSetFromIcoMoon(nowConfig, 'NowExtra');
 
 class IconExtra extends React.Component {
   state = {
-    fontLoaded: false
+    fontLoaded: false,
   };
 
   async componentDidMount() {
@@ -24,7 +24,7 @@ class IconExtra extends React.Component {
       if (family === 'NowExtra') {
         return <IconNowExtra name={name} family={family} {...rest} />;
       }
-      return <Icon name={name} family={family} {...rest} />;
+      return <Icon size={this.props.size || 16} name={name} family={family} {...rest} />;
     }
 
     return null;

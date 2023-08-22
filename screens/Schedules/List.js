@@ -128,7 +128,7 @@ const ScheduleList = ({ navigation }) => {
   return (
     <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
       <TouchableOpacity style={styles.dateStyle} onPress={() => setOpenCalendar(true)}>
-        <Text bold colo="#e6e6e6">
+        <Text bold colo="#e6e6e6" size={18}>
           {formartDate(date, 'dd  MMMM YYY')}
         </Text>
       </TouchableOpacity>
@@ -157,7 +157,7 @@ const ScheduleList = ({ navigation }) => {
                 ) : (
                   <Block style={{ marginVertical: 10 }}>
                     {schedules.length === 0 && (
-                      <Text center style={{ marginTop: 20, marginBottom: 20 }}>
+                      <Text size={18} center style={{ marginTop: 20, marginBottom: 20 }}>
                         Nenhum registro encontrado
                       </Text>
                     )}

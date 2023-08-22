@@ -185,7 +185,7 @@ class DrawerItem extends React.Component {
                 textTransform: 'uppercase',
                 fontWeight: '300',
               }}
-              size={12}
+              size={16}
               bold={focused ? true : false}
               color={focused ? nowTheme.COLORS.PRIMARY : 'black'}
             >

@@ -19,9 +19,9 @@ export const DateTimePicker = ({ onChange, value = new Date() }) => {
   return (
     <Block>
       <TouchableOpacity style={styles.buttonDate} onPress={() => setShowDatePicker(true)}>
-        <Block row gap={10}>
+        <Block row gap={10} style={{ alignItems: 'center' }}>
           <IconExtra size={16} color={nowTheme.COLORS.PRIMARY} name="clock" family="feather" />
-          <Text size={14}>{formartDate(value, 'HH:mm')}</Text>
+          <Text size={16}>{formartDate(value, 'HH:mm')}</Text>
         </Block>
       </TouchableOpacity>
       {showDatePicker && (

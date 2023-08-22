@@ -42,7 +42,7 @@ export function AsyncSelect({ path, query = {}, labelText, placeholder, onChange
 
   return (
     <View style={styles.container}>
-      <Text bold style={{ marginLeft: 20, marginBottom: 5 }}>
+      <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
         {labelText}
       </Text>
       <Dropdown
@@ -101,11 +101,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   placeholderStyle: {
-    fontSize: 14,
+    fontSize: 16,
     color: 'gray',
   },
   selectedTextStyle: {
-    fontSize: 14,
+    fontSize: 16,
   },
   iconStyle: {
     width: 20,

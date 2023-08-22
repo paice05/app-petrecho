@@ -26,12 +26,14 @@ const CardClient = ({ navigation, id, nome, tipo, telefone, aniversario, onDelet
               });
             }}
           >
-            <Text style={{ textDecorationLine: 'underline' }}>
+            <Text size={18} style={{ textDecorationLine: 'underline' }}>
               {nome?.slice(0, 20)}
               {isLargeName ? '...' : ''}
             </Text>
           </TouchableOpacity>
-          <Text color="gray">{tipo}</Text>
+          <Text size={16} color="gray">
+            {tipo}
+          </Text>
         </Block>
 
         <Menu
@@ -56,16 +58,16 @@ const CardClient = ({ navigation, id, nome, tipo, telefone, aniversario, onDelet
       </Block>
 
       <Block row style={styles.wrapperInfo}>
-        <Block row gap={5}>
-          <Icon color={nowTheme.COLORS.PRIMARY} name="phone" family="feather" />
-          <Text bold size={12}>
+        <Block row gap={5} style={{ alignItems: 'center' }}>
+          <Icon size={18} color={nowTheme.COLORS.PRIMARY} name="phone" family="feather" />
+          <Text size={16} bold>
             {telefone}
           </Text>
         </Block>
 
-        <Block row gap={5}>
-          <Icon color={nowTheme.COLORS.PRIMARY} name="calendar" family="feather" />
-          <Text bold size={12}>
+        <Block row gap={5} style={{ alignItems: 'center' }}>
+          <Icon size={18} color={nowTheme.COLORS.PRIMARY} name="calendar" family="feather" />
+          <Text size={16} bold>
             {aniversario}
           </Text>
         </Block>

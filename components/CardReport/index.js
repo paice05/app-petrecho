@@ -8,7 +8,7 @@ const CardReport = ({ navigation, date, entryValue, outPutValue, id }) => {
     <Block flex space="between" style={styles.container}>
       <Block style={styles.wrapper}>
         <Block row space="between">
-          <Text size={16}>Entrada</Text>
+          <Text size={18}>Entrada</Text>
           <TouchableOpacity
             onPress={() =>
               navigation.navigate('EntryReports', {
@@ -16,14 +16,16 @@ const CardReport = ({ navigation, date, entryValue, outPutValue, id }) => {
               })
             }
           >
-            <Text color={nowTheme.COLORS.PRIMARY}>Ver mais</Text>
+            <Text size={16} color={nowTheme.COLORS.PRIMARY}>
+              Ver mais
+            </Text>
           </TouchableOpacity>
         </Block>
         <Text style={styles.entryValue}>R$ {Number(entryValue).toFixed(2).replace('.', ',')}</Text>
       </Block>
       <Block style={styles.wrapper}>
         <Block row space="between">
-          <Text size={16}>Saída</Text>
+          <Text size={18}>Saída</Text>
           <TouchableOpacity
             onPress={() =>
               navigation.navigate('ExitReports', {
@@ -31,7 +33,9 @@ const CardReport = ({ navigation, date, entryValue, outPutValue, id }) => {
               })
             }
           >
-            <Text color={nowTheme.COLORS.PRIMARY}>Ver mais</Text>
+            <Text size={16} color={nowTheme.COLORS.PRIMARY}>
+              Ver mais
+            </Text>
           </TouchableOpacity>
         </Block>
         <Text style={styles.outPutValue}>
@@ -39,7 +43,9 @@ const CardReport = ({ navigation, date, entryValue, outPutValue, id }) => {
         </Text>
       </Block>
       <TouchableOpacity onPress={() => navigation.navigate('FormRegisterExits', { itemId: id })}>
-        <Text style={styles.checkOut}>Registrar saída</Text>
+        <Text size={18} style={styles.checkOut}>
+          Registrar saída
+        </Text>
       </TouchableOpacity>
     </Block>
   );
@@ -62,7 +68,6 @@ const styles = StyleSheet.create({
     color: nowTheme.COLORS.ERROR,
   },
   checkOut: {
-    fontSize: 14,
     color: nowTheme.COLORS.PRIMARY,
     textDecorationLine: 'underline',
   },

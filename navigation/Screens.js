@@ -201,7 +201,7 @@ function ClientsStack(props) {
 
             return (
               <Header
-                title={isEditing ? 'Atualizar cliente' : 'Novo Cliente'}
+                title={isEditing ? 'Atualizar cliente' : 'Novo cliente'}
                 back
                 navigation={navigation}
                 scene={scene}
@@ -246,7 +246,7 @@ function SchedulesStack(props) {
 
             return (
               <Header
-                title={isEditing ? 'Atualizar agendamento' : 'Novo Agendamento'}
+                title={isEditing ? 'Atualizar agendamento' : 'Novo agendamento'}
                 back
                 navigation={navigation}
                 scene={scene}
@@ -290,7 +290,7 @@ function ServicesStack(props) {
 
             return (
               <Header
-                title={isEditing ? 'Atualizar serviço' : 'Novo Serviço'}
+                title={isEditing ? 'Atualizar serviço' : 'Novo serviço'}
                 back
                 navigation={navigation}
                 scene={scene}

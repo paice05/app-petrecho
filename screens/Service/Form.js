@@ -101,19 +101,22 @@ const ServiceForm = ({ route, navigation }) => {
             }
           />
           {errors?.['name'] && (
-            <Text center size={12} color={nowTheme.COLORS.PRIMARY}>
+            <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
               campo obrigatório
             </Text>
           )}
         </Block>
 
         <Block>
+          <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
+            Preço
+          </Text>
           <CustomInputMask
             value={fields.price}
             onChangeText={(text) => setFields({ ...fields, price: text })}
           />
           {errors?.['price'] && (
-            <Text center size={12} color={nowTheme.COLORS.PRIMARY}>
+            <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
               campo obrigatório
             </Text>
           )}
@@ -121,14 +124,16 @@ const ServiceForm = ({ route, navigation }) => {
 
         <Block row center>
           <Button style={styles.button} onPress={() => navigation.goBack()}>
-            <Text bold>Voltar</Text>
+            <Text size={16} bold>
+              Voltar
+            </Text>
           </Button>
           <Button
             style={styles.primary}
             onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
           >
-            <Text bold color="#fff">
-              {isEditing ? 'Editar' : 'Cadastrar'}
+            <Text size={16} bold color="#fff">
+              {isEditing ? 'Atualizar' : 'Cadastrar'}
             </Text>
           </Button>
         </Block>

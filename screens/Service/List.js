@@ -105,7 +105,7 @@ const Services = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   card: {
-    padding: 8,
+    padding: 15,
   },
 });
 

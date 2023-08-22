@@ -24,12 +24,14 @@ const CardService = ({ navigation, id, nome, valor, onDeleted }) => {
               });
             }}
           >
-            <Text style={{ textDecorationLine: 'underline' }}>
+            <Text size={18} style={{ textDecorationLine: 'underline' }}>
               {nome?.slice(0, 20)}
               {isLargeName ? '...' : ''}
             </Text>
           </TouchableOpacity>
-          <Text color="gray">R$ {Number(valor).toFixed(2).replace('.', ',')}</Text>
+          <Text size={16} color="gray">
+            R$ {Number(valor).toFixed(2).replace('.', ',')}
+          </Text>
         </Block>
         <Menu
           items={[

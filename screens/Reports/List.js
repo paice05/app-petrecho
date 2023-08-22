@@ -67,9 +67,9 @@ const ReportList = ({ navigation }) => {
             onSelect: (value) => setDate(value),
           }))}
         >
-          <Text>
+          <Text size={18}>
             Relatório de{' '}
-            <Text style={styles.text} color={nowTheme.COLORS.PRIMARY}>
+            <Text size={18} style={styles.text} color={nowTheme.COLORS.PRIMARY}>
               {date}
             </Text>
           </Text>
@@ -88,7 +88,7 @@ const ReportList = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   card: {
-    padding: 8,
+    padding: 15,
   },
   text: {
     textDecorationLine: 'underline',

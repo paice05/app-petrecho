@@ -66,9 +66,9 @@ const NewClient = ({ isWhite, style, navigation }) => (
       navigation.navigate('ClientForm');
     }}
   >
-    <Block row center gap={3} style={{ padding: 8 }}>
-      <Icon size={14} family="feather" name="plus-circle" />
-      <Text bold size={12}>
+    <Block row center gap={3}>
+      <Icon size={16} family="feather" name="plus-circle" />
+      <Text bold size={16}>
         CRIAR
       </Text>
     </Block>
@@ -87,8 +87,8 @@ const NewService = ({ isWhite, style, navigation }) => (
     }}
   >
     <Block row center gap={3}>
-      <Icon size={14} family="feather" name="plus-circle" />
-      <Text bold size={12}>
+      <Icon size={16} family="feather" name="plus-circle" />
+      <Text bold size={16}>
         CRIAR
       </Text>
     </Block>
@@ -107,8 +107,8 @@ const NewSchedule = ({ isWhite, style, navigation }) => (
     }}
   >
     <Block row center gap={3}>
-      <Icon size={14} family="feather" name="plus-circle" />
-      <Text bold size={12}>
+      <Icon size={16} family="feather" name="plus-circle" />
+      <Text bold size={16}>
         CRIAR
       </Text>
     </Block>
@@ -259,7 +259,7 @@ class Header extends React.Component {
               style={{ paddingRight: 8 }}
               color={nowTheme.COLORS.HEADER}
             />
-            <Text style={{ fontFamily: 'montserrat-regular' }} size={16} style={styles.tabTitle}>
+            <Text style={{ fontFamily: 'montserrat-regular' }} size={18} style={styles.tabTitle}>
               {optionRight || 'Fashion'}
             </Text>
           </Block>
@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
   },
   title: {
     width: '100%',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
     fontFamily: 'montserrat-regular',
   },

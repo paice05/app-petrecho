@@ -53,7 +53,7 @@ export function AsyncSelectMulti({
 
   return (
     <View>
-      <Text bold style={{ marginLeft: 20, marginBottom: 5 }}>
+      <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
         {labelText}
       </Text>
 
@@ -105,11 +105,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   placeholderStyle: {
-    fontSize: 14,
+    fontSize: 16,
     color: 'gray',
   },
   selectedTextStyle: {
-    fontSize: 14,
+    fontSize: 16,
   },
   iconStyle: {
     width: 20,

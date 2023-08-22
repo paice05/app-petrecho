@@ -32,7 +32,7 @@ export const ScheduleCard = ({ startAt = 7, endAt = 20.5, payload }) => {
           {timeSlots.map(({ time, schedule }, index) => (
             <Block key={index}>
               <TouchableOpacity>
-                <Text size={14} style={schedule ? styles.timeSlot : styles.timeSlotOff}>
+                <Text size={16} style={schedule ? styles.timeSlot : styles.timeSlotOff}>
                   {time}
                 </Text>
               </TouchableOpacity>
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   timeSlot: {
-    width: 55,
+    width: 60,
     marginBottom: 8,
     marginHorizontal: 8,
 
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   timeSlotOff: {
-    width: 55,
+    width: 60,
     marginBottom: 8,
     marginHorizontal: 8,
 

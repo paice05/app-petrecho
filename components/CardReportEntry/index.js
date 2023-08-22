@@ -11,23 +11,25 @@ const CardReportEntry = ({ id, data, servico, nome, value, addition, discount })
   return (
     <>
       <Block flex space="between" style={styles.container}>
-        <Text center>{data}</Text>
-        <Text color={nowTheme.COLORS.PRIMARY} bold>
+        <Text size={18} center>
+          {data}
+        </Text>
+        <Text size={18} color={nowTheme.COLORS.PRIMARY} bold>
           {nome}
         </Text>
-        <Text color="gray" size={12}>
+        <Text color="gray" size={14}>
           {servico}
         </Text>
         <Block row space="between">
           <Block row middle gap={6}>
-            <Text color="gray" size={12}>
+            <Text color="gray" size={14}>
               Adicional: {addition}
             </Text>
-            <Text color="gray" size={12}>
+            <Text color="gray" size={14}>
               Desconto: {discount}
             </Text>
           </Block>
-          <Text size={16}>{value}</Text>
+          <Text size={18}>{value}</Text>
         </Block>
 
         <Divider />
