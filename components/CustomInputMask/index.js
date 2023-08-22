@@ -31,6 +31,7 @@ export const CustomInputMask = ({ onChangeText, value }) => {
         value={value}
         onChangeText={handlePriceChange}
         style={styles.input}
+        placeholder="R$ 10,00"
       />
     </Block>
   );

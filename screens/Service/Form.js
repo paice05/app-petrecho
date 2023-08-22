@@ -2,16 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Dimensions } from 'react-native';
 
 // Galio components
-import { Block, theme } from 'galio-framework';
+import { Block, Text, theme } from 'galio-framework';
 
 // Now UI themed components
-import { nowTheme } from '../../constants';
 import { Button, Icon } from '../../components';
 import CustomInput from '../../components/CustomInput';
+import { nowTheme } from '../../constants';
 import { api } from '../../services/api';
-import Theme from '../../constants/Theme';
-
-const { width } = Dimensions.get('screen');
+import { useValidateRequiredFields } from '../../components/hooks/useValidateRequiredFields';
+import { CustomInputMask } from '../../components/CustomInputMask';
 
 const ServiceForm = ({ route, navigation }) => {
   const params = route.params;
@@ -23,9 +22,26 @@ const ServiceForm = ({ route, navigation }) => {
     price: '',
   });
 
+  const { validate, errors } = useValidateRequiredFields({
+    fields: ['name', 'price'],
+  });
+
+  useEffect(() => {
+    validate(fields);
+  }, [fields]);
+
   const handleSubmitCreate = async () => {
+    if (Object.values(errors).filter(Boolean).length) return;
+
+    const price = fields?.price.replace('R$', '').replace(',', '.');
+
+    const payload = {
+      name: fields.name,
+      price,
+    };
+
     try {
-      await api.request().post('/services', fields);
+      await api.request().post('/services', payload);
 
       navigation.goBack();
     } catch (error) {
@@ -34,8 +50,17 @@ const ServiceForm = ({ route, navigation }) => {
   };
 
   const handleSubmitUpdate = async () => {
+    if (Object.values(errors).filter(Boolean).length) return;
+
+    const price = fields?.price.replace('R$', '').replace(',', '.');
+
+    const payload = {
+      name: fields.name,
+      price,
+    };
+
     try {
-      await api.request().put(`/services/${isEditing}`, fields);
+      await api.request().put(`/services/${isEditing}`, payload);
 
       navigation.goBack();
     } catch (error) {
@@ -65,7 +90,7 @@ const ServiceForm = ({ route, navigation }) => {
   return (
     <ScrollView showsVerticalScrollIndicator={true}>
       <Block flex gap={10} style={styles.cardContainer}>
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
+        <Block>
           <CustomInput
             placeholder="Digite o nome do serviço"
             labelText="Nome"
@@ -75,44 +100,36 @@ const ServiceForm = ({ route, navigation }) => {
               <Icon size={16} name="file-text" family="feather" style={styles.inputIcons} />
             }
           />
+          {errors?.['name'] && (
+            <Text center size={12} color={nowTheme.COLORS.PRIMARY}>
+              campo obrigatório
+            </Text>
+          )}
         </Block>
 
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-          <CustomInput
-            placeholder="Digite o valor do serviço"
-            labelText="Valor"
-            value={fields.price.toString()}
-            onChangeText={(value) => setFields({ ...fields, price: value })}
-            iconContent={
-              <Icon size={16} name="dollar-sign" family="feather" style={styles.inputIcons} />
-            }
+        <Block>
+          <CustomInputMask
+            value={fields.price}
+            onChangeText={(text) => setFields({ ...fields, price: text })}
           />
+          {errors?.['price'] && (
+            <Text center size={12} color={nowTheme.COLORS.PRIMARY}>
+              campo obrigatório
+            </Text>
+          )}
         </Block>
 
-        <Block style={styles.container}>
-          <Button
-            textStyle={{
-              fontFamily: 'montserrat-regular',
-              fontSize: 12,
-              fontWeight: 'bold',
-              color: 'black',
-            }}
-            style={styles.button}
-            onPress={() => navigation.goBack()}
-          >
-            Voltar
+        <Block row center>
+          <Button style={styles.button} onPress={() => navigation.goBack()}>
+            <Text bold>Voltar</Text>
           </Button>
           <Button
-            textStyle={{
-              fontFamily: 'montserrat-regular',
-              fontSize: 12,
-              color: 'white',
-              fontWeight: 'bold',
-            }}
             style={styles.primary}
             onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
           >
-            {isEditing ? 'Editar' : 'Cadastrar'}
+            <Text bold color="#fff">
+              {isEditing ? 'Editar' : 'Cadastrar'}
+            </Text>
           </Button>
         </Block>
       </Block>
@@ -121,50 +138,27 @@ const ServiceForm = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontFamily: 'montserrat-bold',
-    paddingBottom: theme.SIZES.BASE,
-    paddingHorizontal: theme.SIZES.BASE * 2,
-    marginTop: 44,
-    color: nowTheme.COLORS.HEADER,
-  },
   cardContainer: {
     padding: 10,
     margin: 15,
-    //paddingBottom: 25,
     borderRadius: 10,
-    //marginBottom: 16,
     backgroundColor: '#fff',
   },
   button: {
-    marginBottom: theme.SIZES.BASE,
+    marginBottom: nowTheme.SIZES.BASE,
     borderRadius: 10,
     width: 120,
     height: 40,
     backgroundColor: '#eee',
     borderWidth: 1,
-    borderColor: Theme.COLORS.BORDER,
+    borderColor: nowTheme.COLORS.BORDER,
   },
   primary: {
-    marginBottom: theme.SIZES.BASE,
+    marginBottom: nowTheme.SIZES.BASE,
     borderRadius: 10,
     width: 120,
     height: 40,
-    backgroundColor: '#c84648',
-  },
-  articles: {
-    width: width - theme.SIZES.BASE * 2,
-    paddingVertical: theme.SIZES.BASE,
-    paddingHorizontal: 2,
-    fontFamily: 'montserrat-regular',
-  },
-  container: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: theme.SIZES.BASE,
-    paddingTop: 15,
+    backgroundColor: nowTheme.COLORS.PRIMARY,
   },
   inputIcons: {
     marginRight: 12,

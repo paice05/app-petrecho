@@ -17,7 +17,6 @@ export function AsyncSelectMulti({
   value,
   icon,
 }) {
-  const [selectedItems, setSelectedItems] = useState([]);
   const [items, setItems] = useState([]);
   const [textName, setTextName] = useState('');
   const debouncedValue = useDebounce(textName);
@@ -53,7 +52,7 @@ export function AsyncSelectMulti({
   };
 
   return (
-    <View style={styles.container}>
+    <View>
       <Text bold style={{ marginLeft: 20, marginBottom: 5 }}>
         {labelText}
       </Text>
@@ -94,9 +93,6 @@ export function AsyncSelectMulti({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    // paddingBottom: 16,
-  },
   icon: {
     marginRight: 10,
   },

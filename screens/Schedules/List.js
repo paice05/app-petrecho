@@ -1,30 +1,21 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Block, Button, Text } from 'galio-framework';
-import { addDays, format, subDays } from 'date-fns';
-import {
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-  ActivityIndicator,
-  Dimensions,
-} from 'react-native';
-
-import { api } from '../../services/api';
-import CardSchedule from '../../components/CardSchedule';
-import { PaginationSimple } from '../../components/PaginationSimple';
-import { Modal } from '../../components/Modal';
-import Tabs from '../../components/Tabs';
-import { Calendar } from '../../components/Calendar';
-import { nowTheme, tabs } from '../../constants';
+import { Block, Text } from 'galio-framework';
+import { addDays, subDays } from 'date-fns';
+import { StyleSheet, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { useRequestFindMany } from '../../components/hooks/useRequestFindMany';
-import { useRequestDestroy } from '../../components/hooks/useRequestDestroy';
-import { ScheduleCard } from '../../components/ScheduleCard/ScheduleCard';
-import { Navigation } from '../../components/Navigation';
-import { formartDate } from '../../utils/formartDate';
 
-const { width } = Dimensions.get('window');
+import Tabs from '../../components/Tabs';
+import { Modal } from '../../components/Modal';
+import { Calendar } from '../../components/Calendar';
+import CardSchedule from '../../components/CardSchedule';
+import { Navigation } from '../../components/Navigation';
+import { ScheduleCard } from '../../components/ScheduleCard/ScheduleCard';
+import { nowTheme, tabs } from '../../constants';
+import { PaginationSimple } from '../../components/PaginationSimple';
+import { useRequestDestroy } from '../../components/hooks/useRequestDestroy';
+import { useRequestFindMany } from '../../components/hooks/useRequestFindMany';
+import { formartDate } from '../../utils/formartDate';
+import { api } from '../../services/api';
 
 const ScheduleList = ({ navigation }) => {
   const [openCalendar, setOpenCalendar] = useState(false);
@@ -46,6 +37,7 @@ const ScheduleList = ({ navigation }) => {
     path: '/schedules',
     defaultQuery: {
       page: pagination.currentPage,
+      perPage: 50,
       where: {
         scheduleAt: {
           $between: [

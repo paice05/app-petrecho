@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, Vibration } from 'react-native';
 import { Block, Text, Button as GaButton } from 'galio-framework';
 
 import Menu from '../Menu';
@@ -13,11 +13,16 @@ const CardService = ({ navigation, id, nome, valor, onDeleted }) => {
       <Block row space="between">
         <Block gap={5} style={styles.wrapperName}>
           <TouchableOpacity
-            onPress={() =>
+            onPress={() => {
+              const vibrationDuration = 100;
+
+              // Faz o dispositivo vibrar
+              Vibration.vibrate(vibrationDuration);
+
               navigation.navigate('ServiceForm', {
                 itemId: id,
-              })
-            }
+              });
+            }}
           >
             <Text style={{ textDecorationLine: 'underline' }}>
               {nome?.slice(0, 20)}

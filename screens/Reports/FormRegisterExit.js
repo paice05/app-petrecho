@@ -9,8 +9,7 @@ import { nowTheme } from '../../constants';
 import { Button, Icon } from '../../components';
 import CustomInput from '../../components/CustomInput';
 import { api } from '../../services/api';
-
-const { width } = Dimensions.get('screen');
+import { useValidateRequiredFields } from '../../components/hooks/useValidateRequiredFields';
 
 const RegisterExitForm = ({ navigation }) => {
   const [fields, setFields] = useState({
@@ -18,7 +17,17 @@ const RegisterExitForm = ({ navigation }) => {
     value: '',
   });
 
+  const { validate, errors } = useValidateRequiredFields({
+    fields: ['description', 'value'],
+  });
+
+  useEffect(() => {
+    validate(fields);
+  }, [fields]);
+
   const handleSubmitRegister = async () => {
+    if (Object.values(errors).filter(Boolean).length) return;
+
     try {
       await api.request().post('/reports/register-out', fields);
       navigation.goBack();
@@ -30,27 +39,41 @@ const RegisterExitForm = ({ navigation }) => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <Block flex gap={10} style={styles.cardContainer}>
-        <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
-          <CustomInput
-            placeholder="Digite a descrição"
-            style={[styles.inputStyle]}
-            labelText="Descrição"
-            value={fields.description}
-            onChangeText={(value) => setFields({ ...fields, description: value })}
-            iconContent={
-              <Icon size={16} name="file-text" family="feather" style={styles.inputIcons} />
-            }
-          />
+        <Block>
+          <Block>
+            <CustomInput
+              placeholder="Digite a descrição"
+              style={[styles.inputStyle]}
+              labelText="Descrição"
+              value={fields.description}
+              onChangeText={(value) => setFields({ ...fields, description: value })}
+              iconContent={
+                <Icon size={16} name="file-text" family="feather" style={styles.inputIcons} />
+              }
+            />
+            {errors?.['description'] && (
+              <Text center size={12} color={nowTheme.COLORS.PRIMARY}>
+                campo obrigatório
+              </Text>
+            )}
+          </Block>
 
-          <CustomInput
-            placeholder="Digite o valor da saída"
-            labelText="Valor"
-            value={fields.value.toString()}
-            onChangeText={(item) => setFields({ ...fields, value: item })}
-            iconContent={
-              <Icon size={16} name="dollar-sign" family="feather" style={styles.inputIcons} />
-            }
-          />
+          <Block>
+            <CustomInput
+              placeholder="Digite o valor da saída"
+              labelText="Valor"
+              value={fields.value.toString()}
+              onChangeText={(item) => setFields({ ...fields, value: item })}
+              iconContent={
+                <Icon size={16} name="dollar-sign" family="feather" style={styles.inputIcons} />
+              }
+            />
+            {errors?.['value'] && (
+              <Text center size={12} color={nowTheme.COLORS.PRIMARY}>
+                campo obrigatório
+              </Text>
+            )}
+          </Block>
         </Block>
 
         <Block style={styles.wrapperButtons}>
@@ -100,17 +123,17 @@ const styles = StyleSheet.create({
   cardContainer: {
     padding: 10,
     margin: 15,
-    //paddingBottom: 25,
     borderRadius: 10,
-    //marginBottom: 16,
     backgroundColor: '#fff',
   },
   button: {
-    marginBottom: theme.SIZES.BASE,
+    marginBottom: nowTheme.SIZES.BASE,
     borderRadius: 10,
     width: 120,
     height: 40,
     backgroundColor: '#eee',
+    borderWidth: 1,
+    borderColor: nowTheme.COLORS.BORDER,
   },
   primary: {
     marginBottom: theme.SIZES.BASE,

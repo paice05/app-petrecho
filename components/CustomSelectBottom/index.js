@@ -15,7 +15,6 @@ export const CustomSelectBottom = ({
   onChange,
   value,
   options,
-  textStyle,
   itemTextStyle,
 }) => {
   return (
@@ -25,9 +24,7 @@ export const CustomSelectBottom = ({
       <SelectList
         style={Platform.OS === 'ios' ? styles.inputIOS : styles.input}
         placeHolder={placeholder}
-        onSelect={(item, index) => {
-          onChange(item);
-        }}
+        onSelect={(item) => onChange(item)}
         value={value?.title}
         data={options}
         headerTitle={labelText}
@@ -35,7 +32,6 @@ export const CustomSelectBottom = ({
         textStyle={styles.textStyleChange}
         itemTextStyle={itemTextStyle}
         renderIcon={() => <Icon family="feather" name="user" color={nowTheme.COLORS.PRIMARY} />}
-        // showSearch
       />
     </SafeAreaView>
   );
@@ -48,12 +44,10 @@ const styles = StyleSheet.create({
     borderColor: nowTheme.COLORS.BORDER,
     height: 44,
     backgroundColor: '#FFFFFF',
-    width: 360,
-    // marginBottom: 16,
     paddingHorizontal: 20,
-
     display: 'flex',
     flexDirection: 'row-reverse',
+    color: 'black',
   },
   inputIOS: {
     borderRadius: 35,
@@ -61,21 +55,10 @@ const styles = StyleSheet.create({
     borderColor: nowTheme.COLORS.BORDER,
     height: 44,
     backgroundColor: '#FFFFFF',
-    width: 375,
-    // marginBottom: 16,
     paddingHorizontal: 18,
-
     display: 'flex',
     flexDirection: 'row-reverse',
-  },
-  success: {
-    borderColor: nowTheme.COLORS.INPUT_SUCCESS,
-  },
-  error: {
-    borderColor: nowTheme.COLORS.INPUT_ERROR,
-  },
-  primary: {
-    borderColor: nowTheme.COLORS.PRIMARY,
+    color: 'black',
   },
   shadow: {
     shadowColor: nowTheme.COLORS.BLACK,
@@ -87,9 +70,5 @@ const styles = StyleSheet.create({
   textStyleChange: {
     fontSize: 14,
     marginLeft: 10,
-    color: nowTheme.COLORS.PLACEHOLDER,
-    //'&::after': {
-    //  color: nowTheme.COLORS.BLACK,
-    //},
   },
 });

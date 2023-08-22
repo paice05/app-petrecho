@@ -1,18 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
   ImageBackground,
   Dimensions,
-  StatusBar,
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
-import { Block, Checkbox, Text, Button as GaButton, theme } from 'galio-framework';
+import { Block, Text, theme } from 'galio-framework';
 
 import { Button, Icon, Input } from '../../components';
 import { Images, nowTheme } from '../../constants';
 import { api } from '../../services/api';
-import { useFocusEffect } from '@react-navigation/native';
 import { getCache, setCache } from '../../services/cache';
 
 const { width, height } = Dimensions.get('screen');
@@ -26,6 +24,7 @@ const Login = ({ navigation }) => {
     username: '',
     password: '',
   });
+
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
@@ -53,7 +52,7 @@ const Login = ({ navigation }) => {
           });
         }
       })
-      .catch((error) => setIsError(true));
+      .catch(() => setIsError(true));
   };
 
   return (
@@ -77,13 +76,13 @@ const Login = ({ navigation }) => {
                       color="#FFF"
                       size={24}
                     >
-                      Meu Petrecho - Login
+                      Meu Petrecho
                     </Text>
                   </Block>
                 </Block>
-                <Block flex={1} middle space="between">
+                <Block flex={1} middle>
                   <Block center flex={0.9}>
-                    <Block flex space="between">
+                    <Block flex>
                       <Block>
                         <Block width={width * 0.8} style={{ marginBottom: 5 }}>
                           <Input
@@ -168,7 +167,6 @@ const styles = StyleSheet.create({
     height: height,
   },
   registerContainer: {
-    // marginTop: 55,
     width: width * 0.9,
     height: height < 812 ? height * 0.8 : height * 0.8,
     backgroundColor: nowTheme.COLORS.WHITE,
@@ -185,8 +183,6 @@ const styles = StyleSheet.create({
   },
   socialConnect: {
     backgroundColor: nowTheme.COLORS.WHITE,
-    // borderBottomWidth: StyleSheet.hairlineWidth,
-    // borderColor: "rgba(136, 152, 170, 0.3)"
   },
   socialButtons: {
     width: 120,
@@ -203,7 +199,7 @@ const styles = StyleSheet.create({
   },
   inputIcons: {
     marginRight: 12,
-    color: nowTheme.COLORS.ICON_INPUT,
+    color: nowTheme.COLORS.PRIMARY,
   },
   inputs: {
     borderWidth: 1,
@@ -213,22 +209,19 @@ const styles = StyleSheet.create({
   passwordCheck: {
     paddingLeft: 2,
     paddingTop: 6,
-    paddingBottom: 15,
   },
   createButton: {
     width: width * 0.5,
-    // marginTop: 25,
-    marginBottom: 40,
-    backgroundColor: '#26c6da',
+    backgroundColor: nowTheme.COLORS.PRIMARY,
   },
   cardTitle: {
     padding: theme.SIZES.BASE * 2,
     borderRadius: 4,
     borderStyle: 'solid',
     borderWidth: 1,
-    borderColor: '#26c6da',
+    borderColor: nowTheme.COLORS.PRIMARY,
     marginBottom: 16,
-    backgroundColor: '#26c6da',
+    backgroundColor: nowTheme.COLORS.PRIMARY,
   },
 });
 

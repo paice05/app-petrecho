@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, Vibration, View } from 'react-native';
 import { Block, Text } from 'galio-framework';
 import {
   Menu,
@@ -44,7 +44,14 @@ const SimpleMenu = ({ children, items = [] }) => {
                 <MenuOption
                   key={key}
                   style={{ paddingVertical: 15 }}
-                  onSelect={() => item.onSelect(item.text)}
+                  onSelect={() => {
+                    const vibrationDuration = 100;
+
+                    // Faz o dispositivo vibrar
+                    Vibration.vibrate(vibrationDuration);
+
+                    item.onSelect(item.text);
+                  }}
                   children={
                     <Block row gap={7}>
                       {item.icon && <Icon color={item.color} name={item.icon} family="feather" />}

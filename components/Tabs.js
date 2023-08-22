@@ -1,5 +1,12 @@
 import React from 'react';
-import { StyleSheet, Dimensions, FlatList, Animated, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  Dimensions,
+  FlatList,
+  Animated,
+  TouchableOpacity,
+  Vibration,
+} from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 
 const { width } = Dimensions.get('screen');
@@ -75,7 +82,16 @@ export default class Tabs extends React.Component {
     if (result < 0) day = addDays(date, result * -1).getDate();
 
     return (
-      <TouchableOpacity onPress={() => this.selectMenu(item.id)}>
+      <TouchableOpacity
+        onPress={() => {
+          const vibrationDuration = 100;
+
+          // Faz o dispositivo vibrar
+          Vibration.vibrate(vibrationDuration);
+
+          this.selectMenu(item.id);
+        }}
+      >
         <Block style={containerStyles}>
           <Animated.View style={[styles.menuTitle]}>
             <Text center color={isActive ? nowTheme.COLORS.WHITE : ''} size={8}>

@@ -65,9 +65,9 @@ const SchedulesForm = ({ route, navigation }) => {
   useEffect(() => {
     if (response) {
       setFields({
-        user: { value: response.user.id, label: response.user.name },
+        user: { value: response?.user?.id, label: response?.user?.name },
         services: response.services.map((item) => ({ value: item.id, label: item.name })),
-        employee: { value: response.employee.id, label: response.employee.name },
+        employee: { value: response?.employee?.id, label: response?.employee?.name },
         date: formartDate(response.scheduleAt, 'dd-MM-yyyy'),
         time: new Date(response.scheduleAt),
         isPackage: response.isPackage,
@@ -332,6 +332,8 @@ const styles = StyleSheet.create({
     width: 120,
     height: 40,
     backgroundColor: '#eee',
+    borderWidth: 1,
+    borderColor: nowTheme.COLORS.BORDER,
   },
   primary: {
     marginBottom: nowTheme.SIZES.BASE,

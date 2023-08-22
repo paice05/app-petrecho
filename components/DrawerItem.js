@@ -1,5 +1,5 @@
 import { Block, Text, theme } from 'galio-framework';
-import { Linking, StyleSheet, TouchableOpacity } from 'react-native';
+import { Linking, StyleSheet, TouchableOpacity, Vibration } from 'react-native';
 
 import Icon from './Icon';
 import React from 'react';
@@ -157,6 +157,11 @@ class DrawerItem extends React.Component {
       <TouchableOpacity
         style={{ height: 60 }}
         onPress={() => {
+          const vibrationDuration = 100;
+
+          // Faz o dispositivo vibrar
+          Vibration.vibrate(vibrationDuration);
+
           if (title === 'LOGOUT') {
             // limpar o token do cache
             clearCache('token').then(() => {

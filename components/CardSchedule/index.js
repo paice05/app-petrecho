@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, Vibration } from 'react-native';
 import { Block, Text, Button } from 'galio-framework';
 
 import { nowTheme } from '../../constants';
@@ -41,11 +41,16 @@ const CardSchedule = ({
       <Block row space="between">
         <Block gap={5} style={styles.wrapperName}>
           <TouchableOpacity
-            onPress={() =>
+            onPress={() => {
+              const vibrationDuration = 100;
+
+              // Faz o dispositivo vibrar
+              Vibration.vibrate(vibrationDuration);
+
               navigation.navigate('ScheduleForm', {
                 itemId: id,
-              })
-            }
+              });
+            }}
           >
             <Block row style={{ alignItems: 'center' }}>
               <Text style={{ textDecorationLine: 'underline' }}>
@@ -121,12 +126,12 @@ const CardSchedule = ({
         <Block row style={styles.wrapperButtons}>
           <Button onPress={onCanceled} style={styles.button}>
             <Text bold size={12}>
-              Cancelou
+              Cancelar
             </Text>
           </Button>
           <Button onPress={onFinished} style={[styles.button, styles.primary]}>
             <Text color="white" bold size={12}>
-              Finalizado
+              Confirmar
             </Text>
           </Button>
         </Block>

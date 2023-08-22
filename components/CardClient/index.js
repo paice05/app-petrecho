@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, Vibration } from 'react-native';
 import { Block, Text } from 'galio-framework';
 
 import { nowTheme } from '../../constants';
@@ -15,11 +15,16 @@ const CardClient = ({ navigation, id, nome, tipo, telefone, aniversario, onDelet
       <Block row space="between">
         <Block gap={5} style={styles.wrapperName}>
           <TouchableOpacity
-            onPress={() =>
+            onPress={() => {
+              const vibrationDuration = 100;
+
+              // Faz o dispositivo vibrar
+              Vibration.vibrate(vibrationDuration);
+
               navigation.navigate('ClientForm', {
                 itemId: id,
-              })
-            }
+              });
+            }}
           >
             <Text style={{ textDecorationLine: 'underline' }}>
               {nome?.slice(0, 20)}

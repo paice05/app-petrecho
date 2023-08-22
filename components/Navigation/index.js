@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, Vibration } from 'react-native';
 import { Block, Text } from 'galio-framework';
 
 import { nowTheme } from '../../constants';
@@ -12,7 +12,17 @@ export const Navigation = ({ items = [] }) => {
       <Block row center>
         {items.map((item, index) => (
           <Block key={index} row center>
-            <TouchableOpacity style={styles.button} onPress={() => setActive(index)}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                const vibrationDuration = 100;
+
+                // Faz o dispositivo vibrar
+                Vibration.vibrate(vibrationDuration);
+
+                setActive(index);
+              }}
+            >
               <Text size={16} color={index === active && nowTheme.COLORS.PRIMARY}>
                 {item.title}
               </Text>

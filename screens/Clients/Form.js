@@ -2,15 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Dimensions } from 'react-native';
 
 // Galio components
-import { Block, Text, Button as GaButton, theme } from 'galio-framework';
+import { Block, Text, theme } from 'galio-framework';
 
 // Now UI themed components
-import { Images, nowTheme, articles, tabs } from '../../constants';
-import { Button, Select, Icon, Input, Header, Switch } from '../../components';
+import { Button, Icon } from '../../components';
 import CustomInput from '../../components/CustomInput';
 import { CustomSelectBottom } from '../../components/CustomSelectBottom';
+import { useValidateRequiredFields } from '../../components/hooks/useValidateRequiredFields';
 import { api } from '../../services/api';
 import { optionsBirthDate } from '../../constants/month';
+import { nowTheme } from '../../constants';
 import Theme from '../../constants/Theme';
 
 const { width } = Dimensions.get('screen');
@@ -38,7 +39,17 @@ const ClientForm = ({ route, navigation }) => {
     type: isEditing ? { title: '', data: '' } : { title: 'Cliente', data: 'pf' },
   });
 
+  const { validate, errors } = useValidateRequiredFields({
+    fields: ['name'],
+  });
+
+  useEffect(() => {
+    validate(fields);
+  }, [fields]);
+
   const handleSubmitCreate = async () => {
+    if (Object.values(errors).filter(Boolean).length) return;
+
     const payload = {
       ...fields,
       type: fields.type.data,
@@ -56,6 +67,8 @@ const ClientForm = ({ route, navigation }) => {
   };
 
   const handleSubmitUpdate = async () => {
+    if (Object.values(errors).filter(Boolean).length) return;
+
     const payload = {
       ...fields,
       type: fields?.type?.data,
@@ -97,13 +110,20 @@ const ClientForm = ({ route, navigation }) => {
   return (
     <ScrollView showsVerticalScrollIndicator={true}>
       <Block flex gap={10} style={styles.cardContainer}>
-        <CustomInput
-          placeholder="Digite seu nome"
-          labelText="Nome"
-          value={fields.name}
-          onChangeText={(value) => setFields({ ...fields, name: value })}
-          iconContent={<Icon size={16} name="user" family="feather" style={styles.inputIcons} />}
-        />
+        <Block>
+          <CustomInput
+            placeholder="Digite seu nome"
+            labelText="Nome"
+            value={fields.name}
+            onChangeText={(value) => setFields({ ...fields, name: value })}
+            iconContent={<Icon size={16} name="user" family="feather" style={styles.inputIcons} />}
+          />
+          {errors?.['name'] && (
+            <Text center size={12} color={nowTheme.COLORS.PRIMARY}>
+              campo obrigatório
+            </Text>
+          )}
+        </Block>
 
         <CustomInput
           placeholder="Digite o telefone do cliente"
@@ -133,30 +153,17 @@ const ClientForm = ({ route, navigation }) => {
           />
         </Block>
 
-        <Block style={styles.buttonContainer}>
-          <Button
-            textStyle={{
-              fontFamily: 'montserrat-regular',
-              fontSize: 12,
-              fontWeight: 'bold',
-              color: 'black',
-            }}
-            style={styles.button}
-            onPress={() => navigation.goBack()}
-          >
-            Voltar
+        <Block row center style={styles.buttonContainer}>
+          <Button style={styles.button} onPress={() => navigation.goBack()}>
+            <Text bold>Voltar</Text>
           </Button>
           <Button
-            textStyle={{
-              fontFamily: 'montserrat-regular',
-              fontSize: 12,
-              color: 'white',
-              fontWeight: 'bold',
-            }}
             style={styles.primary}
             onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
           >
-            {isEditing ? 'Editar' : 'Cadastrar'}
+            <Text bold color="#fff">
+              {isEditing ? 'Editar' : 'Cadastrar'}
+            </Text>
           </Button>
         </Block>
       </Block>
@@ -165,42 +172,24 @@ const ClientForm = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontFamily: 'montserrat-bold',
-    // paddingBottom: theme.SIZES.BASE,
-
-    // marginTop: 44,
-    color: nowTheme.COLORS.HEADER,
-  },
   button: {
-    marginBottom: theme.SIZES.BASE,
+    marginBottom: nowTheme.SIZES.BASE,
     borderRadius: 10,
     width: 120,
     height: 40,
     backgroundColor: '#eee',
     borderWidth: 1,
-    borderColor: Theme.COLORS.BORDER,
+    borderColor: nowTheme.COLORS.BORDER,
   },
   primary: {
-    marginBottom: theme.SIZES.BASE,
+    marginBottom: nowTheme.SIZES.BASE,
     borderRadius: 10,
     width: 120,
     height: 40,
-    backgroundColor: '#c84648',
-  },
-  articles: {
-    width: width - theme.SIZES.BASE * 2,
-    // paddingVertical: theme.SIZES.BASE,
-    paddingHorizontal: 2,
-    fontFamily: 'montserrat-regular',
+    backgroundColor: nowTheme.COLORS.PRIMARY,
   },
   buttonContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: theme.SIZES.BASE,
-    // paddingBottom: 20,
+    paddingHorizontal: nowTheme.SIZES.BASE,
   },
   cardContainer: {
     margin: 15,

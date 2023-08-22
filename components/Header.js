@@ -1,6 +1,13 @@
 import React from 'react';
 import { withNavigation } from '@react-navigation/compat';
-import { TouchableOpacity, StyleSheet, Platform, Dimensions, Keyboard } from 'react-native';
+import {
+  TouchableOpacity,
+  StyleSheet,
+  Platform,
+  Dimensions,
+  Keyboard,
+  Vibration,
+} from 'react-native';
 import { Button, Block, NavBar, Text, theme, Button as GaButton } from 'galio-framework';
 
 import Icon from './Icon';
@@ -28,7 +35,17 @@ const BellButton = ({ isWhite, style, navigation }) => (
 );
 
 const BasketButton = ({ isWhite, style, navigation }) => (
-  <TouchableOpacity style={[styles.button, style]} onPress={() => navigation.navigate('Pro')}>
+  <TouchableOpacity
+    style={[styles.button, style]}
+    onPress={() => {
+      const vibrationDuration = 100;
+
+      // Faz o dispositivo vibrar
+      Vibration.vibrate(vibrationDuration);
+
+      navigation.navigate('Pro');
+    }}
+  >
     <Icon
       family="NowExtra"
       size={16}
@@ -39,7 +56,16 @@ const BasketButton = ({ isWhite, style, navigation }) => (
 );
 
 const NewClient = ({ isWhite, style, navigation }) => (
-  <TouchableOpacity onPress={() => navigation.navigate('ClientForm')}>
+  <TouchableOpacity
+    onPress={() => {
+      const vibrationDuration = 100;
+
+      // Faz o dispositivo vibrar
+      Vibration.vibrate(vibrationDuration);
+
+      navigation.navigate('ClientForm');
+    }}
+  >
     <Block row center gap={3} style={{ padding: 8 }}>
       <Icon size={14} family="feather" name="plus-circle" />
       <Text bold size={12}>
@@ -50,7 +76,16 @@ const NewClient = ({ isWhite, style, navigation }) => (
 );
 
 const NewService = ({ isWhite, style, navigation }) => (
-  <TouchableOpacity onPress={() => navigation.navigate('ServiceForm')}>
+  <TouchableOpacity
+    onPress={() => {
+      const vibrationDuration = 100;
+
+      // Faz o dispositivo vibrar
+      Vibration.vibrate(vibrationDuration);
+
+      navigation.navigate('ServiceForm');
+    }}
+  >
     <Block row center gap={3}>
       <Icon size={14} family="feather" name="plus-circle" />
       <Text bold size={12}>
@@ -61,7 +96,16 @@ const NewService = ({ isWhite, style, navigation }) => (
 );
 
 const NewSchedule = ({ isWhite, style, navigation }) => (
-  <TouchableOpacity onPress={() => navigation.navigate('ScheduleForm')}>
+  <TouchableOpacity
+    onPress={() => {
+      const vibrationDuration = 100;
+
+      // Faz o dispositivo vibrar
+      Vibration.vibrate(vibrationDuration);
+
+      navigation.navigate('ScheduleForm');
+    }}
+  >
     <Block row center gap={3}>
       <Icon size={14} family="feather" name="plus-circle" />
       <Text bold size={12}>
@@ -74,6 +118,11 @@ const NewSchedule = ({ isWhite, style, navigation }) => (
 class Header extends React.Component {
   handleLeftPress = () => {
     const { back, navigation } = this.props;
+    const vibrationDuration = 100;
+
+    // Faz o dispositivo vibrar
+    Vibration.vibrate(vibrationDuration);
+
     return back ? navigation.goBack() : navigation.openDrawer();
   };
   renderRight = () => {
