@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dimensions, StyleSheet } from 'react-native';
+import { Dimensions, Platform, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import { Text } from 'galio-framework';
 
@@ -23,7 +23,7 @@ export const CustomSelectBottom = ({
       <Text bold>{labelText}</Text>
 
       <SelectList
-        style={styles.input}
+        style={Platform.OS === 'ios' ? styles.inputIOS : styles.input}
         placeHolder={placeholder}
         onSelect={(item, index) => {
           onChange(item);
@@ -32,7 +32,7 @@ export const CustomSelectBottom = ({
         data={options}
         headerTitle={labelText}
         listHeight={300}
-        textStyle={{ fontSize: 14, marginLeft: 18, color: nowTheme.COLORS.BORDER }}
+        textStyle={styles.textStyleChange}
         itemTextStyle={itemTextStyle}
         renderIcon={() => <Icon family="feather" name="user" color={nowTheme.COLORS.PRIMARY} />}
         // showSearch
@@ -48,9 +48,22 @@ const styles = StyleSheet.create({
     borderColor: nowTheme.COLORS.BORDER,
     height: 44,
     backgroundColor: '#FFFFFF',
-    width: width * 0.9,
+    width: 360,
     // marginBottom: 16,
     paddingHorizontal: 20,
+
+    display: 'flex',
+    flexDirection: 'row-reverse',
+  },
+  inputIOS: {
+    borderRadius: 35,
+    borderWidth: 1,
+    borderColor: nowTheme.COLORS.BORDER,
+    height: 44,
+    backgroundColor: '#FFFFFF',
+    width: 375,
+    // marginBottom: 16,
+    paddingHorizontal: 18,
 
     display: 'flex',
     flexDirection: 'row-reverse',
@@ -70,5 +83,13 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
     shadowOpacity: 0.13,
     elevation: 2,
+  },
+  textStyleChange: {
+    fontSize: 14,
+    marginLeft: 10,
+    color: nowTheme.COLORS.PLACEHOLDER,
+    //'&::after': {
+    //  color: nowTheme.COLORS.BLACK,
+    //},
   },
 });

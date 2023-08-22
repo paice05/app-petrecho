@@ -113,10 +113,9 @@ const ClientForm = ({ route, navigation }) => {
           iconContent={<Icon size={16} name="phone" family="feather" style={styles.inputIcons} />}
         />
 
-        <Block flex center>
+        <Block gap={-12} marginBottom={8}>
           <Text style={styles.styleLabelText}>Mês de aniversário</Text>
           <CustomSelectBottom
-            //labelText="Mês de aniversário"
             placeholder="Escolha um mês"
             value={fields.birthDate}
             onChange={(item) => setFields({ ...fields, birthDate: item })}
@@ -124,10 +123,9 @@ const ClientForm = ({ route, navigation }) => {
           />
         </Block>
 
-        <Block>
+        <Block gap={-12} marginBottom={10}>
           <Text style={styles.styleLabelText}>Tipo de cliente</Text>
           <CustomSelectBottom
-            //labelText="Tipo de cliente"
             placeholder="Escolha um tipo"
             value={fields.type}
             onChange={(item) => setFields({ ...fields, type: item })}
@@ -217,8 +215,8 @@ const styles = StyleSheet.create({
   styleLabelText: {
     fontSize: 14,
     alignSelf: 'flex-start',
-    marginLeft: 14,
-    fontWeight: 500,
+    marginLeft: 22,
+    fontWeight: 'bold',
   },
 });
 

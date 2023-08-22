@@ -29,7 +29,7 @@ const RegisterExitForm = ({ navigation }) => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <Block flex style={styles.cardContainer}>
+      <Block flex gap={10} style={styles.cardContainer}>
         <Block style={{ paddingHorizontal: theme.SIZES.BASE }}>
           <CustomInput
             placeholder="Digite a descrição"
@@ -38,29 +38,17 @@ const RegisterExitForm = ({ navigation }) => {
             value={fields.description}
             onChangeText={(value) => setFields({ ...fields, description: value })}
             iconContent={
-              <Icon
-                size={16}
-                color="#ADB5BD"
-                name="file-text"
-                family="feather"
-                style={styles.inputIcons}
-              />
+              <Icon size={16} name="file-text" family="feather" style={styles.inputIcons} />
             }
           />
 
           <CustomInput
             placeholder="Digite o valor da saída"
             labelText="Valor"
-            value={fields.value?.toString()}
+            value={fields.value.toString()}
             onChangeText={(item) => setFields({ ...fields, value: item })}
             iconContent={
-              <Icon
-                size={16}
-                color="#ADB5BD"
-                name="dollar-sign"
-                family="feather"
-                style={styles.inputIcons}
-              />
+              <Icon size={16} name="dollar-sign" family="feather" style={styles.inputIcons} />
             }
           />
         </Block>
@@ -110,11 +98,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#00acc1',
   },
   cardContainer: {
-    padding: 12,
+    padding: 10,
     margin: 15,
-    paddingBottom: 25,
+    //paddingBottom: 25,
     borderRadius: 10,
-    marginBottom: 16,
+    //marginBottom: 16,
     backgroundColor: '#fff',
   },
   button: {
@@ -141,7 +129,7 @@ const styles = StyleSheet.create({
   },
   inputIcons: {
     marginRight: 12,
-    color: nowTheme.COLORS.ICON_INPUT,
+    color: nowTheme.COLORS.PRIMARY,
   },
   inputStyle: {
     borderWidth: 1,
