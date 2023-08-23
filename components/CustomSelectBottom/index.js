@@ -30,6 +30,7 @@ export const CustomSelectBottom = ({
         headerTitle={labelText}
         listHeight={300}
         textStyle={styles.textStyleChange}
+        itemStyle={{ fontSize: 24 }}
         itemTextStyle={itemTextStyle}
         renderIcon={() => <Icon family="feather" name="user" color={nowTheme.COLORS.PRIMARY} />}
       />
@@ -48,6 +49,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row-reverse',
     color: 'black',
+    fontSize: 16,
   },
   inputIOS: {
     borderRadius: 35,
@@ -59,6 +61,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row-reverse',
     color: 'black',
+    fontSize: 16,
   },
   shadow: {
     shadowColor: nowTheme.COLORS.BLACK,
@@ -68,7 +71,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   textStyleChange: {
-    fontSize: 16,
+    fontSize: 14,
     marginLeft: 10,
   },
 });

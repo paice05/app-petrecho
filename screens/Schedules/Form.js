@@ -243,7 +243,7 @@ const SchedulesForm = ({ route, navigation }) => {
               Data
             </Text>
             <TouchableOpacity onPress={onChangeToggle} style={styles.buttonDate}>
-              <Block row gap={10}>
+              <Block row gap={10} style={{ alignItems: 'center' }}>
                 <Icon size={16} color={nowTheme.COLORS.PRIMARY} name="calendar" family="feather" />
                 <Text size={16}>{fields.date}</Text>
               </Block>
@@ -278,7 +278,7 @@ const SchedulesForm = ({ route, navigation }) => {
 
         <Config setFields={setFields} fields={fields} />
 
-        <Block row space="between">
+        <Block row center>
           <Button style={styles.button} onPress={() => navigation.goBack()}>
             <Text size={16} bold>
               Voltar
