@@ -24,7 +24,7 @@ export const useRequestFindMany = ({ path, defaultQuery = {} }) => {
         setError(false);
         setLoading(false);
       })
-      .catch(() => {
+      .catch((err) => {
         setResponse(null);
 
         setError(true);

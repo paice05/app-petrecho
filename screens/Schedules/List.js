@@ -33,6 +33,7 @@ const ScheduleList = ({ navigation }) => {
     execute: findMany,
     response,
     loading,
+    error,
   } = useRequestFindMany({
     path: '/schedules',
     defaultQuery: {
@@ -53,6 +54,10 @@ const ScheduleList = ({ navigation }) => {
     path: '/schedules',
     callbackSuccess: findMany,
   });
+
+  useEffect(() => {
+    if (error) setSchedules([]);
+  }, [error]);
 
   useEffect(() => {
     if (response) {
