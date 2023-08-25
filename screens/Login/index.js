@@ -5,6 +5,7 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   Keyboard,
+  TouchableOpacity,
 } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 
@@ -12,6 +13,8 @@ import { Button, Icon, Input } from '../../components';
 import { Images, nowTheme } from '../../constants';
 import { api } from '../../services/api';
 import { getCache, setCache } from '../../services/cache';
+import { BlockModal } from '../../components/BlockModal';
+import { useToggle } from '../../components/hooks/useToggle';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -26,6 +29,8 @@ const Login = ({ navigation }) => {
   });
 
   const [isError, setIsError] = useState(false);
+
+  const { toggle, onChangeToggle } = useToggle();
 
   useEffect(() => {
     getCache('token').then((response) => {
@@ -146,6 +151,14 @@ const Login = ({ navigation }) => {
             </Block>
           </Block>
         </ImageBackground>
+        <BlockModal
+          title="Conta bloqueada"
+          description="Caro cliente, sua conta esta bloqueada!!!
+            Entre em contato com a administração para mais detalhes."
+          isVisible={toggle}
+          onRequestClose={onChangeToggle}
+          handleReturn={onChangeToggle}
+        />
       </Block>
     </DismissKeyboard>
   );
