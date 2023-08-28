@@ -6,12 +6,18 @@ import Images from '../constants/Images';
 import React from 'react';
 import nowTheme from '../constants/Theme';
 import { useSafeArea } from 'react-native-safe-area-context';
+import { useUserContext } from '../context/user';
 
 const { width } = Dimensions.get('screen');
 
 function CustomDrawerContent({ drawerPosition, navigation, profile, focused, state, ...rest }) {
   const insets = useSafeArea();
-  const screens = ['Agendamentos', 'Relatorios', 'Clientes', 'Serviços'];
+  const { user } = useUserContext();
+
+  const screens = user.isAdmin
+    ? ['Relatorios', 'Agendamentos', 'Clientes', 'Serviços']
+    : ['Agendamentos', 'Clientes', 'Serviços'];
+
   return (
     <Block style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
       <Block style={styles.header}>
@@ -28,7 +34,7 @@ function CustomDrawerContent({ drawerPosition, navigation, profile, focused, sta
                 title={item}
                 key={index}
                 navigation={navigation}
-                focused={state.index === index ? true : false}
+                focused={state.index === (user.isAdmin ? index : index + 1) ? true : false}
               />
             );
           })}

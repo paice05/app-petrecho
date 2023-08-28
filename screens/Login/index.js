@@ -15,6 +15,7 @@ import { api } from '../../services/api';
 import { clearCache, getCache, setCache } from '../../services/cache';
 import { BlockModal } from '../../components/BlockModal';
 import { useToggle } from '../../components/hooks/useToggle';
+import { useUserContext } from '../../context/user';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -31,6 +32,7 @@ const Login = ({ navigation }) => {
   const [isError, setIsError] = useState(false);
 
   const { toggle, onChangeToggle } = useToggle();
+  const { changeUser } = useUserContext();
 
   useEffect(() => {
     getCache('token').then((response) => {
@@ -71,6 +73,8 @@ const Login = ({ navigation }) => {
         /** salvar o token no cache e entrar no app */
         if (data.token) {
           api.setToken(data.token);
+          changeUser({ name: data.user.name, isAdmin: data.user.isSuperAdmin });
+
           setCache('token', data.token).then(() => {
             navigation.navigate('App');
           });

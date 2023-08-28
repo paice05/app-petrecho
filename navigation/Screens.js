@@ -386,16 +386,16 @@ function AppStack(props) {
       initialRouteName="Agendamentos"
     >
       <Drawer.Screen
-        name="Agendamentos"
-        component={SchedulesStack}
+        name="Relatorios"
+        component={ReportsStack}
         options={{
           headerShown: false,
         }}
       />
 
       <Drawer.Screen
-        name="Relatorios"
-        component={ReportsStack}
+        name="Agendamentos"
+        component={SchedulesStack}
         options={{
           headerShown: false,
         }}

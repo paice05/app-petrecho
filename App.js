@@ -9,6 +9,7 @@ import { MenuProvider } from 'react-native-popup-menu';
 
 import Screens from './navigation/Screens';
 import { Images, articles, nowTheme } from './constants';
+import { UserContextProvider } from './context/user';
 
 // cache app images
 const assetImages = [
@@ -66,11 +67,13 @@ export default class App extends React.Component {
       return (
         <NavigationContainer>
           <GalioProvider theme={nowTheme}>
-            <MenuProvider>
-              <Block flex>
-                <Screens />
-              </Block>
-            </MenuProvider>
+            <UserContextProvider>
+              <MenuProvider>
+                <Block flex>
+                  <Screens />
+                </Block>
+              </MenuProvider>
+            </UserContextProvider>
           </GalioProvider>
         </NavigationContainer>
       );
