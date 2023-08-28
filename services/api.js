@@ -2,7 +2,7 @@ import axios from 'axios';
 import qs from 'qs';
 
 const myIp = {
-  ale: '192.168.10.151',
+  ale: '192.168.10.155',
   paice: '192.168.1.18',
 };
 

@@ -1,6 +1,35 @@
-import React from 'react';
-import { View, Modal, StyleSheet, Text, Pressable, TouchableOpacity } from 'react-native';
+import React, { useCallback } from 'react';
+import {
+  View,
+  Modal,
+  StyleSheet,
+  Text,
+  Pressable,
+  TouchableOpacity,
+  Linking,
+  Alert,
+  Button,
+} from 'react-native';
 import { Block } from 'galio-framework';
+
+const redirectWhatsApp = 'https://wa.me/+55-(14)991038089';
+
+const OpenURLButton = ({ url, children }) => {
+  const handlePress = useCallback(async () => {
+    // Checking if the link is supported for links with custom URL scheme.
+    const supported = await Linking.canOpenURL(url);
+
+    if (supported) {
+      // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+      // by some browser in the mobile
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`Don't know how to open this URL: ${url}`);
+    }
+  }, [url]);
+
+  return <Button title={children} onPress={handlePress} />;
+};
 
 export const BlockModal = ({
   isVisible,
@@ -32,7 +61,9 @@ export const BlockModal = ({
                     style={[styles.button, styles.buttonRedirect]}
                     onPress={handleRedirect}
                   >
-                    <Text style={styles.textStyle}>Entrar em contato</Text>
+                    <OpenURLButton url={redirectWhatsApp} style={styles.textStyle}>
+                      Entrar em contato
+                    </OpenURLButton>
                   </Pressable>
                 </Block>
               ) : (

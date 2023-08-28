@@ -5,7 +5,7 @@ import { ScrollView, StyleSheet, Dimensions } from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 
 // Now UI themed components
-import { Button, Icon } from '../../components';
+import { Button, Icon, Input } from '../../components';
 import CustomInput from '../../components/CustomInput';
 import { CustomSelectBottom } from '../../components/CustomSelectBottom';
 import { useValidateRequiredFields } from '../../components/hooks/useValidateRequiredFields';
@@ -37,6 +37,7 @@ const ClientForm = ({ route, navigation }) => {
     cellPhone: '',
     birthDate: { title: '', data: '' },
     type: isEditing ? { title: '', data: '' } : { title: 'Cliente', data: 'pf' },
+    password: '',
   });
 
   const { validate, errors } = useValidateRequiredFields({
@@ -97,6 +98,7 @@ const ClientForm = ({ route, navigation }) => {
             cellPhone: response.data.cellPhone,
             birthDate: optionsBirthDate.find((item) => item.data === response.data.birthDate),
             type: optionsType.find((item) => item.data === response.data.type),
+            password: response.data.password,
           });
         } catch (error) {
           console.log(error);
@@ -157,6 +159,31 @@ const ClientForm = ({ route, navigation }) => {
           />
         </Block>
 
+        {fields.type.data === 'pj' ? (
+          <Block Block gap={-12} marginBottom={10}>
+            <Text bold size={16} marginBottom={12} style={styles.styleLabelText}>
+              Senha
+            </Text>
+            <Input
+              placeholder="Senha"
+              password
+              viewPass
+              value={fields.password}
+              onChangeText={(value) => setFields({ ...fields, password: value })}
+              style={styles.inputPassword}
+              iconContent={
+                <Icon
+                  size={16}
+                  color="#ADB5BD"
+                  name="lock"
+                  family="feather"
+                  style={styles.inputIcons}
+                />
+              }
+            />
+          </Block>
+        ) : null}
+
         <Block row center style={styles.buttonContainer}>
           <Button style={styles.button} onPress={() => navigation.goBack()}>
             <Text size={16} bold>
@@ -210,6 +237,12 @@ const styles = StyleSheet.create({
   styleLabelText: {
     alignSelf: 'flex-start',
     marginLeft: 22,
+  },
+  inputPassword: {
+    borderWidth: 1,
+    borderColor: nowTheme.COLORS.BORDER,
+    borderRadius: 21.5,
+    backgroundColor: '#FFFFFF',
   },
 });
 
