@@ -12,7 +12,7 @@ import { Block, Text, theme } from 'galio-framework';
 import { Button, Icon, Input } from '../../components';
 import { Images, nowTheme } from '../../constants';
 import { api } from '../../services/api';
-import { getCache, setCache } from '../../services/cache';
+import { clearCache, getCache, setCache } from '../../services/cache';
 import { BlockModal } from '../../components/BlockModal';
 import { useToggle } from '../../components/hooks/useToggle';
 
@@ -36,7 +36,18 @@ const Login = ({ navigation }) => {
     getCache('token').then((response) => {
       if (response) {
         api.setToken(response);
-        navigation.navigate('App');
+
+        // verificar se o account desse token da habilitado
+        api
+          .request()
+          .get('/auth/me')
+          .then(() => {
+            navigation.navigate('App');
+          })
+          .catch((err) => {
+            onChangeToggle();
+            clearCache('token');
+          });
       }
     });
   }, []);
@@ -50,6 +61,14 @@ const Login = ({ navigation }) => {
       .request()
       .post('/auth', fields)
       .then(({ data }) => {
+        /** verificar se a conta esta habilitada */
+        if (!data.user.account.enable) {
+          onChangeToggle();
+
+          return;
+        }
+
+        /** salvar o token no cache e entrar no app */
         if (data.token) {
           api.setToken(data.token);
           setCache('token', data.token).then(() => {
@@ -57,7 +76,9 @@ const Login = ({ navigation }) => {
           });
         }
       })
-      .catch(() => setIsError(true));
+      .catch((err) => {
+        setIsError(true);
+      });
   };
 
   return (
