@@ -74,6 +74,7 @@ const ClientForm = ({ route, navigation }) => {
       ...fields,
       type: fields?.type?.data,
       birthDate: fields?.birthDate?.data,
+      password: fields?.password?.data,
     };
 
     try {

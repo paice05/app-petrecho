@@ -6,9 +6,14 @@ import { nowTheme } from '../../constants';
 
 import Icon from '../Icon';
 import Menu from '../Menu';
+import { useUserContext } from '../../context/user';
 
 const CardClient = ({ navigation, id, nome, tipo, telefone, aniversario, onDeleted }) => {
   const isLargeName = nome.length > 20;
+
+  const { user } = useUserContext();
+
+  const userIsAdmin = user.isAdmin;
 
   return (
     <Block flex space="between" style={styles.container}>
@@ -36,25 +41,29 @@ const CardClient = ({ navigation, id, nome, tipo, telefone, aniversario, onDelet
           </Text>
         </Block>
 
-        <Menu
-          items={[
-            {
-              onSelect: () =>
-                navigation.navigate('ClientForm', {
-                  itemId: id,
-                }),
-              text: 'Editar',
-              icon: 'edit',
-              color: nowTheme.COLORS.SWITCH_ON,
-            },
-            {
-              onSelect: onDeleted,
-              text: 'Deletar',
-              icon: 'trash-2',
-              color: nowTheme.COLORS.PRIMARY,
-            },
-          ]}
-        />
+        {user.isAdmin ? (
+          <Menu
+            items={[
+              {
+                onSelect: () =>
+                  navigation.navigate('ClientForm', {
+                    itemId: id,
+                  }),
+                text: 'Editar',
+                icon: 'edit',
+                color: nowTheme.COLORS.SWITCH_ON,
+              },
+              {
+                onSelect: onDeleted,
+                text: 'Deletar',
+                icon: 'trash-2',
+                color: nowTheme.COLORS.PRIMARY,
+              },
+            ]}
+          />
+        ) : (
+          ''
+        )}
       </Block>
 
       <Block row style={styles.wrapperInfo}>
