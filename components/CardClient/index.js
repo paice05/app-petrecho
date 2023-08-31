@@ -48,7 +48,6 @@ const CardClient = ({ navigation, id, nome, tipo, telefone, aniversario, isAdmin
             {tipo}
           </Text>
         </Block>
-
         <Menu
           items={[
             {
