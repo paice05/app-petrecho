@@ -1,9 +1,10 @@
 import axios from 'axios';
 import qs from 'qs';
 
-const myIp = {
-  ale: '192.168.10.155',
-  paice: '192.168.1.18',
+const host = {
+  ale: 'http://192.168.10.155:3333',
+  paice: 'http://192.168.1.18:3333',
+  production: 'https://api.meupetrecho.com.br',
 };
 
 class API {
@@ -13,10 +14,11 @@ class API {
 
   request() {
     return axios.create({
-      baseURL: `http://${myIp.ale}:3333/api/v1`,
+      baseURL: `${host.production}/api/v1`,
       paramsSerializer: (params) => qs.stringify(params),
       headers: {
         Authorization: `Bearer ${this.token}`,
+        'Content-Type': 'application/json',
       },
     });
   }

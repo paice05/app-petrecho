@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#eee',
   },
   primary: {
-    backgroundColor: '#c84648',
+    backgroundColor: nowTheme.COLORS.PRIMARY,
   },
   actionIcon: {
     alignItems: 'center',

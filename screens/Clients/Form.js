@@ -57,6 +57,8 @@ const ClientForm = ({ route, navigation }) => {
       birthDate: fields.birthDate.data,
     };
 
+    if (!fields.password) delete payload.password;
+
     try {
       const response = await api.request().post('/users', payload);
 
@@ -74,8 +76,9 @@ const ClientForm = ({ route, navigation }) => {
       ...fields,
       type: fields?.type?.data,
       birthDate: fields?.birthDate?.data,
-      password: fields?.password?.data,
     };
+
+    if (!fields.password) delete payload.password;
 
     try {
       const response = await api.request().put(`/users/${isEditing}`, payload);
@@ -99,7 +102,7 @@ const ClientForm = ({ route, navigation }) => {
             cellPhone: response.data.cellPhone,
             birthDate: optionsBirthDate.find((item) => item.data === response.data.birthDate),
             type: optionsType.find((item) => item.data === response.data.type),
-            password: response.data.password,
+            password: '',
           });
         } catch (error) {
           console.log(error);

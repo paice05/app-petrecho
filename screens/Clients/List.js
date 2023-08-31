@@ -73,8 +73,7 @@ const Clients = ({ navigation }) => {
         <Block>
           {clients.length === 0 && (
             <Text center style={{ marginTop: 20, marginBottom: 20 }}>
-              {' '}
-              Nenhum registro encontrado{' '}
+              Nenhum registro encontrado
             </Text>
           )}
 
@@ -88,6 +87,7 @@ const Clients = ({ navigation }) => {
                 telefone={item.cellPhone}
                 aniversario={item.birthDate}
                 tipo={item.type === 'pj' ? 'Funcionário' : 'Cliente'}
+                isAdmin={item.isSuperAdmin}
                 onDeleted={() => handleConfirmDelete(item.id)}
               />
             );

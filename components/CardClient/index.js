@@ -8,7 +8,7 @@ import Icon from '../Icon';
 import Menu from '../Menu';
 import { useUserContext } from '../../context/user';
 
-const CardClient = ({ navigation, id, nome, tipo, telefone, aniversario, onDeleted }) => {
+const CardClient = ({ navigation, id, nome, tipo, telefone, aniversario, isAdmin, onDeleted }) => {
   const isLargeName = nome.length > 20;
 
   const { user } = useUserContext();
@@ -26,6 +26,8 @@ const CardClient = ({ navigation, id, nome, tipo, telefone, aniversario, onDelet
               // Faz o dispositivo vibrar
               Vibration.vibrate(vibrationDuration);
 
+              if (!userIsAdmin && isAdmin) return;
+
               navigation.navigate('ClientForm', {
                 itemId: id,
               });
@@ -34,6 +36,12 @@ const CardClient = ({ navigation, id, nome, tipo, telefone, aniversario, onDelet
             <Text size={18} style={{ textDecorationLine: 'underline' }}>
               {nome?.slice(0, 20)}
               {isLargeName ? '...' : ''}
+              {isAdmin ? (
+                <Text color="gray" size={12}>
+                  {' '}
+                  (admin)
+                </Text>
+              ) : null}
             </Text>
           </TouchableOpacity>
           <Text size={16} color="gray">
@@ -41,29 +49,27 @@ const CardClient = ({ navigation, id, nome, tipo, telefone, aniversario, onDelet
           </Text>
         </Block>
 
-        {user.isAdmin ? (
-          <Menu
-            items={[
-              {
-                onSelect: () =>
-                  navigation.navigate('ClientForm', {
-                    itemId: id,
-                  }),
-                text: 'Editar',
-                icon: 'edit',
-                color: nowTheme.COLORS.SWITCH_ON,
-              },
-              {
-                onSelect: onDeleted,
-                text: 'Deletar',
-                icon: 'trash-2',
-                color: nowTheme.COLORS.PRIMARY,
-              },
-            ]}
-          />
-        ) : (
-          ''
-        )}
+        <Menu
+          items={[
+            {
+              onSelect: () =>
+                navigation.navigate('ClientForm', {
+                  itemId: id,
+                }),
+              text: 'Editar',
+              icon: 'edit',
+              color: nowTheme.COLORS.SWITCH_ON,
+              disable: !userIsAdmin && isAdmin,
+            },
+            {
+              onSelect: onDeleted,
+              text: 'Deletar',
+              icon: 'trash-2',
+              color: nowTheme.COLORS.PRIMARY,
+              disable: !userIsAdmin,
+            },
+          ]}
+        />
       </Block>
 
       <Block row style={styles.wrapperInfo}>

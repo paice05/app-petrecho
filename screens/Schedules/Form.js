@@ -340,7 +340,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 120,
     height: 40,
-    backgroundColor: '#c84648',
+    backgroundColor: nowTheme.COLORS.PRIMARY,
   },
 
   buttonDate: {
