@@ -13,8 +13,6 @@ const CardClient = ({ navigation, id, nome, tipo, telefone, aniversario, onDelet
 
   const { user } = useUserContext();
 
-  const userIsAdmin = user.isAdmin;
-
   return (
     <Block flex space="between" style={styles.container}>
       <Block row space="between">
@@ -40,30 +38,27 @@ const CardClient = ({ navigation, id, nome, tipo, telefone, aniversario, onDelet
             {tipo}
           </Text>
         </Block>
-
-        {user.isAdmin ? (
-          <Menu
-            items={[
-              {
-                onSelect: () =>
-                  navigation.navigate('ClientForm', {
-                    itemId: id,
-                  }),
-                text: 'Editar',
-                icon: 'edit',
-                color: nowTheme.COLORS.SWITCH_ON,
-              },
-              {
-                onSelect: onDeleted,
-                text: 'Deletar',
-                icon: 'trash-2',
-                color: nowTheme.COLORS.PRIMARY,
-              },
-            ]}
-          />
-        ) : (
-          ''
-        )}
+        <Menu
+          items={[
+            {
+              onSelect: () =>
+                navigation.navigate('ClientForm', {
+                  itemId: id,
+                }),
+              text: 'Editar',
+              icon: 'edit',
+              color: nowTheme.COLORS.SWITCH_ON,
+              disable: user.isAdmin === false,
+            },
+            {
+              onSelect: onDeleted,
+              text: 'Deletar',
+              icon: 'trash-2',
+              color: nowTheme.COLORS.PRIMARY,
+              disable: tipo === 'Funcionário',
+            },
+          ]}
+        />
       </Block>
 
       <Block row style={styles.wrapperInfo}>

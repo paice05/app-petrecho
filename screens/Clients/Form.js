@@ -74,7 +74,6 @@ const ClientForm = ({ route, navigation }) => {
       ...fields,
       type: fields?.type?.data,
       birthDate: fields?.birthDate?.data,
-      password: fields?.password?.data,
     };
 
     try {
@@ -99,7 +98,7 @@ const ClientForm = ({ route, navigation }) => {
             cellPhone: response.data.cellPhone,
             birthDate: optionsBirthDate.find((item) => item.data === response.data.birthDate),
             type: optionsType.find((item) => item.data === response.data.type),
-            password: response.data.password,
+            password: '',
           });
         } catch (error) {
           console.log(error);
