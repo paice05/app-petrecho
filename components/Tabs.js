@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   StyleSheet,
   Dimensions,
@@ -6,12 +6,12 @@ import {
   Animated,
   TouchableOpacity,
   Vibration,
-} from 'react-native';
-import { Block, Text, theme } from 'galio-framework';
+} from "react-native";
+import { Block, Text, theme } from "galio-framework";
 
-const { width } = Dimensions.get('screen');
-import nowTheme from '../constants/Theme';
-import { addDays, subDays } from 'date-fns';
+const { width } = Dimensions.get("screen");
+import nowTheme from "../constants/Theme";
+import { addDays, subDays } from "date-fns";
 
 export default class Tabs extends React.Component {
   static defaultProps = {
@@ -28,7 +28,8 @@ export default class Tabs extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.selected !== prevProps.selected) this.selectMenu(this.props.selected);
+    if (this.props.selected !== prevProps.selected)
+      this.selectMenu(this.props.selected);
   }
 
   animatedValue = new Animated.Value(1);
@@ -70,7 +71,7 @@ export default class Tabs extends React.Component {
 
     const containerStyles = [
       styles.titleContainer,
-      !isActive && { backgroundColor: '#e7e7e7' },
+      !isActive && { backgroundColor: "#e7e7e7" },
       isActive && styles.containerShadow,
     ];
 
@@ -94,13 +95,17 @@ export default class Tabs extends React.Component {
       >
         <Block style={containerStyles}>
           <Animated.View style={[styles.menuTitle]}>
-            <Text center color={isActive ? nowTheme.COLORS.WHITE : ''} size={10}>
+            <Text
+              center
+              color={isActive ? nowTheme.COLORS.WHITE : ""}
+              size={12}
+            >
               {item.title}
             </Text>
             <Text
               style={{ paddingHorizontal: 15 }}
               center
-              color={isActive ? nowTheme.COLORS.WHITE : ''}
+              color={isActive ? nowTheme.COLORS.WHITE : ""}
               size={18}
             >
               {day}
@@ -154,7 +159,7 @@ const styles = StyleSheet.create({
     // marginBottom: 20,
   },
   titleContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     backgroundColor: nowTheme.COLORS.ACTIVE,
     borderRadius: 10,
     marginRight: 9,
@@ -162,7 +167,7 @@ const styles = StyleSheet.create({
     paddingVertical: 3,
   },
   containerShadow: {
-    shadowColor: 'black',
+    shadowColor: "black",
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 4,
     shadowOpacity: 0.1,
@@ -171,5 +176,6 @@ const styles = StyleSheet.create({
   },
   menuTitle: {
     paddingVertical: 8,
+    minWidth: 50,
   },
 });

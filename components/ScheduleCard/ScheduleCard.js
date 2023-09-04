@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import { Text, Block } from 'galio-framework';
-import { nowTheme } from '../../constants';
+import React from "react";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, Block } from "galio-framework";
+import { nowTheme } from "../../constants";
 
 export const ScheduleCard = ({ startAt = 7, endAt = 20.5, payload }) => {
   const startTime = startAt * 60;
@@ -12,9 +12,9 @@ export const ScheduleCard = ({ startAt = 7, endAt = 20.5, payload }) => {
   for (let i = startTime; i <= endTime; i += interval) {
     const hours = Math.floor(i / 60);
     const minutes = i % 60;
-    const timeString = `${hours.toString().padStart(2, '0')}:${minutes
+    const timeString = `${hours.toString().padStart(2, "0")}:${minutes
       .toString()
-      .padStart(2, '0')}`;
+      .padStart(2, "0")}`;
 
     if (payload.includes(timeString)) {
       timeSlots.push({ time: timeString, schedule: true });
@@ -32,7 +32,11 @@ export const ScheduleCard = ({ startAt = 7, endAt = 20.5, payload }) => {
           {timeSlots.map(({ time, schedule }, index) => (
             <Block key={index}>
               <TouchableOpacity>
-                <Text size={16} style={schedule ? styles.timeSlot : styles.timeSlotOff}>
+                <Text
+                  center
+                  size={16}
+                  style={schedule ? styles.timeSlot : styles.timeSlotOff}
+                >
                   {time}
                 </Text>
               </TouchableOpacity>
@@ -46,39 +50,35 @@ export const ScheduleCard = ({ startAt = 7, endAt = 20.5, payload }) => {
 
 const styles = StyleSheet.create({
   scheduleCard: {
-    backgroundColor: '#fff',
-    padding: 16,
+    backgroundColor: "#fff",
     borderRadius: 8,
     marginVertical: 10,
-  },
-  heading: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 12,
+
+    paddingVertical: 4,
   },
   timeSlot: {
     width: 60,
-    marginBottom: 8,
-    marginHorizontal: 8,
-
-    backgroundColor: nowTheme.COLORS.PRIMARY,
-    color: '#fff',
-    paddingHorizontal: 8,
-    borderRadius: 5,
+    height: 40,
     padding: 8,
+    margin: 4,
+
+    borderWidth: 1,
+    borderRadius: 5,
+    color: "#fff",
+    borderColor: "#fff",
+    backgroundColor: nowTheme.COLORS.PRIMARY,
   },
   timeSlotOff: {
     width: 60,
-    marginBottom: 8,
-    marginHorizontal: 8,
-
-    paddingHorizontal: 8,
-    borderRadius: 5,
+    height: 40,
     padding: 8,
+    margin: 4,
 
     borderWidth: 1,
-    color: 'gray',
-    borderColor: 'gray',
+    borderRadius: 5,
+
+    color: "gray",
+    borderColor: "gray",
   },
 });
 
