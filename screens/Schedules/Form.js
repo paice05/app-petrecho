@@ -10,22 +10,25 @@ import { Calendar } from "react-native-calendars";
 
 import { useValidateRequiredFields } from "../../components/hooks/useValidateRequiredFields";
 import { useRequestFindOne } from "../../components/hooks/useRequestFindOne";
+import { useRequestFindMany } from "../../components/hooks/useRequestFindMany";
 import { useRequestCreate } from "../../components/hooks/useRequestCreate";
 import { useRequestUpdate } from "../../components/hooks/useRequestUpdate";
-import { AsyncSelectMulti } from "../../components/AsyncSelectMulti";
 import { DateTimePicker } from "../../components/DatePiker";
 import { Button, Icon } from "../../components";
-import { AsyncSelect } from "../../components/AsyncSelect";
 import { useToggle } from "../../components/hooks/useToggle";
 import { Modal } from "../../components/Modal";
 
 import { formartDate } from "../../utils/formartDate";
 import { nowTheme } from "../../constants";
 import { Config } from "./Config";
+import { UserSearch } from "../../components/UserSearch";
 
 const SchedulesForm = ({ route, navigation }) => {
   const params = route.params;
   const isEditing = params?.itemId;
+
+  const [allServices, setAllServices] = useState([]);
+  const [typeView, setTypeView] = useState("all"); // all | selected
 
   const [fields, setFields] = useState({
     user: null,
@@ -53,13 +56,30 @@ const SchedulesForm = ({ route, navigation }) => {
     id: params?.itemId,
   });
 
-  const { execute: execCreate, response: responseCreated } = useRequestCreate({
+  const {
+    execute: execCreate,
+    response: responseCreated,
+    loading: loadingCreate,
+  } = useRequestCreate({
     path: "/schedules",
   });
 
-  const { execute: execUpdate, response: responseUpdate } = useRequestUpdate({
+  const {
+    execute: execUpdate,
+    response: responseUpdate,
+    loading: loadingUpdate,
+  } = useRequestUpdate({
     path: "/schedules",
     id: params?.itemId,
+  });
+
+  const {
+    execute: execServices,
+    response: responseServices,
+    loading: loadingServices,
+  } = useRequestFindMany({
+    path: "/services",
+    defaultQuery: { perPage: 100 },
   });
 
   useEffect(() => {
@@ -71,10 +91,7 @@ const SchedulesForm = ({ route, navigation }) => {
     if (response) {
       setFields({
         user: { value: response?.user?.id, label: response?.user?.name },
-        services: response.services.map((item) => ({
-          value: item.id,
-          label: item.name,
-        })),
+        services: response.services.map((item) => item.id),
         employee: {
           value: response?.employee?.id,
           label: response?.employee?.name,
@@ -102,9 +119,20 @@ const SchedulesForm = ({ route, navigation }) => {
     if (isEditing) execFindOne();
   }, []);
 
+  // loading services
+  useEffect(() => {
+    execServices();
+  }, []);
+
   useEffect(() => {
     validate(fields);
   }, [fields]);
+
+  useEffect(() => {
+    if (responseServices) {
+      setAllServices(responseServices.data);
+    }
+  }, [responseServices]);
 
   const handleSubmitCreate = async () => {
     if (Object.values(errors).filter(Boolean).length) return;
@@ -124,10 +152,10 @@ const SchedulesForm = ({ route, navigation }) => {
 
     const payload = {
       ...fields,
-      services: fields?.services.map((item) => item.value),
+      services: fields.services,
       scheduleAt,
-      userId: fields?.user.value,
-      employeeId: fields?.employee.value,
+      userId: fields.user.value,
+      employeeId: fields.employee.value,
       discount,
       addition,
     };
@@ -147,7 +175,7 @@ const SchedulesForm = ({ route, navigation }) => {
 
     const payload = {
       ...fields,
-      services: fields.services.map((item) => item.value),
+      services: fields.services,
       scheduleAt,
       userId: fields.user.value,
       employeeId: fields.employee.value,
@@ -156,6 +184,16 @@ const SchedulesForm = ({ route, navigation }) => {
     };
 
     execUpdate(payload);
+  };
+
+  const handleChangeService = (serviceId) => {
+    if (fields.services.includes(serviceId))
+      return setFields({
+        ...fields,
+        services: fields.services.filter((item) => item !== serviceId),
+      });
+
+    setFields({ ...fields, services: [...fields.services, serviceId] });
   };
 
   if (loading)
@@ -169,19 +207,19 @@ const SchedulesForm = ({ route, navigation }) => {
     <ScrollView showsVerticalScrollIndicator={false}>
       <Block gap={15} flex style={styles.group}>
         <Block>
-          <AsyncSelect
+          <UserSearch
             path="/users"
             query={{ type: "pf" }}
             placeholder="Pesquise um cliente"
             labelText="Cliente"
-            onChange={(item) =>
-              item &&
+            onSelectUser={(item) =>
               setFields({
                 ...fields,
-                user: { value: item.value, label: item.label },
+                user: { value: item.id, label: item.name },
               })
             }
-            value={fields.user}
+            clear={() => setFields({ ...fields, user: null })}
+            value={fields?.user?.label}
             icon="user"
           />
           {errors?.["user"] && (
@@ -191,77 +229,109 @@ const SchedulesForm = ({ route, navigation }) => {
           )}
         </Block>
 
-        <Block>
-          <AsyncSelectMulti
-            isMulti
-            path="/services"
-            placeholder="Pesquise um serviço"
-            labelText="Serviços"
-            value={fields.services}
-            onChange={(item) => {
-              if (
-                fields.services.some((service) => item.value === service.value)
-              )
-                return;
+        <Block
+          row
+          space="between"
+          style={{
+            alignItems: "center",
+            paddingLeft: 20,
+          }}
+        >
+          <Text size={16} bold>
+            Serviços
+          </Text>
 
-              setFields({ ...fields, services: [...fields.services, item] });
-            }}
-            icon="tool"
-          />
-          {errors?.["services"] && (
-            <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
-              campo obrigatório
-            </Text>
-          )}
+          <Block row gap={20}>
+            <TouchableOpacity onPress={() => setTypeView("all")}>
+              <Text
+                size={16}
+                color={typeView === "all" && nowTheme.COLORS.PRIMARY}
+              >
+                Todos
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => setTypeView("selected")}>
+              <Text
+                size={16}
+                color={typeView === "selected" && nowTheme.COLORS.PRIMARY}
+              >
+                Selecionados ({fields.services.length})
+              </Text>
+            </TouchableOpacity>
+          </Block>
         </Block>
 
-        {fields?.services?.length > 0 && (
-          <Block flex={1} style={{ paddingHorizontal: 20 }}>
-            {fields?.services?.map((item, index) => {
-              return (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() =>
-                    setFields({
-                      ...fields,
-                      services: fields.services.filter(
-                        (service) => service.value !== item.value
-                      ),
-                    })
-                  }
-                  style={{ flex: 1 }}
-                >
-                  <Block row gap={5} style={styles.serviceItem}>
-                    <Text color="gray" size={16}>
-                      {item?.label}
-                    </Text>
-                    <Icon
-                      size={16}
-                      color={nowTheme.COLORS.PRIMARY}
-                      name="trash-2"
-                      family="feather"
-                    />
-                  </Block>
-                </TouchableOpacity>
-              );
-            })}
+        <ScrollView
+          style={{
+            maxHeight: 200,
+          }}
+        >
+          <Block gap={10}>
+            {loadingServices ? (
+              <ActivityIndicator size="large" colo="#0000ff" />
+            ) : (
+              (typeView === "selected"
+                ? allServices.filter((item) =>
+                    fields.services.includes(item.id)
+                  )
+                : allServices
+              )
+                .sort((a, b) => (a.name > b.name ? 1 : -1))
+                .map((item) => (
+                  <TouchableOpacity
+                    key={item.id}
+                    onPress={() => handleChangeService(item.id)}
+                  >
+                    <Block
+                      row
+                      space="between"
+                      style={[
+                        {
+                          backgroundColor: "#eee",
+                          padding: 8,
+                          borderRadius: 4,
+                          flex: 1,
+                        },
+                        fields.services.includes(item.id)
+                          ? { backgroundColor: nowTheme.COLORS.PRIMARY }
+                          : {},
+                      ]}
+                    >
+                      <Text
+                        color={fields.services.includes(item.id) ? "white" : ""}
+                      >
+                        {item.name}
+                      </Text>
+                      <Text
+                        color={fields.services.includes(item.id) ? "white" : ""}
+                      >
+                        {Number(item.price).toLocaleString("pt-BR", {
+                          style: "currency",
+                          currency: "BRL",
+                          currencyDisplay: "symbol",
+                        })}
+                      </Text>
+                    </Block>
+                  </TouchableOpacity>
+                ))
+            )}
           </Block>
-        )}
+        </ScrollView>
 
         <Block>
-          <AsyncSelect
+          <UserSearch
             path="/users"
             query={{ type: "pj" }}
             placeholder="Pesquise um funcionário"
             labelText="Funcionário"
-            onChange={(item) =>
-              item &&
+            onSelectUser={(item) =>
               setFields({
                 ...fields,
-                employee: { value: item.value, label: item.label },
+                employee: { value: item.id, label: item.name },
               })
             }
-            value={fields.employee}
+            clear={() => setFields({ ...fields, employee: null })}
+            value={fields?.employee?.label}
             icon="user"
           />
           {errors?.["employee"] && (
@@ -333,6 +403,7 @@ const SchedulesForm = ({ route, navigation }) => {
             </Text>
           </Button>
           <Button
+            loading={loadingCreate || loadingUpdate}
             style={styles.primary}
             onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
           >

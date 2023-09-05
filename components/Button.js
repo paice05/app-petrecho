@@ -1,19 +1,29 @@
-import React from 'react';
-import { StyleSheet, Vibration } from 'react-native';
-import { Button } from 'galio-framework';
+import React from "react";
+import { ActivityIndicator, StyleSheet, Vibration } from "react-native";
+import { Block, Button } from "galio-framework";
 
-import nowTheme from '../constants/Theme';
+import nowTheme from "../constants/Theme";
 
 class ArButton extends React.Component {
   render() {
-    const { small, shadowless, children, color, style, fontSize, round, ...props } = this.props;
+    const {
+      small,
+      shadowless,
+      children,
+      color,
+      style,
+      fontSize,
+      round,
+      loading,
+      ...props
+    } = this.props;
 
     const colorStyle = color && nowTheme.COLORS[color.toUpperCase()];
 
     const buttonStyles = [
       small && styles.smallButton,
-      colorStyle === 'neutral'
-        ? { backgroundColor: 'rgba(0,0,0,0)' }
+      colorStyle === "neutral"
+        ? { backgroundColor: "rgba(0,0,0,0)" }
         : color && { backgroundColor: colorStyle },
       round && { borderRadius: nowTheme.SIZES.BASE * 2 },
       !shadowless && styles.shadow,
@@ -24,7 +34,7 @@ class ArButton extends React.Component {
       <Button
         style={buttonStyles}
         shadowless
-        textStyle={{ fontSize: fontSize || 12, fontWeight: '700' }}
+        textStyle={{ fontSize: fontSize || 12, fontWeight: "700" }}
         {...props}
         onPress={() => {
           const vibrationDuration = 100;
@@ -34,8 +44,12 @@ class ArButton extends React.Component {
 
           this.props.onPress();
         }}
+        disabled={loading}
       >
-        {children}
+        <Block row gap={5}>
+          {children}
+          {loading ? <ActivityIndicator size="small" colo="#0000ff" /> : null}
+        </Block>
       </Button>
     );
   }

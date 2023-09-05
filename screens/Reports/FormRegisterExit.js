@@ -74,11 +74,10 @@ const RegisterExitForm = ({ navigation }) => {
           </Block>
 
           <Block>
-            <CustomInputMask 
+            <CustomInputMask
               placeholder="Digite o valor da saída"
               value={fields.value}
-              onChangeText={(item) => setFields({ ...fields, value: item})}
-              
+              onChangeText={(item) => setFields({ ...fields, value: item })}
             />
             {errors?.["value"] && (
               <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
@@ -88,28 +87,16 @@ const RegisterExitForm = ({ navigation }) => {
           </Block>
         </Block>
 
-        <Block style={styles.wrapperButtons}>
-          <Button
-            textStyle={{
-              fontSize: 16,
-              fontWeight: "bold",
-              color: "black",
-            }}
-            style={styles.button}
-            onPress={() => navigation.goBack()}
-          >
-            Voltar
+        <Block row center>
+          <Button style={styles.button} onPress={() => navigation.goBack()}>
+            <Text size={16} bold>
+              Voltar
+            </Text>
           </Button>
-          <Button
-            textStyle={{
-              fontSize: 16,
-              color: "white",
-              fontWeight: "bold",
-            }}
-            style={styles.primary}
-            onPress={handleSubmitRegister}
-          >
-            Cadastrar
+          <Button style={styles.primary} onPress={handleSubmitRegister}>
+            <Text size={16} bold color="#fff">
+              Cadastrar
+            </Text>
           </Button>
         </Block>
       </Block>

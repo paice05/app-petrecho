@@ -227,13 +227,6 @@ const ScheduleList = ({ navigation }) => {
                           />
                         );
                       })}
-                    <PaginationSimple
-                      currentPage={pagination.currentPage}
-                      total={pagination.total}
-                      lastPage={pagination.lastPage}
-                      handleNextPage={handleNextPage}
-                      handlePreviousPage={handlePreviousPage}
-                    />
                   </Block>
                 )}
               </Block>
@@ -257,6 +250,16 @@ const ScheduleList = ({ navigation }) => {
           },
         ]}
       />
+
+      {schedules.length > 0 ? (
+        <PaginationSimple
+          currentPage={pagination.currentPage}
+          total={pagination.total}
+          lastPage={pagination.lastPage}
+          handleNextPage={handleNextPage}
+          handlePreviousPage={handlePreviousPage}
+        />
+      ) : null}
 
       <Modal
         isVisible={openCalendar}

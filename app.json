@@ -2,7 +2,7 @@
   "expo": {
     "name": "meupetrecho",
     "slug": "test",
-    "version": "1.5.0",
+    "version": "1.9.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -20,13 +20,17 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "versionCode": 5,
+      "versionCode": 9,
       "package": "com.mpaice.meupetrechoapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "extra": {},
+    "extra": {
+      "eas": {
+        "projectId": "7d33f38e-42ec-417e-ae63-e519783cf260"
+      }
+    },
     "owner": "mpaice"
   }
 }

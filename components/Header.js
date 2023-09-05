@@ -129,28 +129,7 @@ const RenderRight = (props) => {
       break;
   }
 };
-const RenderSearch = () => {
-  return (
-    <Input
-      right
-      color="black"
-      style={styles.search}
-      placeholder="What are you looking for?"
-      placeholderTextColor={"#8898AA"}
-      onFocus={() => {
-        Keyboard.dismiss();
-      }}
-      iconContent={
-        <Icon
-          size={16}
-          color={theme.COLORS.MUTED}
-          name="zoom-bold2x"
-          family="NowExtra"
-        />
-      }
-    />
-  );
-};
+
 const RenderOptions = (props) => {
   const { optionLeft, optionRight } = props;
 
@@ -193,7 +172,6 @@ const RenderTabs = (props) => {
   const defaultTab = tabs && tabs[0] && tabs[0].id;
 
   if (!tabs) return null;
-
   const navigation = useNavigation();
 
   return (
@@ -209,7 +187,6 @@ const RenderHeader = (props) => {
   if (search || tabs || options) {
     return (
       <Block center>
-        {search ? <RenderSearch {...props} /> : null}
         {options ? <RenderOptions {...props} /> : null}
         {tabs ? <RenderTabs {...props} /> : null}
       </Block>

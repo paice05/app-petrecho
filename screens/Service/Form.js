@@ -76,7 +76,11 @@ const ServiceForm = ({ route, navigation }) => {
 
           setFields({
             name: response.data.name,
-            price: response.data.price,
+            price: Number(response.data.price).toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+              currencyDisplay: "symbol",
+            }),
           });
         } catch (error) {
           console.log(error);
