@@ -244,7 +244,7 @@ const ScheduleList = ({ navigation }) => {
             children: (
               <Block>
                 {loading ? (
-                  <ActivityIndicator size="large" colo="#0000ff" />
+                  <ActivityIndicator size="large" color="#0000ff" />
                 ) : (
                   <ScheduleCard
                     payload={schedules.map((item) =>

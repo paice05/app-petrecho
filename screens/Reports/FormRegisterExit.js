@@ -10,6 +10,7 @@ import { Button, Icon } from "../../components";
 import CustomInput from "../../components/CustomInput";
 import { api } from "../../services/api";
 import { useValidateRequiredFields } from "../../components/hooks/useValidateRequiredFields";
+import { CustomInputMask } from "../../components/CustomInputMask";
 
 const RegisterExitForm = ({ navigation }) => {
   const [fields, setFields] = useState({
@@ -28,8 +29,15 @@ const RegisterExitForm = ({ navigation }) => {
   const handleSubmitRegister = async () => {
     if (Object.values(errors).filter(Boolean).length) return;
 
+    const value = fields?.value.replace("R$", "").replace(",", ".");
+
+    const payload = {
+      description: fields.description,
+      value,
+    };
+
     try {
-      await api.request().post("/reports/register-out", fields);
+      await api.request().post("/reports/register-out", payload);
       navigation.goBack();
     } catch (error) {
       console.log(error);
@@ -66,19 +74,11 @@ const RegisterExitForm = ({ navigation }) => {
           </Block>
 
           <Block>
-            <CustomInput
+            <CustomInputMask 
               placeholder="Digite o valor da saída"
-              labelText="Valor"
-              value={fields.value.toString()}
-              onChangeText={(item) => setFields({ ...fields, value: item })}
-              iconContent={
-                <Icon
-                  size={16}
-                  name="dollar-sign"
-                  family="feather"
-                  style={styles.inputIcons}
-                />
-              }
+              value={fields.value}
+              onChangeText={(item) => setFields({ ...fields, value: item})}
+              
             />
             {errors?.["value"] && (
               <Text center size={14} color={nowTheme.COLORS.PRIMARY}>

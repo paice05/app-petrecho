@@ -1,14 +1,14 @@
-import axios from 'axios';
-import qs from 'qs';
+import axios from "axios";
+import qs from "qs";
 
 const host = {
-  ale: 'http://192.168.10.155:3333',
-  paice: 'http://192.168.1.18:3333',
-  production: 'https://api.meupetrecho.com.br',
+  ale: "http://192.168.10.155:3333",
+  paice: "http://192.168.1.18:3333",
+  production: "https://api.meupetrecho.com.br",
 };
 
 class API {
-  token = '';
+  token = "";
 
   constructor() {}
 
@@ -18,7 +18,7 @@ class API {
       paramsSerializer: (params) => qs.stringify(params),
       headers: {
         Authorization: `Bearer ${this.token}`,
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
   }

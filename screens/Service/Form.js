@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Dimensions } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { ScrollView, StyleSheet, Dimensions } from "react-native";
 
 // Galio components
-import { Block, Text, theme } from 'galio-framework';
+import { Block, Text, theme } from "galio-framework";
 
 // Now UI themed components
-import { Button, Icon } from '../../components';
-import CustomInput from '../../components/CustomInput';
-import { nowTheme } from '../../constants';
-import { api } from '../../services/api';
-import { useValidateRequiredFields } from '../../components/hooks/useValidateRequiredFields';
-import { CustomInputMask } from '../../components/CustomInputMask';
+import { Button, Icon } from "../../components";
+import CustomInput from "../../components/CustomInput";
+import { nowTheme } from "../../constants";
+import { api } from "../../services/api";
+import { useValidateRequiredFields } from "../../components/hooks/useValidateRequiredFields";
+import { CustomInputMask } from "../../components/CustomInputMask";
 
 const ServiceForm = ({ route, navigation }) => {
   const params = route.params;
@@ -18,12 +18,12 @@ const ServiceForm = ({ route, navigation }) => {
   const isEditing = params?.itemId;
 
   const [fields, setFields] = useState({
-    name: '',
-    price: '',
+    name: "",
+    price: "",
   });
 
   const { validate, errors } = useValidateRequiredFields({
-    fields: ['name', 'price'],
+    fields: ["name", "price"],
   });
 
   useEffect(() => {
@@ -33,7 +33,7 @@ const ServiceForm = ({ route, navigation }) => {
   const handleSubmitCreate = async () => {
     if (Object.values(errors).filter(Boolean).length) return;
 
-    const price = fields?.price.replace('R$', '').replace(',', '.');
+    const price = fields?.price.replace("R$", "").replace(",", ".");
 
     const payload = {
       name: fields.name,
@@ -41,7 +41,7 @@ const ServiceForm = ({ route, navigation }) => {
     };
 
     try {
-      await api.request().post('/services', payload);
+      await api.request().post("/services", payload);
 
       navigation.goBack();
     } catch (error) {
@@ -52,7 +52,7 @@ const ServiceForm = ({ route, navigation }) => {
   const handleSubmitUpdate = async () => {
     if (Object.values(errors).filter(Boolean).length) return;
 
-    const price = fields?.price.replace('R$', '').replace(',', '.');
+    const price = fields?.price.replace("R$", "").replace(",", ".");
 
     const payload = {
       name: fields.name,
@@ -97,10 +97,15 @@ const ServiceForm = ({ route, navigation }) => {
             value={fields.name}
             onChangeText={(value) => setFields({ ...fields, name: value })}
             iconContent={
-              <Icon size={16} name="file-text" family="feather" style={styles.inputIcons} />
+              <Icon
+                size={16}
+                name="file-text"
+                family="feather"
+                style={styles.inputIcons}
+              />
             }
           />
-          {errors?.['name'] && (
+          {errors?.["name"] && (
             <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
               campo obrigatório
             </Text>
@@ -112,10 +117,11 @@ const ServiceForm = ({ route, navigation }) => {
             Preço
           </Text>
           <CustomInputMask
+            placeholder="Digite o valor do serviço"
             value={fields.price}
             onChangeText={(text) => setFields({ ...fields, price: text })}
           />
-          {errors?.['price'] && (
+          {errors?.["price"] && (
             <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
               campo obrigatório
             </Text>
@@ -133,7 +139,7 @@ const ServiceForm = ({ route, navigation }) => {
             onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
           >
             <Text size={16} bold color="#fff">
-              {isEditing ? 'Atualizar' : 'Cadastrar'}
+              {isEditing ? "Atualizar" : "Cadastrar"}
             </Text>
           </Button>
         </Block>
@@ -147,14 +153,14 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 15,
     borderRadius: 10,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
   button: {
     marginBottom: nowTheme.SIZES.BASE,
     borderRadius: 10,
     width: 120,
     height: 40,
-    backgroundColor: '#eee',
+    backgroundColor: "#eee",
     borderWidth: 1,
     borderColor: nowTheme.COLORS.BORDER,
   },

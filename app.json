@@ -26,11 +26,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "extra": {
-      "eas": {
-        "projectId": "7d33f38e-42ec-417e-ae63-e519783cf260"
-      }
-    },
+    "extra": {},
     "owner": "mpaice"
   }
 }

@@ -1,22 +1,27 @@
-import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { Block, Text, Switch } from 'galio-framework';
-import { Calendar } from 'react-native-calendars';
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
+import React, { useEffect, useState } from "react";
+import { Block, Text, Switch } from "galio-framework";
+import { Calendar } from "react-native-calendars";
 
-import { useValidateRequiredFields } from '../../components/hooks/useValidateRequiredFields';
-import { useRequestFindOne } from '../../components/hooks/useRequestFindOne';
-import { useRequestCreate } from '../../components/hooks/useRequestCreate';
-import { useRequestUpdate } from '../../components/hooks/useRequestUpdate';
-import { AsyncSelectMulti } from '../../components/AsyncSelectMulti';
-import { DateTimePicker } from '../../components/DatePiker';
-import { Button, Icon } from '../../components';
-import { AsyncSelect } from '../../components/AsyncSelect';
-import { useToggle } from '../../components/hooks/useToggle';
-import { Modal } from '../../components/Modal';
+import { useValidateRequiredFields } from "../../components/hooks/useValidateRequiredFields";
+import { useRequestFindOne } from "../../components/hooks/useRequestFindOne";
+import { useRequestCreate } from "../../components/hooks/useRequestCreate";
+import { useRequestUpdate } from "../../components/hooks/useRequestUpdate";
+import { AsyncSelectMulti } from "../../components/AsyncSelectMulti";
+import { DateTimePicker } from "../../components/DatePiker";
+import { Button, Icon } from "../../components";
+import { AsyncSelect } from "../../components/AsyncSelect";
+import { useToggle } from "../../components/hooks/useToggle";
+import { Modal } from "../../components/Modal";
 
-import { formartDate } from '../../utils/formartDate';
-import { nowTheme } from '../../constants';
-import { Config } from './Config';
+import { formartDate } from "../../utils/formartDate";
+import { nowTheme } from "../../constants";
+import { Config } from "./Config";
 
 const SchedulesForm = ({ route, navigation }) => {
   const params = route.params;
@@ -26,7 +31,7 @@ const SchedulesForm = ({ route, navigation }) => {
     user: null,
     services: [], // value label
     employee: null,
-    date: formartDate(new Date(), 'dd-MM-yyyy'),
+    date: formartDate(new Date(), "dd-MM-yyyy"),
     time: new Date(),
     discount: 0,
     addition: 0,
@@ -34,7 +39,7 @@ const SchedulesForm = ({ route, navigation }) => {
   });
 
   const { validate, errors } = useValidateRequiredFields({
-    fields: ['user', 'services', 'employee', 'date', 'time'],
+    fields: ["user", "services", "employee", "date", "time"],
   });
 
   const { toggle, onChangeToggle } = useToggle();
@@ -44,16 +49,16 @@ const SchedulesForm = ({ route, navigation }) => {
     response,
     loading,
   } = useRequestFindOne({
-    path: '/schedules',
+    path: "/schedules",
     id: params?.itemId,
   });
 
   const { execute: execCreate, response: responseCreated } = useRequestCreate({
-    path: '/schedules',
+    path: "/schedules",
   });
 
   const { execute: execUpdate, response: responseUpdate } = useRequestUpdate({
-    path: '/schedules',
+    path: "/schedules",
     id: params?.itemId,
   });
 
@@ -66,22 +71,28 @@ const SchedulesForm = ({ route, navigation }) => {
     if (response) {
       setFields({
         user: { value: response?.user?.id, label: response?.user?.name },
-        services: response.services.map((item) => ({ value: item.id, label: item.name })),
-        employee: { value: response?.employee?.id, label: response?.employee?.name },
-        date: formartDate(response.scheduleAt, 'dd-MM-yyyy'),
+        services: response.services.map((item) => ({
+          value: item.id,
+          label: item.name,
+        })),
+        employee: {
+          value: response?.employee?.id,
+          label: response?.employee?.name,
+        },
+        date: formartDate(response.scheduleAt, "dd-MM-yyyy"),
         time: new Date(response.scheduleAt),
         isPackage: response.isPackage,
         discount:
-          Number(response.discount).toLocaleString('pt-BR', {
-            style: 'currency',
-            currency: 'BRL',
-            currencyDisplay: 'symbol',
+          Number(response.discount).toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+            currencyDisplay: "symbol",
           }) || null,
         addition:
-          Number(response.addition).toLocaleString('pt-BR', {
-            style: 'currency',
-            currency: 'BRL',
-            currencyDisplay: 'symbol',
+          Number(response.addition).toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+            currencyDisplay: "symbol",
           }) || null,
       });
     }
@@ -98,10 +109,18 @@ const SchedulesForm = ({ route, navigation }) => {
   const handleSubmitCreate = async () => {
     if (Object.values(errors).filter(Boolean).length) return;
 
-    const [day, month, year] = fields.date.split('-');
-    const scheduleAt = new Date(`${year}-${month}-${day} ${formartDate(fields.time, 'HH:mm')}:00`);
-    const discount = fields.discount.toString().replace('R$', '').replace(',', '.');
-    const addition = fields.addition.toString().replace('R$', '').replace(',', '.');
+    const [day, month, year] = fields.date.split("-");
+    const scheduleAt = new Date(
+      `${year}-${month}-${day} ${formartDate(fields.time, "HH:mm")}:00`
+    );
+    const discount = fields.discount
+      .toString()
+      .replace("R$", "")
+      .replace(",", ".");
+    const addition = fields.addition
+      .toString()
+      .replace("R$", "")
+      .replace(",", ".");
 
     const payload = {
       ...fields,
@@ -119,10 +138,12 @@ const SchedulesForm = ({ route, navigation }) => {
   const handleSubmitUpdate = async () => {
     if (Object.values(errors).filter(Boolean).length) return;
 
-    const [day, month, year] = fields.date.split('-');
-    const scheduleAt = new Date(`${year}-${month}-${day} ${formartDate(fields.time, 'HH:mm')}:00`);
-    const discount = fields?.discount.replace('R$', '').replace(',', '.');
-    const addition = fields?.addition.replace('R$', '').replace(',', '.');
+    const [day, month, year] = fields.date.split("-");
+    const scheduleAt = new Date(
+      `${year}-${month}-${day} ${formartDate(fields.time, "HH:mm")}:00`
+    );
+    const discount = fields?.discount.replace("R$", "").replace(",", ".");
+    const addition = fields?.addition.replace("R$", "").replace(",", ".");
 
     const payload = {
       ...fields,
@@ -150,16 +171,20 @@ const SchedulesForm = ({ route, navigation }) => {
         <Block>
           <AsyncSelect
             path="/users"
-            query={{ type: 'pf' }}
+            query={{ type: "pf" }}
             placeholder="Pesquise um cliente"
             labelText="Cliente"
             onChange={(item) =>
-              item && setFields({ ...fields, user: { value: item.value, label: item.label } })
+              item &&
+              setFields({
+                ...fields,
+                user: { value: item.value, label: item.label },
+              })
             }
             value={fields.user}
             icon="user"
           />
-          {errors?.['user'] && (
+          {errors?.["user"] && (
             <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
               campo obrigatório
             </Text>
@@ -174,13 +199,16 @@ const SchedulesForm = ({ route, navigation }) => {
             labelText="Serviços"
             value={fields.services}
             onChange={(item) => {
-              if (fields.services.some((service) => item.value === service.value)) return;
+              if (
+                fields.services.some((service) => item.value === service.value)
+              )
+                return;
 
               setFields({ ...fields, services: [...fields.services, item] });
             }}
             icon="tool"
           />
-          {errors?.['services'] && (
+          {errors?.["services"] && (
             <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
               campo obrigatório
             </Text>
@@ -196,7 +224,9 @@ const SchedulesForm = ({ route, navigation }) => {
                   onPress={() =>
                     setFields({
                       ...fields,
-                      services: fields.services.filter((service) => service.value !== item.value),
+                      services: fields.services.filter(
+                        (service) => service.value !== item.value
+                      ),
                     })
                   }
                   style={{ flex: 1 }}
@@ -221,16 +251,20 @@ const SchedulesForm = ({ route, navigation }) => {
         <Block>
           <AsyncSelect
             path="/users"
-            query={{ type: 'pj' }}
+            query={{ type: "pj" }}
             placeholder="Pesquise um funcionário"
             labelText="Funcionário"
             onChange={(item) =>
-              item && setFields({ ...fields, employee: { value: item.value, label: item.label } })
+              item &&
+              setFields({
+                ...fields,
+                employee: { value: item.value, label: item.label },
+              })
             }
             value={fields.employee}
             icon="user"
           />
-          {errors?.['employee'] && (
+          {errors?.["employee"] && (
             <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
               campo obrigatório
             </Text>
@@ -242,10 +276,20 @@ const SchedulesForm = ({ route, navigation }) => {
             <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
               Data
             </Text>
-            <TouchableOpacity onPress={onChangeToggle} style={styles.buttonDate}>
-              <Block row gap={10} style={{ alignItems: 'center' }}>
-                <Icon size={16} color={nowTheme.COLORS.PRIMARY} name="calendar" family="feather" />
-                <Text size={16}>{fields.date}</Text>
+            <TouchableOpacity
+              onPress={onChangeToggle}
+              style={styles.buttonDate}
+            >
+              <Block row gap={10} style={{ alignItems: "center" }}>
+                <Icon
+                  size={16}
+                  color={nowTheme.COLORS.PRIMARY}
+                  name="calendar"
+                  family="feather"
+                />
+                <Text size={16} style={{ height: 20 }}>
+                  {fields.date}
+                </Text>
               </Block>
             </TouchableOpacity>
           </Block>
@@ -253,7 +297,6 @@ const SchedulesForm = ({ route, navigation }) => {
             <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
               Horário
             </Text>
-
             <DateTimePicker
               value={fields.time}
               onChange={(time) => setFields({ ...fields, time })}
@@ -264,8 +307,13 @@ const SchedulesForm = ({ route, navigation }) => {
         <Block row right>
           <Switch
             value={fields.isPackage}
-            onChange={() => setFields({ ...fields, isPackage: !fields.isPackage })}
-            trackColor={{ false: nowTheme.COLORS.HEADER, true: nowTheme.COLORS.PRIMARY }}
+            onChange={() =>
+              setFields({ ...fields, isPackage: !fields.isPackage })
+            }
+            trackColor={{
+              false: nowTheme.COLORS.HEADER,
+              true: nowTheme.COLORS.PRIMARY,
+            }}
           />
           <Text
             style={{ paddingBottom: 15, paddingHorizontal: 10 }}
@@ -289,7 +337,7 @@ const SchedulesForm = ({ route, navigation }) => {
             onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
           >
             <Text size={16} bold color="#fff">
-              {isEditing ? 'Atualizar' : 'Cadastrar'}
+              {isEditing ? "Atualizar" : "Cadastrar"}
             </Text>
           </Button>
         </Block>
@@ -303,7 +351,7 @@ const SchedulesForm = ({ route, navigation }) => {
       >
         <Calendar
           onDayPress={(value) => {
-            const [year, month, day] = value.dateString.split('-');
+            const [year, month, day] = value.dateString.split("-");
 
             setFields({ ...fields, date: `${day}-${month}-${year}` });
             onChangeToggle();
@@ -318,20 +366,20 @@ const styles = StyleSheet.create({
   group: {
     margin: 15,
     borderRadius: 10,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 8,
   },
   serviceItem: {
     paddingBottom: 7,
     paddingRight: 15,
-    alignItems: 'center',
+    alignItems: "center",
   },
   button: {
     marginBottom: nowTheme.SIZES.BASE,
     borderRadius: 10,
     width: 120,
     height: 40,
-    backgroundColor: '#eee',
+    backgroundColor: "#eee",
     borderWidth: 1,
     borderColor: nowTheme.COLORS.BORDER,
   },
@@ -348,8 +396,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: nowTheme.COLORS.BORDER,
     height: 44,
-    backgroundColor: '#FFFFFF',
-    padding: 12,
+    backgroundColor: "#FFFFFF",
+    padding: 9,
   },
 });
 
