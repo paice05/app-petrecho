@@ -89,28 +89,27 @@ export const UserSearch = ({
         )}
       </Block>
 
-      <ScrollView style={{ maxHeight: 200 }}>
-        <FlatList
-          data={!textName.length ? [] : items}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={[
-                {
-                  backgroundColor: "#eee",
-                  padding: 8,
-                  borderRadius: 4,
-                  flex: 1,
-                  marginVertical: 5,
-                },
-              ]}
-              onPress={() => handleSelectUser(item)}
-            >
-              <Text>{item.name}</Text>
-            </TouchableOpacity>
-          )}
-        />
-      </ScrollView>
+      <FlatList
+        data={!textName.length ? [] : items}
+        keyExtractor={(item) => item.id}
+        style={{ maxHeight: 200 }}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={[
+              {
+                backgroundColor: "#eee",
+                padding: 8,
+                borderRadius: 4,
+                flex: 1,
+                marginVertical: 5,
+              },
+            ]}
+            onPress={() => handleSelectUser(item)}
+          >
+            <Text>{item.name}</Text>
+          </TouchableOpacity>
+        )}
+      />
     </View>
   );
 };
