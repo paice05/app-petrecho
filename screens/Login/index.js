@@ -14,6 +14,7 @@ import { clearCache, getCache, setCache } from "../../services/cache";
 import { BlockModal } from "../../components/BlockModal";
 import { useToggle } from "../../components/hooks/useToggle";
 import { useUserContext } from "../../context/user";
+import { LoadingOverlay } from "../../components/LoadingOverlay";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -30,6 +31,7 @@ const Login = ({ navigation }) => {
   });
 
   const [isError, setIsError] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { toggle, onChangeToggle } = useToggle();
   const { changeUser } = useUserContext();
@@ -37,6 +39,7 @@ const Login = ({ navigation }) => {
   useEffect(() => {
     getCache("token").then((response) => {
       if (response) {
+        setLoading(true);
         api.setToken(response);
 
         // verificar se o account desse token da habilitado
@@ -49,11 +52,13 @@ const Login = ({ navigation }) => {
 
               changeUser({ name: user.name, isAdmin: user.isSuperAdmin });
               navigation.navigate("App");
+              setLoading(false);
             });
           })
           .catch((err) => {
             onChangeToggle();
             clearCache("token");
+            setLoading(false);
           });
       }
     });
@@ -63,6 +68,7 @@ const Login = ({ navigation }) => {
     if (!fields.username || !fields.password) return;
 
     setIsError(false);
+    setLoading(true);
 
     api
       .request()
@@ -71,6 +77,7 @@ const Login = ({ navigation }) => {
         /** verificar se a conta esta habilitada */
         if (!data.user.account.enable) {
           onChangeToggle();
+          setLoading(false);
 
           return;
         }
@@ -83,17 +90,20 @@ const Login = ({ navigation }) => {
           setCache("token", data.token);
           setCache("user", JSON.stringify(data.user)).then(() => {
             navigation.navigate("App");
+            setLoading(false);
           });
         }
       })
       .catch((err) => {
         setIsError(true);
+        setLoading(false);
       });
   };
 
   return (
     <DismissKeyboard>
       <Block flex middle>
+        <LoadingOverlay visible={loading} />
         <Block flex middle>
           <Block style={styles.registerContainer}>
             <Block flex space="evenly">
