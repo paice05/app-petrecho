@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, Block } from "galio-framework";
+import * as Sharing from "expo-sharing";
+import ViewShot from "react-native-view-shot";
+
 import { nowTheme } from "../../constants";
+import IconExtra from "../Icon";
 
 export const ScheduleCard = ({ startAt = 7, endAt = 20.5, payload }) => {
   const startTime = startAt * 60;
@@ -25,24 +29,56 @@ export const ScheduleCard = ({ startAt = 7, endAt = 20.5, payload }) => {
     timeSlots.push({ time: timeString, schedule: false });
   }
 
+  const ref = useRef();
+
+  const handleShare = async () => {
+    if (ref.current) {
+      // tirar o print
+      const uri = await ref.current.capture();
+
+      // verificar se o compartilhamento esta disponivel
+      const enable = await Sharing.isAvailableAsync();
+
+      if (enable) {
+        // compartilhar
+        await Sharing.shareAsync(uri, {});
+      }
+    }
+  };
+
   return (
     <View style={styles.scheduleCard}>
       <Block center>
-        <Text>
-          {timeSlots.map(({ time, schedule }, index) => (
-            <Block key={index}>
-              <TouchableOpacity>
-                <Text
-                  center
-                  size={16}
-                  style={schedule ? styles.timeSlot : styles.timeSlotOff}
-                >
-                  {time}
-                </Text>
-              </TouchableOpacity>
-            </Block>
-          ))}
-        </Text>
+        <ViewShot ref={ref}>
+          <Text>
+            {timeSlots.map(({ time, schedule }, index) => (
+              <Block key={index}>
+                <TouchableOpacity>
+                  <Text
+                    center
+                    size={16}
+                    style={schedule ? styles.timeSlot : styles.timeSlotOff}
+                  >
+                    {time}
+                  </Text>
+                </TouchableOpacity>
+              </Block>
+            ))}
+          </Text>
+        </ViewShot>
+
+        <TouchableOpacity onPress={handleShare} style={{ padding: 14 }}>
+          <Block row center gap={10}>
+            <IconExtra
+              color={nowTheme.COLORS.PRIMARY}
+              size={18}
+              name="share-2"
+            />
+            <Text color={nowTheme.COLORS.PRIMARY} size={18}>
+              Compartilhar
+            </Text>
+          </Block>
+        </TouchableOpacity>
       </Block>
     </View>
   );
