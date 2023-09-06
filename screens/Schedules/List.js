@@ -1,13 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Block, Text } from "galio-framework";
 import { addDays, subDays } from "date-fns";
-import {
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-  ActivityIndicator,
-} from "react-native";
+import { StyleSheet, ScrollView, TouchableOpacity, Alert } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 
 import Tabs from "../../components/Tabs";
@@ -22,6 +16,7 @@ import { useRequestDestroy } from "../../components/hooks/useRequestDestroy";
 import { useRequestFindMany } from "../../components/hooks/useRequestFindMany";
 import { formartDate } from "../../utils/formartDate";
 import { api } from "../../services/api";
+import { LoadingOverlay } from "../../components/LoadingOverlay";
 
 const ScheduleList = ({ navigation }) => {
   const [openCalendar, setOpenCalendar] = useState(false);
@@ -149,6 +144,8 @@ const ScheduleList = ({ navigation }) => {
       showsVerticalScrollIndicator={true}
       contentContainerStyle={styles.card}
     >
+      <LoadingOverlay visible={loading} />
+
       <TouchableOpacity
         style={styles.dateStyle}
         onPress={() => setOpenCalendar(true)}
@@ -178,74 +175,60 @@ const ScheduleList = ({ navigation }) => {
           {
             title: "Lista",
             children: (
-              <Block>
-                {loading ? (
-                  <ActivityIndicator size="large" colo="#0000ff" />
-                ) : (
-                  <Block style={{ marginVertical: 10 }}>
-                    {schedules.length === 0 && (
-                      <Text
-                        size={18}
-                        center
-                        style={{ marginTop: 20, marginBottom: 20 }}
-                      >
-                        Nenhum registro encontrado
-                      </Text>
-                    )}
-
-                    {schedules
-                      .sort((a, b) =>
-                        formartDate(a.scheduleAt, "HH:mm") >
-                        formartDate(b.scheduleAt, "HH:mm")
-                          ? 1
-                          : -1
-                      )
-                      .map((item) => {
-                        return (
-                          <CardSchedule
-                            key={item.id}
-                            navigation={navigation}
-                            id={item.id}
-                            nome={
-                              item?.user?.name || "(Esse cliente não existe)"
-                            }
-                            funcionario={
-                              item?.employee?.name ||
-                              "(Esse funcionário não existe)"
-                            }
-                            servico={item?.services
-                              ?.map((service) => service?.name)
-                              .join(", ")}
-                            horario={formartDate(item.scheduleAt, "HH:mm")}
-                            dia={formartDate(item.scheduleAt, "dd/MM/YYY")}
-                            status={item.status}
-                            pacote={item.isPackage}
-                            onFinished={() => handleFinished(item.id)}
-                            onCanceled={() => handleCanceled(item.id)}
-                            onDeleted={() => handleConfirmDelete(item.id)}
-                            onRevert={() => handleRestore(item.id)}
-                          />
-                        );
-                      })}
-                  </Block>
+              <Block style={{ marginVertical: 10 }}>
+                {schedules.length === 0 && (
+                  <Text
+                    size={18}
+                    center
+                    style={{ marginTop: 20, marginBottom: 20 }}
+                  >
+                    Nenhum registro encontrado
+                  </Text>
                 )}
+
+                {schedules
+                  .sort((a, b) =>
+                    formartDate(a.scheduleAt, "HH:mm") >
+                    formartDate(b.scheduleAt, "HH:mm")
+                      ? 1
+                      : -1
+                  )
+                  .map((item) => {
+                    return (
+                      <CardSchedule
+                        key={item.id}
+                        navigation={navigation}
+                        id={item.id}
+                        nome={item?.user?.name || "(Esse cliente não existe)"}
+                        funcionario={
+                          item?.employee?.name ||
+                          "(Esse funcionário não existe)"
+                        }
+                        servico={item?.services
+                          ?.map((service) => service?.name)
+                          .join(", ")}
+                        horario={formartDate(item.scheduleAt, "HH:mm")}
+                        dia={formartDate(item.scheduleAt, "dd/MM/YYY")}
+                        status={item.status}
+                        pacote={item.isPackage}
+                        onFinished={() => handleFinished(item.id)}
+                        onCanceled={() => handleCanceled(item.id)}
+                        onDeleted={() => handleConfirmDelete(item.id)}
+                        onRevert={() => handleRestore(item.id)}
+                      />
+                    );
+                  })}
               </Block>
             ),
           },
           {
             title: "Horários",
             children: (
-              <Block>
-                {loading ? (
-                  <ActivityIndicator size="large" color="#0000ff" />
-                ) : (
-                  <ScheduleCard
-                    payload={schedules.map((item) =>
-                      formartDate(item.scheduleAt, "HH:mm")
-                    )}
-                  />
+              <ScheduleCard
+                payload={schedules.map((item) =>
+                  formartDate(item.scheduleAt, "HH:mm")
                 )}
-              </Block>
+              />
             ),
           },
         ]}

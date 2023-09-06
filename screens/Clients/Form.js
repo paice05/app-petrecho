@@ -1,29 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Dimensions } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { ScrollView, StyleSheet, Dimensions } from "react-native";
 
 // Galio components
-import { Block, Text, theme } from 'galio-framework';
+import { Block, Text, theme } from "galio-framework";
 
 // Now UI themed components
-import { Button, Icon, Input } from '../../components';
-import CustomInput from '../../components/CustomInput';
-import { CustomSelectBottom } from '../../components/CustomSelectBottom';
-import { useValidateRequiredFields } from '../../components/hooks/useValidateRequiredFields';
-import { api } from '../../services/api';
-import { optionsBirthDate } from '../../constants/month';
-import { nowTheme } from '../../constants';
-import Theme from '../../constants/Theme';
+import { Button, Icon, Input } from "../../components";
+import CustomInput from "../../components/CustomInput";
+import { CustomSelectBottom } from "../../components/CustomSelectBottom";
+import { useValidateRequiredFields } from "../../components/hooks/useValidateRequiredFields";
+import { api } from "../../services/api";
+import { optionsBirthDate } from "../../constants/month";
+import { nowTheme } from "../../constants";
+import Theme from "../../constants/Theme";
 
-const { width } = Dimensions.get('screen');
+const { width } = Dimensions.get("screen");
 
 const optionsType = [
   {
-    title: 'Cliente',
-    data: 'pf',
+    title: "Cliente",
+    data: "pf",
   },
   {
-    title: 'Funcionário',
-    data: 'pj',
+    title: "Funcionário",
+    data: "pj",
   },
 ];
 
@@ -33,15 +33,17 @@ const ClientForm = ({ route, navigation }) => {
   const isEditing = params?.itemId;
 
   const [fields, setFields] = useState({
-    name: '',
-    cellPhone: '',
-    birthDate: { title: '', data: '' },
-    type: isEditing ? { title: '', data: '' } : { title: 'Cliente', data: 'pf' },
-    password: '',
+    name: "",
+    cellPhone: "",
+    birthDate: { title: "", data: "" },
+    type: isEditing
+      ? { title: "", data: "" }
+      : { title: "Cliente", data: "pf" },
+    password: "",
   });
 
   const { validate, errors } = useValidateRequiredFields({
-    fields: ['name'],
+    fields: ["name"],
   });
 
   useEffect(() => {
@@ -60,7 +62,7 @@ const ClientForm = ({ route, navigation }) => {
     if (!fields.password) delete payload.password;
 
     try {
-      const response = await api.request().post('/users', payload);
+      const response = await api.request().post("/users", payload);
 
       setFields(response.data);
       navigation.goBack();
@@ -100,9 +102,11 @@ const ClientForm = ({ route, navigation }) => {
             ...fields,
             name: response.data.name,
             cellPhone: response.data.cellPhone,
-            birthDate: optionsBirthDate.find((item) => item.data === response.data.birthDate),
+            birthDate: optionsBirthDate.find(
+              (item) => item.data === response.data.birthDate
+            ),
             type: optionsType.find((item) => item.data === response.data.type),
-            password: '',
+            password: "",
           });
         } catch (error) {
           console.log(error);
@@ -122,9 +126,16 @@ const ClientForm = ({ route, navigation }) => {
             labelText="Nome"
             value={fields.name}
             onChangeText={(value) => setFields({ ...fields, name: value })}
-            iconContent={<Icon size={16} name="user" family="feather" style={styles.inputIcons} />}
+            iconContent={
+              <Icon
+                size={16}
+                name="user"
+                family="feather"
+                style={styles.inputIcons}
+              />
+            }
           />
-          {errors?.['name'] && (
+          {errors?.["name"] && (
             <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
               campo obrigatório
             </Text>
@@ -136,7 +147,14 @@ const ClientForm = ({ route, navigation }) => {
           labelText="Telefone"
           value={fields.cellPhone}
           onChangeText={(value) => setFields({ ...fields, cellPhone: value })}
-          iconContent={<Icon size={16} name="phone" family="feather" style={styles.inputIcons} />}
+          iconContent={
+            <Icon
+              size={16}
+              name="phone"
+              family="feather"
+              style={styles.inputIcons}
+            />
+          }
         />
 
         <Block gap={-12} marginBottom={8}>
@@ -163,9 +181,14 @@ const ClientForm = ({ route, navigation }) => {
           />
         </Block>
 
-        {fields.type.data === 'pj' ? (
+        {fields.type.data === "pj" ? (
           <Block Block gap={-12} marginBottom={10}>
-            <Text bold size={16} marginBottom={12} style={styles.styleLabelText}>
+            <Text
+              bold
+              size={16}
+              marginBottom={12}
+              style={styles.styleLabelText}
+            >
               Senha
             </Text>
             <Input
@@ -173,7 +196,9 @@ const ClientForm = ({ route, navigation }) => {
               password
               viewPass
               value={fields.password}
-              onChangeText={(value) => setFields({ ...fields, password: value })}
+              onChangeText={(value) =>
+                setFields({ ...fields, password: value })
+              }
               style={styles.inputPassword}
               iconContent={
                 <Icon
@@ -187,22 +212,22 @@ const ClientForm = ({ route, navigation }) => {
             />
           </Block>
         ) : null}
+      </Block>
 
-        <Block row center style={styles.buttonContainer}>
-          <Button style={styles.button} onPress={() => navigation.goBack()}>
-            <Text size={16} bold>
-              Voltar
-            </Text>
-          </Button>
-          <Button
-            style={styles.primary}
-            onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
-          >
-            <Text size={16} bold color="#fff">
-              {isEditing ? 'Atualizar' : 'Cadastrar'}
-            </Text>
-          </Button>
-        </Block>
+      <Block row center style={styles.buttonContainer}>
+        <Button style={styles.button} onPress={() => navigation.goBack()}>
+          <Text size={16} bold>
+            Voltar
+          </Text>
+        </Button>
+        <Button
+          style={styles.primary}
+          onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
+        >
+          <Text size={16} bold color="#fff">
+            {isEditing ? "Atualizar" : "Cadastrar"}
+          </Text>
+        </Button>
       </Block>
     </ScrollView>
   );
@@ -214,9 +239,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 120,
     height: 40,
-    backgroundColor: '#eee',
+    backgroundColor: "#eee",
     borderWidth: 1,
     borderColor: nowTheme.COLORS.BORDER,
+    backgroundColor: "white",
   },
   primary: {
     marginBottom: nowTheme.SIZES.BASE,
@@ -231,7 +257,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     margin: 15,
     borderRadius: 10,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 10,
   },
   inputIcons: {
@@ -239,14 +265,14 @@ const styles = StyleSheet.create({
     color: nowTheme.COLORS.PRIMARY,
   },
   styleLabelText: {
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     marginLeft: 22,
   },
   inputPassword: {
     borderWidth: 1,
     borderColor: nowTheme.COLORS.BORDER,
     borderRadius: 21.5,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
   },
 });
 

@@ -131,22 +131,21 @@ const ServiceForm = ({ route, navigation }) => {
             </Text>
           )}
         </Block>
-
-        <Block row center>
-          <Button style={styles.button} onPress={() => navigation.goBack()}>
-            <Text size={16} bold>
-              Voltar
-            </Text>
-          </Button>
-          <Button
-            style={styles.primary}
-            onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
-          >
-            <Text size={16} bold color="#fff">
-              {isEditing ? "Atualizar" : "Cadastrar"}
-            </Text>
-          </Button>
-        </Block>
+      </Block>
+      <Block row center>
+        <Button style={styles.button} onPress={() => navigation.goBack()}>
+          <Text size={16} bold>
+            Voltar
+          </Text>
+        </Button>
+        <Button
+          style={styles.primary}
+          onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
+        >
+          <Text size={16} bold color="#fff">
+            {isEditing ? "Atualizar" : "Cadastrar"}
+          </Text>
+        </Button>
       </Block>
     </ScrollView>
   );
@@ -167,6 +166,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#eee",
     borderWidth: 1,
     borderColor: nowTheme.COLORS.BORDER,
+    backgroundColor: "white",
   },
   primary: {
     marginBottom: nowTheme.SIZES.BASE,

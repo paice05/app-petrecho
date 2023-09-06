@@ -1,11 +1,6 @@
 import { Block, theme } from "galio-framework";
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  ActivityIndicator,
-} from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Button, Icon } from "../../components";
 import CustomInput from "../../components/CustomInput";
 import { CustomSelectBottom } from "../../components/CustomSelectBottom";

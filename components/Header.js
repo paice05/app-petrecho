@@ -24,19 +24,18 @@ import nowTheme from "../constants/Theme";
 
 const { width } = Dimensions.get("window");
 
-const NewClient = ({ isWhite, style, navigation }) => (
+const NewClient = ({ navigation }) => (
   <TouchableOpacity
     onPress={() => {
       const vibrationDuration = 100;
 
-      // Faz o dispositivo vibrar
       Vibration.vibrate(vibrationDuration);
 
       navigation.navigate("ClientForm");
     }}
   >
     <Block row center gap={3}>
-      <Icon size={16} family="feather" name="plus-circle" />
+      <Icon size={20} name="plus-circle" />
       <Text bold size={16}>
         CRIAR
       </Text>
@@ -44,19 +43,32 @@ const NewClient = ({ isWhite, style, navigation }) => (
   </TouchableOpacity>
 );
 
-const NewService = ({ isWhite, style, navigation }) => (
+const ImportContacts = ({ navigation }) => (
   <TouchableOpacity
     onPress={() => {
       const vibrationDuration = 100;
 
-      // Faz o dispositivo vibrar
+      Vibration.vibrate(vibrationDuration);
+
+      navigation.navigate("ImportContacts");
+    }}
+  >
+    <Icon size={20} name="download" />
+  </TouchableOpacity>
+);
+
+const NewService = ({ navigation }) => (
+  <TouchableOpacity
+    onPress={() => {
+      const vibrationDuration = 100;
+
       Vibration.vibrate(vibrationDuration);
 
       navigation.navigate("ServiceForm");
     }}
   >
     <Block row center gap={3}>
-      <Icon size={16} family="feather" name="plus-circle" />
+      <Icon size={20} name="plus-circle" />
       <Text bold size={16}>
         CRIAR
       </Text>
@@ -64,19 +76,18 @@ const NewService = ({ isWhite, style, navigation }) => (
   </TouchableOpacity>
 );
 
-const NewSchedule = ({ isWhite, style, navigation }) => (
+const NewSchedule = ({ navigation }) => (
   <TouchableOpacity
     onPress={() => {
       const vibrationDuration = 100;
 
-      // Faz o dispositivo vibrar
       Vibration.vibrate(vibrationDuration);
 
       navigation.navigate("ScheduleForm");
     }}
   >
     <Block row center gap={3}>
-      <Icon size={16} family="feather" name="plus-circle" />
+      <Icon size={20} name="plus-circle" />
       <Text bold size={16}>
         CRIAR
       </Text>
@@ -87,44 +98,27 @@ const NewSchedule = ({ isWhite, style, navigation }) => (
 const handleLeftPress = (back, navigation) => {
   const vibrationDuration = 100;
 
-  // Faz o dispositivo vibrar
   Vibration.vibrate(vibrationDuration);
 
   return back ? navigation.goBack() : navigation.openDrawer();
 };
 const RenderRight = (props) => {
-  const { white, title } = props;
+  const { title } = props;
 
   const navigation = useNavigation();
 
   switch (title) {
     case "Agendamentos":
-      return [
-        <NewSchedule
-          key="basket-home"
-          navigation={navigation}
-          isWhite={white}
-          style={{ padding: 0 }}
-        />,
-      ];
+      return [<NewSchedule navigation={navigation} />];
     case "Clientes":
       return [
-        <NewClient
-          key="basket-home"
-          navigation={navigation}
-          isWhite={white}
-          style={{ padding: 0 }}
-        />,
+        <Block row gap={20}>
+          <ImportContacts navigation={navigation} />
+          <NewClient navigation={navigation} />
+        </Block>,
       ];
     case "Serviços":
-      return [
-        <NewService
-          key="basket-home"
-          navigation={navigation}
-          isWhite={white}
-          style={{ padding: 0 }}
-        />,
-      ];
+      return [<NewService navigation={navigation} />];
     default:
       break;
   }
@@ -222,12 +216,11 @@ export function Header({
         title={title}
         style={navbarStyles}
         transparent={transparent}
-        right={<RenderRight white={white} title={title} />}
-        rightStyle={{ alignItems: "center" }}
+        right={<RenderRight title={title} />}
+        rightStyle={[title === "Clientes" && { paddingRight: 20 }]}
         left={
           <Icon
             name={back ? "arrow-left" : "menu"}
-            family="NowExtra"
             size={22}
             onPress={() => handleLeftPress(back, navigation)}
             color={
@@ -260,9 +253,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   navbar: {
-    // paddingVertical: 0,
-    // paddingBottom: theme.SIZES.BASE * 1.5,
-    // zIndex: 5,
     paddingTop: 70,
   },
   shadow: {

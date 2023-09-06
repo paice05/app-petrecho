@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
-import { api } from '../../services/api';
+import { api } from "../../services/api";
 
 export const useRequestCreate = ({ path }) => {
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(false);
 
   const execute = (payload, params = {}) => {
     setLoading(true);

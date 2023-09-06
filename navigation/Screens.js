@@ -20,6 +20,7 @@ import ServiceList from "../screens/Service/List";
 import ServiceForm from "../screens/Service/Form";
 import RegisterExitForm from "../screens/Reports/FormRegisterExit";
 import Login from "../screens/Login";
+import { ImportContacts } from "../screens/Clients/components/ImportContacts";
 
 const { width } = Dimensions.get("screen");
 
@@ -84,6 +85,22 @@ function ClientsStack(props) {
               />
             );
           },
+        }}
+      />
+
+      <Stack.Screen
+        name="ImportContacts"
+        component={ImportContacts}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+              back
+              title="Importar contatos"
+              navigation={navigation}
+              scene={scene}
+            />
+          ),
+          cardStyle: { backgroundColor: "#eee" },
         }}
       />
     </Stack.Navigator>

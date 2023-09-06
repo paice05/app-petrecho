@@ -1,9 +1,4 @@
-import {
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Block, Text, Switch } from "galio-framework";
 import { Calendar } from "react-native-calendars";
@@ -22,6 +17,7 @@ import { formartDate } from "../../utils/formartDate";
 import { nowTheme } from "../../constants";
 import { Config } from "./Config";
 import { UserSearch } from "../../components/UserSearch";
+import { LoadingOverlay } from "../../components/LoadingOverlay";
 
 const SchedulesForm = ({ route, navigation }) => {
   const params = route.params;
@@ -196,15 +192,11 @@ const SchedulesForm = ({ route, navigation }) => {
     setFields({ ...fields, services: [...fields.services, serviceId] });
   };
 
-  if (loading)
-    return (
-      <Block>
-        <ActivityIndicator size="large" colo="#0000ff" />
-      </Block>
-    );
-
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
+      <LoadingOverlay
+        visible={loading || loadingServices || loadingCreate || loadingUpdate}
+      />
       <Block gap={15} flex style={styles.group}>
         <Block>
           <UserSearch
@@ -267,54 +259,48 @@ const SchedulesForm = ({ route, navigation }) => {
           }}
         >
           <Block gap={10}>
-            {loadingServices ? (
-              <ActivityIndicator size="large" colo="#0000ff" />
-            ) : (
-              (typeView === "selected"
-                ? allServices.filter((item) =>
-                    fields.services.includes(item.id)
-                  )
-                : allServices
-              )
-                .sort((a, b) => (a.name > b.name ? 1 : -1))
-                .map((item) => (
-                  <TouchableOpacity
-                    key={item.id}
-                    onPress={() => handleChangeService(item.id)}
+            {(typeView === "selected"
+              ? allServices.filter((item) => fields.services.includes(item.id))
+              : allServices
+            )
+              .sort((a, b) => (a.name > b.name ? 1 : -1))
+              .map((item) => (
+                <TouchableOpacity
+                  key={item.id}
+                  onPress={() => handleChangeService(item.id)}
+                >
+                  <Block
+                    row
+                    space="between"
+                    style={[
+                      {
+                        backgroundColor: "#eee",
+                        padding: 8,
+                        borderRadius: 4,
+                        flex: 1,
+                      },
+                      fields.services.includes(item.id)
+                        ? { backgroundColor: nowTheme.COLORS.PRIMARY }
+                        : {},
+                    ]}
                   >
-                    <Block
-                      row
-                      space="between"
-                      style={[
-                        {
-                          backgroundColor: "#eee",
-                          padding: 8,
-                          borderRadius: 4,
-                          flex: 1,
-                        },
-                        fields.services.includes(item.id)
-                          ? { backgroundColor: nowTheme.COLORS.PRIMARY }
-                          : {},
-                      ]}
+                    <Text
+                      color={fields.services.includes(item.id) ? "white" : ""}
                     >
-                      <Text
-                        color={fields.services.includes(item.id) ? "white" : ""}
-                      >
-                        {item.name}
-                      </Text>
-                      <Text
-                        color={fields.services.includes(item.id) ? "white" : ""}
-                      >
-                        {Number(item.price).toLocaleString("pt-BR", {
-                          style: "currency",
-                          currency: "BRL",
-                          currencyDisplay: "symbol",
-                        })}
-                      </Text>
-                    </Block>
-                  </TouchableOpacity>
-                ))
-            )}
+                      {item.name}
+                    </Text>
+                    <Text
+                      color={fields.services.includes(item.id) ? "white" : ""}
+                    >
+                      {Number(item.price).toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                        currencyDisplay: "symbol",
+                      })}
+                    </Text>
+                  </Block>
+                </TouchableOpacity>
+              ))}
           </Block>
         </ScrollView>
 
@@ -395,23 +381,22 @@ const SchedulesForm = ({ route, navigation }) => {
         </Block>
 
         <Config setFields={setFields} fields={fields} />
+      </Block>
 
-        <Block row center>
-          <Button style={styles.button} onPress={() => navigation.goBack()}>
-            <Text size={16} bold>
-              Voltar
-            </Text>
-          </Button>
-          <Button
-            loading={loadingCreate || loadingUpdate}
-            style={styles.primary}
-            onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
-          >
-            <Text size={16} bold color="#fff">
-              {isEditing ? "Atualizar" : "Cadastrar"}
-            </Text>
-          </Button>
-        </Block>
+      <Block row center>
+        <Button style={styles.button} onPress={() => navigation.goBack()}>
+          <Text size={16} bold>
+            Voltar
+          </Text>
+        </Button>
+        <Button
+          style={styles.primary}
+          onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
+        >
+          <Text size={16} bold color="#fff">
+            {isEditing ? "Atualizar" : "Cadastrar"}
+          </Text>
+        </Button>
       </Block>
 
       <Modal
@@ -453,6 +438,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#eee",
     borderWidth: 1,
     borderColor: nowTheme.COLORS.BORDER,
+    backgroundColor: "white",
   },
   primary: {
     marginBottom: nowTheme.SIZES.BASE,

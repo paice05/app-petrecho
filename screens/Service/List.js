@@ -1,15 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, Dimensions, ScrollView, ActivityIndicator, Alert } from 'react-native';
+import React, { useCallback, useEffect, useState } from "react";
+import { StyleSheet, ScrollView, Alert } from "react-native";
 
-import CardService from '../../components/CardService';
+import CardService from "../../components/CardService";
 
-import { PaginationSimple } from '../../components/PaginationSimple';
-import { Filters } from './Filters';
+import { PaginationSimple } from "../../components/PaginationSimple";
 
-import { Block, Text } from 'galio-framework';
-import { useFocusEffect } from '@react-navigation/native';
-import { useRequestFindMany } from '../../components/hooks/useRequestFindMany';
-import { useRequestDestroy } from '../../components/hooks/useRequestDestroy';
+import { Block, Text } from "galio-framework";
+import { useFocusEffect } from "@react-navigation/native";
+import { useRequestFindMany } from "../../components/hooks/useRequestFindMany";
+import { useRequestDestroy } from "../../components/hooks/useRequestDestroy";
+import { LoadingOverlay } from "../../components/LoadingOverlay";
 
 const Services = ({ navigation }) => {
   const [services, setServices] = useState([]);
@@ -21,8 +21,15 @@ const Services = ({ navigation }) => {
     lastPage: 0,
   });
 
-  const { execute: findMany, response, loading } = useRequestFindMany({ path: '/services' });
-  const { execute: destroy } = useRequestDestroy({ path: '/services', callbackSuccess: findMany });
+  const {
+    execute: findMany,
+    response,
+    loading,
+  } = useRequestFindMany({ path: "/services" });
+  const { execute: destroy } = useRequestDestroy({
+    path: "/services",
+    callbackSuccess: findMany,
+  });
 
   useEffect(() => {
     if (response) {
@@ -55,50 +62,50 @@ const Services = ({ navigation }) => {
   };
 
   const handleConfirmDelete = (id) =>
-    Alert.alert('Cuidado', 'você deseja remover esse serviço?', [
+    Alert.alert("Cuidado", "você deseja remover esse serviço?", [
       {
-        text: 'Cancelar',
+        text: "Cancelar",
         onPress: () => {},
-        style: 'cancel',
+        style: "cancel",
       },
-      { text: 'Confirmar', onPress: () => destroy(id) },
+      { text: "Confirmar", onPress: () => destroy(id) },
     ]);
 
   return (
-    <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
-      {/* <Filters fetchServices={findMany} hasClean={hasClean} /> */}
-      {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : (
-        <Block>
-          {services.length === 0 && (
-            <Text center style={{ marginTop: 20, marginBottom: 20 }}>
-              {' '}
-              Nenhum registro encontrado{' '}
-            </Text>
-          )}
+    <ScrollView
+      showsVerticalScrollIndicator={true}
+      contentContainerStyle={styles.card}
+    >
+      <LoadingOverlay visible={loading} />
 
-          {services.map((item) => {
-            return (
-              <CardService
-                key={item.id}
-                navigation={navigation}
-                id={item.id}
-                nome={item.name}
-                valor={item.price}
-                onDeleted={() => handleConfirmDelete(item.id)}
-              />
-            );
-          })}
-          <PaginationSimple
-            currentPage={pagination.currentPage}
-            total={pagination.total}
-            lastPage={pagination.lastPage}
-            handleNextPage={handleNextPage}
-            handlePreviousPage={handlePreviousPage}
-          />
-        </Block>
-      )}
+      <Block>
+        {services.length === 0 && (
+          <Text center style={{ marginTop: 20, marginBottom: 20 }}>
+            {" "}
+            Nenhum registro encontrado{" "}
+          </Text>
+        )}
+
+        {services.map((item) => {
+          return (
+            <CardService
+              key={item.id}
+              navigation={navigation}
+              id={item.id}
+              nome={item.name}
+              valor={item.price}
+              onDeleted={() => handleConfirmDelete(item.id)}
+            />
+          );
+        })}
+        <PaginationSimple
+          currentPage={pagination.currentPage}
+          total={pagination.total}
+          lastPage={pagination.lastPage}
+          handleNextPage={handleNextPage}
+          handlePreviousPage={handlePreviousPage}
+        />
+      </Block>
     </ScrollView>
   );
 };
