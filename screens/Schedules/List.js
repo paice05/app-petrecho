@@ -205,12 +205,16 @@ const ScheduleList = ({ navigation }) => {
                           "(Esse funcionário não existe)"
                         }
                         servico={item?.services
-                          ?.map((service) => service?.name)
+                          ?.filter((item) => !item.ServiceSchedule.isPackage)
+                          .map((item) => item.name)
+                          .join(", ")}
+                        pacote={item?.services
+                          ?.filter((item) => item.ServiceSchedule.isPackage)
+                          .map((item) => item.name)
                           .join(", ")}
                         horario={formartDate(item.scheduleAt, "HH:mm")}
                         dia={formartDate(item.scheduleAt, "dd/MM/YYY")}
                         status={item.status}
-                        pacote={item.isPackage}
                         onFinished={() => handleFinished(item.id)}
                         onCanceled={() => handleCanceled(item.id)}
                         onDeleted={() => handleConfirmDelete(item.id)}

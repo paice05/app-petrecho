@@ -10,7 +10,9 @@ const CardReportEntry = ({
   id,
   data,
   servico,
+  pacote,
   nome,
+  scheduleAt,
   value,
   addition,
   discount,
@@ -21,12 +23,25 @@ const CardReportEntry = ({
         <Text size={18} center>
           {data}
         </Text>
-        <Text size={18} color={nowTheme.COLORS.PRIMARY} bold>
-          {nome}
-        </Text>
-        <Text color="gray" size={14}>
-          {servico}
-        </Text>
+        <Block space="between" row style={{ alignItems: "center" }}>
+          <Text size={18} color={nowTheme.COLORS.PRIMARY} bold>
+            {nome}
+          </Text>
+          <Text bold size={14}>
+            {scheduleAt}
+          </Text>
+        </Block>
+        {servico && (
+          <Text color="gray" size={14}>
+            {servico}
+          </Text>
+        )}
+        {pacote && (
+          <Text color="gray" size={14}>
+            Pacote: {pacote}
+          </Text>
+        )}
+
         <Block row space="between">
           <Block row middle gap={6}>
             <Text color="gray" size={14}>

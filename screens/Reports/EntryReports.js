@@ -57,9 +57,15 @@ const EntryReport = ({ route }) => {
               key={item.id}
               id={item.id}
               data={formartDate(item.createdAt, "dd/MM/yyyy")}
-              servico={item.schedule?.services
+              servico={item?.schedule.services
+                ?.filter((item) => !item.ServiceSchedule.isPackage)
                 .map((item) => item.name)
                 .join(", ")}
+              pacote={item?.schedule?.services
+                ?.filter((item) => item.ServiceSchedule.isPackage)
+                .map((item) => item.name)
+                .join(", ")}
+              scheduleAt={formartDate(item.schedule.scheduleAt, "dd/MM HH:mm")}
               value={`R$ ` + Number(item.entry).toFixed(2).replace(".", ",")}
               nome={item.schedule?.user.name}
               addition={
