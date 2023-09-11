@@ -17,6 +17,7 @@ import { useRequestFindMany } from "../../components/hooks/useRequestFindMany";
 import { formartDate } from "../../utils/formartDate";
 import { api } from "../../services/api";
 import { LoadingOverlay } from "../../components/LoadingOverlay";
+import WaitingListCard from "../../components/WaitingListCard";
 
 const ScheduleList = ({ navigation }) => {
   const [openCalendar, setOpenCalendar] = useState(false);
@@ -229,6 +230,42 @@ const ScheduleList = ({ navigation }) => {
                   formartDate(item.scheduleAt, "HH:mm")
                 )}
               />
+            ),
+          },
+          {
+            title: "Espera",
+            children: (
+              <Block style={{ marginVertical: 10 }}>
+                {schedules.length === 0 && (
+                  <Text
+                    size={18}
+                    center
+                    style={{ marginTop: 20, marginBottom: 20 }}
+                  >
+                    Nenhum registro encontrado
+                  </Text>
+                )}
+                {schedules.map((item) => {
+                  return (
+                    <WaitingListCard
+                      key={item.id}
+                      navigation={navigation}
+                      id={item.id}
+                      nome={item?.user?.name || "(Esse cliente não existe)"}
+                      funcionario={
+                        item?.employee?.name || "(Esse funcionário não existe)"
+                      }
+                      servico={item?.services
+                        ?.map((service) => service?.name)
+                        .join(",")}
+                      dia={formartDate(item.scheduleAt, "dd/MM/YYY")}
+                      status={item.status}
+                      pacote={item.isPackage}
+                      onAwaiting={handleAwaiting(item.id)}
+                    />
+                  );
+                })}
+              </Block>
             ),
           },
         ]}

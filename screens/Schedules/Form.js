@@ -349,15 +349,17 @@ const SchedulesForm = ({ route, navigation }) => {
               </Block>
             </TouchableOpacity>
           </Block>
-          <Block flex={1}>
-            <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
-              Horário
-            </Text>
-            <DateTimePicker
-              value={fields.time}
-              onChange={(time) => setFields({ ...fields, time })}
-            />
-          </Block>
+          {fields.isAwaiting === false ? (
+            <Block flex={1}>
+              <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
+                Horário
+              </Text>
+              <DateTimePicker
+                value={fields.time}
+                onChange={(time) => setFields({ ...fields, time })}
+              />
+            </Block>
+          ) : null}
         </Block>
 
         <Block row right>
@@ -376,7 +378,27 @@ const SchedulesForm = ({ route, navigation }) => {
             size={16}
             color={nowTheme.COLORS.PRIMARY}
           >
-            sessão de pacote
+            Sessão de pacote
+          </Text>
+        </Block>
+
+        <Block row right>
+          <Switch
+            value={{}}
+            onChange={() =>
+              setFields({ ...fields, isPackage: !fields.isPackage })
+            }
+            trackColor={{
+              false: nowTheme.COLORS.HEADER,
+              true: nowTheme.COLORS.PRIMARY,
+            }}
+          />
+          <Text
+            style={{ paddingBottom: 15, paddingHorizontal: 10 }}
+            size={16}
+            color={nowTheme.COLORS.PRIMARY}
+          >
+            Lista de espera
           </Text>
         </Block>
 
@@ -455,6 +477,7 @@ const styles = StyleSheet.create({
     height: 44,
     backgroundColor: "#FFFFFF",
     padding: 9,
+    width: 178,
   },
 });
 
