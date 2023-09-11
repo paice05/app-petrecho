@@ -419,15 +419,17 @@ const SchedulesForm = ({ route, navigation }) => {
               </Block>
             </TouchableOpacity>
           </Block>
-          <Block flex={1}>
-            <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
-              Horário
-            </Text>
-            <DateTimePicker
-              value={fields.time}
-              onChange={(time) => setFields({ ...fields, time })}
-            />
-          </Block>
+          {fields.isAwaiting === false ? (
+            <Block flex={1}>
+              <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
+                Horário
+              </Text>
+              <DateTimePicker
+                value={fields.time}
+                onChange={(time) => setFields({ ...fields, time })}
+              />
+            </Block>
+          ) : null}
         </Block>
 
         <Config setFields={setFields} fields={fields} />
@@ -505,6 +507,7 @@ const styles = StyleSheet.create({
     height: 44,
     backgroundColor: "#FFFFFF",
     padding: 9,
+    width: 178,
   },
   details: {
     borderWidth: 1,
