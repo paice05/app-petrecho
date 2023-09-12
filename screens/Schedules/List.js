@@ -17,14 +17,13 @@ import { useRequestFindMany } from "../../components/hooks/useRequestFindMany";
 import { formartDate } from "../../utils/formartDate";
 import { api } from "../../services/api";
 import { LoadingOverlay } from "../../components/LoadingOverlay";
-import WaitingListCard from "../../components/WaitingListCard";
 
 const ScheduleList = ({ navigation }) => {
   const [openCalendar, setOpenCalendar] = useState(false);
   const [date, setDate] = useState(new Date());
-
+  const [openScheduleCard, setOpenScheduleCard] = useState(false);
   const [schedules, setSchedules] = useState([]);
-
+  console.log({ schedules });
   const [pagination, setPagination] = useState({
     currentPage: 1,
     total: 0,
@@ -140,6 +139,14 @@ const ScheduleList = ({ navigation }) => {
       });
   };
 
+  const handleAwaiting = (scheduleId) => {
+    const payload = {
+      status: "awaiting",
+    };
+
+    fetchChangeStatus(scheduleId, payload);
+  };
+
   return (
     <ScrollView
       showsVerticalScrollIndicator={true}
@@ -196,27 +203,29 @@ const ScheduleList = ({ navigation }) => {
                   )
                   .map((item) => {
                     return (
-                      <CardSchedule
-                        key={item.id}
-                        navigation={navigation}
-                        id={item.id}
-                        nome={item?.user?.name || "(Esse cliente não existe)"}
-                        funcionario={
-                          item?.employee?.name ||
-                          "(Esse funcionário não existe)"
-                        }
-                        servico={item?.services
-                          ?.map((service) => service?.name)
-                          .join(", ")}
-                        horario={formartDate(item.scheduleAt, "HH:mm")}
-                        dia={formartDate(item.scheduleAt, "dd/MM/YYY")}
-                        status={item.status}
-                        pacote={item.isPackage}
-                        onFinished={() => handleFinished(item.id)}
-                        onCanceled={() => handleCanceled(item.id)}
-                        onDeleted={() => handleConfirmDelete(item.id)}
-                        onRevert={() => handleRestore(item.id)}
-                      />
+                      item.status !== "awaiting" && (
+                        <CardSchedule
+                          key={item.id}
+                          navigation={navigation}
+                          id={item.id}
+                          nome={item?.user?.name || "(Esse cliente não existe)"}
+                          funcionario={
+                            item?.employee?.name ||
+                            "(Esse funcionário não existe)"
+                          }
+                          servico={item?.services
+                            ?.map((service) => service?.name)
+                            .join(", ")}
+                          horario={formartDate(item.scheduleAt, "HH:mm")}
+                          dia={formartDate(item.scheduleAt, "dd/MM/YYY")}
+                          status={item.status}
+                          pacote={item.isPackage}
+                          onFinished={() => handleFinished(item.id)}
+                          onCanceled={() => handleCanceled(item.id)}
+                          onDeleted={() => handleConfirmDelete(item.id)}
+                          onRevert={() => handleRestore(item.id)}
+                        />
+                      )
                     );
                   })}
               </Block>
@@ -247,24 +256,39 @@ const ScheduleList = ({ navigation }) => {
                 )}
                 {schedules.map((item) => {
                   return (
-                    <WaitingListCard
-                      key={item.id}
-                      navigation={navigation}
-                      id={item.id}
-                      nome={item?.user?.name || "(Esse cliente não existe)"}
-                      funcionario={
-                        item?.employee?.name || "(Esse funcionário não existe)"
-                      }
-                      servico={item?.services
-                        ?.map((service) => service?.name)
-                        .join(",")}
-                      dia={formartDate(item.scheduleAt, "dd/MM/YYY")}
-                      status={item.status}
-                      pacote={item.isPackage}
-                      onAwaiting={handleAwaiting(item.id)}
-                    />
+                    item.status === "awaiting" && (
+                      <CardSchedule
+                        key={item.id}
+                        navigation={navigation}
+                        id={item.id}
+                        nome={item?.user?.name || "(Esse cliente não existe)"}
+                        funcionario={
+                          item?.employee?.name ||
+                          "(Esse funcionário não existe)"
+                        }
+                        servico={item?.services
+                          ?.map((service) => service?.name)
+                          .join(", ")}
+                        dia={formartDate(item.scheduleAt, "dd/MM/YYY")}
+                        status={item.status}
+                        pacote={item.isPackage}
+                        onAwaiting={() => setOpenScheduleCard(true)}
+                      />
+                    )
                   );
                 })}
+                <Modal
+                  title="Selecione um horário disponível"
+                  isVisible={openScheduleCard}
+                  onRequestClose={setOpenScheduleCard}
+                  handleCancel={setOpenScheduleCard}
+                >
+                  <ScheduleCard
+                    payload={schedules.map((item) =>
+                      formartDate(item.scheduleAt, "HH:mm")
+                    )}
+                  />
+                </Modal>
               </Block>
             ),
           },

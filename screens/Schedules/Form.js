@@ -35,8 +35,9 @@ const SchedulesForm = ({ route, navigation }) => {
     discount: 0,
     addition: 0,
     isPackage: false,
+    status: "pending",
   });
-
+  console.log({ fields });
   const { validate, errors } = useValidateRequiredFields({
     fields: ["user", "services", "employee", "date", "time"],
   });
@@ -107,6 +108,7 @@ const SchedulesForm = ({ route, navigation }) => {
             currency: "BRL",
             currencyDisplay: "symbol",
           }) || null,
+        status: response.status,
       });
     }
   }, [response]);
@@ -154,6 +156,7 @@ const SchedulesForm = ({ route, navigation }) => {
       employeeId: fields.employee.value,
       discount,
       addition,
+      status: fields.status,
     };
 
     execCreate(payload);
@@ -177,6 +180,7 @@ const SchedulesForm = ({ route, navigation }) => {
       employeeId: fields.employee.value,
       discount,
       addition,
+      status: fields.status,
     };
 
     execUpdate(payload);
@@ -349,7 +353,7 @@ const SchedulesForm = ({ route, navigation }) => {
               </Block>
             </TouchableOpacity>
           </Block>
-          {fields.isAwaiting === false ? (
+          {fields.status === "pending" ? (
             <Block flex={1}>
               <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
                 Horário
@@ -384,10 +388,7 @@ const SchedulesForm = ({ route, navigation }) => {
 
         <Block row right>
           <Switch
-            value={{}}
-            onChange={() =>
-              setFields({ ...fields, isPackage: !fields.isPackage })
-            }
+            onChange={() => setFields({ ...fields, status: "awaiting" })}
             trackColor={{
               false: nowTheme.COLORS.HEADER,
               true: nowTheme.COLORS.PRIMARY,

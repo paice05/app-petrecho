@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, TouchableOpacity, Vibration } from "react-native";
 import { Block, Text, Button } from "galio-framework";
 
@@ -6,6 +6,7 @@ import { nowTheme } from "../../constants";
 
 import Icon from "../Icon";
 import Menu from "../Menu";
+import { Modal } from "../Modal";
 
 const CardSchedule = ({
   navigation,
@@ -21,6 +22,7 @@ const CardSchedule = ({
   onCanceled,
   onDeleted,
   onRevert,
+  onAwaiting,
 }) => {
   const isLargeName = nome?.length > 30;
 
@@ -28,12 +30,14 @@ const CardSchedule = ({
     pending: "Pendente",
     finished: "Finalizado",
     canceled: "Cancelado",
+    awaiting: "Aguardando",
   };
 
   const icon = {
     pending: "alert-circle",
     finished: "check-circle",
     canceled: "x-circle",
+    awaiting: "alert-circle",
   };
 
   return (
@@ -110,13 +114,18 @@ const CardSchedule = ({
             {dia}
           </Text>
         </Block>
-
-        <Block row gap={5} style={styles.actionIcon}>
-          <Icon color={nowTheme.COLORS.PRIMARY} name="clock" family="feather" />
-          <Text bold size={16}>
-            {horario}
-          </Text>
-        </Block>
+        {status !== "awaiting" ? (
+          <Block row gap={5} style={styles.actionIcon}>
+            <Icon
+              color={nowTheme.COLORS.PRIMARY}
+              name="clock"
+              family="feather"
+            />
+            <Text bold size={16}>
+              {horario}
+            </Text>
+          </Block>
+        ) : null}
 
         <Block row gap={5} style={styles.actionIcon}>
           <Icon
@@ -143,6 +152,18 @@ const CardSchedule = ({
           >
             <Text color="white" bold size={16}>
               Confirmar
+            </Text>
+          </TouchableOpacity>
+        </Block>
+      )}
+      {status === "awaiting" && (
+        <Block row style={styles.wrapperButtons}>
+          <TouchableOpacity
+            onPress={onAwaiting}
+            style={[styles.button, styles.primary]}
+          >
+            <Text color="white" bold size={16}>
+              Converter em agendamento
             </Text>
           </TouchableOpacity>
         </Block>
