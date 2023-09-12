@@ -15,9 +15,9 @@ const CardSchedule = ({
   funcionario,
   servico,
   dia,
+  pacote,
   horario,
   status,
-  pacote,
   onFinished,
   onCanceled,
   onDeleted,
@@ -61,17 +61,18 @@ const CardSchedule = ({
                 {nome?.slice(0, 30)}
                 {isLargeName ? "..." : ""}
               </Text>
-              {pacote ? (
-                <Text color="gray" size={12}>
-                  {" "}
-                  (pacote)
-                </Text>
-              ) : null}
             </Block>
           </TouchableOpacity>
-          <Text size={16} color="gray">
-            {servico}
-          </Text>
+          {servico && (
+            <Text size={16} color="gray">
+              {servico}
+            </Text>
+          )}
+          {pacote && (
+            <Text size={16} color="gray">
+              Pacote: {pacote}
+            </Text>
+          )}
         </Block>
 
         <Block>

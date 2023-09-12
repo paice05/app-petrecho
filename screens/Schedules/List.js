@@ -226,6 +226,31 @@ const ScheduleList = ({ navigation }) => {
                           onRevert={() => handleRestore(item.id)}
                         />
                       )
+                      <CardSchedule
+                        key={item.id}
+                        navigation={navigation}
+                        id={item.id}
+                        nome={item?.user?.name || "(Esse cliente não existe)"}
+                        funcionario={
+                          item?.employee?.name ||
+                          "(Esse funcionário não existe)"
+                        }
+                        servico={item?.services
+                          ?.filter((item) => !item.ServiceSchedule.isPackage)
+                          .map((item) => item.name)
+                          .join(", ")}
+                        pacote={item?.services
+                          ?.filter((item) => item.ServiceSchedule.isPackage)
+                          .map((item) => item.name)
+                          .join(", ")}
+                        horario={formartDate(item.scheduleAt, "HH:mm")}
+                        dia={formartDate(item.scheduleAt, "dd/MM/YYY")}
+                        status={item.status}
+                        onFinished={() => handleFinished(item.id)}
+                        onCanceled={() => handleCanceled(item.id)}
+                        onDeleted={() => handleConfirmDelete(item.id)}
+                        onRevert={() => handleRestore(item.id)}
+                      />
                     );
                   })}
               </Block>

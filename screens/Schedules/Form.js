@@ -88,7 +88,10 @@ const SchedulesForm = ({ route, navigation }) => {
     if (response) {
       setFields({
         user: { value: response?.user?.id, label: response?.user?.name },
-        services: response.services.map((item) => item.id),
+        services: response.services.map((item) => ({
+          id: item.id,
+          isPackage: item.ServiceSchedule.isPackage,
+        })),
         employee: {
           value: response?.employee?.id,
           label: response?.employee?.name,
@@ -186,14 +189,36 @@ const SchedulesForm = ({ route, navigation }) => {
     execUpdate(payload);
   };
 
-  const handleChangeService = (serviceId) => {
-    if (fields.services.includes(serviceId))
-      return setFields({
+  const handleChangeService = ({ serviceId }) => {
+    if (fields.services.findIndex((item) => item.id === serviceId) !== -1) {
+      setFields({
         ...fields,
-        services: fields.services.filter((item) => item !== serviceId),
+        services: fields.services.filter((item) => item.id !== serviceId),
       });
 
-    setFields({ ...fields, services: [...fields.services, serviceId] });
+      return;
+    }
+
+    setFields({
+      ...fields,
+      services: [...fields.services, { id: serviceId, isPackage: false }],
+    });
+  };
+
+  const handleChangeIsPackage = ({ serviceId, isPackage }) => {
+    setFields({
+      ...fields,
+      services: fields.services.map((item) => {
+        if (item.id === serviceId) {
+          return {
+            ...item,
+            isPackage: isPackage,
+          };
+        }
+
+        return item;
+      }),
+    });
   };
 
   return (
@@ -259,54 +284,99 @@ const SchedulesForm = ({ route, navigation }) => {
 
         <ScrollView
           style={{
-            maxHeight: 200,
+            maxHeight: 300,
           }}
         >
           <Block gap={10}>
             {(typeView === "selected"
-              ? allServices.filter((item) => fields.services.includes(item.id))
+              ? allServices.filter((item) =>
+                  fields.services.some((service) => service.id === item.id)
+                )
               : allServices
             )
               .sort((a, b) => (a.name > b.name ? 1 : -1))
-              .map((item) => (
-                <TouchableOpacity
-                  key={item.id}
-                  onPress={() => handleChangeService(item.id)}
-                >
-                  <Block
-                    row
-                    space="between"
-                    style={[
-                      {
-                        backgroundColor: "#eee",
-                        padding: 8,
-                        borderRadius: 4,
-                        flex: 1,
-                      },
-                      fields.services.includes(item.id)
-                        ? { backgroundColor: nowTheme.COLORS.PRIMARY }
-                        : {},
-                    ]}
-                  >
-                    <Text
-                      color={fields.services.includes(item.id) ? "white" : ""}
+              .map((item) => {
+                const itemSelected =
+                  fields.services.findIndex(
+                    (service) => service.id === item.id
+                  ) !== -1;
+
+                return (
+                  <Block>
+                    <TouchableOpacity
+                      key={item.id}
+                      onPress={() =>
+                        handleChangeService({ serviceId: item.id })
+                      }
                     >
-                      {item.name}
-                    </Text>
-                    <Text
-                      color={fields.services.includes(item.id) ? "white" : ""}
-                    >
-                      {Number(item.price).toLocaleString("pt-BR", {
-                        style: "currency",
-                        currency: "BRL",
-                        currencyDisplay: "symbol",
-                      })}
-                    </Text>
+                      <Block
+                        row
+                        space="between"
+                        style={[
+                          {
+                            backgroundColor: "#eee",
+                            padding: 8,
+                            borderRadius: 4,
+                            flex: 1,
+                          },
+                          itemSelected
+                            ? {
+                                backgroundColor: nowTheme.COLORS.PRIMARY,
+                                borderBottomLeftRadius: 0,
+                                borderBottomRightRadius: 0,
+                              }
+                            : {},
+                        ]}
+                      >
+                        <Text color={itemSelected ? "white" : ""}>
+                          {item.name}
+                        </Text>
+                        <Text color={itemSelected ? "white" : ""}>
+                          {Number(item.price).toLocaleString("pt-BR", {
+                            style: "currency",
+                            currency: "BRL",
+                            currencyDisplay: "symbol",
+                          })}
+                        </Text>
+                      </Block>
+                    </TouchableOpacity>
+                    {itemSelected && (
+                      <Block row style={styles.details}>
+                        <Switch
+                          value={
+                            fields.services.find(
+                              (service) => service.id === item.id
+                            )?.isPackage || false
+                          }
+                          onChange={() =>
+                            handleChangeIsPackage({
+                              serviceId: item.id,
+                              isPackage:
+                                !fields.services.find(
+                                  (service) => service.id === item.id
+                                )?.isPackage || false,
+                            })
+                          }
+                          trackColor={{
+                            false: nowTheme.COLORS.HEADER,
+                            true: nowTheme.COLORS.PRIMARY,
+                          }}
+                        />
+                        <Text size={16} color={nowTheme.COLORS.PRIMARY}>
+                          sessão de pacote
+                        </Text>
+                      </Block>
+                    )}
                   </Block>
-                </TouchableOpacity>
-              ))}
+                );
+              })}
           </Block>
         </ScrollView>
+        {errors?.["services"] && (
+          <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
+            selecione pelo menos 1 serviço
+          </Text>
+        )}
 
         <Block>
           <UserSearch
@@ -479,6 +549,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     padding: 9,
     width: 178,
+  },
+  details: {
+    borderWidth: 1,
+    borderColor: nowTheme.COLORS.PRIMARY,
+    borderRadius: 4,
+    height: 50,
+    borderTopWidth: 0,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    alignItems: "center",
   },
 });
 
