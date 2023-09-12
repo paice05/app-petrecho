@@ -76,18 +76,20 @@ export const ScheduleCard = ({
           </Text>
         </ViewShot>
 
-        <TouchableOpacity onPress={handleShare} style={{ padding: 14 }}>
-          <Block row center gap={10}>
-            <IconExtra
-              color={nowTheme.COLORS.PRIMARY}
-              size={18}
-              name="share-2"
-            />
-            <Text color={nowTheme.COLORS.PRIMARY} size={18}>
-              Compartilhar
-            </Text>
-          </Block>
-        </TouchableOpacity>
+        {!onConfirm && (
+          <TouchableOpacity onPress={handleShare} style={{ padding: 14 }}>
+            <Block row center gap={10}>
+              <IconExtra
+                color={nowTheme.COLORS.PRIMARY}
+                size={18}
+                name="share-2"
+              />
+              <Text color={nowTheme.COLORS.PRIMARY} size={18}>
+                Compartilhar
+              </Text>
+            </Block>
+          </TouchableOpacity>
+        )}
       </Block>
     </View>
   );

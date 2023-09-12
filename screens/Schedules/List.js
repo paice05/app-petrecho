@@ -17,6 +17,7 @@ import { useRequestFindMany } from "../../components/hooks/useRequestFindMany";
 import { formartDate } from "../../utils/formartDate";
 import { api } from "../../services/api";
 import { LoadingOverlay } from "../../components/LoadingOverlay";
+import { Button } from "../../components";
 
 const ScheduleList = ({ navigation }) => {
   const [openCalendar, setOpenCalendar] = useState(false);
@@ -286,12 +287,18 @@ const ScheduleList = ({ navigation }) => {
                   onRequestClose={setOpenScheduleCard}
                   handleCancel={setOpenScheduleCard}
                 >
-                  <ScheduleCard
-                    payload={schedules.map((item) =>
-                      formartDate(item.scheduleAt, "HH:mm")
-                    )}
-                    onConfirm={(time) => Alert.alert(time)}
-                  />
+                  <Block>
+                    <ScheduleCard
+                      payload={schedules.map((item) =>
+                        formartDate(item.scheduleAt, "HH:mm")
+                      )}
+                      onConfirm={(time) => Alert.alert(time)}
+                    />
+
+                    <Button>
+                      <Text>Confirmar</Text>
+                    </Button>
+                  </Block>
                 </Modal>
               </Block>
             ),
