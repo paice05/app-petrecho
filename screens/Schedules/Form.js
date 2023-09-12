@@ -423,7 +423,7 @@ const SchedulesForm = ({ route, navigation }) => {
               </Block>
             </TouchableOpacity>
           </Block>
-          {fields.status === "pending" ? (
+          {fields.status !== "pending" ? (
             <Block flex={1}>
               <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
                 Horário
@@ -438,27 +438,13 @@ const SchedulesForm = ({ route, navigation }) => {
 
         <Block row right>
           <Switch
-            value={fields.isPackage}
-            onChange={() =>
-              setFields({ ...fields, isPackage: !fields.isPackage })
-            }
-            trackColor={{
-              false: nowTheme.COLORS.HEADER,
-              true: nowTheme.COLORS.PRIMARY,
+            onChange={() => {
+              if (fields.status === "pending") {
+                setFields({ ...fields, status: "awaiting" });
+              } else {
+                setFields({ ...fields, status: "pending" });
+              }
             }}
-          />
-          <Text
-            style={{ paddingBottom: 15, paddingHorizontal: 10 }}
-            size={16}
-            color={nowTheme.COLORS.PRIMARY}
-          >
-            Sessão de pacote
-          </Text>
-        </Block>
-
-        <Block row right>
-          <Switch
-            onChange={() => setFields({ ...fields, status: "awaiting" })}
             trackColor={{
               false: nowTheme.COLORS.HEADER,
               true: nowTheme.COLORS.PRIMARY,

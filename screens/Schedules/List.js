@@ -201,31 +201,9 @@ const ScheduleList = ({ navigation }) => {
                       ? 1
                       : -1
                   )
+                  .filter((item) => item.status !== "awaiting")
                   .map((item) => {
                     return (
-                      item.status !== "awaiting" && (
-                        <CardSchedule
-                          key={item.id}
-                          navigation={navigation}
-                          id={item.id}
-                          nome={item?.user?.name || "(Esse cliente não existe)"}
-                          funcionario={
-                            item?.employee?.name ||
-                            "(Esse funcionário não existe)"
-                          }
-                          servico={item?.services
-                            ?.map((service) => service?.name)
-                            .join(", ")}
-                          horario={formartDate(item.scheduleAt, "HH:mm")}
-                          dia={formartDate(item.scheduleAt, "dd/MM/YYY")}
-                          status={item.status}
-                          pacote={item.isPackage}
-                          onFinished={() => handleFinished(item.id)}
-                          onCanceled={() => handleCanceled(item.id)}
-                          onDeleted={() => handleConfirmDelete(item.id)}
-                          onRevert={() => handleRestore(item.id)}
-                        />
-                      )
                       <CardSchedule
                         key={item.id}
                         navigation={navigation}
@@ -279,9 +257,10 @@ const ScheduleList = ({ navigation }) => {
                     Nenhum registro encontrado
                   </Text>
                 )}
-                {schedules.map((item) => {
-                  return (
-                    item.status === "awaiting" && (
+                {schedules
+                  .filter((item) => item.status === "awaiting")
+                  .map((item) => {
+                    return (
                       <CardSchedule
                         key={item.id}
                         navigation={navigation}
@@ -299,9 +278,8 @@ const ScheduleList = ({ navigation }) => {
                         pacote={item.isPackage}
                         onAwaiting={() => setOpenScheduleCard(true)}
                       />
-                    )
-                  );
-                })}
+                    );
+                  })}
                 <Modal
                   title="Selecione um horário disponível"
                   isVisible={openScheduleCard}
@@ -312,6 +290,7 @@ const ScheduleList = ({ navigation }) => {
                     payload={schedules.map((item) =>
                       formartDate(item.scheduleAt, "HH:mm")
                     )}
+                    onConfirm={(time) => Alert.alert(time)}
                   />
                 </Modal>
               </Block>

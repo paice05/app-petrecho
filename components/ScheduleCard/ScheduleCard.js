@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { Text, Block } from "galio-framework";
 import * as Sharing from "expo-sharing";
 import ViewShot from "react-native-view-shot";
@@ -7,7 +7,12 @@ import ViewShot from "react-native-view-shot";
 import { nowTheme } from "../../constants";
 import IconExtra from "../Icon";
 
-export const ScheduleCard = ({ startAt = 7, endAt = 20.5, payload }) => {
+export const ScheduleCard = ({
+  startAt = 7,
+  endAt = 20.5,
+  payload,
+  onConfirm,
+}) => {
   const startTime = startAt * 60;
   const endTime = endAt * 60;
   const interval = 30;
@@ -53,7 +58,11 @@ export const ScheduleCard = ({ startAt = 7, endAt = 20.5, payload }) => {
           <Text>
             {timeSlots.map(({ time, schedule }, index) => (
               <Block key={index}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    if (onConfirm) onConfirm(time);
+                  }}
+                >
                   <Text
                     center
                     size={16}
