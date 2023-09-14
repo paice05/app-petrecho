@@ -2,20 +2,22 @@ import React, { useState } from "react";
 
 import { api } from "../../services/api";
 
-export const useRequestUpdate = ({ path, id }) => {
+export const useRequestUpdate = ({ path, id, callbackSuccess }) => {
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const execute = (payload, params = {}) => {
+  const execute = (payload, params = {}, recordId) => {
     setLoading(true);
 
     api
       .request()
-      .put(`${path}/${id}`, payload, {
+      .put(`${path}/${id || recordId}`, payload, {
         params,
       })
       .then(() => {
+        if (callbackSuccess) callbackSuccess();
+
         setResponse(true);
 
         setError(false);

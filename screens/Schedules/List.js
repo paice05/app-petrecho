@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Block, Text } from "galio-framework";
-import { addDays, subDays } from "date-fns";
+import { addDays, format, setHours, setMinutes, subDays } from "date-fns";
 import { StyleSheet, ScrollView, TouchableOpacity, Alert } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -24,10 +24,12 @@ const ScheduleList = ({ route, navigation }) => {
 
   const [openCalendar, setOpenCalendar] = useState(false);
   const [date, setDate] = useState(new Date());
-  const [openScheduleCard, setOpenScheduleCard] = useState(false);
+  const [selectedScheduleAwating, setSelectedScheduleAwating] = useState({
+    open: false,
+    scheduleId: "",
+    hour: "",
+  });
   const [schedules, setSchedules] = useState([]);
-  const [timeList, setTimeList] = useState("");
-  console.log({ schedules });
   const [pagination, setPagination] = useState({
     currentPage: 1,
     total: 0,
@@ -64,23 +66,19 @@ const ScheduleList = ({ route, navigation }) => {
     },
   });
 
-  const {
-    execute: execUpdate,
-    response: responseUpdate,
-    loading: loadingUpdate,
-  } = useRequestUpdate({
+  const { execute: execUpdate, loading: loadingUpdate } = useRequestUpdate({
     path: "/schedules",
-    id: params?.id,
+    id: null,
+    callbackSuccess: () => {
+      findMany();
+      handleCloseScheduleAwating();
+    },
   });
 
   const { execute: destroy } = useRequestDestroy({
     path: "/schedules",
     callbackSuccess: findMany,
   });
-
-  useEffect(() => {
-    if (responseUpdate) navigation.goBack();
-  }, [responseUpdate]);
 
   useEffect(() => {
     if (error) setSchedules([]);
@@ -112,12 +110,17 @@ const ScheduleList = ({ route, navigation }) => {
     }, [date])
   );
 
-  const handleAwaitingUpdate = (scheduleId) => {
-    console.log("scheduleId", scheduleId);
+  const handleAwaitingUpdate = () => {
+    const [hour, minute] = selectedScheduleAwating.hour.split(":");
+
+    const scheduleAt = setMinutes(setHours(date, Number(hour)), Number(minute));
+
     const payload = {
       status: "pending",
+      scheduleAt,
     };
-    fetchChangeStatus(scheduleId, payload);
+
+    execUpdate(payload, {}, selectedScheduleAwating.scheduleId);
   };
 
   const handleConfirmDelete = (id) =>
@@ -165,12 +168,20 @@ const ScheduleList = ({ route, navigation }) => {
       });
   };
 
+  const handleCloseScheduleAwating = () => {
+    setSelectedScheduleAwating({
+      open: false,
+      scheduleId: "",
+      hour: "",
+    });
+  };
+
   return (
     <ScrollView
       showsVerticalScrollIndicator={true}
       contentContainerStyle={styles.card}
     >
-      <LoadingOverlay visible={loading} />
+      <LoadingOverlay visible={loading || loadingUpdate} />
 
       <TouchableOpacity
         style={styles.dateStyle}
@@ -294,32 +305,39 @@ const ScheduleList = ({ route, navigation }) => {
                         dia={formartDate(item.scheduleAt, "dd/MM/YYY")}
                         status={item.status}
                         pacote={item.isPackage}
-                        onAwaiting={() => setOpenScheduleCard(true)}
+                        onAwaiting={() =>
+                          setSelectedScheduleAwating({
+                            open: true,
+                            scheduleId: item.id,
+                            hour: "",
+                          })
+                        }
                       />
                     );
                   })}
                 <Modal
                   title="Selecione um horário disponível"
-                  isVisible={openScheduleCard}
-                  onRequestClose={setOpenScheduleCard}
-                  handleCancel={setOpenScheduleCard}
+                  isVisible={selectedScheduleAwating.open}
+                  onRequestClose={handleCloseScheduleAwating}
+                  handleCancel={handleCloseScheduleAwating}
                 >
                   <Block>
                     <ScheduleCard
                       payload={schedules.map((item) =>
                         formartDate(item.scheduleAt, "HH:mm")
                       )}
-                      onConfirm={(time) => {
-                        setTimeList(time);
-                        console.log("time ==> ", setTimeList);
-                      }}
+                      onConfirm={(time) =>
+                        setSelectedScheduleAwating({
+                          ...selectedScheduleAwating,
+                          hour: time,
+                        })
+                      }
+                      selected={selectedScheduleAwating.hour}
                     />
 
                     <Block row style={styles.wrapperButtons}>
                       <TouchableOpacity
-                        onPress={(item) => {
-                          handleAwaitingUpdate(item.id);
-                        }}
+                        onPress={handleAwaitingUpdate}
                         style={[styles.button, styles.primary]}
                       >
                         <Text color="white" bold size={16}>

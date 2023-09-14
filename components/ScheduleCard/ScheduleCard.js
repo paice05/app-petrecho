@@ -12,6 +12,7 @@ export const ScheduleCard = ({
   endAt = 20.5,
   payload,
   onConfirm,
+  selected = "",
 }) => {
   const startTime = startAt * 60;
   const endTime = endAt * 60;
@@ -66,7 +67,13 @@ export const ScheduleCard = ({
                   <Text
                     center
                     size={16}
-                    style={schedule ? styles.timeSlot : styles.timeSlotOff}
+                    style={
+                      schedule
+                        ? styles.timeSlot
+                        : time === selected
+                        ? styles.timeSlotOn
+                        : styles.timeSlotOff
+                    }
                   >
                     {time}
                   </Text>
@@ -126,6 +133,18 @@ const styles = StyleSheet.create({
 
     color: "gray",
     borderColor: "gray",
+  },
+  timeSlotOn: {
+    width: 60,
+    height: 40,
+    padding: 8,
+    margin: 4,
+
+    borderWidth: 1,
+    borderRadius: 5,
+    color: "#fff",
+    borderColor: "#fff",
+    backgroundColor: nowTheme.COLORS.SUCCESS,
   },
 });
 
