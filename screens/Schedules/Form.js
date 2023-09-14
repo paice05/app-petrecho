@@ -37,7 +37,7 @@ const SchedulesForm = ({ route, navigation }) => {
     isPackage: false,
     status: "pending",
   });
-  console.log({ fields });
+
   const { validate, errors } = useValidateRequiredFields({
     fields: ["user", "services", "employee", "date", "time"],
   });
@@ -423,7 +423,7 @@ const SchedulesForm = ({ route, navigation }) => {
               </Block>
             </TouchableOpacity>
           </Block>
-          {fields.status !== "pending" ? (
+          {fields.status === "pending" ? (
             <Block flex={1}>
               <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
                 Horário

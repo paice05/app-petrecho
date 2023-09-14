@@ -17,13 +17,16 @@ import { useRequestFindMany } from "../../components/hooks/useRequestFindMany";
 import { formartDate } from "../../utils/formartDate";
 import { api } from "../../services/api";
 import { LoadingOverlay } from "../../components/LoadingOverlay";
-import { Button } from "../../components";
+import { useRequestUpdate } from "../../components/hooks/useRequestUpdate";
 
-const ScheduleList = ({ navigation }) => {
+const ScheduleList = ({ route, navigation }) => {
+  const params = route.params;
+
   const [openCalendar, setOpenCalendar] = useState(false);
   const [date, setDate] = useState(new Date());
   const [openScheduleCard, setOpenScheduleCard] = useState(false);
   const [schedules, setSchedules] = useState([]);
+  const [timeList, setTimeList] = useState("");
   console.log({ schedules });
   const [pagination, setPagination] = useState({
     currentPage: 1,
@@ -60,10 +63,24 @@ const ScheduleList = ({ navigation }) => {
       order: [["scheduleAt", "ASC"]],
     },
   });
+
+  const {
+    execute: execUpdate,
+    response: responseUpdate,
+    loading: loadingUpdate,
+  } = useRequestUpdate({
+    path: "/schedules",
+    id: params?.id,
+  });
+
   const { execute: destroy } = useRequestDestroy({
     path: "/schedules",
     callbackSuccess: findMany,
   });
+
+  useEffect(() => {
+    if (responseUpdate) navigation.goBack();
+  }, [responseUpdate]);
 
   useEffect(() => {
     if (error) setSchedules([]);
@@ -94,6 +111,14 @@ const ScheduleList = ({ navigation }) => {
       findMany();
     }, [date])
   );
+
+  const handleAwaitingUpdate = (scheduleId) => {
+    console.log("scheduleId", scheduleId);
+    const payload = {
+      status: "pending",
+    };
+    fetchChangeStatus(scheduleId, payload);
+  };
 
   const handleConfirmDelete = (id) =>
     Alert.alert("Cuidado", "você deseja remover esse agendamento?", [
@@ -138,14 +163,6 @@ const ScheduleList = ({ navigation }) => {
       .then(() => {
         findMany();
       });
-  };
-
-  const handleAwaiting = (scheduleId) => {
-    const payload = {
-      status: "awaiting",
-    };
-
-    fetchChangeStatus(scheduleId, payload);
   };
 
   return (
@@ -292,12 +309,24 @@ const ScheduleList = ({ navigation }) => {
                       payload={schedules.map((item) =>
                         formartDate(item.scheduleAt, "HH:mm")
                       )}
-                      onConfirm={(time) => Alert.alert(time)}
+                      onConfirm={(time) => {
+                        setTimeList(time);
+                        console.log("time ==> ", setTimeList);
+                      }}
                     />
 
-                    <Button>
-                      <Text>Confirmar</Text>
-                    </Button>
+                    <Block row style={styles.wrapperButtons}>
+                      <TouchableOpacity
+                        onPress={(item) => {
+                          handleAwaitingUpdate(item.id);
+                        }}
+                        style={[styles.button, styles.primary]}
+                      >
+                        <Text color="white" bold size={16}>
+                          Confirmar
+                        </Text>
+                      </TouchableOpacity>
+                    </Block>
                   </Block>
                 </Modal>
               </Block>
@@ -342,7 +371,6 @@ const styles = StyleSheet.create({
     padding: 15,
     backgroundColor: "#eee",
   },
-
   dateStyle: {
     display: "flex",
     alignItems: "center",
@@ -376,6 +404,22 @@ const styles = StyleSheet.create({
   text: {
     marginHorizontal: 20,
     fontSize: 12,
+  },
+  wrapperButtons: {
+    justifyContent: "center",
+    gap: 15,
+  },
+  button: {
+    borderRadius: 10,
+    backgroundColor: "#eee",
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  primary: {
+    backgroundColor: nowTheme.COLORS.PRIMARY,
   },
 });
 
