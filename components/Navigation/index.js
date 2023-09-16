@@ -23,7 +23,7 @@ export const Navigation = ({ items = [] }) => {
               }}
             >
               <Text
-                style={index === 0 ? styles.divider : {}}
+                style={[index !== items.length - 1 && styles.divider]}
                 size={22}
                 color={index === active ? nowTheme.COLORS.PRIMARY : ""}
               >

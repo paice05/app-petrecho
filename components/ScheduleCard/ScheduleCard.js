@@ -1,11 +1,12 @@
-import React, { useRef, useState } from "react";
-import { View, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import React from "react";
+import { View, StyleSheet, TouchableOpacity, Share } from "react-native";
 import { Text, Block } from "galio-framework";
-import * as Sharing from "expo-sharing";
-import ViewShot from "react-native-view-shot";
 
 import { nowTheme } from "../../constants";
+import { URL_WEB } from "../../constants/node";
 import IconExtra from "../Icon";
+import { useTimeSlots } from "../hooks/useTimeSlots";
+import { useUserContext } from "../../context/user";
 
 export const ScheduleCard = ({
   startAt = 7,
@@ -14,74 +15,46 @@ export const ScheduleCard = ({
   onConfirm,
   selected = "",
 }) => {
-  const startTime = startAt * 60;
-  const endTime = endAt * 60;
-  const interval = 30;
+  const { timeSlots } = useTimeSlots({ payload, startAt, endAt });
+  const { user } = useUserContext();
 
-  const timeSlots = [];
-  for (let i = startTime; i <= endTime; i += interval) {
-    const hours = Math.floor(i / 60);
-    const minutes = i % 60;
-    const timeString = `${hours.toString().padStart(2, "0")}:${minutes
-      .toString()
-      .padStart(2, "0")}`;
-
-    if (payload.includes(timeString)) {
-      timeSlots.push({ time: timeString, schedule: true });
-
-      continue;
-    }
-
-    timeSlots.push({ time: timeString, schedule: false });
-  }
-
-  const ref = useRef();
+  const LINK = `${URL_WEB}/${user.account.id}`;
 
   const handleShare = async () => {
-    if (ref.current) {
-      // tirar o print
-      const uri = await ref.current.capture();
-
-      // verificar se o compartilhamento esta disponivel
-      const enable = await Sharing.isAvailableAsync();
-
-      if (enable) {
-        // compartilhar
-        await Sharing.shareAsync(uri, {});
-      }
-    }
+    Share.share({
+      message: LINK,
+      title: "1 link selecionado",
+    });
   };
 
   return (
     <View style={styles.scheduleCard}>
       <Block center>
-        <ViewShot ref={ref}>
-          <Text>
-            {timeSlots.map(({ time, schedule }, index) => (
-              <Block key={index}>
-                <TouchableOpacity
-                  onPress={() => {
-                    if (onConfirm) onConfirm(time);
-                  }}
+        <Text>
+          {timeSlots.map(({ time, schedule }, index) => (
+            <Block key={index}>
+              <TouchableOpacity
+                onPress={() => {
+                  if (onConfirm) onConfirm(time);
+                }}
+              >
+                <Text
+                  center
+                  size={16}
+                  style={
+                    schedule
+                      ? styles.timeSlot
+                      : time === selected
+                      ? styles.timeSlotOn
+                      : styles.timeSlotOff
+                  }
                 >
-                  <Text
-                    center
-                    size={16}
-                    style={
-                      schedule
-                        ? styles.timeSlot
-                        : time === selected
-                        ? styles.timeSlotOn
-                        : styles.timeSlotOff
-                    }
-                  >
-                    {time}
-                  </Text>
-                </TouchableOpacity>
-              </Block>
-            ))}
-          </Text>
-        </ViewShot>
+                  {time}
+                </Text>
+              </TouchableOpacity>
+            </Block>
+          ))}
+        </Text>
 
         {!onConfirm && (
           <TouchableOpacity onPress={handleShare} style={{ padding: 14 }}>

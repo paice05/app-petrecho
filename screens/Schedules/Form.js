@@ -28,6 +28,7 @@ const SchedulesForm = ({ route, navigation }) => {
 
   const [fields, setFields] = useState({
     user: null,
+    shortName: null,
     services: [], // value label
     employee: null,
     date: formartDate(new Date(), "dd-MM-yyyy"),
@@ -35,7 +36,7 @@ const SchedulesForm = ({ route, navigation }) => {
     discount: 0,
     addition: 0,
     isPackage: false,
-    status: "pending",
+    status: false,
   });
 
   const { validate, errors } = useValidateRequiredFields({
@@ -88,6 +89,7 @@ const SchedulesForm = ({ route, navigation }) => {
     if (response) {
       setFields({
         user: { value: response?.user?.id, label: response?.user?.name },
+        shortName: response.shortName,
         services: response.services.map((item) => ({
           id: item.id,
           isPackage: item.ServiceSchedule.isPackage,
@@ -98,7 +100,6 @@ const SchedulesForm = ({ route, navigation }) => {
         },
         date: formartDate(response.scheduleAt, "dd-MM-yyyy"),
         time: new Date(response.scheduleAt),
-        isPackage: response.isPackage,
         discount:
           Number(response.discount).toLocaleString("pt-BR", {
             style: "currency",
@@ -111,7 +112,7 @@ const SchedulesForm = ({ route, navigation }) => {
             currency: "BRL",
             currencyDisplay: "symbol",
           }) || null,
-        status: response.status,
+        status: response.status === "awaiting",
       });
     }
   }, [response]);
@@ -159,8 +160,10 @@ const SchedulesForm = ({ route, navigation }) => {
       employeeId: fields.employee.value,
       discount,
       addition,
-      status: fields.status,
     };
+
+    if (fields.status) payload["status"] = "awaiting";
+    else delete payload["status"];
 
     execCreate(payload);
   };
@@ -183,8 +186,10 @@ const SchedulesForm = ({ route, navigation }) => {
       employeeId: fields.employee.value,
       discount,
       addition,
-      status: fields.status,
     };
+
+    if (fields.status) payload["status"] = "awaiting";
+    else delete payload["status"];
 
     execUpdate(payload);
   };
@@ -228,25 +233,38 @@ const SchedulesForm = ({ route, navigation }) => {
       />
       <Block gap={15} flex style={styles.group}>
         <Block>
-          <UserSearch
-            path="/users"
-            query={{ type: "pf" }}
-            placeholder="Pesquise um cliente"
-            labelText="Cliente"
-            onSelectUser={(item) =>
-              setFields({
-                ...fields,
-                user: { value: item.id, label: item.name },
-              })
-            }
-            clear={() => setFields({ ...fields, user: null })}
-            value={fields?.user?.label}
-            icon="user"
-          />
-          {errors?.["user"] && (
-            <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
-              campo obrigatório
-            </Text>
+          {fields.shortName ? (
+            <Block style={{ marginLeft: 20 }}>
+              <Text bold size={18}>
+                {fields.shortName}{" "}
+              </Text>
+              <Text bold={false} size={14} color="gray">
+                (esse cliente foi criado através do seu link)
+              </Text>
+            </Block>
+          ) : (
+            <Block>
+              <UserSearch
+                path="/users"
+                query={{ type: "pf" }}
+                placeholder="Pesquise um cliente"
+                labelText="Cliente"
+                onSelectUser={(item) =>
+                  setFields({
+                    ...fields,
+                    user: { value: item.id, label: item.name },
+                  })
+                }
+                clear={() => setFields({ ...fields, user: null })}
+                value={fields?.user?.label}
+                icon="user"
+              />
+              {errors?.["user"] && (
+                <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
+                  campo obrigatório
+                </Text>
+              )}
+            </Block>
           )}
         </Block>
 
@@ -423,7 +441,7 @@ const SchedulesForm = ({ route, navigation }) => {
               </Block>
             </TouchableOpacity>
           </Block>
-          {fields.status === "pending" ? (
+          {!fields.status && (
             <Block flex={1}>
               <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
                 Horário
@@ -433,17 +451,14 @@ const SchedulesForm = ({ route, navigation }) => {
                 onChange={(time) => setFields({ ...fields, time })}
               />
             </Block>
-          ) : null}
+          )}
         </Block>
 
         <Block row right>
           <Switch
+            value={fields.status}
             onChange={() => {
-              if (fields.status === "pending") {
-                setFields({ ...fields, status: "awaiting" });
-              } else {
-                setFields({ ...fields, status: "pending" });
-              }
+              setFields({ ...fields, status: !fields.status });
             }}
             trackColor={{
               false: nowTheme.COLORS.HEADER,

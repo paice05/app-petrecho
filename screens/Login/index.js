@@ -50,7 +50,11 @@ const Login = ({ navigation }) => {
             getCache("user").then((userRaw) => {
               const user = JSON.parse(userRaw);
 
-              changeUser({ name: user.name, isAdmin: user.isSuperAdmin });
+              changeUser({
+                name: user.name,
+                isAdmin: user.isSuperAdmin,
+                account: user.account,
+              });
               navigation.navigate("App");
               setLoading(false);
             });
@@ -85,7 +89,11 @@ const Login = ({ navigation }) => {
         /** salvar o token no cache e entrar no app */
         if (data.token) {
           api.setToken(data.token);
-          changeUser({ name: data.user.name, isAdmin: data.user.isSuperAdmin });
+          changeUser({
+            name: data.user.name,
+            isAdmin: data.user.isSuperAdmin,
+            account: data.user.account,
+          });
 
           setCache("token", data.token);
           setCache("user", JSON.stringify(data.user)).then(() => {

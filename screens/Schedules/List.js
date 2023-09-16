@@ -237,7 +237,11 @@ const ScheduleList = ({ route, navigation }) => {
                         key={item.id}
                         navigation={navigation}
                         id={item.id}
-                        nome={item?.user?.name || "(Esse cliente não existe)"}
+                        nome={
+                          item?.user?.name ||
+                          item?.shortName ||
+                          "(Esse cliente não existe)"
+                        }
                         funcionario={
                           item?.employee?.name ||
                           "(Esse funcionário não existe)"
@@ -267,9 +271,12 @@ const ScheduleList = ({ route, navigation }) => {
             title: "Horários",
             children: (
               <ScheduleCard
-                payload={schedules.map((item) =>
-                  formartDate(item.scheduleAt, "HH:mm")
-                )}
+                payload={schedules
+                  .filter(
+                    (item) =>
+                      item.status === "pending" || item.status === "finished"
+                  )
+                  .map((item) => formartDate(item.scheduleAt, "HH:mm"))}
               />
             ),
           },
@@ -294,17 +301,25 @@ const ScheduleList = ({ route, navigation }) => {
                         key={item.id}
                         navigation={navigation}
                         id={item.id}
-                        nome={item?.user?.name || "(Esse cliente não existe)"}
+                        nome={
+                          item?.user?.name ||
+                          item?.shortName ||
+                          "(Esse cliente não existe)"
+                        }
                         funcionario={
                           item?.employee?.name ||
                           "(Esse funcionário não existe)"
                         }
                         servico={item?.services
-                          ?.map((service) => service?.name)
+                          ?.filter((item) => !item.ServiceSchedule.isPackage)
+                          .map((item) => item.name)
                           .join(", ")}
                         dia={formartDate(item.scheduleAt, "dd/MM/YYY")}
                         status={item.status}
-                        pacote={item.isPackage}
+                        pacote={item?.services
+                          ?.filter((item) => item.ServiceSchedule.isPackage)
+                          .map((item) => item.name)
+                          .join(", ")}
                         onAwaiting={() =>
                           setSelectedScheduleAwating({
                             open: true,
@@ -323,9 +338,13 @@ const ScheduleList = ({ route, navigation }) => {
                 >
                   <Block>
                     <ScheduleCard
-                      payload={schedules.map((item) =>
-                        formartDate(item.scheduleAt, "HH:mm")
-                      )}
+                      payload={schedules
+                        .filter(
+                          (item) =>
+                            item.status === "pending" ||
+                            item.status === "finished"
+                        )
+                        .map((item) => formartDate(item.scheduleAt, "HH:mm"))}
                       onConfirm={(time) =>
                         setSelectedScheduleAwating({
                           ...selectedScheduleAwating,
