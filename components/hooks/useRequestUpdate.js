@@ -15,10 +15,10 @@ export const useRequestUpdate = ({ path, id, callbackSuccess }) => {
       .put(`${path}/${id || recordId}`, payload, {
         params,
       })
-      .then(() => {
+      .then(({ data }) => {
         if (callbackSuccess) callbackSuccess();
 
-        setResponse(true);
+        setResponse(data);
 
         setError(false);
         setLoading(false);

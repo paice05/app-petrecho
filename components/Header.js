@@ -95,6 +95,25 @@ const NewSchedule = ({ navigation }) => (
   </TouchableOpacity>
 );
 
+const EditConfig = ({ navigation }) => (
+  <TouchableOpacity
+    onPress={() => {
+      const vibrationDuration = 100;
+
+      Vibration.vibrate(vibrationDuration);
+
+      navigation.navigate("ConfigForm");
+    }}
+  >
+    <Block row center gap={3}>
+      <Icon size={20} name="edit" />
+      <Text bold size={16}>
+        EDITAR
+      </Text>
+    </Block>
+  </TouchableOpacity>
+);
+
 const handleLeftPress = (back, navigation) => {
   const vibrationDuration = 100;
 
@@ -119,6 +138,8 @@ const RenderRight = (props) => {
       ];
     case "Serviços":
       return [<NewService navigation={navigation} />];
+    case "Configurações":
+      return [<EditConfig navigation={navigation} />];
     default:
       break;
   }

@@ -454,7 +454,7 @@ const SchedulesForm = ({ route, navigation }) => {
           )}
         </Block>
 
-        <Block row right>
+        <Block row style={{ alignItems: "center" }}>
           <Switch
             value={fields.status}
             onChange={() => {
@@ -465,11 +465,7 @@ const SchedulesForm = ({ route, navigation }) => {
               true: nowTheme.COLORS.PRIMARY,
             }}
           />
-          <Text
-            style={{ paddingBottom: 15, paddingHorizontal: 10 }}
-            size={16}
-            color={nowTheme.COLORS.PRIMARY}
-          >
+          <Text size={16} color={nowTheme.COLORS.PRIMARY}>
             Lista de espera
           </Text>
         </Block>

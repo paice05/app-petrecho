@@ -21,6 +21,8 @@ import ServiceForm from "../screens/Service/Form";
 import RegisterExitForm from "../screens/Reports/FormRegisterExit";
 import Login from "../screens/Login";
 import { ImportContacts } from "../screens/Clients/components/ImportContacts";
+import { Config } from "../screens/Config";
+import { ConfigForm } from "../screens/Config/Form";
 
 const { width } = Dimensions.get("screen");
 
@@ -272,6 +274,48 @@ function ReportsStack(props) {
   );
 }
 
+function ConfigStack(props) {
+  return (
+    <Stack.Navigator
+      initialRouteName="Configurações"
+      screenOptions={{
+        mode: "card",
+        headerShown: "screen",
+      }}
+    >
+      <Stack.Screen
+        name="Configurações"
+        component={Config}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+              title="Configurações"
+              navigation={navigation}
+              scene={scene}
+            />
+          ),
+          cardStyle: { backgroundColor: "#eee" },
+        }}
+      />
+      <Stack.Screen
+        name="ConfigForm"
+        component={ConfigForm}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+              title="Atualizar Configurações"
+              navigation={navigation}
+              scene={scene}
+              back
+            />
+          ),
+          cardStyle: { backgroundColor: "#eee" },
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
 function AppStack(props) {
   return (
     <Drawer.Navigator
@@ -330,6 +374,14 @@ function AppStack(props) {
       <Drawer.Screen
         name="Serviços"
         component={ServicesStack}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Drawer.Screen
+        name="Configurações"
+        component={ConfigStack}
         options={{
           headerShown: false,
         }}

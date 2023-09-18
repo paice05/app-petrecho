@@ -51,7 +51,17 @@ class DrawerItem extends React.Component {
       case "LOGOUT":
         return (
           <Icon
-            name="share"
+            name="log-out"
+            size={22}
+            style={{ borderColor: "rgba(0,0,0,0.5)", opacity: 0.5 }}
+            color={focused ? nowTheme.COLORS.PRIMARY : "black"}
+          />
+        );
+
+      case "Configurações":
+        return (
+          <Icon
+            name="settings"
             size={22}
             style={{ borderColor: "rgba(0,0,0,0.5)", opacity: 0.5 }}
             color={focused ? nowTheme.COLORS.PRIMARY : "black"}

@@ -1,17 +1,17 @@
-import { Block, theme } from "galio-framework";
-import { ScrollView, StyleSheet } from "react-native";
-import { DrawerItem as DrawerCustomItem, Icon } from "../components";
-
 import React from "react";
+import { Block, Text, theme } from "galio-framework";
+import { ScrollView, StyleSheet } from "react-native";
 
+import { DrawerItem as DrawerCustomItem } from "../components";
+import { version } from "../package.json";
 import { useUserContext } from "../context/user";
 
 function CustomDrawerContent({ navigation, state }) {
   const { user } = useUserContext();
 
   const screens = user.isAdmin
-    ? ["Relatorios", "Agendamentos", "Clientes", "Serviços"]
-    : ["Agendamentos", "Clientes", "Serviços"];
+    ? ["Relatorios", "Agendamentos", "Clientes", "Serviços", "Configurações"]
+    : ["Agendamentos", "Clientes", "Serviços", "Configurações"];
 
   return (
     <Block
@@ -51,6 +51,8 @@ function CustomDrawerContent({ navigation, state }) {
           <DrawerCustomItem title="LOGOUT" navigation={navigation} />
         </ScrollView>
       </Block>
+
+      <Text center>versão {version}</Text>
     </Block>
   );
 }
