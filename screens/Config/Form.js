@@ -30,7 +30,7 @@ export function ConfigForm({ navigation }) {
 
   const { execute, loading, response } = useRequestUpdate({
     path: "/public/account",
-    id: user.account.id,
+    id: `${user.account.id}/config`,
     callbackSuccess: () => {},
   });
 

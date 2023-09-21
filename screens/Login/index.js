@@ -5,6 +5,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import * as Notifications from "expo-notifications";
 import { Block, Text, theme } from "galio-framework";
 
 import { Button, Icon, Input } from "../../components";
@@ -17,6 +18,14 @@ import { useUserContext } from "../../context/user";
 import { LoadingOverlay } from "../../components/LoadingOverlay";
 
 const { width, height } = Dimensions.get("screen");
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+    shouldShowAlert: true,
+  }),
+});
 
 const DismissKeyboard = ({ children }) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>

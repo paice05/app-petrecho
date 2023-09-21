@@ -1,8 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Block, Text } from "galio-framework";
-import { addDays, format, setHours, setMinutes, subDays } from "date-fns";
-import { StyleSheet, ScrollView, TouchableOpacity, Alert } from "react-native";
+import { addDays, setHours, setMinutes, subDays } from "date-fns";
+import {
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+  Platform,
+} from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
+import * as Notifications from "expo-notifications";
 
 import Tabs from "../../components/Tabs";
 import { Modal } from "../../components/Modal";
@@ -18,9 +25,39 @@ import { formartDate } from "../../utils/formartDate";
 import { api } from "../../services/api";
 import { LoadingOverlay } from "../../components/LoadingOverlay";
 import { useRequestUpdate } from "../../components/hooks/useRequestUpdate";
+import { useUserContext } from "../../context/user";
+
+async function registerForPushNotificationsAsync() {
+  const { status: existingStatus } = await Notifications.getPermissionsAsync();
+  let finalStatus = existingStatus;
+  if (existingStatus !== "granted") {
+    const { status } = await Notifications.requestPermissionsAsync();
+    finalStatus = status;
+  }
+  if (finalStatus !== "granted") {
+    alert("Failed to get push token for push notification!");
+    return;
+  }
+  const token = await Notifications.getExpoPushTokenAsync({
+    projectId: "7d33f38e-42ec-417e-ae63-e519783cf260",
+  });
+
+  if (Platform.OS === "android") {
+    Notifications.setNotificationChannelAsync("default", {
+      name: "default",
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: "#FF231F7C",
+    });
+  }
+
+  return token.data;
+}
 
 const ScheduleList = ({ route, navigation }) => {
   const params = route.params;
+
+  const { user } = useUserContext();
 
   const [openCalendar, setOpenCalendar] = useState(false);
   const [date, setDate] = useState(new Date());
@@ -79,6 +116,18 @@ const ScheduleList = ({ route, navigation }) => {
     path: "/schedules",
     callbackSuccess: findMany,
   });
+
+  const { execute: execUpdateToken,  } = useRequestUpdate({
+    path: "/public/account",
+    id: `${user.account.id}/token`,
+    callbackSuccess: () => {},
+  });
+
+  useEffect(() => {
+    registerForPushNotificationsAsync().then((token) => {
+      execUpdateToken({ token })
+    });
+  }, []);
 
   useEffect(() => {
     if (error) setSchedules([]);
