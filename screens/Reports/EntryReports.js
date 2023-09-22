@@ -67,7 +67,7 @@ const EntryReport = ({ route }) => {
                 .join(", ")}
               scheduleAt={formartDate(item.schedule.scheduleAt, "dd/MM HH:mm")}
               value={`R$ ` + Number(item.entry).toFixed(2).replace(".", ",")}
-              nome={item.schedule?.user.name}
+              nome={item.schedule.shortName || item.schedule?.user?.name}
               addition={
                 `R$ ` +
                 Number(item.schedule.addition).toFixed(2).replace(".", ",")

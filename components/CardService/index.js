@@ -1,15 +1,22 @@
-import React from 'react';
-import { StyleSheet, TouchableOpacity, Vibration } from 'react-native';
-import { Block, Text, Button as GaButton } from 'galio-framework';
+import React from "react";
+import { StyleSheet, TouchableOpacity, Vibration } from "react-native";
+import { Block, Text } from "galio-framework";
 
-import Menu from '../Menu';
-import { nowTheme } from '../../constants';
+import Menu from "../Menu";
+import IconExtra from "../Icon";
+import { useColorContext } from "../../context/colors";
 
 const CardService = ({ navigation, id, nome, valor, onDeleted }) => {
   const isLargeName = nome.length > 20;
 
+  const { colors } = useColorContext();
+
   return (
-    <Block flex space="between" style={styles.container}>
+    <Block
+      flex
+      space="between"
+      style={[styles.container, { backgroundColor: colors.PRIMARY_CARD_COLOR }]}
+    >
       <Block row space="between">
         <Block gap={5} style={styles.wrapperName}>
           <TouchableOpacity
@@ -19,39 +26,54 @@ const CardService = ({ navigation, id, nome, valor, onDeleted }) => {
               // Faz o dispositivo vibrar
               Vibration.vibrate(vibrationDuration);
 
-              navigation.navigate('ServiceForm', {
+              navigation.navigate("ServiceForm", {
                 itemId: id,
               });
             }}
           >
-            <Text size={18} style={{ textDecorationLine: 'underline' }}>
+            <Text
+              size={18}
+              style={[
+                { color: colors.TEXT },
+                { textDecorationLine: "underline" },
+              ]}
+            >
               {nome?.slice(0, 20)}
-              {isLargeName ? '...' : ''}
+              {isLargeName ? "..." : ""}
             </Text>
           </TouchableOpacity>
-          <Text size={16} color="gray">
-            R$ {Number(valor).toFixed(2).replace('.', ',')}
+          <Text size={16} color={colors.TEXT}>
+            R$ {Number(valor).toFixed(2).replace(".", ",")}
           </Text>
         </Block>
         <Menu
           items={[
             {
               onSelect: () =>
-                navigation.navigate('ServiceForm', {
+                navigation.navigate("ServiceForm", {
                   itemId: id,
                 }),
-              text: 'Editar',
-              icon: 'edit',
-              color: nowTheme.COLORS.SWITCH_ON,
+              text: "Editar",
+              icon: "edit",
+              color: colors.SWITCH_ON,
             },
             {
               onSelect: onDeleted,
-              text: 'Deletar',
-              icon: 'trash-2',
-              color: nowTheme.COLORS.PRIMARY,
+              text: "Deletar",
+              icon: "trash-2",
+              color: colors.PRIMARY,
             },
           ]}
-        />
+        >
+          <Block center style={[styles.more, { borderColor: colors.PRIMARY }]}>
+            <IconExtra
+              size={20}
+              color={colors.PRIMARY}
+              name="more-vertical"
+              family="feather"
+            />
+          </Block>
+        </Menu>
       </Block>
     </Block>
   );
@@ -62,10 +84,18 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10,
     marginBottom: 16,
-    backgroundColor: '#fff',
   },
   wrapperName: {
     paddingBottom: 20,
+  },
+  more: {
+    width: 35,
+    height: 35,
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderRadius: 3,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 

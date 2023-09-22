@@ -10,6 +10,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useRequestFindMany } from "../../components/hooks/useRequestFindMany";
 import { useRequestDestroy } from "../../components/hooks/useRequestDestroy";
 import { LoadingOverlay } from "../../components/LoadingOverlay";
+import { useColorContext } from "../../context/colors";
 
 const Services = ({ navigation }) => {
   const [services, setServices] = useState([]);
@@ -20,6 +21,8 @@ const Services = ({ navigation }) => {
     total: 0,
     lastPage: 0,
   });
+
+  const { colors } = useColorContext();
 
   const {
     execute: findMany,
@@ -74,7 +77,10 @@ const Services = ({ navigation }) => {
   return (
     <ScrollView
       showsVerticalScrollIndicator={true}
-      contentContainerStyle={styles.card}
+      contentContainerStyle={[
+        styles.card,
+        { backgroundColor: colors.PRIMARY_BACK_GROUND_COLOR },
+      ]}
     >
       <LoadingOverlay visible={loading} />
 
@@ -113,6 +119,7 @@ const Services = ({ navigation }) => {
 const styles = StyleSheet.create({
   card: {
     padding: 15,
+    flex: 1,
   },
 });
 

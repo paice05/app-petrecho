@@ -1,6 +1,12 @@
 import React from "react";
 
-import { ScrollView, StyleSheet, Vibration, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  Vibration,
+  View,
+} from "react-native";
 import { Block, Text } from "galio-framework";
 import {
   Menu,
@@ -14,30 +20,23 @@ import {
 import Icon from "../Icon";
 import { nowTheme } from "../../constants";
 
-const { SlideInMenu } = renderers;
+const { SlideInMenu, ContextMenu, NotAnimatedContextMenu, Popover } = renderers;
 
-const SimpleMenu = ({ children, items = [] }) => {
+const SimpleMenu = ({ children, styleContainer, items = [] }) => {
   return (
     <View>
-      <Menu renderer={SlideInMenu}>
+      <Menu
+        renderer={SlideInMenu}
+        rendererProps={{ anchorStyle: styles.anchorStyle }}
+        style={{ height: 50 }}
+      >
         <MenuTrigger
-          children={
-            children || (
-              <Block style={styles.more} middle>
-                <Icon
-                  size={20}
-                  color={nowTheme.COLORS.PRIMARY}
-                  name="more-vertical"
-                  family="feather"
-                />
-              </Block>
-            )
-          }
+          children={<Block style={styleContainer}>{children}</Block>}
         />
         <MenuOptions
           customStyles={{
             optionsContainer: {
-              maxHeight: 200,
+              maxHeight: 300,
               paddingBottom: 25,
               paddingLeft: 5,
             },
@@ -85,12 +84,7 @@ const SimpleMenu = ({ children, items = [] }) => {
 export default SimpleMenu;
 
 const styles = StyleSheet.create({
-  more: {
-    width: 35,
-    height: 35,
-    borderWidth: 1,
-    borderStyle: "solid",
-    borderColor: nowTheme.COLORS.PRIMARY,
-    borderRadius: 3,
+  anchorStyle: {
+    backgroundColor: "blue",
   },
 });

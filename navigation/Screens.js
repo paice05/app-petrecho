@@ -43,7 +43,7 @@ function LoginStack(props) {
         name="Login"
         component={Login}
         options={{
-          backgroundColor: "#eee",
+          backgroundColor: nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR,
         }}
       />
     </Stack.Navigator>
@@ -66,7 +66,9 @@ function ClientsStack(props) {
           header: ({ navigation, scene }) => (
             <Header title="Clientes" navigation={navigation} scene={scene} />
           ),
-          cardStyle: { backgroundColor: "#eee" },
+          cardStyle: {
+            backgroundColor: nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR,
+          },
         }}
       />
 
@@ -103,7 +105,9 @@ function ClientsStack(props) {
               scene={scene}
             />
           ),
-          cardStyle: { backgroundColor: "#eee" },
+          cardStyle: {
+            backgroundColor: nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR,
+          },
         }}
       />
     </Stack.Navigator>
@@ -131,7 +135,9 @@ function SchedulesStack(props) {
             />
           ),
 
-          cardStyle: { backgroundColor: "#eee" },
+          cardStyle: {
+            backgroundColor: nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR,
+          },
         }}
       />
 
@@ -175,7 +181,9 @@ function ServicesStack(props) {
           header: ({ navigation, scene }) => (
             <Header title="Serviços" navigation={navigation} scene={scene} />
           ),
-          cardStyle: { backgroundColor: "#eee" },
+          cardStyle: {
+            backgroundColor: nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR,
+          },
         }}
       />
 
@@ -220,7 +228,9 @@ function ReportsStack(props) {
           header: ({ navigation, scene }) => (
             <Header title="Relatórios" navigation={navigation} scene={scene} />
           ),
-          cardStyle: { backgroundColor: "#eee" },
+          cardStyle: {
+            backgroundColor: nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR,
+          },
         }}
       />
       <Stack.Screen
@@ -295,7 +305,9 @@ function ConfigStack(props) {
               scene={scene}
             />
           ),
-          cardStyle: { backgroundColor: "#eee" },
+          cardStyle: {
+            backgroundColor: nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR,
+          },
         }}
       />
       <Stack.Screen
@@ -310,7 +322,9 @@ function ConfigStack(props) {
               back
             />
           ),
-          cardStyle: { backgroundColor: "#eee" },
+          cardStyle: {
+            backgroundColor: nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR,
+          },
         }}
       />
     </Stack.Navigator>

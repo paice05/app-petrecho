@@ -117,7 +117,7 @@ const ScheduleList = ({ route, navigation }) => {
     callbackSuccess: findMany,
   });
 
-  const { execute: execUpdateToken,  } = useRequestUpdate({
+  const { execute: execUpdateToken } = useRequestUpdate({
     path: "/public/account",
     id: `${user.account.id}/token`,
     callbackSuccess: () => {},
@@ -125,7 +125,8 @@ const ScheduleList = ({ route, navigation }) => {
 
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
-      execUpdateToken({ token })
+      Alert.alert(token);
+      execUpdateToken({ token });
     });
   }, []);
 
@@ -197,6 +198,13 @@ const ScheduleList = ({ route, navigation }) => {
   const handleFinished = (scheduleId) => {
     const payload = {
       status: "finished",
+    };
+
+    fetchChangeStatus(scheduleId, payload);
+  };
+  const handleFinishedAwaitingPayment = (scheduleId) => {
+    const payload = {
+      status: "awaiting-payment",
     };
 
     fetchChangeStatus(scheduleId, payload);
@@ -307,6 +315,9 @@ const ScheduleList = ({ route, navigation }) => {
                         dia={formartDate(item.scheduleAt, "dd/MM/YYY")}
                         status={item.status}
                         onFinished={() => handleFinished(item.id)}
+                        onFinishedAwaitingPayment={() =>
+                          handleFinishedAwaitingPayment(item.id)
+                        }
                         onCanceled={() => handleCanceled(item.id)}
                         onDeleted={() => handleConfirmDelete(item.id)}
                         onRevert={() => handleRestore(item.id)}
@@ -323,7 +334,9 @@ const ScheduleList = ({ route, navigation }) => {
                 payload={schedules
                   .filter(
                     (item) =>
-                      item.status === "pending" || item.status === "finished"
+                      item.status === "pending" ||
+                      item.status === "finished" ||
+                      item.status === "awaiting-payment"
                   )
                   .map((item) => formartDate(item.scheduleAt, "HH:mm"))}
               />

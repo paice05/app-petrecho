@@ -19,6 +19,7 @@ const CardSchedule = ({
   horario,
   status,
   onFinished,
+  onFinishedAwaitingPayment,
   onCanceled,
   onDeleted,
   onRevert,
@@ -31,6 +32,7 @@ const CardSchedule = ({
     finished: "Finalizado",
     canceled: "Cancelado",
     awaiting: "Aguardando",
+    "awaiting-payment": "A pagar",
   };
 
   const icon = {
@@ -38,6 +40,7 @@ const CardSchedule = ({
     finished: "check-circle",
     canceled: "x-circle",
     awaiting: "alert-circle",
+    "awaiting-payment": "thumbs-down",
   };
 
   return (
@@ -100,8 +103,24 @@ const CardSchedule = ({
                 color: nowTheme.COLORS.INFO,
                 disable: status === "pending",
               },
+              {
+                onSelect: onFinished,
+                text: "Confirmar pagamento",
+                icon: "dollar-sign",
+                color: nowTheme.COLORS.SUCCESS,
+                disable: status !== "awaiting-payment",
+              },
             ]}
-          />
+          >
+            <Block center style={styles.more}>
+              <Icon
+                size={20}
+                color={nowTheme.COLORS.PRIMARY}
+                name="more-vertical"
+                family="feather"
+              />
+            </Block>
+          </Menu>
         </Block>
       </Block>
       <Block row style={styles.wrapperInfo}>
@@ -147,14 +166,27 @@ const CardSchedule = ({
               Cancelar
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            onPress={onFinished}
-            style={[styles.button, styles.primary]}
+          <Menu
+            styleContainer={[styles.button, styles.primary]}
+            items={[
+              {
+                onSelect: onFinished,
+                text: "Pago",
+                icon: "dollar-sign",
+                color: nowTheme.COLORS.SUCCESS,
+              },
+              {
+                onSelect: onFinishedAwaitingPayment,
+                text: "A pagar",
+                icon: "thumbs-down",
+                color: nowTheme.COLORS.PRIMARY,
+              },
+            ]}
           >
             <Text color="white" bold size={16}>
               Confirmar
             </Text>
-          </TouchableOpacity>
+          </Menu>
         </Block>
       )}
       {status === "awaiting" && (
@@ -206,6 +238,16 @@ const styles = StyleSheet.create({
   },
   actionIcon: {
     alignItems: "center",
+  },
+  more: {
+    width: 35,
+    height: 35,
+    borderWidth: 1,
+    borderStyle: "solid",
+    borderColor: nowTheme.COLORS.PRIMARY,
+    borderRadius: 3,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 
