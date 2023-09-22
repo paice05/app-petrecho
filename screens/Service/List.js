@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { StyleSheet, ScrollView, Alert } from "react-native";
+import { StyleSheet, ScrollView, Alert, View } from "react-native";
 
 import CardService from "../../components/CardService";
 
@@ -75,16 +75,16 @@ const Services = ({ navigation }) => {
     ]);
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={true}
-      contentContainerStyle={[
+    <View
+      style={[
         styles.card,
-        { backgroundColor: colors.PRIMARY_BACK_GROUND_COLOR },
+        {
+          backgroundColor: colors.PRIMARY_BACK_GROUND_COLOR,
+        },
       ]}
     >
       <LoadingOverlay visible={loading} />
-
-      <Block>
+      <ScrollView showsVerticalScrollIndicator={true}>
         {services.length === 0 && (
           <Text center style={{ marginTop: 20, marginBottom: 20 }}>
             {" "}
@@ -104,22 +104,23 @@ const Services = ({ navigation }) => {
             />
           );
         })}
-        <PaginationSimple
-          currentPage={pagination.currentPage}
-          total={pagination.total}
-          lastPage={pagination.lastPage}
-          handleNextPage={handleNextPage}
-          handlePreviousPage={handlePreviousPage}
-        />
-      </Block>
-    </ScrollView>
+      </ScrollView>
+
+      <PaginationSimple
+        currentPage={pagination.currentPage}
+        total={pagination.total}
+        lastPage={pagination.lastPage}
+        handleNextPage={handleNextPage}
+        handlePreviousPage={handlePreviousPage}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    padding: 15,
     flex: 1,
+    padding: 15,
   },
 });
 
