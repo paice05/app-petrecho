@@ -8,6 +8,7 @@ import { PaginationSimple } from "../../components/PaginationSimple";
 import { useRequestFindMany } from "../../components/hooks/useRequestFindMany";
 import { useRequestDestroy } from "../../components/hooks/useRequestDestroy";
 import { LoadingOverlay } from "../../components/LoadingOverlay";
+import { nowTheme } from "../../constants";
 
 const Clients = ({ navigation }) => {
   const [clients, setClients] = useState([]);
