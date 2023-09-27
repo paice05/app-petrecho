@@ -21,60 +21,71 @@ import Icon from "./Icon";
 import Input from "./Input";
 import Tabs from "./Tabs";
 import nowTheme from "../constants/Theme";
+import { useColorContext } from "../context/colors";
 
 const { width } = Dimensions.get("window");
 
-const NewClient = ({ navigation }) => (
-  <TouchableOpacity
-    onPress={() => {
-      const vibrationDuration = 100;
+const NewClient = ({ navigation }) => {
+  const { colors } = useColorContext();
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        const vibrationDuration = 100;
 
-      Vibration.vibrate(vibrationDuration);
+        Vibration.vibrate(vibrationDuration);
 
-      navigation.navigate("ClientForm");
-    }}
-  >
-    <Block row center gap={3}>
-      <Icon size={20} name="plus-circle" />
-      <Text bold size={16}>
-        CRIAR
-      </Text>
-    </Block>
-  </TouchableOpacity>
-);
+        navigation.navigate("ClientForm");
+      }}
+    >
+      <Block row center gap={3}>
+        <Icon size={20} name="plus-circle" color={colors.ICON} />
+        <Text bold size={16} color={colors.TEXT}>
+          CRIAR
+        </Text>
+      </Block>
+    </TouchableOpacity>
+  );
+};
 
-const ImportContacts = ({ navigation }) => (
-  <TouchableOpacity
-    onPress={() => {
-      const vibrationDuration = 100;
+const ImportContacts = ({ navigation }) => {
+  const { colors } = useColorContext();
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        const vibrationDuration = 100;
 
-      Vibration.vibrate(vibrationDuration);
+        Vibration.vibrate(vibrationDuration);
 
-      navigation.navigate("ImportContacts");
-    }}
-  >
-    <Icon size={20} name="download" />
-  </TouchableOpacity>
-);
+        navigation.navigate("ImportContacts");
+      }}
+    >
+      <Icon size={20} name="download" color={colors.ICON} />
+    </TouchableOpacity>
+  );
+};
 
-const NewService = ({ navigation }) => (
-  <TouchableOpacity
-    onPress={() => {
-      const vibrationDuration = 100;
+const NewService = ({ navigation }) => {
+  const { colors } = useColorContext();
 
-      Vibration.vibrate(vibrationDuration);
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        const vibrationDuration = 100;
 
-      navigation.navigate("ServiceForm");
-    }}
-  >
-    <Block row center gap={3}>
-      <Icon size={20} name="plus-circle" />
-      <Text bold size={16}>
-        CRIAR
-      </Text>
-    </Block>
-  </TouchableOpacity>
-);
+        Vibration.vibrate(vibrationDuration);
+
+        navigation.navigate("ServiceForm");
+      }}
+    >
+      <Block row center gap={3}>
+        <Icon size={20} name="plus-circle" color={colors.ICON} />
+        <Text bold size={16} color={colors.TEXT}>
+          CRIAR
+        </Text>
+      </Block>
+    </TouchableOpacity>
+  );
+};
 
 const NewSchedule = ({ navigation }) => (
   <TouchableOpacity
@@ -95,24 +106,28 @@ const NewSchedule = ({ navigation }) => (
   </TouchableOpacity>
 );
 
-const EditConfig = ({ navigation }) => (
-  <TouchableOpacity
-    onPress={() => {
-      const vibrationDuration = 100;
+const EditConfig = ({ navigation }) => {
+  const { colors } = useColorContext();
 
-      Vibration.vibrate(vibrationDuration);
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        const vibrationDuration = 100;
 
-      navigation.navigate("ConfigForm");
-    }}
-  >
-    <Block row center gap={3}>
-      <Icon size={20} name="edit" />
-      <Text bold size={16}>
-        EDITAR
-      </Text>
-    </Block>
-  </TouchableOpacity>
-);
+        Vibration.vibrate(vibrationDuration);
+
+        navigation.navigate("ConfigForm");
+      }}
+    >
+      <Block row center gap={3}>
+        <Icon size={20} name="edit" color={colors.ICON} />
+        <Text bold size={16} color={colors.TEXT}>
+          EDITAR
+        </Text>
+      </Block>
+    </TouchableOpacity>
+  );
+};
 
 const handleLeftPress = (back, navigation) => {
   const vibrationDuration = 100;
@@ -220,15 +235,14 @@ export function Header({
   ...props
 }) {
   const navigation = useNavigation();
+  const { colors } = useColorContext();
 
-  const noShadow = ["ClientForm"].includes(title);
   const headerStyles = [
-    { height: 100 },
-    !noShadow ? styles.shadow : null,
+    styles.shadow,
     transparent ? { backgroundColor: "rgba(0,0,0,0)" } : null,
   ];
 
-  const navbarStyles = [styles.navbar, bgColor && { backgroundColor: bgColor }];
+  const navbarStyles = [styles.navbar, { backgroundColor: colors.BACKGROUND }];
 
   return (
     <Block style={headerStyles}>
@@ -244,16 +258,13 @@ export function Header({
             name={back ? "arrow-left" : "menu"}
             size={22}
             onPress={() => handleLeftPress(back, navigation)}
-            color={
-              iconColor ||
-              (white ? nowTheme.COLORS.WHITE : nowTheme.COLORS.ICON)
-            }
+            color={colors.ICON}
           />
         }
         leftStyle={{ paddingVertical: 12, flex: 0.2 }}
         titleStyle={[
           styles.title,
-          { color: nowTheme.COLORS[white ? "WHITE" : "HEADER"] },
+          { color: colors.TEXT },
           titleColor && { color: titleColor },
         ]}
         {...props}
@@ -277,9 +288,9 @@ const styles = StyleSheet.create({
     paddingTop: 70,
   },
   shadow: {
-    backgroundColor: theme.COLORS.WHITE,
+    backgroundColor: "#fff",
     shadowColor: "black",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 10 },
     shadowRadius: 6,
     shadowOpacity: 0.2,
     elevation: 3,

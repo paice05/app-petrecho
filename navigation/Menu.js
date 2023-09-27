@@ -17,7 +17,7 @@ function CustomDrawerContent({ navigation, state }) {
 
   return (
     <Block
-      style={[styles.container, { backgroundColor: colors.PRIMARY_MENU_COLOR }]}
+      style={[styles.container, { backgroundColor: colors.MENU }]}
       forceInset={{ top: "always", horizontal: "never" }}
     >
       <Block style={styles.header}></Block>
@@ -34,6 +34,7 @@ function CustomDrawerContent({ navigation, state }) {
                     ? true
                     : false
                 }
+                colors={colors}
               />
             );
           })}

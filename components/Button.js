@@ -15,16 +15,14 @@ class ArButton extends React.Component {
       fontSize,
       round,
       loading,
+      backgroundColor,
       ...props
     } = this.props;
 
-    const colorStyle = color && nowTheme.COLORS[color.toUpperCase()];
-
     const buttonStyles = [
       small && styles.smallButton,
-      colorStyle === "neutral"
-        ? { backgroundColor: "rgba(0,0,0,0)" }
-        : color && { backgroundColor: colorStyle },
+
+      { backgroundColor },
       round && { borderRadius: nowTheme.SIZES.BASE * 2 },
       !shadowless && styles.shadow,
       { ...style },

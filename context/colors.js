@@ -4,19 +4,36 @@ import { nowTheme } from "../constants";
 
 const ColorContext = createContext({});
 
+const defaultColors = {
+  DANGER: "#ed4245",
+  WARNING: "#fee75c",
+  SUCCESS: "#57f287",
+  INFO: "#5865f2",
+  WHITE: "#FFF",
+  BLACK: "#000",
+};
+
 export const ColorContextProvider = ({ children }) => {
   const [colors, setColor] = useState({
-    PRIMARY: nowTheme.COLORS.PRIMARY,
-    PRIMARY_BACK_GROUND_COLOR: nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR,
-    PRIMARY_CARD_COLOR: nowTheme.COLORS.PRIMARY_CARD_COLOR,
+    BACKGROUND: nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR,
+    BACKGROUND_CARD: nowTheme.COLORS.PRIMARY_CARD_COLOR,
+    BUTTON: nowTheme.COLORS.PRIMARY,
     TEXT: nowTheme.COLORS.TEXT,
-    SWITCH_ON: nowTheme.COLORS.SWITCH_ON,
-    PRIMARY_BUTTON_COLOR: nowTheme.COLORS.PRIMARY_BUTTON_COLOR,
-    PRIMARY_MENU_COLOR: nowTheme.COLORS.PRIMARY_MENU_COLOR,
+    SUB_TEXT: "#00171F",
+    ICON: nowTheme.COLORS.PRIMARY,
+    PLACEHOLDER: "#00171F",
+    MENU: "#fff",
   });
 
+  const handleChangeColors = (newColors) => {
+    setColor({
+      ...newColors,
+      ...defaultColors,
+    });
+  };
+
   return (
-    <ColorContext.Provider value={{ colors, changeColor: setColor }}>
+    <ColorContext.Provider value={{ colors, changeColor: handleChangeColors }}>
       {children}
     </ColorContext.Provider>
   );

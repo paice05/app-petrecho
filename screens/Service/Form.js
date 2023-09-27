@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Dimensions } from "react-native";
+import { ScrollView, StyleSheet, Dimensions, View } from "react-native";
 
 // Galio components
 import { Block, Text, theme } from "galio-framework";
@@ -11,9 +11,11 @@ import { nowTheme } from "../../constants";
 import { api } from "../../services/api";
 import { useValidateRequiredFields } from "../../components/hooks/useValidateRequiredFields";
 import { CustomInputMask } from "../../components/CustomInputMask";
+import { useColorContext } from "../../context/colors";
 
 const ServiceForm = ({ route, navigation }) => {
   const params = route.params;
+  const { colors } = useColorContext();
 
   const isEditing = params?.itemId;
 
@@ -92,71 +94,96 @@ const ServiceForm = ({ route, navigation }) => {
   }, []);
 
   return (
-    <ScrollView showsVerticalScrollIndicator={true}>
-      <Block flex gap={10} style={styles.cardContainer}>
-        <Block>
-          <CustomInput
-            placeholder="Digite o nome do serviço"
-            labelText="Nome"
-            value={fields.name}
-            onChangeText={(value) => setFields({ ...fields, name: value })}
-            iconContent={
-              <Icon
-                size={16}
-                name="file-text"
-                family="feather"
-                style={styles.inputIcons}
-              />
-            }
-          />
-          {errors?.["name"] && (
-            <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
-              campo obrigatório
-            </Text>
-          )}
-        </Block>
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: colors.BACKGROUND,
+        },
+      ]}
+    >
+      <ScrollView showsVerticalScrollIndicator={true}>
+        <Block
+          gap={10}
+          style={[
+            styles.cardContainer,
+            { backgroundColor: colors.BACKGROUND_CARD },
+          ]}
+        >
+          <Block>
+            <CustomInput
+              placeholder="Digite o nome do serviço"
+              labelText="Nome"
+              value={fields.name}
+              onChangeText={(value) => setFields({ ...fields, name: value })}
+              iconContent={
+                <Icon
+                  size={16}
+                  name="file-text"
+                  family="feather"
+                  style={styles.inputIcons}
+                  color={colors.ICON}
+                />
+              }
+            />
+            {errors?.["name"] && (
+              <Text center size={14} color={colors.DANGER}>
+                campo obrigatório
+              </Text>
+            )}
+          </Block>
 
-        <Block>
-          <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
-            Preço
-          </Text>
-          <CustomInputMask
-            placeholder="Digite o valor do serviço"
-            value={fields.price}
-            onChangeText={(text) => setFields({ ...fields, price: text })}
-          />
-          {errors?.["price"] && (
-            <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
-              campo obrigatório
+          <Block>
+            <Text
+              color={colors.TEXT}
+              size={16}
+              bold
+              style={{ marginLeft: 20, marginBottom: 5 }}
+            >
+              Preço
             </Text>
-          )}
+            <CustomInputMask
+              placeholder="Digite o valor do serviço"
+              value={fields.price}
+              onChangeText={(text) => setFields({ ...fields, price: text })}
+            />
+            {errors?.["price"] && (
+              <Text center size={14} color={colors.DANGER}>
+                campo obrigatório
+              </Text>
+            )}
+          </Block>
         </Block>
-      </Block>
+      </ScrollView>
       <Block row center>
         <Button style={styles.button} onPress={() => navigation.goBack()}>
-          <Text size={16} bold>
+          <Text size={16} bold color={colors.BLACK}>
             Voltar
           </Text>
         </Button>
         <Button
           style={styles.primary}
+          backgroundColor={colors.BACKGROUND_CARD}
           onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
         >
-          <Text size={16} bold color="#fff">
+          <Text size={16} bold color={colors.TEXT}>
             {isEditing ? "Atualizar" : "Cadastrar"}
           </Text>
         </Button>
       </Block>
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 15,
+  },
   cardContainer: {
-    padding: 10,
-    margin: 15,
+    paddingHorizontal: 10,
+    paddingVertical: 20,
     borderRadius: 10,
-    backgroundColor: "#fff",
   },
   button: {
     marginBottom: nowTheme.SIZES.BASE,
@@ -173,11 +200,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 120,
     height: 40,
-    backgroundColor: nowTheme.COLORS.PRIMARY,
   },
   inputIcons: {
     marginRight: 12,
-    color: nowTheme.COLORS.PRIMARY,
   },
 });
 

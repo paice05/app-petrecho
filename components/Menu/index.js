@@ -19,10 +19,13 @@ import {
 
 import Icon from "../Icon";
 import { nowTheme } from "../../constants";
+import { useColorContext } from "../../context/colors";
 
 const { SlideInMenu, ContextMenu, NotAnimatedContextMenu, Popover } = renderers;
 
 const SimpleMenu = ({ children, styleContainer, items = [] }) => {
+  const { colors } = useColorContext();
+
   return (
     <View>
       <Menu
@@ -39,6 +42,7 @@ const SimpleMenu = ({ children, styleContainer, items = [] }) => {
               maxHeight: 300,
               paddingBottom: 25,
               paddingLeft: 5,
+              backgroundColor: colors.BACKGROUND,
             },
           }}
         >
@@ -62,12 +66,12 @@ const SimpleMenu = ({ children, styleContainer, items = [] }) => {
                       {item.icon && (
                         <Icon
                           size={18}
-                          color={item.color}
+                          color={colors.TEXT}
                           name={item.icon}
                           family="feather"
                         />
                       )}
-                      <Text size={18} color={item.color}>
+                      <Text size={18} color={colors.TEXT}>
                         {item.text}
                       </Text>
                     </Block>

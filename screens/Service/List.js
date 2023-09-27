@@ -79,7 +79,7 @@ const Services = ({ navigation }) => {
       style={[
         styles.card,
         {
-          backgroundColor: colors.PRIMARY_BACK_GROUND_COLOR,
+          backgroundColor: colors.BACKGROUND,
         },
       ]}
     >
@@ -119,7 +119,7 @@ const Services = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   card: {
-    //flex: 1,
+    flex: 1,
     padding: 15,
   },
 });

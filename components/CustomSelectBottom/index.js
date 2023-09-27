@@ -5,6 +5,7 @@ import { Text } from "galio-framework";
 import { SelectList } from "react-native-select-bottom-list";
 import { nowTheme } from "../../constants";
 import Icon from "../Icon";
+import { useColorContext } from "../../context/colors";
 
 const { width } = Dimensions.get("window");
 
@@ -14,25 +15,25 @@ export const CustomSelectBottom = ({
   onChange,
   value,
   options,
-  itemTextStyle,
 }) => {
+  const { colors } = useColorContext();
+
   return (
     <SafeAreaView>
       <Text bold>{labelText}</Text>
 
       <SelectList
-        style={Platform.OS === "ios" ? styles.inputIOS : styles.input}
+        style={Platform.OS === "ios" ? styles.inputIOS : [styles.input]}
         placeHolder={placeholder}
         onSelect={(item) => onChange(item)}
         value={value?.title}
         data={options}
         headerTitle={labelText}
         listHeight={300}
-        textStyle={styles.textStyleChange}
-        itemStyle={{ fontSize: 24 }}
-        itemTextStyle={itemTextStyle}
+        textStyle={[styles.textStyleChange, { color: colors.PLACEHOLDER }]}
+        itemStyle={{ fontSize: 24, color: colors.TEXT }}
         renderIcon={() => (
-          <Icon family="feather" name="user" color={nowTheme.COLORS.PRIMARY} />
+          <Icon family="feather" name="user" color={colors.ICON} />
         )}
       />
     </SafeAreaView>
@@ -43,9 +44,7 @@ const styles = StyleSheet.create({
   input: {
     borderRadius: 30,
     borderWidth: 1,
-    borderColor: nowTheme.COLORS.BORDER,
     height: 44,
-    backgroundColor: "#FFFFFF",
     paddingHorizontal: 20,
     display: "flex",
     flexDirection: "row-reverse",
@@ -55,9 +54,7 @@ const styles = StyleSheet.create({
   inputIOS: {
     borderRadius: 35,
     borderWidth: 1,
-    borderColor: nowTheme.COLORS.BORDER,
     height: 44,
-    backgroundColor: "#FFFFFF",
     paddingHorizontal: 18,
     display: "flex",
     flexDirection: "row-reverse",

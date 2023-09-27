@@ -7,6 +7,7 @@ import { nowTheme } from "../../constants";
 import Icon from "../Icon";
 import Menu from "../Menu";
 import { useUserContext } from "../../context/user";
+import { useColorContext } from "../../context/colors";
 
 const CardClient = ({
   navigation,
@@ -21,6 +22,7 @@ const CardClient = ({
   const isLargeName = nome.length > 20;
 
   const { user } = useUserContext();
+  const { colors } = useColorContext();
 
   const userIsAdmin = user.isAdmin;
 
@@ -28,8 +30,7 @@ const CardClient = ({
     <Block
       flex
       space="between"
-      style={styles.container}
-      card={nowTheme.COLORS.PRIMARY_CARD_COLOR}
+      style={[styles.container, { backgroundColor: colors.BACKGROUND_CARD }]}
     >
       <Block row space="between">
         <Block gap={5} style={styles.wrapperName}>
@@ -47,18 +48,22 @@ const CardClient = ({
               });
             }}
           >
-            <Text size={18} style={{ textDecorationLine: "underline" }}>
+            <Text
+              size={18}
+              style={{ textDecorationLine: "underline" }}
+              color={colors.TEXT}
+            >
               {nome?.slice(0, 20)}
               {isLargeName ? "..." : ""}
               {isAdmin ? (
-                <Text color="gray" size={12}>
+                <Text color="gray" size={12} color={colors.SUB_TEXT}>
                   {" "}
                   (admin)
                 </Text>
               ) : null}
             </Text>
           </TouchableOpacity>
-          <Text size={16} color="gray">
+          <Text size={16} color={colors.SUB_TEXT}>
             {tipo}
           </Text>
         </Block>
@@ -71,22 +76,22 @@ const CardClient = ({
                 }),
               text: "Editar",
               icon: "edit",
-              color: nowTheme.COLORS.SWITCH_ON,
+              color: colors.TEXT,
               disable: !userIsAdmin && isAdmin,
             },
             {
               onSelect: onDeleted,
               text: "Deletar",
               icon: "trash-2",
-              color: nowTheme.COLORS.PRIMARY,
+              color: colors.TEXT,
               disable: !userIsAdmin,
             },
           ]}
         >
-          <Block center style={styles.more}>
+          <Block center style={[styles.more, { borderColor: colors.TEXT }]}>
             <Icon
               size={20}
-              color={nowTheme.COLORS.PRIMARY}
+              color={colors.TEXT}
               name="more-vertical"
               family="feather"
             />
@@ -96,13 +101,8 @@ const CardClient = ({
 
       <Block row style={styles.wrapperInfo}>
         <Block row gap={5} style={{ alignItems: "center" }}>
-          <Icon
-            size={18}
-            color={nowTheme.COLORS.PRIMARY}
-            name="phone"
-            family="feather"
-          />
-          <Text size={16} bold>
+          <Icon size={18} color={colors.ICON} name="phone" family="feather" />
+          <Text size={16} bold color={colors.TEXT}>
             {telefone}
           </Text>
         </Block>
@@ -110,11 +110,11 @@ const CardClient = ({
         <Block row gap={5} style={{ alignItems: "center" }}>
           <Icon
             size={18}
-            color={nowTheme.COLORS.PRIMARY}
+            color={colors.ICON}
             name="calendar"
             family="feather"
           />
-          <Text size={16} bold>
+          <Text size={16} bold color={colors.TEXT}>
             {aniversario}
           </Text>
         </Block>
@@ -141,7 +141,6 @@ const styles = StyleSheet.create({
     height: 35,
     borderWidth: 1,
     borderStyle: "solid",
-    borderColor: nowTheme.COLORS.PRIMARY,
     borderRadius: 3,
     alignItems: "center",
     justifyContent: "center",

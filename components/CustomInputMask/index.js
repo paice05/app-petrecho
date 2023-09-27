@@ -5,8 +5,11 @@ import { Block } from "galio-framework";
 
 import { nowTheme } from "../../constants";
 import IconExtra from "../Icon";
+import { useColorContext } from "../../context/colors";
 
 export const CustomInputMask = ({ onChangeText, value, placeholder }) => {
+  const { colors } = useColorContext();
+
   const handlePriceChange = (formatted, extracted) => {
     onChangeText(formatted);
   };
@@ -15,7 +18,7 @@ export const CustomInputMask = ({ onChangeText, value, placeholder }) => {
     <Block row style={styles.container}>
       <IconExtra
         size={16}
-        color={nowTheme.COLORS.PRIMARY}
+        color={colors.ICON}
         name="dollar-sign"
         family="feather"
         style={styles.inputIcons}
@@ -30,8 +33,12 @@ export const CustomInputMask = ({ onChangeText, value, placeholder }) => {
         }}
         value={value}
         onChangeText={handlePriceChange}
-        style={styles.input}
         placeholder={placeholder}
+        placeholderTextColor={colors.PLACEHOLDER}
+        style={[
+          styles.input,
+          { backgroundColor: "transparent", color: colors.TEXT },
+        ]}
       />
     </Block>
   );
@@ -43,7 +50,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: nowTheme.COLORS.BORDER,
     height: 44,
-    backgroundColor: "#FFFFFF",
     paddingHorizontal: 10,
     alignItems: "center",
   },

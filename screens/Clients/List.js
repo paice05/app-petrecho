@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { StyleSheet, ScrollView, Alert } from "react-native";
+import { StyleSheet, ScrollView, Alert, View } from "react-native";
 import { Block, Text } from "galio-framework";
 import { useFocusEffect } from "@react-navigation/native";
 
@@ -9,6 +9,7 @@ import { useRequestFindMany } from "../../components/hooks/useRequestFindMany";
 import { useRequestDestroy } from "../../components/hooks/useRequestDestroy";
 import { LoadingOverlay } from "../../components/LoadingOverlay";
 import { nowTheme } from "../../constants";
+import { useColorContext } from "../../context/colors";
 
 const Clients = ({ navigation }) => {
   const [clients, setClients] = useState([]);
@@ -19,6 +20,8 @@ const Clients = ({ navigation }) => {
     total: 0,
     lastPage: 0,
   });
+
+  const { colors } = useColorContext();
 
   const {
     execute: findMany,
@@ -71,48 +74,58 @@ const Clients = ({ navigation }) => {
     ]);
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={true}
-      contentContainerStyle={styles.card}
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: colors.BACKGROUND,
+        },
+      ]}
     >
-      <LoadingOverlay visible={loading} />
+      <ScrollView
+        showsVerticalScrollIndicator={true}
+        contentContainerStyle={styles.card}
+      >
+        <LoadingOverlay visible={loading} />
 
-      <Block>
-        {clients.length === 0 && (
-          <Text center style={{ marginTop: 20, marginBottom: 20 }}>
-            Nenhum registro encontrado
-          </Text>
-        )}
+        <Block>
+          {clients.length === 0 && (
+            <Text center style={{ marginTop: 20, marginBottom: 20 }}>
+              Nenhum registro encontrado
+            </Text>
+          )}
 
-        {clients.map((item) => {
-          return (
-            <CardClient
-              key={item.id}
-              navigation={navigation}
-              id={item.id}
-              nome={item.name}
-              telefone={item.cellPhone}
-              aniversario={item.birthDate}
-              tipo={item.type === "pj" ? "Funcionário" : "Cliente"}
-              isAdmin={item.isSuperAdmin}
-              onDeleted={() => handleConfirmDelete(item.id)}
-            />
-          );
-        })}
-        <PaginationSimple
-          currentPage={pagination.currentPage}
-          total={pagination.total}
-          lastPage={pagination.lastPage}
-          handleNextPage={handleNextPage}
-          handlePreviousPage={handlePreviousPage}
-        />
-      </Block>
-    </ScrollView>
+          {clients.map((item) => {
+            return (
+              <CardClient
+                key={item.id}
+                navigation={navigation}
+                id={item.id}
+                nome={item.name}
+                telefone={item.cellPhone}
+                aniversario={item.birthDate}
+                tipo={item.type === "pj" ? "Funcionário" : "Cliente"}
+                isAdmin={item.isSuperAdmin}
+                onDeleted={() => handleConfirmDelete(item.id)}
+              />
+            );
+          })}
+        </Block>
+      </ScrollView>
+      <PaginationSimple
+        currentPage={pagination.currentPage}
+        total={pagination.total}
+        lastPage={pagination.lastPage}
+        handleNextPage={handleNextPage}
+        handlePreviousPage={handlePreviousPage}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  card: {
+  container: {
+    flex: 1,
     padding: 15,
   },
 });

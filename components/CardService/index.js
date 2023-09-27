@@ -15,7 +15,7 @@ const CardService = ({ navigation, id, nome, valor, onDeleted }) => {
     <Block
       flex
       space="between"
-      style={[styles.container, { backgroundColor: colors.PRIMARY_CARD_COLOR }]}
+      style={[styles.container, { backgroundColor: colors.BACKGROUND_CARD }]}
     >
       <Block row space="between">
         <Block gap={5} style={styles.wrapperName}>
@@ -42,7 +42,7 @@ const CardService = ({ navigation, id, nome, valor, onDeleted }) => {
               {isLargeName ? "..." : ""}
             </Text>
           </TouchableOpacity>
-          <Text size={16} color={colors.TEXT}>
+          <Text size={16} color={colors.SUB_TEXT}>
             R$ {Number(valor).toFixed(2).replace(".", ",")}
           </Text>
         </Block>
@@ -55,20 +55,20 @@ const CardService = ({ navigation, id, nome, valor, onDeleted }) => {
                 }),
               text: "Editar",
               icon: "edit",
-              color: colors.SWITCH_ON,
+              color: colors.TEXT,
             },
             {
               onSelect: onDeleted,
               text: "Deletar",
               icon: "trash-2",
-              color: colors.PRIMARY,
+              color: colors.TEXT,
             },
           ]}
         >
-          <Block center style={[styles.more, { borderColor: colors.PRIMARY }]}>
+          <Block center style={[styles.more, { borderColor: colors.TEXT }]}>
             <IconExtra
               size={20}
-              color={colors.PRIMARY}
+              color={colors.TEXT}
               name="more-vertical"
               family="feather"
             />

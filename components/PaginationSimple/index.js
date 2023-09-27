@@ -1,8 +1,9 @@
-import React from 'react';
+import React from "react";
 
-import { Block, Text } from 'galio-framework';
-import { StyleSheet, TouchableOpacity, Vibration } from 'react-native';
-import { nowTheme } from '../../constants';
+import { Block, Text } from "galio-framework";
+import { StyleSheet, TouchableOpacity, Vibration } from "react-native";
+import { nowTheme } from "../../constants";
+import { useColorContext } from "../../context/colors";
 
 export const PaginationSimple = ({
   currentPage = 0,
@@ -11,6 +12,8 @@ export const PaginationSimple = ({
   handleNextPage,
   handlePreviousPage,
 }) => {
+  const { colors } = useColorContext();
+
   return (
     <Block row center>
       <TouchableOpacity
@@ -24,13 +27,17 @@ export const PaginationSimple = ({
           handlePreviousPage();
         }}
       >
-        <Text color={nowTheme.COLORS.PRIMARY} size={18} style={{ textDecorationLine: 'underline' }}>
+        <Text
+          color={colors.TEXT}
+          size={18}
+          style={{ textDecorationLine: "underline" }}
+        >
           Anterior
         </Text>
       </TouchableOpacity>
-      <Text size={16}>
-        {' '}
-        Página {currentPage} de {lastPage}{' '}
+      <Text size={16} color={colors.SUB_TEXT}>
+        {" "}
+        Página {currentPage} de {lastPage}{" "}
       </Text>
       <TouchableOpacity
         color="info"
@@ -43,19 +50,26 @@ export const PaginationSimple = ({
           handleNextPage();
         }}
       >
-        <Text color={nowTheme.COLORS.PRIMARY} size={18} style={{ textDecorationLine: 'underline' }}>
+        <Text
+          color={colors.TEXT}
+          size={18}
+          style={{ textDecorationLine: "underline" }}
+        >
           Próxima
         </Text>
       </TouchableOpacity>
 
-      <Text size={16}> Total: {total}</Text>
+      <Text size={16} color={colors.SUB_TEXT}>
+        {" "}
+        Total: {total}
+      </Text>
     </Block>
   );
 };
 
 const styles = StyleSheet.create({
   text: {
-    textDecorationLine: 'underline',
+    textDecorationLine: "underline",
     paddingHorizontal: 10,
   },
 });

@@ -1,12 +1,22 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Block, Input, Text } from 'galio-framework';
-import { nowTheme } from '../../constants';
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import { Block, Input, Text } from "galio-framework";
+import { nowTheme } from "../../constants";
+import { useColorContext } from "../../context/colors";
 
-const CustomInput = ({ labelText, placeholder, options, value, onChangeText, iconContent }) => {
+const CustomInput = ({
+  labelText,
+  placeholder,
+  options,
+  value,
+  onChangeText,
+  iconContent,
+}) => {
+  const { colors } = useColorContext();
+
   return (
     <Block>
-      <Text size={16} bold style={{ marginLeft: 20 }}>
+      <Text size={16} bold style={{ marginLeft: 20 }} color={colors.TEXT}>
         {labelText}
       </Text>
       <Input
@@ -16,9 +26,9 @@ const CustomInput = ({ labelText, placeholder, options, value, onChangeText, ico
         options={options}
         value={value}
         onChangeText={onChangeText}
-        placeholderTextColor={nowTheme.COLORS.MUTED}
-        style={styles.input}
-        color={nowTheme.COLORS.HEADER}
+        placeholderTextColor={colors.PLACEHOLDER}
+        style={[styles.input, { backgroundColor: "transparent" }]}
+        color={colors.TEXT}
         iconContent={iconContent}
         shadowless
       />
@@ -32,7 +42,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: nowTheme.COLORS.BORDER,
     height: 44,
-    backgroundColor: '#FFFFFF',
     fontSize: 16,
   },
 });

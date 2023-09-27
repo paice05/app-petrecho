@@ -291,26 +291,22 @@ function ConfigStack(props) {
   return (
     <Stack.Navigator
       initialRouteName="Configurações"
-      screenOptions={{
-        mode: "card",
-        headerShown: "screen",
-      }}
+      // screenOptions={{
+      //   mode: "card",
+      //   headerShown: "screen",
+      // }}
     >
       <Stack.Screen
         name="Configurações"
         component={Config}
         options={{
-          header: ({ navigation, scene }) => (
+          header: ({ scene }) => (
             <Header
               title="Configurações"
-              navigation={navigation}
               scene={scene}
               bgColor={colors.PRIMARY_MENU_COLOR}
             />
           ),
-          cardStyle: {
-            backgroundColor: nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR,
-          },
         }}
       />
       <Stack.Screen
@@ -337,32 +333,32 @@ function ConfigStack(props) {
 function AppStack(props) {
   return (
     <Drawer.Navigator
-      style={{ flex: 1 }}
+      // style={{ flex: 1 }}
       drawerContent={(props) => <CustomDrawerContent {...props} />}
-      drawerStyle={{
-        backgroundColor: nowTheme.COLORS.PRIMARY,
-        width: width * 0.8,
-      }}
-      screenOptions={{
-        activeTintcolor: nowTheme.COLORS.WHITE,
-        inactiveTintColor: nowTheme.COLORS.WHITE,
-        activeBackgroundColor: "transparent",
-        itemStyle: {
-          width: width * 0.75,
-          backgroundColor: "transparent",
-          paddingVertical: 16,
-          paddingHorizonal: 12,
-          justifyContent: "center",
-          alignContent: "center",
-          alignItems: "center",
-          overflow: "hidden",
-        },
-        labelStyle: {
-          fontSize: 18,
-          marginLeft: 12,
-          fontWeight: "normal",
-        },
-      }}
+      // drawerStyle={{
+      //   backgroundColor: nowTheme.COLORS.PRIMARY,
+      //   width: width * 0.8,
+      // }}
+      // screenOptions={{
+      //   activeTintcolor: nowTheme.COLORS.WHITE,
+      //   inactiveTintColor: nowTheme.COLORS.WHITE,
+      //   activeBackgroundColor: "transparent",
+      //   itemStyle: {
+      //     width: width * 0.75,
+      //     backgroundColor: "transparent",
+      //     paddingVertical: 16,
+      //     paddingHorizonal: 12,
+      //     justifyContent: "center",
+      //     alignContent: "center",
+      //     alignItems: "center",
+      //     overflow: "hidden",
+      //   },
+      //   labelStyle: {
+      //     fontSize: 18,
+      //     marginLeft: 12,
+      //     fontWeight: "normal",
+      //   },
+      // }}
       initialRouteName="Agendamentos"
     >
       <Drawer.Screen

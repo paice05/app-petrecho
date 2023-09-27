@@ -8,7 +8,7 @@ import { clearCache } from "../services/cache";
 
 class DrawerItem extends React.Component {
   renderIcon = () => {
-    const { title, focused } = this.props;
+    const { title, focused, colors } = this.props;
 
     switch (title) {
       case "Clientes":
@@ -16,7 +16,7 @@ class DrawerItem extends React.Component {
           <Icon
             name="user"
             size={22}
-            color={focused ? nowTheme.COLORS.PRIMARY : "black"}
+            color={focused ? colors.BACKGROUND : colors?.ICON}
             style={{ opacity: 0.5 }}
           />
         );
@@ -25,7 +25,7 @@ class DrawerItem extends React.Component {
           <Icon
             name="calendar"
             size={22}
-            color={focused ? nowTheme.COLORS.PRIMARY : "black"}
+            color={focused ? colors.BACKGROUND : colors?.ICON}
             style={{ opacity: 0.5 }}
           />
         );
@@ -34,7 +34,7 @@ class DrawerItem extends React.Component {
           <Icon
             name="bar-chart-2"
             size={22}
-            color={focused ? nowTheme.COLORS.PRIMARY : "black"}
+            color={focused ? colors.BACKGROUND : colors?.ICON}
             style={{ opacity: 0.5 }}
           />
         );
@@ -43,7 +43,7 @@ class DrawerItem extends React.Component {
           <Icon
             name="tool"
             size={22}
-            color={focused ? nowTheme.COLORS.PRIMARY : "black"}
+            color={focused ? colors.BACKGROUND : colors?.ICON}
             style={{ opacity: 0.5 }}
           />
         );
@@ -53,8 +53,7 @@ class DrawerItem extends React.Component {
           <Icon
             name="log-out"
             size={22}
-            style={{ borderColor: "rgba(0,0,0,0.5)", opacity: 0.5 }}
-            color={focused ? nowTheme.COLORS.PRIMARY : "black"}
+            color={focused ? colors.BACKGROUND : colors?.ICON}
           />
         );
 
@@ -64,7 +63,7 @@ class DrawerItem extends React.Component {
             name="settings"
             size={22}
             style={{ borderColor: "rgba(0,0,0,0.5)", opacity: 0.5 }}
-            color={focused ? nowTheme.COLORS.PRIMARY : "black"}
+            color={focused ? colors.BACKGROUND : colors?.ICON}
           />
         );
       default:
@@ -73,7 +72,8 @@ class DrawerItem extends React.Component {
   };
 
   render() {
-    const { focused, title, navigation } = this.props;
+    const { focused, title, navigation, colors } = this.props;
+    console.log({ colors });
 
     const containerStyles = [
       styles.defaultStyle,
@@ -113,7 +113,7 @@ class DrawerItem extends React.Component {
               }}
               size={16}
               bold={focused ? true : false}
-              color={focused ? nowTheme.COLORS.PRIMARY : "black"}
+              color={focused ? colors?.BACKGROUND : colors?.TEXT}
             >
               {title}
             </Text>

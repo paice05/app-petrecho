@@ -11,108 +11,116 @@ export function Config() {
 
   const blueStyle = () => {
     changeColor({
-      PRIMARY: "#FFFFFF",
-      PRIMARY_BACK_GROUND_COLOR: "#5fa8d3",
-      PRIMARY_CARD_COLOR: "#1b4965",
-      TEXT: "#d9ed92",
-      SWITCH_ON: "#eee",
-      PRIMARY_MENU_COLOR: "#B8C7CC",
+      BACKGROUND: "#003459",
+      BACKGROUND_CARD: "#007EA7",
+      BUTTON: "#007EA7",
+      TEXT: "#FFFFFF",
+      SUB_TEXT: "#00171F",
+      ICON: "#00A8E8",
+      PLACEHOLDER: "#00171F",
+      MENU: "#007EA7",
     });
   };
 
   const purpleStyle = () => {
     changeColor({
-      PRIMARY: "#403d39",
-      PRIMARY_BACK_GROUND_COLOR: "#e0aaff",
-      PRIMARY_CARD_COLOR: "#9d4edd",
-      TEXT: "#fff",
-      SWITCH_ON: "#eee",
+      BACKGROUND: "#5D576B",
+      BACKGROUND_CARD: "#8884FF",
+      BUTTON: "#8D8D92",
+      TEXT: "#FDE2FF",
+      SUB_TEXT: "#D7BCE8",
+      ICON: "#FDE2FF",
+      PLACEHOLDER: "#5D576B",
+      MENU: "#8884FF",
     });
   };
 
   const greenStyle = () => {
     changeColor({
-      PRIMARY: "#403d39",
-      PRIMARY_BACK_GROUND_COLOR: "#e9e9e9",
-      PRIMARY_CARD_COLOR: "#006666",
-      TEXT: "#fafad7",
-      SWITCH_ON: "#000",
+      BACKGROUND: "#3D5A6C",
+      BACKGROUND_CARD: "#72A98F",
+      BUTTON: "#433A3F",
+      TEXT: "#CDDDDD",
+      SUB_TEXT: "#433A3F",
+      ICON: "#CBEF43",
+      PLACEHOLDER: "#433A3F",
+      MENU: "#72A98F",
     });
   };
 
-  const orangeStyle = () => {
+  const darkStyle = () => {
     changeColor({
-      PRIMARY: "#F4FAFF",
-      PRIMARY_BACK_GROUND_COLOR: "#869AAC",
-      PRIMARY_CARD_COLOR: "#1B2228",
-      TEXT: "#fff",
-      SWITCH_ON: "#e1e6e3",
+      BACKGROUND: "#051014",
+      BACKGROUND_CARD: "#2E2F2F",
+      BUTTON: "#8D8D92",
+      TEXT: "#CDDDDD",
+      SUB_TEXT: "#ACBDBA",
+      ICON: "#A599B5",
+      PLACEHOLDER: "#A599B5",
+      MENU: "#2E2F2F",
     });
   };
 
   const pinkStyle = () => {
     changeColor({
-      PRIMARY: "#D7C0D0",
-      PRIMARY_BACK_GROUND_COLOR: "#F7C7DB",
-      PRIMARY_CARD_COLOR: "#F79AD3",
-      TEXT: "#C86FC9",
-      SWITCH_ON: "#ccd6bd",
-      PRIMARY_BUTTON_COLOR: "#8E518D",
+      BACKGROUND: "#B58DB6",
+      BACKGROUND_CARD: "#5D2E46",
+      BUTTON: "#5D2E46",
+      TEXT: "#E8D6CB",
+      SUB_TEXT: "#D0ADA7",
+      ICON: "#DDE8B9",
+      PLACEHOLDER: "#DDE8B9",
+      MENU: "#5D2E46",
     });
   };
 
   const colorDefault = () => {
     changeColor({
-      PRIMARY: "#c84648",
-      PRIMARY_BACK_GROUND_COLOR: "#eee",
-      PRIMARY_CARD_COLOR: "#fff",
-      TEXT: "#32325D",
-      SWITCH_ON: "#f96332",
+      BACKGROUND: nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR,
+      BACKGROUND_CARD: nowTheme.COLORS.PRIMARY_CARD_COLOR,
+      BUTTON: nowTheme.COLORS.PRIMARY,
+      TEXT: nowTheme.COLORS.TEXT,
+      SUB_TEXT: "#00171F",
+      ICON: nowTheme.COLORS.PRIMARY,
+      PLACEHOLDER: "#00171F",
+      MENU: "#fff",
     });
   };
 
   return (
-    <Block
-      style={[
-        styles.card,
-        { backgroundColor: colors.PRIMARY_BACK_GROUND_COLOR },
-      ]}
-    >
+    <Block style={[styles.card, { backgroundColor: colors.BACKGROUND }]}>
       <Block
-        style={[
-          styles.container,
-          { backgroundColor: colors.PRIMARY_CARD_COLOR },
-        ]}
+        style={[styles.container, { backgroundColor: colors.BACKGROUND_CARD }]}
         gap={20}
       >
         <Block style={styles.item} space="between">
-          <Text size={16} bold color={colors.PRIMARY}>
+          <Text size={16} bold color={colors.TEXT}>
             Nome da conta
           </Text>
-          <Text size={16} color={colors.TEXT}>
+          <Text size={16} color={colors.SUB_TEXT}>
             {user?.account.name}
           </Text>
         </Block>
 
         <Block style={styles.item} space="between">
-          <Text size={16} bold color={colors.PRIMARY}>
+          <Text size={16} bold color={colors.TEXT}>
             Horário de atendimento
           </Text>
           <Block row gap={10}>
-            <Text size={16} color={colors.TEXT}>
+            <Text size={16} color={colors.SUB_TEXT}>
               {user.account.config?.startAt}
             </Text>
-            <Text size={16} color={colors.TEXT}>
+            <Text size={16} color={colors.SUB_TEXT}>
               às
             </Text>
-            <Text size={16} color={colors.TEXT}>
+            <Text size={16} color={colors.SUB_TEXT}>
               {user.account.config?.endAt}
             </Text>
           </Block>
         </Block>
 
         <Block style={styles.item} space="between">
-          <Text size={16} bold color={colors.PRIMARY}>
+          <Text size={16} bold color={colors.TEXT}>
             Dias de atendimento
           </Text>
           <Block row gap={10}>
@@ -120,7 +128,7 @@ export function Config() {
               Object.entries(user.account.config?.days)
                 .filter(([key, value]) => Boolean(value))
                 .map(([key]) => (
-                  <Text key={key} size={16} color={colors.TEXT}>
+                  <Text key={key} size={16} color={colors.SUB_TEXT}>
                     {key.toUpperCase()}
                   </Text>
                 ))}
@@ -128,7 +136,7 @@ export function Config() {
         </Block>
 
         <Block style={styles.item} space="between">
-          <Text size={16} bold color={colors.PRIMARY}>
+          <Text size={16} bold color={colors.TEXT}>
             Opções de cores do app
           </Text>
           <Block row style={{ marginLeft: -5 }}>
@@ -156,11 +164,11 @@ export function Config() {
           </Block>
           <Block row style={{ marginLeft: -5 }}>
             <Button
-              color="#FFA500"
+              color="#1B2228"
               style={styles.buttonStyles}
-              onPress={orangeStyle}
+              onPress={darkStyle}
             >
-              Laranja
+              DARK
             </Button>
             <Button
               color="#FF69B4"
