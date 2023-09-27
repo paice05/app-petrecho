@@ -1,34 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { Block, Button, Switch, Text } from "galio-framework";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import React from "react";
+import { Block, Button, Text } from "galio-framework";
+import { StyleSheet } from "react-native";
 import { nowTheme } from "../../constants";
 import { useUserContext } from "../../context/user";
 import { useColorContext } from "../../context/colors";
 
 export function Config() {
   const { user } = useUserContext();
-  const { changeColor } = useColorContext();
-
-  const [toogle, setToogle] = useState(true);
-  const [currentColor, setCurrentColor] = useState(
-    nowTheme.COLORS.PRIMARY,
-    nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR,
-    nowTheme.COLORS.PRIMARY_CARD_COLOR
-  );
+  const { colors, changeColor } = useColorContext();
 
   const blueStyle = () => {
     changeColor({
-      PRIMARY: "#08090A",
-      PRIMARY_BACK_GROUND_COLOR: "#80e9ff",
-      PRIMARY_CARD_COLOR: "#19274e",
-      TEXT: "#fff",
+      PRIMARY: "#FFFFFF",
+      PRIMARY_BACK_GROUND_COLOR: "#5fa8d3",
+      PRIMARY_CARD_COLOR: "#1b4965",
+      TEXT: "#d9ed92",
       SWITCH_ON: "#eee",
+      PRIMARY_MENU_COLOR: "#B8C7CC",
     });
   };
-
-  useEffect(() => {
-    setCurrentColor();
-  }, [toogle]);
 
   const purpleStyle = () => {
     changeColor({
@@ -41,63 +31,88 @@ export function Config() {
   };
 
   const greenStyle = () => {
-    setCurrentColor(
-      (nowTheme.COLORS.PRIMARY = "#403d39"),
-      (nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR = "#D1E4DE"),
-      (nowTheme.COLORS.PRIMARY_CARD_COLOR = "#02A26F")
-    );
+    changeColor({
+      PRIMARY: "#403d39",
+      PRIMARY_BACK_GROUND_COLOR: "#e9e9e9",
+      PRIMARY_CARD_COLOR: "#006666",
+      TEXT: "#fafad7",
+      SWITCH_ON: "#000",
+    });
   };
 
   const orangeStyle = () => {
-    setCurrentColor(
-      (nowTheme.COLORS.PRIMARY = "#F4FAFF"),
-      (nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR = "#869AAC"),
-      (nowTheme.COLORS.PRIMARY_CARD_COLOR = "#1B2228")
-    );
+    changeColor({
+      PRIMARY: "#F4FAFF",
+      PRIMARY_BACK_GROUND_COLOR: "#869AAC",
+      PRIMARY_CARD_COLOR: "#1B2228",
+      TEXT: "#fff",
+      SWITCH_ON: "#e1e6e3",
+    });
   };
 
   const pinkStyle = () => {
-    setCurrentColor(
-      (nowTheme.COLORS.PRIMARY = "#08090A"),
-      (nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR = "#F79AD3"),
-      (nowTheme.COLORS.PRIMARY_CARD_COLOR = "#8E518D")
-    );
+    changeColor({
+      PRIMARY: "#D7C0D0",
+      PRIMARY_BACK_GROUND_COLOR: "#F7C7DB",
+      PRIMARY_CARD_COLOR: "#F79AD3",
+      TEXT: "#C86FC9",
+      SWITCH_ON: "#ccd6bd",
+      PRIMARY_BUTTON_COLOR: "#8E518D",
+    });
   };
 
   const colorDefault = () => {
-    setCurrentColor(
-      (nowTheme.COLORS.PRIMARY = "#c84648"),
-      (nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR = "#eee"),
-      (nowTheme.COLORS.PRIMARY_CARD_COLOR = "#fff")
-    );
+    changeColor({
+      PRIMARY: "#c84648",
+      PRIMARY_BACK_GROUND_COLOR: "#eee",
+      PRIMARY_CARD_COLOR: "#fff",
+      TEXT: "#32325D",
+      SWITCH_ON: "#f96332",
+    });
   };
 
-  useEffect(() => {
-    currentColor;
-  }, [currentColor]);
-
   return (
-    <Block style={styles.card}>
-      <Block style={styles.container} gap={20}>
+    <Block
+      style={[
+        styles.card,
+        { backgroundColor: colors.PRIMARY_BACK_GROUND_COLOR },
+      ]}
+    >
+      <Block
+        style={[
+          styles.container,
+          { backgroundColor: colors.PRIMARY_CARD_COLOR },
+        ]}
+        gap={20}
+      >
         <Block style={styles.item} space="between">
-          <Text size={16} color={nowTheme.COLORS.PRIMARY}>
+          <Text size={16} bold color={colors.PRIMARY}>
             Nome da conta
           </Text>
-          <Text size={16}>{user.account.name}</Text>
+          <Text size={16} color={colors.TEXT}>
+            {user?.account.name}
+          </Text>
         </Block>
 
         <Block style={styles.item} space="between">
-          <Text size={16} color={nowTheme.COLORS.PRIMARY}>
+          <Text size={16} bold color={colors.PRIMARY}>
             Horário de atendimento
           </Text>
           <Block row gap={10}>
-            <Text size={16}>{user.account.config?.startAt}</Text>
-            <Text size={16}>{user.account.config?.endAt}</Text>
+            <Text size={16} color={colors.TEXT}>
+              {user.account.config?.startAt}
+            </Text>
+            <Text size={16} color={colors.TEXT}>
+              às
+            </Text>
+            <Text size={16} color={colors.TEXT}>
+              {user.account.config?.endAt}
+            </Text>
           </Block>
         </Block>
 
         <Block style={styles.item} space="between">
-          <Text size={16} color={nowTheme.COLORS.PRIMARY}>
+          <Text size={16} bold color={colors.PRIMARY}>
             Dias de atendimento
           </Text>
           <Block row gap={10}>
@@ -105,7 +120,7 @@ export function Config() {
               Object.entries(user.account.config?.days)
                 .filter(([key, value]) => Boolean(value))
                 .map(([key]) => (
-                  <Text key={key} size={16}>
+                  <Text key={key} size={16} color={colors.TEXT}>
                     {key.toUpperCase()}
                   </Text>
                 ))}
@@ -113,7 +128,7 @@ export function Config() {
         </Block>
 
         <Block style={styles.item} space="between">
-          <Text size={16} bold color={nowTheme.COLORS.PRIMARY}>
+          <Text size={16} bold color={colors.PRIMARY}>
             Opções de cores do app
           </Text>
           <Block row style={{ marginLeft: -5 }}>
@@ -177,11 +192,11 @@ export function Config() {
 
 const styles = StyleSheet.create({
   card: {
+    flex: 1,
     padding: 15,
   },
   container: {
     borderRadius: 10,
-    backgroundColor: "#fff",
     padding: 10,
   },
   item: {

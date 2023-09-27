@@ -24,6 +24,7 @@ import Login from "../screens/Login";
 import { ImportContacts } from "../screens/Clients/components/ImportContacts";
 import { Config } from "../screens/Config";
 import { ConfigForm } from "../screens/Config/Form";
+import { useColorContext } from "../context/colors";
 
 const { width } = Dimensions.get("screen");
 
@@ -286,6 +287,7 @@ function ReportsStack(props) {
 }
 
 function ConfigStack(props) {
+  const { colors } = useColorContext();
   return (
     <Stack.Navigator
       initialRouteName="Configurações"
@@ -303,6 +305,7 @@ function ConfigStack(props) {
               title="Configurações"
               navigation={navigation}
               scene={scene}
+              bgColor={colors.PRIMARY_MENU_COLOR}
             />
           ),
           cardStyle: {

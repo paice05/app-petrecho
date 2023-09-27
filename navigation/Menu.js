@@ -5,9 +5,11 @@ import { ScrollView, StyleSheet } from "react-native";
 import { DrawerItem as DrawerCustomItem } from "../components";
 import { version } from "../package.json";
 import { useUserContext } from "../context/user";
+import { useColorContext } from "../context/colors";
 
 function CustomDrawerContent({ navigation, state }) {
   const { user } = useUserContext();
+  const { colors } = useColorContext();
 
   const screens = user.isAdmin
     ? ["Relatorios", "Agendamentos", "Clientes", "Serviços", "Configurações"]
@@ -15,7 +17,7 @@ function CustomDrawerContent({ navigation, state }) {
 
   return (
     <Block
-      style={styles.container}
+      style={[styles.container, { backgroundColor: colors.PRIMARY_MENU_COLOR }]}
       forceInset={{ top: "always", horizontal: "never" }}
     >
       <Block style={styles.header}></Block>

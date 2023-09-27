@@ -11,6 +11,8 @@ export const ColorContextProvider = ({ children }) => {
     PRIMARY_CARD_COLOR: nowTheme.COLORS.PRIMARY_CARD_COLOR,
     TEXT: nowTheme.COLORS.TEXT,
     SWITCH_ON: nowTheme.COLORS.SWITCH_ON,
+    PRIMARY_BUTTON_COLOR: nowTheme.COLORS.PRIMARY_BUTTON_COLOR,
+    PRIMARY_MENU_COLOR: nowTheme.COLORS.PRIMARY_MENU_COLOR,
   });
 
   return (

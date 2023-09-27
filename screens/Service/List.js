@@ -119,7 +119,7 @@ const Services = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   card: {
-    flex: 1,
+    //flex: 1,
     padding: 15,
   },
 });
