@@ -23,6 +23,7 @@ export const ColorContextProvider = ({ children }) => {
     ICON: nowTheme.COLORS.PRIMARY,
     PLACEHOLDER: "#00171F",
     MENU: "#fff",
+    ACTIVE_MENU: nowTheme.COLORS.PRIMARY,
   });
 
   const handleChangeColors = (newColors) => {

@@ -84,6 +84,7 @@ export function Config() {
       ICON: nowTheme.COLORS.PRIMARY,
       PLACEHOLDER: "#00171F",
       MENU: "#fff",
+      ACTIVE_MENU: nowTheme.COLORS.PRIMARY,
     });
   };
 

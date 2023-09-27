@@ -48,10 +48,15 @@ function CustomDrawerContent({ navigation, state }) {
                 width: "93%",
                 borderWidth: StyleSheet.hairlineWidth,
                 marginHorizontal: 10,
+                backgroundColor: colors.TEXT,
               }}
             />
           </Block>
-          <DrawerCustomItem title="LOGOUT" navigation={navigation} />
+          <DrawerCustomItem
+            title="LOGOUT"
+            navigation={navigation}
+            colors={colors}
+          />
         </ScrollView>
       </Block>
 
