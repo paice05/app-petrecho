@@ -142,21 +142,21 @@ export function Config() {
           </Text>
           <Block row style={{ marginLeft: -5 }}>
             <Button
-              color="#2CA8FF"
+              color="#007EA7"
               style={styles.buttonStyles}
               onPress={blueStyle}
             >
               Azul
             </Button>
             <Button
-              color="#A020F0"
+              color="#8884FF"
               style={styles.buttonStyles}
               onPress={purpleStyle}
             >
               Roxo
             </Button>
             <Button
-              color="#18ce0f"
+              color="#72A98F"
               style={styles.buttonStyles}
               onPress={greenStyle}
             >
@@ -172,14 +172,14 @@ export function Config() {
               DARK
             </Button>
             <Button
-              color="#FF69B4"
+              color="#5D2E46"
               style={styles.buttonStyles}
               onPress={pinkStyle}
             >
               Rosa
             </Button>
             <Button
-              color="#D3D3D3"
+              color={nowTheme.COLORS.PRIMARY}
               style={styles.buttonStyles}
               onPress={colorDefault}
             >
