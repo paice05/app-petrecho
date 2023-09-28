@@ -8,16 +8,21 @@ import { StyleSheet } from "react-native";
 import Screens from "./navigation/Screens";
 import { nowTheme } from "./constants";
 import { UserContextProvider } from "./context/user";
-import { ColorContextProvider } from "./context/colors";
+import { ColorContextProvider, useColorContext } from "./context/colors";
 
 export default function App() {
+  const { colors } = useColorContext();
+
   return (
     <NavigationContainer>
       <GalioProvider theme={nowTheme}>
         <ColorContextProvider>
           <UserContextProvider>
             <MenuProvider customStyles={menuProviderStyles}>
-              <StatusBar style="dark" backgroundColor="#eee" />
+              <StatusBar
+                style={colors?.BACKGROUND === "#eee" ? "dark" : "light"}
+                backgroundColor={colors?.BACKGROUND}
+              />
               <Screens />
             </MenuProvider>
           </UserContextProvider>

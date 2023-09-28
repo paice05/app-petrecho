@@ -2,7 +2,7 @@
   "expo": {
     "name": "meupetrecho",
     "slug": "test",
-    "version": "1.16.0",
+    "version": "1.18.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -20,7 +20,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "versionCode": 16,
+      "versionCode": 18,
       "package": "com.mpaice.meupetrechoapp"
     },
     "web": {

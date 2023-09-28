@@ -24,6 +24,7 @@ export const ColorContextProvider = ({ children }) => {
     PLACEHOLDER: "#00171F",
     MENU: "#fff",
     ACTIVE_MENU: nowTheme.COLORS.PRIMARY,
+    ...defaultColors,
   });
 
   const handleChangeColors = (newColors) => {

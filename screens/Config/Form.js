@@ -48,11 +48,11 @@ export function ConfigForm({ navigation }) {
   useEffect(() => {
     setFields({
       name: user.account.name,
-      startTime: user.account.config?.startAt
-        ? new Date(`2023-01-01 ${user.account.config?.startAt}`)
+      startTime: user.account?.config?.startAt
+        ? new Date(`2023-01-01 ${user.account.config.startAt}:00`)
         : new Date(),
-      endTime: user.account.config?.endAt
-        ? new Date(`2023-01-01 ${user.account.config.endAt}`)
+      endTime: user.account?.config?.endAt
+        ? new Date(`2023-01-01 ${user.account.config.endAt}:00`)
         : new Date(),
       weekDays: user?.account?.config?.days
         ? Object.entries(user.account.config.days)
