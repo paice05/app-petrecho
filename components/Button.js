@@ -43,6 +43,8 @@ class ArButton extends React.Component {
           this.props.onPress();
         }}
         disabled={loading}
+        color={color}
+        backgroundColor={backgroundColor}
       >
         <Block row gap={5}>
           {children}

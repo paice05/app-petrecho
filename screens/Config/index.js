@@ -19,6 +19,10 @@ export function Config() {
       ICON: "#00A8E8",
       PLACEHOLDER: "#00171F",
       MENU: "#007EA7",
+      BUTTON_BACK: "#cbdbd8",
+      BUTTON_REGISTER_OR_UPDATE: "#eb7072",
+      TEXT_BUTTON_BACK: "#0b2386",
+      TEXT_BUTTON_REGISTER_UPDATE: "#FFFFFF",
     });
   };
 
@@ -85,6 +89,10 @@ export function Config() {
       PLACEHOLDER: "#00171F",
       MENU: "#fff",
       ACTIVE_MENU: nowTheme.COLORS.PRIMARY,
+      BUTTON_BACK: nowTheme.COLORS.BUTTON_BACK,
+      BUTTON_REGISTER_OR_UPDATE: nowTheme.COLORS.BUTTON_REGISTER_OR_UPDATE,
+      TEXT_BUTTON_BACK: nowTheme.COLORS.TEXT_BUTTON_BACK,
+      TEXT_BUTTON_REGISTER_UPDATE: nowTheme.COLORS.TEXT_BUTTON_REGISTER_UPDATE,
     });
   };
 

@@ -6,9 +6,12 @@ import { Block, Text } from "galio-framework";
 import IconExtra from "../Icon";
 import { formartDate } from "../../utils/formartDate";
 import { nowTheme } from "../../constants";
+import { useColorContext } from "../../context/colors";
 
 export const DateTimePicker = ({ onChange, value = new Date() }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const { colors } = useColorContext();
 
   const onTimeSelected = (event, value) => {
     setShowDatePicker(false);
@@ -29,7 +32,7 @@ export const DateTimePicker = ({ onChange, value = new Date() }) => {
         >
           <IconExtra
             size={16}
-            color={nowTheme.COLORS.PRIMARY}
+            color={colors.BUTTON}
             name="clock"
             family="feather"
           />

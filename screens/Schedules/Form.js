@@ -18,6 +18,7 @@ import { nowTheme } from "../../constants";
 import { Config } from "./Config";
 import { UserSearch } from "../../components/UserSearch";
 import { LoadingOverlay } from "../../components/LoadingOverlay";
+import { useColorContext } from "../../context/colors";
 
 const SchedulesForm = ({ route, navigation }) => {
   const params = route.params;
@@ -38,6 +39,8 @@ const SchedulesForm = ({ route, navigation }) => {
     isPackage: false,
     status: false,
   });
+
+  const { colors } = useColorContext();
 
   const { validate, errors } = useValidateRequiredFields({
     fields: ["user", "services", "employee", "date", "time"],
@@ -227,7 +230,10 @@ const SchedulesForm = ({ route, navigation }) => {
   };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ backgroundColor: colors.BACKGROUND }}
+    >
       <LoadingOverlay
         visible={loading || loadingServices || loadingCreate || loadingUpdate}
       />
@@ -235,7 +241,7 @@ const SchedulesForm = ({ route, navigation }) => {
         <Block>
           {fields.shortName ? (
             <Block style={{ marginLeft: 20 }}>
-              <Text bold size={18}>
+              <Text bold size={18} color={colors.TEXT}>
                 {fields.shortName}{" "}
               </Text>
               <Text bold={false} size={14} color="gray">
@@ -260,7 +266,7 @@ const SchedulesForm = ({ route, navigation }) => {
                 icon="user"
               />
               {errors?.["user"] && (
-                <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
+                <Text center size={14} color={colors.BUTTON}>
                   campo obrigatório
                 </Text>
               )}
@@ -276,24 +282,18 @@ const SchedulesForm = ({ route, navigation }) => {
             paddingLeft: 20,
           }}
         >
-          <Text size={16} bold>
+          <Text size={16} bold color={colors.TEXT}>
             Serviços
           </Text>
 
           <Block row gap={20}>
             <TouchableOpacity onPress={() => setTypeView("all")}>
-              <Text
-                size={16}
-                color={typeView === "all" && nowTheme.COLORS.PRIMARY}
-              >
+              <Text size={16} color={typeView === "all" && colors.BUTTON}>
                 Todos
               </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setTypeView("selected")}>
-              <Text
-                size={16}
-                color={typeView === "selected" && nowTheme.COLORS.PRIMARY}
-              >
+              <Text size={16} color={typeView === "selected" && colors.BUTTON}>
                 Selecionados ({fields.services.length})
               </Text>
             </TouchableOpacity>
@@ -332,14 +332,14 @@ const SchedulesForm = ({ route, navigation }) => {
                         space="between"
                         style={[
                           {
-                            backgroundColor: "#eee",
+                            backgroundColor: "#FFFFFF",
                             padding: 8,
                             borderRadius: 4,
                             flex: 1,
                           },
                           itemSelected
                             ? {
-                                backgroundColor: nowTheme.COLORS.PRIMARY,
+                                backgroundColor: colors.BUTTON,
                                 borderBottomLeftRadius: 0,
                                 borderBottomRightRadius: 0,
                               }
@@ -376,11 +376,11 @@ const SchedulesForm = ({ route, navigation }) => {
                             })
                           }
                           trackColor={{
-                            false: nowTheme.COLORS.HEADER,
-                            true: nowTheme.COLORS.PRIMARY,
+                            false: colors.SUB_TEXT,
+                            true: colors.BUTTON,
                           }}
                         />
-                        <Text size={16} color={nowTheme.COLORS.PRIMARY}>
+                        <Text size={16} color={colors.BUTTON}>
                           sessão de pacote
                         </Text>
                       </Block>
@@ -391,7 +391,7 @@ const SchedulesForm = ({ route, navigation }) => {
           </Block>
         </ScrollView>
         {errors?.["services"] && (
-          <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
+          <Text center size={14} color={colors.BUTTON}>
             selecione pelo menos 1 serviço
           </Text>
         )}
@@ -413,7 +413,7 @@ const SchedulesForm = ({ route, navigation }) => {
             icon="user"
           />
           {errors?.["employee"] && (
-            <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
+            <Text center size={14} color={colors.BUTTON}>
               campo obrigatório
             </Text>
           )}
@@ -421,7 +421,12 @@ const SchedulesForm = ({ route, navigation }) => {
 
         <Block row space="between" gap={10}>
           <Block flex={1}>
-            <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
+            <Text
+              size={16}
+              bold
+              style={{ marginLeft: 20, marginBottom: 5 }}
+              color={colors.TEXT}
+            >
               Data
             </Text>
             <TouchableOpacity
@@ -431,11 +436,11 @@ const SchedulesForm = ({ route, navigation }) => {
               <Block row gap={10} style={{ alignItems: "center" }}>
                 <Icon
                   size={16}
-                  color={nowTheme.COLORS.PRIMARY}
+                  color={colors.BUTTON}
                   name="calendar"
                   family="feather"
                 />
-                <Text size={16} style={{ height: 20 }}>
+                <Text size={16} style={{ height: 20 }} color={colors.SUB_TEXT}>
                   {fields.date}
                 </Text>
               </Block>
@@ -443,7 +448,12 @@ const SchedulesForm = ({ route, navigation }) => {
           </Block>
           {!fields.status && (
             <Block flex={1}>
-              <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
+              <Text
+                size={16}
+                bold
+                style={{ marginLeft: 20, marginBottom: 5 }}
+                color={colors.TEXT}
+              >
                 Horário
               </Text>
               <DateTimePicker
@@ -462,10 +472,10 @@ const SchedulesForm = ({ route, navigation }) => {
             }}
             trackColor={{
               false: nowTheme.COLORS.HEADER,
-              true: nowTheme.COLORS.PRIMARY,
+              true: colors.BUTTON,
             }}
           />
-          <Text size={16} color={nowTheme.COLORS.PRIMARY}>
+          <Text size={16} color={colors.TEXT}>
             Lista de espera
           </Text>
         </Block>
@@ -474,16 +484,21 @@ const SchedulesForm = ({ route, navigation }) => {
       </Block>
 
       <Block row center>
-        <Button style={styles.button} onPress={() => navigation.goBack()}>
-          <Text size={16} bold>
+        <Button
+          style={styles.button}
+          backgroundColor={colors.BUTTON_BACK}
+          onPress={() => navigation.goBack()}
+        >
+          <Text size={16} bold color={colors.TEXT_BUTTON_BACK}>
             Voltar
           </Text>
         </Button>
         <Button
           style={styles.primary}
+          backgroundColor={colors.BUTTON_REGISTER_OR_UPDATE}
           onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
         >
-          <Text size={16} bold color="#fff">
+          <Text size={16} bold color={colors.TEXT_BUTTON_REGISTER_UPDATE}>
             {isEditing ? "Atualizar" : "Cadastrar"}
           </Text>
         </Button>
@@ -512,7 +527,7 @@ const styles = StyleSheet.create({
   group: {
     margin: 15,
     borderRadius: 10,
-    backgroundColor: "#fff",
+    //backgroundColor: colors.BACKGROUND,
     padding: 8,
   },
   serviceItem: {
@@ -525,17 +540,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: 120,
     height: 40,
-    backgroundColor: "#eee",
+    //backgroundColor: "#eee",
     borderWidth: 1,
     borderColor: nowTheme.COLORS.BORDER,
-    backgroundColor: "white",
   },
   primary: {
     marginBottom: nowTheme.SIZES.BASE,
     borderRadius: 10,
     width: 120,
     height: 40,
-    backgroundColor: nowTheme.COLORS.PRIMARY,
   },
 
   buttonDate: {

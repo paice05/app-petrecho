@@ -5,9 +5,12 @@ import { Block, Text } from "galio-framework";
 import { Icon } from "../../components";
 import { nowTheme } from "../../constants";
 import { CustomInputMask } from "../../components/CustomInputMask";
+import { useColorContext } from "../../context/colors";
 
 export const Config = ({ fields, setFields }) => {
   const [show, setShow] = useState(false);
+
+  const { colors } = useColorContext();
 
   const handleToggleShow = () => {
     const vibrationDuration = 100;
@@ -28,15 +31,15 @@ export const Config = ({ fields, setFields }) => {
             show ? styles.containerOpen : styles.containerClose,
           ]}
         >
-          <Text size={16} color={nowTheme.COLORS.PRIMARY}>
-            configurações gerais
+          <Text size={16} color={colors.BUTTON}>
+            Configurações gerais
           </Text>
 
           <Icon
             name="chevron-down"
             family="feather"
             size={18}
-            color={nowTheme.COLORS.PRIMARY}
+            color={colors.BUTTON}
             style={show ? styles.iconRotate : {}}
           />
         </Block>
@@ -45,7 +48,12 @@ export const Config = ({ fields, setFields }) => {
       {show && (
         <Block row gap={10}>
           <Block flex={1}>
-            <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
+            <Text
+              size={16}
+              bold
+              style={{ marginLeft: 20, marginBottom: 5 }}
+              color={colors.TEXT}
+            >
               Desconto
             </Text>
             <CustomInputMask
@@ -54,7 +62,12 @@ export const Config = ({ fields, setFields }) => {
             />
           </Block>
           <Block flex={1}>
-            <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
+            <Text
+              size={16}
+              bold
+              style={{ marginLeft: 20, marginBottom: 5 }}
+              color={colors.TEXT}
+            >
               Adicional
             </Text>
             <CustomInputMask

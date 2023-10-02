@@ -14,6 +14,7 @@ import { useDebounce } from "../hooks/useDebounce";
 import { api } from "../../services/api";
 import { nowTheme } from "../../constants";
 import Icon from "../Icon";
+import { useColorContext } from "../../context/colors";
 
 export const UserSearch = ({
   path,
@@ -29,6 +30,8 @@ export const UserSearch = ({
   const [loading, setLoading] = useState(false);
 
   const debouncedValue = useDebounce(textName);
+
+  const { colors } = useColorContext();
 
   useEffect(() => {
     if (value) return;
@@ -60,17 +63,24 @@ export const UserSearch = ({
 
   return (
     <View>
-      <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
+      <Text
+        size={16}
+        bold
+        style={{ marginLeft: 20, marginBottom: 5 }}
+        color={colors.TEXT}
+      >
         {labelText}
       </Text>
       <Block row style={styles.container}>
-        <Icon size={16} name="user" color={nowTheme.COLORS.PRIMARY} />
+        <Icon size={16} name="user" color={colors.BUTTON} />
         <TextInput
           placeholder={placeholder}
+          placeholderTextColor={colors.PLACEHOLDER}
           value={value || textName}
           onChangeText={(text) => setTextName(text)}
           flex={1}
-          style={{ fontSize: 16 }}
+          style={{ fontSize: 16, color: colors.SUB_TEXT }}
+          selectionColor={colors.SUB_TEXT}
         />
         {value && (
           <TouchableOpacity
@@ -79,14 +89,12 @@ export const UserSearch = ({
               clear();
             }}
           >
-            <Text size={14} color={nowTheme.COLORS.PRIMARY}>
+            <Text size={14} color={colors.BUTTON}>
               Limpar
             </Text>
           </TouchableOpacity>
         )}
-        {loading && (
-          <ActivityIndicator size="small" color={nowTheme.COLORS.PRIMARY} />
-        )}
+        {loading && <ActivityIndicator size="small" color={colors.BUTTON} />}
       </Block>
 
       <FlatList
@@ -106,7 +114,7 @@ export const UserSearch = ({
             ]}
             onPress={() => handleSelectUser(item)}
           >
-            <Text>{item.name}</Text>
+            <Text color={colors.SUB_TEXT}>{item.name}</Text>
           </TouchableOpacity>
         )}
       />

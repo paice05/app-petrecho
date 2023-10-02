@@ -3,9 +3,11 @@ import { StyleSheet, TouchableOpacity, Vibration } from "react-native";
 import { Block, Text } from "galio-framework";
 
 import { nowTheme } from "../../constants";
+import { useColorContext } from "../../context/colors";
 
 export const Navigation = ({ items = [] }) => {
   const [active, setActive] = useState(0);
+  const { colors } = useColorContext();
 
   return (
     <Block>
@@ -25,7 +27,7 @@ export const Navigation = ({ items = [] }) => {
               <Text
                 style={[index !== items.length - 1 && styles.divider]}
                 size={22}
-                color={index === active ? nowTheme.COLORS.PRIMARY : ""}
+                color={index === active ? colors.BUTTON : ""}
               >
                 {item.title}
               </Text>

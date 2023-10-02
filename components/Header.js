@@ -87,24 +87,28 @@ const NewService = ({ navigation }) => {
   );
 };
 
-const NewSchedule = ({ navigation }) => (
-  <TouchableOpacity
-    onPress={() => {
-      const vibrationDuration = 100;
+const NewSchedule = ({ navigation }) => {
+  const { colors } = useColorContext();
 
-      Vibration.vibrate(vibrationDuration);
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        const vibrationDuration = 100;
 
-      navigation.navigate("ScheduleForm");
-    }}
-  >
-    <Block row center gap={3}>
-      <Icon size={20} name="plus-circle" />
-      <Text bold size={16}>
-        CRIAR
-      </Text>
-    </Block>
-  </TouchableOpacity>
-);
+        Vibration.vibrate(vibrationDuration);
+
+        navigation.navigate("ScheduleForm");
+      }}
+    >
+      <Block row center gap={3}>
+        <Icon size={20} name="plus-circle" color={colors.ICON} />
+        <Text bold size={16} color={colors.TEXT}>
+          CRIAR
+        </Text>
+      </Block>
+    </TouchableOpacity>
+  );
+};
 
 const EditConfig = ({ navigation }) => {
   const { colors } = useColorContext();

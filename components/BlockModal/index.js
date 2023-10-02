@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback } from "react";
 import {
   View,
   Modal,
@@ -9,10 +9,10 @@ import {
   Linking,
   Alert,
   Button,
-} from 'react-native';
-import { Block } from 'galio-framework';
+} from "react-native";
+import { Block } from "galio-framework";
 
-const redirectWhatsApp = 'https://wa.me/+55-(14)991038089';
+const redirectWhatsApp = "https://wa.me/+55-(14)991038089";
 
 const OpenURLButton = ({ url, children }) => {
   const handlePress = useCallback(async () => {
@@ -54,14 +54,20 @@ export const BlockModal = ({
             <View style={styles.modalButton}>
               {!children ? (
                 <Block flex row>
-                  <Pressable style={[styles.button, styles.buttonReturn]} onPress={handleReturn}>
+                  <Pressable
+                    style={[styles.button, styles.buttonReturn]}
+                    onPress={handleReturn}
+                  >
                     <Text style={styles.textStyle}>Voltar</Text>
                   </Pressable>
                   <Pressable
                     style={[styles.button, styles.buttonRedirect]}
                     onPress={handleRedirect}
                   >
-                    <OpenURLButton url={redirectWhatsApp} style={styles.textStyle}>
+                    <OpenURLButton
+                      url={redirectWhatsApp}
+                      style={styles.textStyle}
+                    >
                       Entrar em contato
                     </OpenURLButton>
                   </Pressable>
@@ -80,18 +86,18 @@ export const BlockModal = ({
 const styles = StyleSheet.create({
   modalContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
   },
   modalView: {
     margin: 15,
     height: 300,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
+    alignItems: "center",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
       height: 2,
@@ -101,44 +107,44 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalButton: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginRight: 20,
   },
   button: {
     height: 40,
     marginHorizontal: 5,
-    width: '50%',
+    width: "50%",
     borderRadius: 20,
     elevation: 3,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   buttonReturn: {
-    backgroundColor: '#2196F3',
+    backgroundColor: "#2196F3",
   },
   buttonRedirect: {
-    backgroundColor: '#1be611',
+    backgroundColor: "#1be611",
   },
   textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
   modalText: {
     marginBottom: 20,
     fontSize: 20,
-    color: 'red',
-    fontWeight: 'bold',
-    textAlign: 'center',
+    color: "red",
+    fontWeight: "bold",
+    textAlign: "center",
     borderBottomWidth: 1,
-    borderBottomColor: 'red',
+    borderBottomColor: "red",
   },
   modalDescription: {
     marginBottom: 35,
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });

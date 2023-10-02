@@ -56,7 +56,7 @@ const CardClient = ({
               {nome?.slice(0, 20)}
               {isLargeName ? "..." : ""}
               {isAdmin ? (
-                <Text color="gray" size={12} color={colors.SUB_TEXT}>
+                <Text color={colors.SUB_TEXT} size={12}>
                   {" "}
                   (admin)
                 </Text>
