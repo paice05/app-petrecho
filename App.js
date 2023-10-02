@@ -20,7 +20,12 @@ export default function App() {
           <UserContextProvider>
             <MenuProvider customStyles={menuProviderStyles}>
               <StatusBar
-                style={colors?.BACKGROUND === "#eee" ? "dark" : "light"}
+                style={
+                  colors?.BACKGROUND ===
+                  nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR
+                    ? "dark"
+                    : "light"
+                }
                 backgroundColor={colors?.BACKGROUND}
               />
               <Screens />

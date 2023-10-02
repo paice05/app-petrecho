@@ -67,12 +67,15 @@ export default class Tabs extends React.Component {
 
   renderItem = (item) => {
     const isActive = this.state.active === item.id;
-    const { date } = this.props;
+    const { date, colors } = this.props;
 
     const containerStyles = [
       styles.titleContainer,
       !isActive && { backgroundColor: "#e7e7e7" },
-      isActive && styles.containerShadow,
+      isActive && {
+        ...styles.containerShadow,
+        backgroundColor: colors.BACKGROUND_CARD,
+      },
     ];
 
     const currentDay = date.getDay();
@@ -160,7 +163,7 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     alignItems: "center",
-    backgroundColor: nowTheme.COLORS.ACTIVE,
+    // backgroundColor: nowTheme.COLORS.ACTIVE,
     borderRadius: 10,
     marginRight: 9,
     // paddingHorizontal: 10,

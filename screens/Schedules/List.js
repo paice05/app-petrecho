@@ -263,6 +263,7 @@ const ScheduleList = ({ route, navigation }) => {
               if (result < 0) setDate(addDays(date, result * -1));
             }}
             date={date}
+            colors={colors}
           />
         </Block>
 

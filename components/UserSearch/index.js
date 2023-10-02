@@ -72,14 +72,18 @@ export const UserSearch = ({
         {labelText}
       </Text>
       <Block row style={styles.container}>
-        <Icon size={16} name="user" color={colors.BUTTON} />
+        <Icon size={16} name="user" color={colors.ICON} />
         <TextInput
           placeholder={placeholder}
           placeholderTextColor={colors.PLACEHOLDER}
           value={value || textName}
           onChangeText={(text) => setTextName(text)}
           flex={1}
-          style={{ fontSize: 16, color: colors.SUB_TEXT }}
+          style={{
+            fontSize: 16,
+            color: colors.SUB_TEXT,
+            backgroundColor: "transparent",
+          }}
           selectionColor={colors.SUB_TEXT}
         />
         {value && (
@@ -128,7 +132,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: nowTheme.COLORS.BORDER,
     height: 44,
-    backgroundColor: "#FFFFFF",
     paddingHorizontal: 10,
     alignItems: "center",
 

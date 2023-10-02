@@ -24,6 +24,10 @@ export const ColorContextProvider = ({ children }) => {
     PLACEHOLDER: "#00171F",
     MENU: "#fff",
     ACTIVE_MENU: nowTheme.COLORS.PRIMARY,
+    BUTTON_BACK: nowTheme.COLORS.BUTTON_BACK,
+    BUTTON_REGISTER_OR_UPDATE: nowTheme.COLORS.BUTTON_REGISTER_OR_UPDATE,
+    TEXT_BUTTON_BACK: nowTheme.COLORS.TEXT_BUTTON_BACK,
+    TEXT_BUTTON_REGISTER_UPDATE: nowTheme.COLORS.TEXT_BUTTON_REGISTER_UPDATE,
     ...defaultColors,
   });
 
