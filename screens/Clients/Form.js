@@ -235,17 +235,21 @@ const ClientForm = ({ route, navigation }) => {
         </Block>
       </ScrollView>
       <Block row center style={styles.buttonContainer}>
-        <Button style={styles.button} onPress={() => navigation.goBack()}>
-          <Text size={16} bold>
+        <Button
+          style={styles.button}
+          backgroundColor={colors.BUTTON_BACK}
+          onPress={() => navigation.goBack()}
+        >
+          <Text size={16} bold color={colors.TEXT_BUTTON_BACK}>
             Voltar
           </Text>
         </Button>
         <Button
           style={styles.primary}
           onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
-          backgroundColor={colors.BACKGROUND_CARD}
+          backgroundColor={colors.BUTTON_REGISTER_OR_UPDATE}
         >
-          <Text size={16} bold color="#fff">
+          <Text size={16} bold color={colors.TEXT_BUTTON_REGISTER_UPDATE}>
             {isEditing ? "Atualizar" : "Cadastrar"}
           </Text>
         </Button>

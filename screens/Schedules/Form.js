@@ -344,7 +344,7 @@ const SchedulesForm = ({ route, navigation }) => {
                             },
                             itemSelected
                               ? {
-                                  backgroundColor: colors.BUTTON,
+                                  backgroundColor: colors.BACKGROUND,
                                   borderBottomLeftRadius: 0,
                                   borderBottomRightRadius: 0,
                                 }
@@ -385,7 +385,7 @@ const SchedulesForm = ({ route, navigation }) => {
                               true: colors.BUTTON,
                             }}
                           />
-                          <Text size={16} color={colors.BUTTON}>
+                          <Text size={16} color={colors.SUB_TEXT}>
                             sessão de pacote
                           </Text>
                         </Block>
@@ -396,7 +396,7 @@ const SchedulesForm = ({ route, navigation }) => {
             </Block>
           </ScrollView>
           {errors?.["services"] && (
-            <Text center size={14} color={colors.BUTTON}>
+            <Text center size={14} color={colors.DANGER}>
               selecione pelo menos 1 serviço
             </Text>
           )}
@@ -418,7 +418,7 @@ const SchedulesForm = ({ route, navigation }) => {
               icon="user"
             />
             {errors?.["employee"] && (
-              <Text center size={14} color={colors.BUTTON}>
+              <Text center size={14} color={colors.DANGER}>
                 campo obrigatório
               </Text>
             )}
@@ -436,12 +436,12 @@ const SchedulesForm = ({ route, navigation }) => {
               </Text>
               <TouchableOpacity
                 onPress={onChangeToggle}
-                style={styles.buttonDate}
+                style={[styles.buttonDate, { backgroundColor: "transparent" }]}
               >
                 <Block row gap={10} style={{ alignItems: "center" }}>
                   <Icon
                     size={16}
-                    color={colors.BUTTON}
+                    color={colors.ICON}
                     name="calendar"
                     family="feather"
                   />
@@ -525,6 +525,10 @@ const SchedulesForm = ({ route, navigation }) => {
 
             setFields({ ...fields, date: `${day}-${month}-${year}` });
             onChangeToggle();
+          }}
+          style={{
+            color: colors.SUB_TEXT,
+            //backgroundColor: colors.BACKGROUND_CARD,
           }}
         />
       </Modal>

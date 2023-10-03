@@ -28,6 +28,7 @@ export const ColorContextProvider = ({ children }) => {
     BUTTON_REGISTER_OR_UPDATE: nowTheme.COLORS.BUTTON_REGISTER_OR_UPDATE,
     TEXT_BUTTON_BACK: nowTheme.COLORS.TEXT_BUTTON_BACK,
     TEXT_BUTTON_REGISTER_UPDATE: nowTheme.COLORS.TEXT_BUTTON_REGISTER_UPDATE,
+    LIST_TIME_BUTTON: nowTheme.COLORS.LIST_TIME_BUTTON,
     ...defaultColors,
   });
 

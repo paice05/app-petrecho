@@ -1,37 +1,42 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, ScrollView } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
-import { Block, Text } from 'galio-framework';
-import { lastDayOfMonth } from 'date-fns';
+import React, { useCallback, useEffect, useState } from "react";
+import { StyleSheet, ScrollView, View } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
+import { Block, Text } from "galio-framework";
+import { lastDayOfMonth } from "date-fns";
 
-import CardReport from '../../components/CardReport';
-import SimpleMenu from '../../components/Menu';
-import { useRequestFindMany } from '../../components/hooks/useRequestFindMany';
-import { nowTheme } from '../../constants';
-import { formartDate } from '../../utils/formartDate';
+import CardReport from "../../components/CardReport";
+import SimpleMenu from "../../components/Menu";
+import { useRequestFindMany } from "../../components/hooks/useRequestFindMany";
+import { nowTheme } from "../../constants";
+import { formartDate } from "../../utils/formartDate";
+import { useColorContext } from "../../context/colors";
 
 const optionsBirthDate = [
-  { title: 'Janeiro', data: 'Janeiro' },
-  { title: 'Fevereiro', data: 'Fevereiro' },
-  { title: 'Março', data: 'Março' },
-  { title: 'Abril', data: 'Abril' },
-  { title: 'Maio', data: 'Maio' },
-  { title: 'Junho', data: 'Junho' },
-  { title: 'Julho', data: 'Julho' },
-  { title: 'Agosto', data: 'Agosto' },
-  { title: 'Setembro', data: 'Setembro' },
-  { title: 'Outubro', data: 'Outubro' },
-  { title: 'Novembro', data: 'Novembro' },
-  { title: 'Dezembro', data: 'Dezembro' },
+  { title: "Janeiro", data: "Janeiro" },
+  { title: "Fevereiro", data: "Fevereiro" },
+  { title: "Março", data: "Março" },
+  { title: "Abril", data: "Abril" },
+  { title: "Maio", data: "Maio" },
+  { title: "Junho", data: "Junho" },
+  { title: "Julho", data: "Julho" },
+  { title: "Agosto", data: "Agosto" },
+  { title: "Setembro", data: "Setembro" },
+  { title: "Outubro", data: "Outubro" },
+  { title: "Novembro", data: "Novembro" },
+  { title: "Dezembro", data: "Dezembro" },
 ];
 
 const ReportList = ({ navigation }) => {
-  const [date, setDate] = useState(optionsBirthDate[new Date().getMonth()].title);
+  const [date, setDate] = useState(
+    optionsBirthDate[new Date().getMonth()].title
+  );
 
   const [valueEntry, setValueEntry] = useState(0);
   const [valueExit, setValueExit] = useState(0);
 
-  const { execute, response } = useRequestFindMany({ path: '/reports' });
+  const { execute, response } = useRequestFindMany({ path: "/reports" });
+
+  const { colors } = useColorContext();
 
   useEffect(() => {
     if (response) {
@@ -42,10 +47,11 @@ const ReportList = ({ navigation }) => {
 
   useFocusEffect(
     useCallback(() => {
-      const month = optionsBirthDate.findIndex((item) => item.title === date) + 1;
+      const month =
+        optionsBirthDate.findIndex((item) => item.title === date) + 1;
 
       const start = new Date(`${new Date().getFullYear()}-${month}-1 00:00:00`);
-      const lastDay = formartDate(lastDayOfMonth(start), 'YYY-MM-dd');
+      const lastDay = formartDate(lastDayOfMonth(start), "YYY-MM-dd");
       const end = new Date(`${lastDay} 23:59:59`);
 
       execute({
@@ -59,39 +65,42 @@ const ReportList = ({ navigation }) => {
   );
 
   return (
-    <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={styles.card}>
-      <Block style={{ marginBottom: 16 }}>
-        <SimpleMenu
-          items={optionsBirthDate.map((item) => ({
-            text: item.title,
-            onSelect: (value) => setDate(value),
-          }))}
-        >
-          <Text size={18}>
-            Relatório de{' '}
-            <Text size={18} style={styles.text} color={nowTheme.COLORS.PRIMARY}>
-              {date}
+    <View style={[styles.card, { backgroundColor: colors.BACKGROUND }]}>
+      <ScrollView showsVerticalScrollIndicator={true}>
+        <Block style={{ marginBottom: 16 }}>
+          <SimpleMenu
+            items={optionsBirthDate.map((item) => ({
+              text: item.title,
+              onSelect: (value) => setDate(value),
+            }))}
+          >
+            <Text size={18} color={colors.TEXT}>
+              Relatório de{" "}
+              <Text size={18} style={styles.text} color={colors.BUTTON}>
+                {date}
+              </Text>
             </Text>
-          </Text>
-        </SimpleMenu>
-      </Block>
+          </SimpleMenu>
+        </Block>
 
-      <CardReport
-        navigation={navigation}
-        date={date}
-        entryValue={valueEntry}
-        outPutValue={valueExit}
-      />
-    </ScrollView>
+        <CardReport
+          navigation={navigation}
+          date={date}
+          entryValue={valueEntry}
+          outPutValue={valueExit}
+        />
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
+    flex: 1,
     padding: 15,
   },
   text: {
-    textDecorationLine: 'underline',
+    textDecorationLine: "underline",
     paddingHorizontal: 10,
   },
 });

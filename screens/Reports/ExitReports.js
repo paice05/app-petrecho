@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { Block, Text } from "galio-framework";
 import { lastDayOfMonth } from "date-fns";
@@ -8,6 +8,7 @@ import CardReportExit from "../../components/CardReportExit";
 import { useRequestFindMany } from "../../components/hooks/useRequestFindMany";
 import { formartDate } from "../../utils/formartDate";
 import { optionsBirthDate } from "../../constants/month";
+import { useColorContext } from "../../context/colors";
 
 const ExitReport = ({ route }) => {
   const { date } = route.params;
@@ -15,6 +16,8 @@ const ExitReport = ({ route }) => {
   const [valueOut, setValueOut] = useState([]);
 
   const { execute, response } = useRequestFindMany({ path: "/reports" });
+
+  const { colors } = useColorContext();
 
   useEffect(() => {
     if (response) {
@@ -42,28 +45,31 @@ const ExitReport = ({ route }) => {
   );
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={true}
-      contentContainerStyle={styles.card}
-    >
-      {valueOut.length === 0 ? (
-        <Text> Nenhum relatório encontrado no mês selecionado </Text>
-      ) : null}
-      {valueOut.map((item, index) => (
-        <Block key={index}>
-          <CardReportExit
-            data={formartDate(item.createdAt, "dd/MM/YYY")}
-            nome={item.description}
-            value={`R$ ${Number(item.out).toFixed(2).replace(".", ",")}`}
-          />
-        </Block>
-      ))}
-    </ScrollView>
+    <View style={[styles.card, { backgroundColor: colors.BACKGROUND }]}>
+      <ScrollView showsVerticalScrollIndicator={true}>
+        {valueOut.length === 0 ? (
+          <Text color={colors.TEXT}>
+            {" "}
+            Nenhum relatório encontrado no mês selecionado{" "}
+          </Text>
+        ) : null}
+        {valueOut.map((item, index) => (
+          <Block key={index}>
+            <CardReportExit
+              data={formartDate(item.createdAt, "dd/MM/YYY")}
+              nome={item.description}
+              value={`R$ ${Number(item.out).toFixed(2).replace(".", ",")}`}
+            />
+          </Block>
+        ))}
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
+    flex: 1,
     padding: 8,
   },
   totalValue: {

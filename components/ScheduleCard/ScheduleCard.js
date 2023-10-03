@@ -7,6 +7,7 @@ import { URL_WEB } from "../../constants/node";
 import IconExtra from "../Icon";
 import { useTimeSlots } from "../hooks/useTimeSlots";
 import { useUserContext } from "../../context/user";
+import { useColorContext } from "../../context/colors";
 
 export const ScheduleCard = ({
   startAt = 7,
@@ -27,9 +28,13 @@ export const ScheduleCard = ({
     });
   };
 
+  const { colors } = useColorContext();
+
   return (
-    <View style={styles.scheduleCard}>
-      <Block center>
+    <View
+      style={[styles.scheduleCard, { backgroundColor: colors.BACKGROUND_CARD }]}
+    >
+      <Block center style={{ marginTop: 10 }}>
         <Text>
           {timeSlots.map(({ time, schedule }, index) => (
             <Block key={index}>
@@ -43,10 +48,19 @@ export const ScheduleCard = ({
                   size={16}
                   style={
                     schedule
-                      ? styles.timeSlot
+                      ? [
+                          styles.timeSlot,
+                          { backgroundColor: colors.LIST_TIME_BUTTON },
+                        ]
                       : time === selected
                       ? styles.timeSlotOn
-                      : styles.timeSlotOff
+                      : [
+                          styles.timeSlotOff,
+                          {
+                            color: colors.SUB_TEXT,
+                            borderColor: colors.SUB_TEXT,
+                          },
+                        ]
                   }
                 >
                   {time}
@@ -59,12 +73,8 @@ export const ScheduleCard = ({
         {!onConfirm && (
           <TouchableOpacity onPress={handleShare} style={{ padding: 14 }}>
             <Block row center gap={10}>
-              <IconExtra
-                color={nowTheme.COLORS.PRIMARY}
-                size={18}
-                name="share-2"
-              />
-              <Text color={nowTheme.COLORS.PRIMARY} size={18}>
+              <IconExtra color={colors.ICON} size={18} name="share-2" />
+              <Text color={colors.ICON} size={18}>
                 Compartilhar
               </Text>
             </Block>
@@ -77,10 +87,8 @@ export const ScheduleCard = ({
 
 const styles = StyleSheet.create({
   scheduleCard: {
-    backgroundColor: "#fff",
     borderRadius: 8,
     marginVertical: 10,
-
     paddingVertical: 4,
   },
   timeSlot: {
@@ -93,7 +101,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     color: "#fff",
     borderColor: "#fff",
-    backgroundColor: nowTheme.COLORS.PRIMARY,
   },
   timeSlotOff: {
     width: 60,
@@ -103,9 +110,6 @@ const styles = StyleSheet.create({
 
     borderWidth: 1,
     borderRadius: 5,
-
-    color: "gray",
-    borderColor: "gray",
   },
   timeSlotOn: {
     width: 60,

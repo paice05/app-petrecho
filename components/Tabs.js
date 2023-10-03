@@ -98,17 +98,13 @@ export default class Tabs extends React.Component {
       >
         <Block style={containerStyles}>
           <Animated.View style={[styles.menuTitle]}>
-            <Text
-              center
-              color={isActive ? nowTheme.COLORS.WHITE : ""}
-              size={12}
-            >
+            <Text center color={isActive ? colors.TEXT : ""} size={12}>
               {item.title}
             </Text>
             <Text
               style={{ paddingHorizontal: 15 }}
               center
-              color={isActive ? nowTheme.COLORS.WHITE : ""}
+              color={isActive ? colors.TEXT : ""}
               size={18}
             >
               {day}
@@ -175,7 +171,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     shadowOpacity: 0.1,
     elevation: 1,
-    color: nowTheme.COLORS.WHITE,
+    //color: nowTheme.COLORS.WHITE,
   },
   menuTitle: {
     paddingVertical: 8,

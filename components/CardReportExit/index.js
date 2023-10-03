@@ -5,18 +5,32 @@ import { Text, Block } from "galio-framework";
 
 import { theme } from "galio-framework";
 import { nowTheme } from "../../constants";
+import { useColorContext } from "../../context/colors";
 
 const CardReportExit = ({ navigation, id, data, nome, value }) => {
+  const { colors } = useColorContext();
+
   return (
-    <Block flex space="between" style={styles.container}>
-      <Text size={18} center style={{ marginBottom: 16 }}>
+    <Block
+      flex
+      space="between"
+      style={[styles.container, { backgroundColor: colors.BACKGROUND_CARD }]}
+    >
+      <Text
+        size={18}
+        center
+        color={colors.SUB_TEXT}
+        style={{ marginBottom: 16 }}
+      >
         {data}
       </Text>
       <Block row space="between">
-        <Text size={18} color={nowTheme.COLORS.PRIMARY}>
+        <Text size={18} color={colors.TEXT}>
           {nome}
         </Text>
-        <Text size={18}>{value}</Text>
+        <Text size={18} color={colors.DANGER}>
+          {value}
+        </Text>
       </Block>
     </Block>
   );

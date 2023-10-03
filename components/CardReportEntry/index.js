@@ -5,6 +5,7 @@ import { Text, Block } from "galio-framework";
 
 import { theme } from "galio-framework";
 import { nowTheme } from "../../constants";
+import { useColorContext } from "../../context/colors";
 
 const CardReportEntry = ({
   id,
@@ -17,41 +18,49 @@ const CardReportEntry = ({
   addition,
   discount,
 }) => {
+  const { colors } = useColorContext();
+
   return (
     <>
-      <Block flex space="between" style={styles.container}>
-        <Text size={18} center>
+      <Block
+        flex
+        space="between"
+        style={[styles.container, { backgroundColor: colors.BACKGROUND_CARD }]}
+      >
+        <Text size={18} color={colors.TEXT} center>
           {data}
         </Text>
         <Block space="between" row style={{ alignItems: "center" }}>
-          <Text size={18} color={nowTheme.COLORS.PRIMARY} bold>
+          <Text size={18} color={colors.TEXT} bold>
             {nome}
           </Text>
-          <Text bold size={14}>
+          <Text bold color={colors.TEXT} size={14}>
             {scheduleAt}
           </Text>
         </Block>
         {servico && (
-          <Text color="gray" size={14}>
+          <Text color={colors.SUB_TEXT} size={14}>
             {servico}
           </Text>
         )}
         {pacote && (
-          <Text color="gray" size={14}>
+          <Text color={colors.SUB_TEXT} size={14}>
             Pacote: {pacote}
           </Text>
         )}
 
         <Block row space="between">
           <Block row middle gap={6}>
-            <Text color="gray" size={14}>
+            <Text color={colors.SUB_TEXT} size={14}>
               Adicional: {addition}
             </Text>
-            <Text color="gray" size={14}>
+            <Text color={colors.SUB_TEXT} size={14}>
               Desconto: {discount}
             </Text>
           </Block>
-          <Text size={18}>{value}</Text>
+          <Text color={colors.SUCCESS} size={18}>
+            {value}
+          </Text>
         </Block>
       </Block>
     </>

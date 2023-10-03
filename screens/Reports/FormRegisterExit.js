@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Dimensions } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 
 // Galio components
 import { Block, Text, theme } from "galio-framework";
@@ -11,6 +11,7 @@ import CustomInput from "../../components/CustomInput";
 import { api } from "../../services/api";
 import { useValidateRequiredFields } from "../../components/hooks/useValidateRequiredFields";
 import { CustomInputMask } from "../../components/CustomInputMask";
+import { useColorContext } from "../../context/colors";
 
 const RegisterExitForm = ({ navigation }) => {
   const [fields, setFields] = useState({
@@ -21,6 +22,8 @@ const RegisterExitForm = ({ navigation }) => {
   const { validate, errors } = useValidateRequiredFields({
     fields: ["description", "value"],
   });
+
+  const { colors } = useColorContext();
 
   useEffect(() => {
     validate(fields);
@@ -45,62 +48,79 @@ const RegisterExitForm = ({ navigation }) => {
   };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false}>
-      <Block flex gap={10} style={styles.cardContainer}>
-        <Block>
+    <View style={[styles.container, { backgroundColor: colors.BACKGROUND }]}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Block
+          flex
+          gap={10}
+          style={[
+            styles.cardContainer,
+            { backgroundColor: colors.BACKGROUND_CARD },
+          ]}
+        >
           <Block>
-            <CustomInput
-              placeholder="Digite a descrição"
-              style={[styles.inputStyle]}
-              labelText="Descrição"
-              value={fields.description}
-              onChangeText={(value) =>
-                setFields({ ...fields, description: value })
-              }
-              iconContent={
-                <Icon
-                  size={16}
-                  name="file-text"
-                  family="feather"
-                  style={styles.inputIcons}
-                />
-              }
-            />
-            {errors?.["description"] && (
-              <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
-                campo obrigatório
-              </Text>
-            )}
+            <Block>
+              <CustomInput
+                placeholder="Digite a descrição"
+                style={[styles.inputStyle]}
+                labelText="Descrição"
+                value={fields.description}
+                onChangeText={(value) =>
+                  setFields({ ...fields, description: value })
+                }
+                iconContent={
+                  <Icon
+                    size={16}
+                    name="file-text"
+                    family="feather"
+                    style={[styles.inputIcons, { color: colors.ICON }]}
+                  />
+                }
+              />
+              {errors?.["description"] && (
+                <Text center size={14} color={colors.DANGER}>
+                  campo obrigatório
+                </Text>
+              )}
+            </Block>
+
+            <Block>
+              <CustomInputMask
+                placeholder="Digite o valor da saída"
+                value={fields.value}
+                onChangeText={(item) => setFields({ ...fields, value: item })}
+              />
+              {errors?.["value"] && (
+                <Text center size={14} color={colors.DANGER}>
+                  campo obrigatório
+                </Text>
+              )}
+            </Block>
           </Block>
 
-          <Block>
-            <CustomInputMask
-              placeholder="Digite o valor da saída"
-              value={fields.value}
-              onChangeText={(item) => setFields({ ...fields, value: item })}
-            />
-            {errors?.["value"] && (
-              <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
-                campo obrigatório
+          <Block row center>
+            <Button
+              style={styles.button}
+              backgroundColor={colors.BUTTON_BACK}
+              onPress={() => navigation.goBack()}
+            >
+              <Text size={16} bold color={colors.TEXT_BUTTON_BACK}>
+                Voltar
               </Text>
-            )}
+            </Button>
+            <Button
+              style={styles.primary}
+              backgroundColor={colors.BUTTON_REGISTER_OR_UPDATE}
+              onPress={handleSubmitRegister}
+            >
+              <Text size={16} bold color={colors.TEXT_BUTTON_REGISTER_UPDATE}>
+                Cadastrar
+              </Text>
+            </Button>
           </Block>
         </Block>
-
-        <Block row center>
-          <Button style={styles.button} onPress={() => navigation.goBack()}>
-            <Text size={16} bold>
-              Voltar
-            </Text>
-          </Button>
-          <Button style={styles.primary} onPress={handleSubmitRegister}>
-            <Text size={16} bold color="#fff">
-              Cadastrar
-            </Text>
-          </Button>
-        </Block>
-      </Block>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -116,11 +136,13 @@ const styles = StyleSheet.create({
     borderColor: "#00acc1",
     backgroundColor: "#00acc1",
   },
+  container: {
+    flex: 1,
+  },
   cardContainer: {
     padding: 10,
     margin: 15,
     borderRadius: 10,
-    backgroundColor: "#fff",
   },
   button: {
     marginBottom: nowTheme.SIZES.BASE,

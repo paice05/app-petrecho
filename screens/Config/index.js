@@ -19,10 +19,11 @@ export function Config() {
       ICON: "#00A8E8",
       PLACEHOLDER: "#00171F",
       MENU: "#007EA7",
-      BUTTON_BACK: "#cbdbd8",
+      BUTTON_BACK: "#f1f5f5",
       BUTTON_REGISTER_OR_UPDATE: "#eb7072",
-      TEXT_BUTTON_BACK: "#0b2386",
+      TEXT_BUTTON_BACK: "#000",
       TEXT_BUTTON_REGISTER_UPDATE: "#FFFFFF",
+      LIST_TIME_BUTTON: "#003459",
     });
   };
 
@@ -84,7 +85,7 @@ export function Config() {
       BACKGROUND_CARD: nowTheme.COLORS.PRIMARY_CARD_COLOR,
       BUTTON: nowTheme.COLORS.PRIMARY,
       TEXT: nowTheme.COLORS.TEXT,
-      SUB_TEXT: "#00171F",
+      SUB_TEXT: "#a0a0a0",
       ICON: nowTheme.COLORS.PRIMARY,
       PLACEHOLDER: "#00171F",
       MENU: "#fff",
@@ -93,6 +94,7 @@ export function Config() {
       BUTTON_REGISTER_OR_UPDATE: nowTheme.COLORS.BUTTON_REGISTER_OR_UPDATE,
       TEXT_BUTTON_BACK: nowTheme.COLORS.TEXT_BUTTON_BACK,
       TEXT_BUTTON_REGISTER_UPDATE: nowTheme.COLORS.TEXT_BUTTON_REGISTER_UPDATE,
+      LIST_TIME_BUTTON: nowTheme.COLORS.LIST_TIME_BUTTON,
     });
   };
 

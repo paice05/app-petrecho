@@ -156,17 +156,21 @@ const ServiceForm = ({ route, navigation }) => {
         </Block>
       </ScrollView>
       <Block row center>
-        <Button style={styles.button} onPress={() => navigation.goBack()}>
-          <Text size={16} bold color={colors.BLACK}>
+        <Button
+          style={styles.button}
+          backgroundColor={colors.BUTTON_BACK}
+          onPress={() => navigation.goBack()}
+        >
+          <Text size={16} bold color={colors.TEXT_BUTTON_BACK}>
             Voltar
           </Text>
         </Button>
         <Button
           style={styles.primary}
-          backgroundColor={colors.BACKGROUND_CARD}
+          backgroundColor={colors.BUTTON_REGISTER_OR_UPDATE}
           onPress={isEditing ? handleSubmitUpdate : handleSubmitCreate}
         >
-          <Text size={16} bold color={colors.TEXT}>
+          <Text size={16} bold color={colors.TEXT_BUTTON_REGISTER_UPDATE}>
             {isEditing ? "Atualizar" : "Cadastrar"}
           </Text>
         </Button>

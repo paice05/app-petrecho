@@ -32,11 +32,13 @@ export const DateTimePicker = ({ onChange, value = new Date() }) => {
         >
           <IconExtra
             size={16}
-            color={colors.BUTTON}
+            color={colors.ICON}
             name="clock"
             family="feather"
           />
-          <Text size={15}>{formartDate(value, "HH:mm")}</Text>
+          <Text size={15} color={colors.SUB_TEXT}>
+            {formartDate(value, "HH:mm")}
+          </Text>
         </Block>
       </TouchableOpacity>
       {showDatePicker && (
@@ -58,7 +60,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: nowTheme.COLORS.BORDER,
     height: 44,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "transparent",
     padding: 9,
   },
 });
