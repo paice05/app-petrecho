@@ -8,6 +8,7 @@ import {
   Alert,
   Platform,
   View,
+  RefreshControl,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import * as Notifications from "expo-notifications";
@@ -237,235 +238,238 @@ const ScheduleList = ({ route, navigation }) => {
     });
   };
 
+  const onRefresh = React.useCallback(() => {
+    findMany();
+  }, []);
+
   return (
     <View style={[styles.card, { backgroundColor: colors.BACKGROUND }]}>
-      <ScrollView showsVerticalScrollIndicator={true}>
-        <LoadingOverlay visible={loading || loadingUpdate} />
+      <LoadingOverlay visible={loading || loadingUpdate} />
 
-        <TouchableOpacity
-          style={styles.dateStyle}
-          onPress={() => setOpenCalendar(true)}
-        >
-          <Text bold color={colors.TEXT} size={18}>
-            {formartDate(date, "dd  MMMM YYY")}
-          </Text>
-        </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.dateStyle}
+        onPress={() => setOpenCalendar(true)}
+      >
+        <Text bold color={colors.TEXT} size={18}>
+          {formartDate(date, "dd  MMMM YYY")}
+        </Text>
+      </TouchableOpacity>
 
-        <Block row center>
-          <Tabs
-            data={tabs.week}
-            selected={tabs.week[date.getDay()].id}
-            onChange={(id) => {
-              const currentDay = date.getDay();
-              const result = currentDay - id;
+      <Block row center>
+        <Tabs
+          data={tabs.week}
+          selected={tabs.week[date.getDay()].id}
+          onChange={(id) => {
+            const currentDay = date.getDay();
+            const result = currentDay - id;
 
-              if (result > 0) setDate(subDays(date, result));
-              if (result < 0) setDate(addDays(date, result * -1));
-            }}
-            date={date}
-            colors={colors}
-          />
-        </Block>
+            if (result > 0) setDate(subDays(date, result));
+            if (result < 0) setDate(addDays(date, result * -1));
+          }}
+          date={date}
+          colors={colors}
+        />
+      </Block>
 
-        <Navigation
-          items={[
-            {
-              title: "Lista",
-              children: (
-                <Block style={{ marginVertical: 10 }}>
-                  {schedules.length === 0 && (
-                    <Text
-                      size={18}
-                      center
-                      style={{ marginTop: 20, marginBottom: 20 }}
-                      color={colors.TEXT}
-                    >
-                      Nenhum registro encontrado
-                    </Text>
-                  )}
-
-                  {schedules
-                    .sort((a, b) =>
-                      formartDate(a.scheduleAt, "HH:mm") >
-                      formartDate(b.scheduleAt, "HH:mm")
-                        ? 1
-                        : -1
-                    )
-                    .filter((item) => item.status !== "awaiting")
-                    .map((item) => {
-                      return (
-                        <CardSchedule
-                          key={item.id}
-                          navigation={navigation}
-                          id={item.id}
-                          nome={
-                            item?.user?.name ||
-                            item?.shortName ||
-                            "(Esse cliente não existe)"
-                          }
-                          funcionario={
-                            item?.employee?.name ||
-                            "(Esse funcionário não existe)"
-                          }
-                          servico={item?.services
-                            ?.filter((item) => !item.ServiceSchedule.isPackage)
-                            .map((item) => item.name)
-                            .join(", ")}
-                          pacote={item?.services
-                            ?.filter((item) => item.ServiceSchedule.isPackage)
-                            .map((item) => item.name)
-                            .join(", ")}
-                          horario={formartDate(item.scheduleAt, "HH:mm")}
-                          dia={formartDate(item.scheduleAt, "dd/MM/YYY")}
-                          status={item.status}
-                          onFinished={() => handleFinished(item.id)}
-                          onFinishedAwaitingPayment={() =>
-                            handleFinishedAwaitingPayment(item.id)
-                          }
-                          onCanceled={() => handleCanceled(item.id)}
-                          onDeleted={() => handleConfirmDelete(item.id)}
-                          onRevert={() => handleRestore(item.id)}
-                        />
-                      );
-                    })}
-                </Block>
-              ),
-            },
-            {
-              title: "Horários",
-              children: (
-                <ScheduleCard
-                  payload={schedules
-                    .filter(
-                      (item) =>
-                        item.status === "pending" ||
-                        item.status === "finished" ||
-                        item.status === "awaiting-payment"
-                    )
-                    .map((item) => formartDate(item.scheduleAt, "HH:mm"))}
-                />
-              ),
-            },
-            {
-              title: "Espera",
-              children: (
-                <Block style={{ marginVertical: 10 }}>
-                  {schedules.length === 0 && (
-                    <Text
-                      size={18}
-                      center
-                      style={{ marginTop: 20, marginBottom: 20 }}
-                      color={colors.TEXT}
-                    >
-                      Nenhum registro encontrado
-                    </Text>
-                  )}
-                  {schedules
-                    .filter((item) => item.status === "awaiting")
-                    .map((item) => {
-                      return (
-                        <CardSchedule
-                          key={item.id}
-                          navigation={navigation}
-                          id={item.id}
-                          nome={
-                            item?.user?.name ||
-                            item?.shortName ||
-                            "(Esse cliente não existe)"
-                          }
-                          funcionario={
-                            item?.employee?.name ||
-                            "(Esse funcionário não existe)"
-                          }
-                          servico={item?.services
-                            ?.filter((item) => !item.ServiceSchedule.isPackage)
-                            .map((item) => item.name)
-                            .join(", ")}
-                          dia={formartDate(item.scheduleAt, "dd/MM/YYY")}
-                          status={item.status}
-                          pacote={item?.services
-                            ?.filter((item) => item.ServiceSchedule.isPackage)
-                            .map((item) => item.name)
-                            .join(", ")}
-                          onAwaiting={() =>
-                            setSelectedScheduleAwating({
-                              open: true,
-                              scheduleId: item.id,
-                              hour: "",
-                            })
-                          }
-                        />
-                      );
-                    })}
-                  <Modal
-                    title="Selecione um horário disponível"
-                    isVisible={selectedScheduleAwating.open}
-                    onRequestClose={handleCloseScheduleAwating}
-                    handleCancel={handleCloseScheduleAwating}
+      <Navigation
+        items={[
+          {
+            title: "Lista",
+            children: (
+              <Block style={{ marginVertical: 10 }}>
+                {schedules.length === 0 && (
+                  <Text
+                    size={18}
+                    center
+                    style={{ marginTop: 20, marginBottom: 20 }}
+                    color={colors.TEXT}
                   >
-                    <Block>
-                      <ScheduleCard
-                        payload={schedules
-                          .filter(
-                            (item) =>
-                              item.status === "pending" ||
-                              item.status === "finished"
-                          )
-                          .map((item) => formartDate(item.scheduleAt, "HH:mm"))}
-                        onConfirm={(time) =>
+                    Nenhum registro encontrado
+                  </Text>
+                )}
+
+                {schedules
+                  .sort((a, b) =>
+                    formartDate(a.scheduleAt, "HH:mm") >
+                    formartDate(b.scheduleAt, "HH:mm")
+                      ? 1
+                      : -1
+                  )
+                  .filter((item) => item.status !== "awaiting")
+                  .map((item) => {
+                    return (
+                      <CardSchedule
+                        key={item.id}
+                        navigation={navigation}
+                        id={item.id}
+                        nome={
+                          item?.user?.name ||
+                          item?.shortName ||
+                          "(Esse cliente não existe)"
+                        }
+                        funcionario={
+                          item?.employee?.name ||
+                          "(Esse funcionário não existe)"
+                        }
+                        servico={item?.services
+                          ?.filter((item) => !item.ServiceSchedule.isPackage)
+                          .map((item) => item.name)
+                          .join(", ")}
+                        pacote={item?.services
+                          ?.filter((item) => item.ServiceSchedule.isPackage)
+                          .map((item) => item.name)
+                          .join(", ")}
+                        horario={formartDate(item.scheduleAt, "HH:mm")}
+                        dia={formartDate(item.scheduleAt, "dd/MM/YYY")}
+                        status={item.status}
+                        onFinished={() => handleFinished(item.id)}
+                        onFinishedAwaitingPayment={() =>
+                          handleFinishedAwaitingPayment(item.id)
+                        }
+                        onCanceled={() => handleCanceled(item.id)}
+                        onDeleted={() => handleConfirmDelete(item.id)}
+                        onRevert={() => handleRestore(item.id)}
+                      />
+                    );
+                  })}
+              </Block>
+            ),
+          },
+          {
+            title: "Horários",
+            children: (
+              <ScheduleCard
+                payload={schedules
+                  .filter(
+                    (item) =>
+                      item.status === "pending" ||
+                      item.status === "finished" ||
+                      item.status === "awaiting-payment"
+                  )
+                  .map((item) => formartDate(item.scheduleAt, "HH:mm"))}
+              />
+            ),
+          },
+          {
+            title: "Espera",
+            children: (
+              <Block style={{ marginVertical: 10 }}>
+                {schedules.length === 0 && (
+                  <Text
+                    size={18}
+                    center
+                    style={{ marginTop: 20, marginBottom: 20 }}
+                    color={colors.TEXT}
+                  >
+                    Nenhum registro encontrado
+                  </Text>
+                )}
+                {schedules
+                  .filter((item) => item.status === "awaiting")
+                  .map((item) => {
+                    return (
+                      <CardSchedule
+                        key={item.id}
+                        navigation={navigation}
+                        id={item.id}
+                        nome={
+                          item?.user?.name ||
+                          item?.shortName ||
+                          "(Esse cliente não existe)"
+                        }
+                        funcionario={
+                          item?.employee?.name ||
+                          "(Esse funcionário não existe)"
+                        }
+                        servico={item?.services
+                          ?.filter((item) => !item.ServiceSchedule.isPackage)
+                          .map((item) => item.name)
+                          .join(", ")}
+                        dia={formartDate(item.scheduleAt, "dd/MM/YYY")}
+                        status={item.status}
+                        pacote={item?.services
+                          ?.filter((item) => item.ServiceSchedule.isPackage)
+                          .map((item) => item.name)
+                          .join(", ")}
+                        onAwaiting={() =>
                           setSelectedScheduleAwating({
-                            ...selectedScheduleAwating,
-                            hour: time,
+                            open: true,
+                            scheduleId: item.id,
+                            hour: "",
                           })
                         }
-                        selected={selectedScheduleAwating.hour}
                       />
+                    );
+                  })}
+                <Modal
+                  title="Selecione um horário disponível"
+                  isVisible={selectedScheduleAwating.open}
+                  onRequestClose={handleCloseScheduleAwating}
+                  handleCancel={handleCloseScheduleAwating}
+                >
+                  <Block>
+                    <ScheduleCard
+                      payload={schedules
+                        .filter(
+                          (item) =>
+                            item.status === "pending" ||
+                            item.status === "finished"
+                        )
+                        .map((item) => formartDate(item.scheduleAt, "HH:mm"))}
+                      onConfirm={(time) =>
+                        setSelectedScheduleAwating({
+                          ...selectedScheduleAwating,
+                          hour: time,
+                        })
+                      }
+                      selected={selectedScheduleAwating.hour}
+                    />
 
-                      <Block row style={styles.wrapperButtons}>
-                        <TouchableOpacity
-                          onPress={handleAwaitingUpdate}
-                          style={[
-                            styles.button,
-                            {
-                              backgroundColor: colors.BUTTON_REGISTER_OR_UPDATE,
-                            },
-                          ]}
+                    <Block row style={styles.wrapperButtons}>
+                      <TouchableOpacity
+                        onPress={handleAwaitingUpdate}
+                        style={[
+                          styles.button,
+                          {
+                            backgroundColor: colors.BUTTON_REGISTER_OR_UPDATE,
+                          },
+                        ]}
+                      >
+                        <Text
+                          color={colors.TEXT_BUTTON_REGISTER_UPDATE}
+                          bold
+                          size={16}
                         >
-                          <Text
-                            color={colors.TEXT_BUTTON_REGISTER_UPDATE}
-                            bold
-                            size={16}
-                          >
-                            Confirmar
-                          </Text>
-                        </TouchableOpacity>
-                      </Block>
+                          Confirmar
+                        </Text>
+                      </TouchableOpacity>
                     </Block>
-                  </Modal>
-                </Block>
-              ),
-            },
-          ]}
-        />
-
-        <Modal
-          isVisible={openCalendar}
-          handleCancel={() => setOpenCalendar(false)}
-          handleConfirm={() => setOpenCalendar(false)}
-          title="Selecione uma data para buscar seus agendamentos"
-          onRequestClose={() => {
-            Alert.alert("Modal será fechado.");
-            setOpenCalendar(!openCalendar);
+                  </Block>
+                </Modal>
+              </Block>
+            ),
+          },
+        ]}
+        refreshing={loading}
+        onRefresh={findMany}
+      />
+      <Modal
+        isVisible={openCalendar}
+        handleCancel={() => setOpenCalendar(false)}
+        handleConfirm={() => setOpenCalendar(false)}
+        title="Selecione uma data para buscar seus agendamentos"
+        onRequestClose={() => {
+          Alert.alert("Modal será fechado.");
+          setOpenCalendar(!openCalendar);
+        }}
+      >
+        <Calendar
+          onChange={(value) => {
+            setDate(new Date(`${value} 00:00:00`));
+            setOpenCalendar(false);
           }}
-        >
-          <Calendar
-            onChange={(value) => {
-              setDate(new Date(`${value} 00:00:00`));
-              setOpenCalendar(false);
-            }}
-          />
-        </Modal>
-      </ScrollView>
+        />
+      </Modal>
       {schedules.length > 0 ? (
         <PaginationSimple
           currentPage={pagination.currentPage}

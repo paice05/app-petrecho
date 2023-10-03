@@ -31,7 +31,7 @@ export const Config = ({ fields, setFields }) => {
             show ? styles.containerOpen : styles.containerClose,
           ]}
         >
-          <Text size={16} color={colors.BUTTON}>
+          <Text size={16} color={colors.TEXT}>
             Configurações gerais
           </Text>
 
@@ -39,7 +39,7 @@ export const Config = ({ fields, setFields }) => {
             name="chevron-down"
             family="feather"
             size={18}
-            color={colors.BUTTON}
+            color={colors.TEXT}
             style={show ? styles.iconRotate : {}}
           />
         </Block>

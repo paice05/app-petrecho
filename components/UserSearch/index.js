@@ -93,7 +93,7 @@ export const UserSearch = ({
               clear();
             }}
           >
-            <Text size={14} color={colors.BUTTON}>
+            <Text size={14} color={colors.TEXT}>
               Limpar
             </Text>
           </TouchableOpacity>

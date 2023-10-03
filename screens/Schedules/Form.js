@@ -290,14 +290,19 @@ const SchedulesForm = ({ route, navigation }) => {
 
             <Block row gap={20}>
               <TouchableOpacity onPress={() => setTypeView("all")}>
-                <Text size={16} color={typeView === "all" && colors.BUTTON}>
+                <Text
+                  size={16}
+                  color={typeView === "all" ? colors.TEXT : colors.BACKGROUND}
+                >
                   Todos
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => setTypeView("selected")}>
                 <Text
                   size={16}
-                  color={typeView === "selected" && colors.BUTTON}
+                  color={
+                    typeView === "selected" ? colors.TEXT : colors.BACKGROUND
+                  }
                 >
                   Selecionados ({fields.services.length})
                 </Text>
@@ -364,7 +369,13 @@ const SchedulesForm = ({ route, navigation }) => {
                         </Block>
                       </TouchableOpacity>
                       {itemSelected && (
-                        <Block row style={styles.details}>
+                        <Block
+                          row
+                          style={[
+                            styles.details,
+                            { borderColor: colors.BACKGROUND },
+                          ]}
+                        >
                           <Switch
                             value={
                               fields.services.find(
@@ -577,7 +588,6 @@ const styles = StyleSheet.create({
   },
   details: {
     borderWidth: 1,
-    borderColor: nowTheme.COLORS.PRIMARY,
     borderRadius: 4,
     height: 50,
     borderTopWidth: 0,

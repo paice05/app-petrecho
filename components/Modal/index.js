@@ -9,6 +9,7 @@ import {
   View,
   TouchableOpacity,
 } from "react-native";
+import { useColorContext } from "../../context/colors";
 
 export const Modal = ({
   isVisible,
@@ -17,6 +18,8 @@ export const Modal = ({
   title,
   children,
 }) => {
+  const { colors } = useColorContext();
+
   return (
     <View>
       <ModalRN
@@ -27,8 +30,15 @@ export const Modal = ({
       >
         <TouchableOpacity style={styles.modalContainer} onPress={handleCancel}>
           <TouchableOpacity style={styles.modal} activeOpacity={1}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>{title}</Text>
+            <View
+              style={[
+                styles.modalView,
+                { backgroundColor: colors.BACKGROUND_CARD },
+              ]}
+            >
+              <Text style={[styles.modalText, { color: colors.TEXT }]}>
+                {title}
+              </Text>
               <View style={styles.modalButton}>
                 {!children ? (
                   <Block flex row>
@@ -75,7 +85,6 @@ const styles = StyleSheet.create({
   },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
     alignItems: "center",

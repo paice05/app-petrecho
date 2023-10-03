@@ -203,7 +203,10 @@ const CardSchedule = ({
         <Block row style={styles.wrapperButtons}>
           <TouchableOpacity
             onPress={onAwaiting}
-            style={[styles.button, styles.primary]}
+            style={[
+              styles.button,
+              { backgroundColor: colors.BUTTON_REGISTER_OR_UPDATE },
+            ]}
           >
             <Text color="white" bold size={16}>
               Converter em agendamento

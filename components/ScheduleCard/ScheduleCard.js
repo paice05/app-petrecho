@@ -48,17 +48,20 @@ export const ScheduleCard = ({
                   size={16}
                   style={
                     schedule
-                      ? [
-                          styles.timeSlot,
-                          { backgroundColor: colors.LIST_TIME_BUTTON },
-                        ]
+                      ? [styles.timeSlot, { backgroundColor: colors.DANGER }]
                       : time === selected
-                      ? styles.timeSlotOn
+                      ? [
+                          styles.timeSlotOn,
+                          {
+                            color: colors.BLACK,
+                            backgroundColor: colors.SUCCESS,
+                          },
+                        ]
                       : [
                           styles.timeSlotOff,
                           {
-                            color: colors.SUB_TEXT,
-                            borderColor: colors.SUB_TEXT,
+                            color: colors.TEXT,
+                            borderColor: colors.TEXT,
                           },
                         ]
                   }
@@ -119,9 +122,6 @@ const styles = StyleSheet.create({
 
     borderWidth: 1,
     borderRadius: 5,
-    color: "#fff",
-    borderColor: "#fff",
-    backgroundColor: nowTheme.COLORS.SUCCESS,
   },
 });
 

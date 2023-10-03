@@ -37,6 +37,12 @@ export function Config() {
       ICON: "#FDE2FF",
       PLACEHOLDER: "#5D576B",
       MENU: "#8884FF",
+
+      BUTTON_BACK: "#f1f5f5",
+      BUTTON_REGISTER_OR_UPDATE: "#eb7072",
+      TEXT_BUTTON_BACK: "#000",
+      TEXT_BUTTON_REGISTER_UPDATE: "#FFFFFF",
+      LIST_TIME_BUTTON: "#003459",
     });
   };
 
@@ -50,6 +56,12 @@ export function Config() {
       ICON: "#CBEF43",
       PLACEHOLDER: "#433A3F",
       MENU: "#72A98F",
+
+      BUTTON_BACK: "#f1f5f5",
+      BUTTON_REGISTER_OR_UPDATE: "#eb7072",
+      TEXT_BUTTON_BACK: "#000",
+      TEXT_BUTTON_REGISTER_UPDATE: "#FFFFFF",
+      LIST_TIME_BUTTON: "#003459",
     });
   };
 
@@ -63,6 +75,12 @@ export function Config() {
       ICON: "#A599B5",
       PLACEHOLDER: "#A599B5",
       MENU: "#2E2F2F",
+
+      BUTTON_BACK: "#f1f5f5",
+      BUTTON_REGISTER_OR_UPDATE: "#eb7072",
+      TEXT_BUTTON_BACK: "#eb7072",
+      TEXT_BUTTON_REGISTER_UPDATE: "#FFFFFF",
+      LIST_TIME_BUTTON: "#003459",
     });
   };
 
@@ -76,6 +94,12 @@ export function Config() {
       ICON: "#DDE8B9",
       PLACEHOLDER: "#DDE8B9",
       MENU: "#5D2E46",
+
+      BUTTON_BACK: "#f1f5f5",
+      BUTTON_REGISTER_OR_UPDATE: "#eb7072",
+      TEXT_BUTTON_BACK: "#000",
+      TEXT_BUTTON_REGISTER_UPDATE: "#FFFFFF",
+      LIST_TIME_BUTTON: "#003459",
     });
   };
 
