@@ -26,6 +26,10 @@ import { Config } from "../screens/Config";
 import { ConfigForm } from "../screens/Config/Form";
 import { useColorContext } from "../context/colors";
 
+import { Clients as ScheduleComponentsClients } from "../screens/Schedules/components/Clients";
+import { Services as ScheduleComponentsServices } from "../screens/Schedules/components/Services";
+import { Employees as ScheduleComponentsEmployees } from "../screens/Schedules/components/Employees";
+
 const { width } = Dimensions.get("screen");
 
 const Stack = createStackNavigator();
@@ -154,6 +158,56 @@ function SchedulesStack(props) {
             return (
               <Header
                 title={isEditing ? "Atualizar agendamento" : "Novo agendamento"}
+                back
+                navigation={navigation}
+                scene={scene}
+              />
+            );
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="ScheduleComponentsClients"
+        component={ScheduleComponentsClients}
+        options={{
+          header: ({ navigation, scene }) => {
+            return (
+              <Header
+                title="Pesquisando clientes"
+                back
+                navigation={navigation}
+                scene={scene}
+              />
+            );
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="ScheduleComponentsServices"
+        component={ScheduleComponentsServices}
+        options={{
+          header: ({ navigation, scene }) => {
+            return (
+              <Header
+                title="Pesquisando serviços"
+                back
+                navigation={navigation}
+                scene={scene}
+              />
+            );
+          },
+        }}
+      />
+      <Stack.Screen
+        name="ScheduleComponentsEmployees"
+        component={ScheduleComponentsEmployees}
+        options={{
+          header: ({ navigation, scene }) => {
+            return (
+              <Header
+                title="Pesquisando funcionários"
                 back
                 navigation={navigation}
                 scene={scene}

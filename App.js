@@ -16,8 +16,8 @@ export default function App() {
   return (
     <NavigationContainer>
       <GalioProvider theme={nowTheme}>
-        <ColorContextProvider>
-          <UserContextProvider>
+        <UserContextProvider>
+          <ColorContextProvider>
             <MenuProvider customStyles={menuProviderStyles}>
               <StatusBar
                 style={
@@ -30,8 +30,8 @@ export default function App() {
               />
               <Screens />
             </MenuProvider>
-          </UserContextProvider>
-        </ColorContextProvider>
+          </ColorContextProvider>
+        </UserContextProvider>
       </GalioProvider>
     </NavigationContainer>
   );

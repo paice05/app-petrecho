@@ -4,10 +4,17 @@ import { StyleSheet } from "react-native";
 import { nowTheme } from "../../constants";
 import { useUserContext } from "../../context/user";
 import { useColorContext } from "../../context/colors";
+import { useRequestUpdate } from "../../components/hooks/useRequestUpdate";
+import { getCache, setCache } from "../../services/cache";
 
 export function Config() {
   const { user } = useUserContext();
   const { colors, changeColor } = useColorContext();
+
+  const { execute } = useRequestUpdate({
+    path: "/users",
+    id: user.id,
+  });
 
   const blueStyle = () => {
     changeColor({
@@ -24,6 +31,13 @@ export function Config() {
       TEXT_BUTTON_BACK: "#000",
       TEXT_BUTTON_REGISTER_UPDATE: "#FFFFFF",
       LIST_TIME_BUTTON: "#003459",
+    });
+
+    execute({ theme: "blue" });
+    getCache("user").then((userRaw) => {
+      const user = JSON.parse(userRaw);
+
+      setCache("user", JSON.stringify({ ...user, theme: "blue" }));
     });
   };
 
@@ -44,6 +58,13 @@ export function Config() {
       TEXT_BUTTON_REGISTER_UPDATE: "#FFFFFF",
       LIST_TIME_BUTTON: "#003459",
     });
+
+    execute({ theme: "purple" });
+    getCache("user").then((userRaw) => {
+      const user = JSON.parse(userRaw);
+
+      setCache("user", JSON.stringify({ ...user, theme: "purple" }));
+    });
   };
 
   const greenStyle = () => {
@@ -62,6 +83,13 @@ export function Config() {
       TEXT_BUTTON_BACK: "#000",
       TEXT_BUTTON_REGISTER_UPDATE: "#FFFFFF",
       LIST_TIME_BUTTON: "#003459",
+    });
+
+    execute({ theme: "green" });
+    getCache("user").then((userRaw) => {
+      const user = JSON.parse(userRaw);
+
+      setCache("user", JSON.stringify({ ...user, theme: "green" }));
     });
   };
 
@@ -82,6 +110,13 @@ export function Config() {
       TEXT_BUTTON_REGISTER_UPDATE: "#FFFFFF",
       LIST_TIME_BUTTON: "#003459",
     });
+
+    execute({ theme: "dark" });
+    getCache("user").then((userRaw) => {
+      const user = JSON.parse(userRaw);
+
+      setCache("user", JSON.stringify({ ...user, theme: "dark" }));
+    });
   };
 
   const pinkStyle = () => {
@@ -101,6 +136,13 @@ export function Config() {
       TEXT_BUTTON_REGISTER_UPDATE: "#FFFFFF",
       LIST_TIME_BUTTON: "#003459",
     });
+
+    execute({ theme: "pink" });
+    getCache("user").then((userRaw) => {
+      const user = JSON.parse(userRaw);
+
+      setCache("user", JSON.stringify({ ...user, theme: "pink" }));
+    });
   };
 
   const colorDefault = () => {
@@ -119,6 +161,13 @@ export function Config() {
       TEXT_BUTTON_BACK: nowTheme.COLORS.TEXT_BUTTON_BACK,
       TEXT_BUTTON_REGISTER_UPDATE: nowTheme.COLORS.TEXT_BUTTON_REGISTER_UPDATE,
       LIST_TIME_BUTTON: nowTheme.COLORS.LIST_TIME_BUTTON,
+    });
+
+    execute({ theme: "default" });
+    getCache("user").then((userRaw) => {
+      const user = JSON.parse(userRaw);
+
+      setCache("user", JSON.stringify({ ...user, theme: "default" }));
     });
   };
 

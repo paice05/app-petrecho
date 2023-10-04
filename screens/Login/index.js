@@ -16,6 +16,8 @@ import { BlockModal } from "../../components/BlockModal";
 import { useToggle } from "../../components/hooks/useToggle";
 import { useUserContext } from "../../context/user";
 import { LoadingOverlay } from "../../components/LoadingOverlay";
+import { useColorContext } from "../../context/colors";
+import { colorsByName } from "../../constants/colors";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -44,6 +46,7 @@ const Login = ({ navigation }) => {
 
   const { toggle, onChangeToggle } = useToggle();
   const { changeUser } = useUserContext();
+  const { changeColor } = useColorContext();
 
   useEffect(() => {
     getCache("token").then((response) => {
@@ -59,11 +62,16 @@ const Login = ({ navigation }) => {
             getCache("user").then((userRaw) => {
               const user = JSON.parse(userRaw);
 
+              console.log({ user });
+
               changeUser({
                 name: user.name,
+                id: user.id,
+                theme: user.theme,
                 isAdmin: user.isSuperAdmin,
                 account: user.account,
               });
+              changeColor(colorsByName[user.theme] || colorsByName["default"]);
               navigation.navigate("App");
               setLoading(false);
             });
@@ -100,9 +108,12 @@ const Login = ({ navigation }) => {
           api.setToken(data.token);
           changeUser({
             name: data.user.name,
+            id: data.user.id,
+            theme: data.user.theme,
             isAdmin: data.user.isSuperAdmin,
             account: data.user.account,
           });
+          changeColor(colorsByName[data.user.theme] || colorsByName["default"]);
 
           setCache("token", data.token);
           setCache("user", JSON.stringify(data.user)).then(() => {

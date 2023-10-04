@@ -2,6 +2,7 @@ import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Block, Text, Switch } from "galio-framework";
 import { Calendar } from "react-native-calendars";
+import { useNavigation } from "@react-navigation/native";
 
 import { useValidateRequiredFields } from "../../components/hooks/useValidateRequiredFields";
 import { useRequestFindOne } from "../../components/hooks/useRequestFindOne";
@@ -19,10 +20,13 @@ import { Config } from "./Config";
 import { UserSearch } from "../../components/UserSearch";
 import { LoadingOverlay } from "../../components/LoadingOverlay";
 import { useColorContext } from "../../context/colors";
+import { WrapperInput } from "../../components/WrapperInput";
 
-const SchedulesForm = ({ route, navigation }) => {
+const SchedulesForm = ({ route }) => {
   const params = route.params;
   const isEditing = params?.itemId;
+
+  const navigation = useNavigation();
 
   const [allServices, setAllServices] = useState([]);
   const [typeView, setTypeView] = useState("all"); // all | selected
@@ -96,6 +100,7 @@ const SchedulesForm = ({ route, navigation }) => {
         services: response.services.map((item) => ({
           id: item.id,
           isPackage: item.ServiceSchedule.isPackage,
+          name: item.name,
         })),
         employee: {
           value: response?.employee?.id,
@@ -213,7 +218,7 @@ const SchedulesForm = ({ route, navigation }) => {
     });
   };
 
-  const handleChangeIsPackage = ({ serviceId, isPackage }) => {
+  const handleChangeServiceIsPackage = ({ serviceId, isPackage }) => {
     setFields({
       ...fields,
       services: fields.services.map((item) => {
@@ -240,200 +245,53 @@ const SchedulesForm = ({ route, navigation }) => {
           flex
           style={[styles.group, { backgroundColor: colors.BACKGROUND_CARD }]}
         >
-          <Block>
-            {fields.shortName ? (
-              <Block style={{ marginLeft: 20 }}>
-                <Text bold size={18} color={colors.TEXT}>
-                  {fields.shortName}{" "}
-                </Text>
-                <Text bold={false} size={14} color="gray">
-                  (esse cliente foi criado através do seu link)
-                </Text>
-              </Block>
-            ) : (
-              <Block>
-                <UserSearch
-                  path="/users"
-                  query={{ type: "pf" }}
-                  placeholder="Pesquise um cliente"
-                  labelText="Cliente"
-                  onSelectUser={(item) =>
-                    setFields({
-                      ...fields,
-                      user: { value: item.id, label: item.name },
-                    })
-                  }
-                  clear={() => setFields({ ...fields, user: null })}
-                  value={fields?.user?.label}
-                  icon="user"
-                />
-                {errors?.["user"] && (
-                  <Text center size={14} color={colors.DANGER}>
-                    campo obrigatório
-                  </Text>
-                )}
-              </Block>
-            )}
-          </Block>
-
-          <Block
-            row
-            space="between"
-            style={{
-              alignItems: "center",
-              paddingLeft: 20,
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("ScheduleComponentsClients", {
+                fields,
+                setFields,
+              });
             }}
           >
-            <Text size={16} bold color={colors.TEXT}>
-              Serviços
-            </Text>
-
-            <Block row gap={20}>
-              <TouchableOpacity onPress={() => setTypeView("all")}>
-                <Text
-                  size={16}
-                  color={typeView === "all" ? colors.TEXT : colors.BACKGROUND}
-                >
-                  Todos
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => setTypeView("selected")}>
-                <Text
-                  size={16}
-                  color={
-                    typeView === "selected" ? colors.TEXT : colors.BACKGROUND
-                  }
-                >
-                  Selecionados ({fields.services.length})
-                </Text>
-              </TouchableOpacity>
-            </Block>
-          </Block>
-
-          <ScrollView
-            style={{
-              maxHeight: 300,
-            }}
-          >
-            <Block gap={10}>
-              {(typeView === "selected"
-                ? allServices.filter((item) =>
-                    fields.services.some((service) => service.id === item.id)
-                  )
-                : allServices
-              )
-                .sort((a, b) => (a.name > b.name ? 1 : -1))
-                .map((item) => {
-                  const itemSelected =
-                    fields.services.findIndex(
-                      (service) => service.id === item.id
-                    ) !== -1;
-
-                  return (
-                    <Block>
-                      <TouchableOpacity
-                        key={item.id}
-                        onPress={() =>
-                          handleChangeService({ serviceId: item.id })
-                        }
-                      >
-                        <Block
-                          row
-                          space="between"
-                          style={[
-                            {
-                              backgroundColor: "#FFFFFF",
-                              padding: 8,
-                              borderRadius: 4,
-                              flex: 1,
-                            },
-                            itemSelected
-                              ? {
-                                  backgroundColor: colors.BACKGROUND,
-                                  borderBottomLeftRadius: 0,
-                                  borderBottomRightRadius: 0,
-                                }
-                              : {},
-                          ]}
-                        >
-                          <Text color={itemSelected ? "white" : ""}>
-                            {item.name}
-                          </Text>
-                          <Text color={itemSelected ? "white" : ""}>
-                            {Number(item.price).toLocaleString("pt-BR", {
-                              style: "currency",
-                              currency: "BRL",
-                              currencyDisplay: "symbol",
-                            })}
-                          </Text>
-                        </Block>
-                      </TouchableOpacity>
-                      {itemSelected && (
-                        <Block
-                          row
-                          style={[
-                            styles.details,
-                            { borderColor: colors.BACKGROUND },
-                          ]}
-                        >
-                          <Switch
-                            value={
-                              fields.services.find(
-                                (service) => service.id === item.id
-                              )?.isPackage || false
-                            }
-                            onChange={() =>
-                              handleChangeIsPackage({
-                                serviceId: item.id,
-                                isPackage:
-                                  !fields.services.find(
-                                    (service) => service.id === item.id
-                                  )?.isPackage || false,
-                              })
-                            }
-                            trackColor={{
-                              false: colors.SUB_TEXT,
-                              true: colors.BUTTON,
-                            }}
-                          />
-                          <Text size={16} color={colors.SUB_TEXT}>
-                            sessão de pacote
-                          </Text>
-                        </Block>
-                      )}
-                    </Block>
-                  );
-                })}
-            </Block>
-          </ScrollView>
-          {errors?.["services"] && (
-            <Text center size={14} color={colors.DANGER}>
-              selecione pelo menos 1 serviço
-            </Text>
-          )}
-
-          <Block>
-            <UserSearch
-              path="/users"
-              query={{ type: "pj" }}
-              placeholder="Pesquise um funcionário"
-              labelText="Funcionário"
-              onSelectUser={(item) =>
-                setFields({
-                  ...fields,
-                  employee: { value: item.id, label: item.name },
-                })
-              }
-              clear={() => setFields({ ...fields, employee: null })}
-              value={fields?.employee?.label}
+            <WrapperInput
+              labelText="Cliente"
               icon="user"
+              placeholder="Pesquise um cliente"
+              value={fields?.user?.label}
             />
-            {errors?.["employee"] && (
-              <Text center size={14} color={colors.DANGER}>
-                campo obrigatório
-              </Text>
-            )}
-          </Block>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("ScheduleComponentsServices", {
+                fields,
+                setFields,
+              });
+            }}
+          >
+            <WrapperInput
+              labelText="Serviços"
+              icon="tool"
+              placeholder="Adicione alguns serviços"
+              value={fields?.services.map((item) => item.name).join("; ")}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate("ScheduleComponentsEmployees", {
+                fields,
+                setFields,
+              });
+            }}
+          >
+            <WrapperInput
+              labelText="Funcionário"
+              icon="user"
+              placeholder="Pesquise um funcionário"
+              value={fields?.employee?.label}
+            />
+          </TouchableOpacity>
 
           <Block row space="between" gap={10}>
             <Block flex={1}>
@@ -551,6 +409,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 15,
+  },
+  containerInput: {
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: nowTheme.COLORS.BORDER,
+    height: 44,
+    paddingHorizontal: 10,
+    alignItems: "center",
+
+    gap: 10,
   },
   group: {
     borderRadius: 10,

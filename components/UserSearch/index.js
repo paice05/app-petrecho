@@ -22,11 +22,9 @@ export const UserSearch = ({
   placeholder,
   labelText,
   onSelectUser,
-  value,
-  clear,
 }) => {
   const [items, setItems] = useState([]);
-  const [textName, setTextName] = useState(value || "");
+  const [textName, setTextName] = useState("");
   const [loading, setLoading] = useState(false);
 
   const debouncedValue = useDebounce(textName);
@@ -34,8 +32,6 @@ export const UserSearch = ({
   const { colors } = useColorContext();
 
   useEffect(() => {
-    if (value) return;
-
     if (debouncedValue) {
       setLoading(true);
 
@@ -44,7 +40,7 @@ export const UserSearch = ({
         .get(path, {
           params: {
             where: {
-              name: { $iLike: `%${debouncedValue}%` },
+              name: { $iLike: `%${debouncedValue.trim()}%` },
               ...query,
             },
           },
@@ -75,29 +71,18 @@ export const UserSearch = ({
         <Icon size={16} name="user" color={colors.ICON} />
         <TextInput
           placeholder={placeholder}
-          placeholderTextColor={colors.PLACEHOLDER}
-          value={value || textName}
+          placeholderTextColor={colors.TEXT}
+          value={textName}
           onChangeText={(text) => setTextName(text)}
           flex={1}
           style={{
             fontSize: 16,
-            color: colors.SUB_TEXT,
+            color: colors.TEXT,
             backgroundColor: "transparent",
           }}
           selectionColor={colors.SUB_TEXT}
         />
-        {value && (
-          <TouchableOpacity
-            onPress={() => {
-              setTextName("");
-              clear();
-            }}
-          >
-            <Text size={14} color={colors.TEXT}>
-              Limpar
-            </Text>
-          </TouchableOpacity>
-        )}
+
         {loading && <ActivityIndicator size="small" color={colors.BUTTON} />}
       </Block>
 
@@ -118,7 +103,7 @@ export const UserSearch = ({
             ]}
             onPress={() => handleSelectUser(item)}
           >
-            <Text color={colors.SUB_TEXT}>{item.name}</Text>
+            <Text color={colors.BLACK}>{item.name}</Text>
           </TouchableOpacity>
         )}
       />
