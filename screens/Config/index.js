@@ -31,6 +31,8 @@ export function Config() {
       TEXT_BUTTON_BACK: "#000",
       TEXT_BUTTON_REGISTER_UPDATE: "#FFFFFF",
       LIST_TIME_BUTTON: "#003459",
+      DAY_SELECTED: "#9CFFFA",
+      WEEK_DAYS: "#000",
     });
 
     execute({ theme: "blue" });
@@ -161,6 +163,8 @@ export function Config() {
       TEXT_BUTTON_BACK: nowTheme.COLORS.TEXT_BUTTON_BACK,
       TEXT_BUTTON_REGISTER_UPDATE: nowTheme.COLORS.TEXT_BUTTON_REGISTER_UPDATE,
       LIST_TIME_BUTTON: nowTheme.COLORS.LIST_TIME_BUTTON,
+      DAY_SELECTED: nowTheme.COLORS.DAY_SELECTED,
+      WEEK_DAYS: nowTheme.COLORS.WEEK_DAYS,
     });
 
     execute({ theme: "default" });

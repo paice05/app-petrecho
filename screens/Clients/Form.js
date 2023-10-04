@@ -208,6 +208,7 @@ const ClientForm = ({ route, navigation }) => {
                 size={16}
                 marginBottom={12}
                 style={styles.styleLabelText}
+                color={colors.TEXT}
               >
                 Senha
               </Text>
@@ -226,7 +227,7 @@ const ClientForm = ({ route, navigation }) => {
                     color="#ADB5BD"
                     name="lock"
                     family="feather"
-                    style={styles.inputIcons}
+                    style={[styles.inputIcons, { color: colors.ICON}]}
                   />
                 }
               />

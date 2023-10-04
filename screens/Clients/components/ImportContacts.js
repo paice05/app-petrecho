@@ -12,11 +12,14 @@ import { nowTheme } from "../../../constants";
 import { Button } from "../../../components";
 import { api } from "../../../services/api";
 import { LoadingOverlay } from "../../../components/LoadingOverlay";
+import { useColorContext } from "../../../context/colors";
 
 export const ImportContacts = ({ navigation }) => {
   const [contacts, setContacts] = useState([]);
   const [selected, setSelected] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const { colors } = useColorContext();
 
   useEffect(() => {
     (async () => {
@@ -89,16 +92,21 @@ export const ImportContacts = ({ navigation }) => {
   };
 
   return (
-    <Block gap={20} style={styles.container}>
+    <Block
+      gap={20}
+      style={[styles.container, { backgroundColor: colors.BACKGROUND }]}
+    >
       {loading && <LoadingOverlay />}
 
       <Block row space="between" style={{ alignItems: "center" }}>
         <TouchableOpacity onPress={handleClickSelectAll}>
-          <Text style={{ padding: 8 }} size={16}>
+          <Text style={{ padding: 8 }} color={colors.TEXT} size={16}>
             Selecionar todos
           </Text>
         </TouchableOpacity>
-        <Text size={16}>Selecionados ({selected.length})</Text>
+        <Text size={16} color={colors.TEXT}>
+          Selecionados ({selected.length})
+        </Text>
       </Block>
       <ScrollView style={{ flexGrow: 1 }}>
         <FlatList
@@ -113,7 +121,11 @@ export const ImportContacts = ({ navigation }) => {
             return (
               <TouchableOpacity
                 onPress={() => handleClick(item.id, item)}
-                style={[styles.card, itemChecked && styles.selected]}
+                style={[
+                  { backgroundColor: colors.BACKGROUND_CARD },
+                  styles.card,
+                  itemChecked && styles.selected,
+                ]}
               >
                 <Text color={itemChecked && "white"}>{item.name}</Text>
                 {item.phoneNumbers.map((phoneNumber) => (
@@ -128,13 +140,21 @@ export const ImportContacts = ({ navigation }) => {
       </ScrollView>
 
       <Block row center>
-        <Button style={styles.button} onPress={() => navigation.goBack()}>
-          <Text size={16} bold>
+        <Button
+          style={styles.button}
+          backgroundColor={colors.BUTTON_BACK}
+          onPress={() => navigation.goBack()}
+        >
+          <Text size={16} bold color={colors.TEXT_BUTTON_BACK}>
             Voltar
           </Text>
         </Button>
-        <Button style={styles.primary} onPress={handleSubmitImport}>
-          <Text size={16} bold color="#fff">
+        <Button
+          style={styles.primary}
+          backgroundColor={colors.BUTTON_REGISTER_OR_UPDATE}
+          onPress={handleSubmitImport}
+        >
+          <Text size={16} bold color={colors.TEXT_BUTTON_REGISTER_UPDATE}>
             Importar
           </Text>
         </Button>
@@ -152,7 +172,6 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 10,
     marginBottom: 16,
-    backgroundColor: "#fff",
   },
   selected: {
     backgroundColor: nowTheme.COLORS.PRIMARY,

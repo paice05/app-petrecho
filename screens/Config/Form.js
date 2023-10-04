@@ -11,6 +11,7 @@ import { Button, Icon } from "../../components";
 import { DateTimePicker } from "../../components/DatePiker";
 import { LoadingOverlay } from "../../components/LoadingOverlay";
 import { formartDate } from "../../utils/formartDate";
+import { useColorContext } from "../../context/colors";
 
 const weekDays = ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SAB"];
 
@@ -27,6 +28,7 @@ export function ConfigForm({ navigation }) {
   });
 
   const { user, changeUser } = useUserContext();
+  const { colors } = useColorContext();
 
   const { execute, loading, response } = useRequestUpdate({
     path: "/public/account",
@@ -97,9 +99,12 @@ export function ConfigForm({ navigation }) {
   };
 
   return (
-    <Block style={styles.card}>
+    <Block style={[styles.card, { backgroundColor: colors.BACKGROUND }]}>
       <LoadingOverlay visible={loading} />
-      <Block style={styles.container} gap={20}>
+      <Block
+        style={[styles.container, { backgroundColor: colors.BACKGROUND_CARD }]}
+        gap={20}
+      >
         <Block>
           <CustomInput
             placeholder="Digite o nome da sua empresa"
@@ -111,12 +116,12 @@ export function ConfigForm({ navigation }) {
                 size={16}
                 name="user"
                 family="feather"
-                style={styles.inputIcons}
+                style={[styles.inputIcons, { color: colors.ICON }]}
               />
             }
           />
           {errors?.["name"] && (
-            <Text center size={14} color={nowTheme.COLORS.PRIMARY}>
+            <Text center size={14} color={colors.DANGER}>
               campo obrigatório
             </Text>
           )}
@@ -124,7 +129,12 @@ export function ConfigForm({ navigation }) {
 
         <Block row gap={10}>
           <Block flex={1}>
-            <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
+            <Text
+              size={16}
+              bold
+              color={colors.TEXT}
+              style={{ marginLeft: 20, marginBottom: 5 }}
+            >
               Horário de início
             </Text>
             <DateTimePicker
@@ -133,7 +143,12 @@ export function ConfigForm({ navigation }) {
             />
           </Block>
           <Block flex={1}>
-            <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
+            <Text
+              size={16}
+              bold
+              color={colors.TEXT}
+              style={{ marginLeft: 20, marginBottom: 5 }}
+            >
               Horário de fim
             </Text>
             <DateTimePicker
@@ -144,7 +159,12 @@ export function ConfigForm({ navigation }) {
         </Block>
 
         <Block>
-          <Text size={16} bold style={{ marginLeft: 20, marginBottom: 5 }}>
+          <Text
+            size={16}
+            bold
+            color={colors.TEXT}
+            style={{ marginLeft: 20, marginBottom: 5 }}
+          >
             Dias de atendimento
           </Text>
           <Block row space="between" style={{ paddingHorizontal: 20 }}>
@@ -153,7 +173,10 @@ export function ConfigForm({ navigation }) {
                 key={item}
                 style={[
                   styles.day,
-                  fields.weekDays.includes(item) && styles.daySelected,
+                  fields.weekDays.includes(item) && {
+                    borderColor: colors.DAY_SELECTED,
+                    backgroundColor: colors.DAY_SELECTED,
+                  },
                 ]}
                 onPress={() => handleChangeWeekDay({ day: item })}
               >
@@ -161,7 +184,7 @@ export function ConfigForm({ navigation }) {
                   bold
                   size={12}
                   center
-                  color={fields.weekDays.includes(item) && "#fff"}
+                  color={fields.weekDays.includes(item) && colors.WEEK_DAYS}
                 >
                   {item}
                 </Text>
@@ -185,17 +208,22 @@ export function ConfigForm({ navigation }) {
         </Block> */}
 
         <Block row center>
-          <Button style={styles.button} onPress={() => navigation.goBack()}>
-            <Text size={16} bold>
+          <Button
+            style={styles.button}
+            backgroundColor={colors.BUTTON_BACK}
+            onPress={() => navigation.goBack()}
+          >
+            <Text size={16} color={colors.TEXT_BUTTON_BACK} bold>
               Voltar
             </Text>
           </Button>
           <Button
             style={styles.primary}
+            backgroundColor={colors.BUTTON_REGISTER_OR_UPDATE}
             onPress={handleSubmit}
             loading={loading}
           >
-            <Text size={16} bold color="#fff">
+            <Text size={16} bold color={colors.TEXT_BUTTON_REGISTER_UPDATE}>
               Atualizar
             </Text>
           </Button>
@@ -207,6 +235,7 @@ export function ConfigForm({ navigation }) {
 
 const styles = StyleSheet.create({
   card: {
+    flex: 1,
     padding: 15,
   },
   container: {
@@ -220,7 +249,6 @@ const styles = StyleSheet.create({
   },
   inputIcons: {
     marginRight: 12,
-    color: nowTheme.COLORS.PRIMARY,
   },
   day: {
     borderWidth: 1,
