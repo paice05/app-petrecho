@@ -6,9 +6,10 @@ import { useNavigation } from "@react-navigation/native";
 
 import { useValidateRequiredFields } from "../../components/hooks/useValidateRequiredFields";
 import { useRequestFindOne } from "../../components/hooks/useRequestFindOne";
-import { useRequestFindMany } from "../../components/hooks/useRequestFindMany";
 import { useRequestCreate } from "../../components/hooks/useRequestCreate";
 import { useRequestUpdate } from "../../components/hooks/useRequestUpdate";
+import { LoadingOverlay } from "../../components/LoadingOverlay";
+import { WrapperInput } from "../../components/WrapperInput";
 import { DateTimePicker } from "../../components/DatePiker";
 import { Button, Icon } from "../../components";
 import { useToggle } from "../../components/hooks/useToggle";
@@ -17,25 +18,24 @@ import { Modal } from "../../components/Modal";
 import { formartDate } from "../../utils/formartDate";
 import { nowTheme } from "../../constants";
 import { Config } from "./Config";
-import { UserSearch } from "../../components/UserSearch";
-import { LoadingOverlay } from "../../components/LoadingOverlay";
 import { useColorContext } from "../../context/colors";
-import { WrapperInput } from "../../components/WrapperInput";
+import { useUserContext } from "../../context/user";
 
 const SchedulesForm = ({ route }) => {
   const params = route.params;
   const isEditing = params?.itemId;
 
   const navigation = useNavigation();
-
-  const [allServices, setAllServices] = useState([]);
-  const [typeView, setTypeView] = useState("all"); // all | selected
+  const { user } = useUserContext();
 
   const [fields, setFields] = useState({
     user: null,
     shortName: null,
     services: [], // value label
-    employee: null,
+    employee: {
+      value: user?.id,
+      label: user?.name,
+    },
     date: formartDate(new Date(), "dd-MM-yyyy"),
     time: new Date(),
     discount: 0,
@@ -76,15 +76,6 @@ const SchedulesForm = ({ route }) => {
   } = useRequestUpdate({
     path: "/schedules",
     id: params?.itemId,
-  });
-
-  const {
-    execute: execServices,
-    response: responseServices,
-    loading: loadingServices,
-  } = useRequestFindMany({
-    path: "/services",
-    defaultQuery: { perPage: 100 },
   });
 
   useEffect(() => {
@@ -129,20 +120,9 @@ const SchedulesForm = ({ route }) => {
     if (isEditing) execFindOne();
   }, []);
 
-  // loading services
-  useEffect(() => {
-    execServices();
-  }, []);
-
   useEffect(() => {
     validate(fields);
   }, [fields]);
-
-  useEffect(() => {
-    if (responseServices) {
-      setAllServices(responseServices.data);
-    }
-  }, [responseServices]);
 
   const handleSubmitCreate = async () => {
     if (Object.values(errors).filter(Boolean).length) return;
@@ -202,44 +182,10 @@ const SchedulesForm = ({ route }) => {
     execUpdate(payload);
   };
 
-  const handleChangeService = ({ serviceId }) => {
-    if (fields.services.findIndex((item) => item.id === serviceId) !== -1) {
-      setFields({
-        ...fields,
-        services: fields.services.filter((item) => item.id !== serviceId),
-      });
-
-      return;
-    }
-
-    setFields({
-      ...fields,
-      services: [...fields.services, { id: serviceId, isPackage: false }],
-    });
-  };
-
-  const handleChangeServiceIsPackage = ({ serviceId, isPackage }) => {
-    setFields({
-      ...fields,
-      services: fields.services.map((item) => {
-        if (item.id === serviceId) {
-          return {
-            ...item,
-            isPackage: isPackage,
-          };
-        }
-
-        return item;
-      }),
-    });
-  };
-
   return (
     <View style={[styles.container, { backgroundColor: colors.BACKGROUND }]}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <LoadingOverlay
-          visible={loading || loadingServices || loadingCreate || loadingUpdate}
-        />
+        <LoadingOverlay visible={loading || loadingCreate || loadingUpdate} />
         <Block
           gap={15}
           flex
@@ -259,6 +205,11 @@ const SchedulesForm = ({ route }) => {
               placeholder="Pesquise um cliente"
               value={fields?.user?.label}
             />
+            {errors?.["user"] && (
+              <Text center size={14} color={colors.DANGER}>
+                campo obrigatório
+              </Text>
+            )}
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -275,6 +226,11 @@ const SchedulesForm = ({ route }) => {
               placeholder="Adicione alguns serviços"
               value={fields?.services.map((item) => item.name).join("; ")}
             />
+            {errors?.["services"] && (
+              <Text center size={14} color={colors.DANGER}>
+                selecione pelo menos 1 serviço
+              </Text>
+            )}
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -291,6 +247,11 @@ const SchedulesForm = ({ route }) => {
               placeholder="Pesquise um funcionário"
               value={fields?.employee?.label}
             />
+            {errors?.["employee"] && (
+              <Text center size={14} color={colors.DANGER}>
+                campo obrigatório
+              </Text>
+            )}
           </TouchableOpacity>
 
           <Block row space="between" gap={10}>

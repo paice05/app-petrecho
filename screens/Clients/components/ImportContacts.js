@@ -127,9 +127,14 @@ export const ImportContacts = ({ navigation }) => {
                   itemChecked && styles.selected,
                 ]}
               >
-                <Text color={itemChecked && "white"}>{item.name}</Text>
+                <Text color={itemChecked ? "white" : colors.TEXT}>
+                  {item.name}
+                </Text>
                 {item.phoneNumbers.map((phoneNumber) => (
-                  <Text color={itemChecked && "white"} key={phoneNumber.id}>
+                  <Text
+                    color={itemChecked ? "white" : colors.TEXT}
+                    key={phoneNumber.id}
+                  >
                     {phoneNumber.number}
                   </Text>
                 ))}

@@ -48,7 +48,7 @@ export function Employees({}) {
           }}
         >
           <Text color={colors.TEXT}>
-            Selecionado: {itemSelected || fields?.user?.label}
+            Selecionado: {itemSelected || fields?.employee?.label}
           </Text>
         </Block>
       )}

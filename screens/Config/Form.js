@@ -173,10 +173,15 @@ export function ConfigForm({ navigation }) {
                 key={item}
                 style={[
                   styles.day,
-                  fields.weekDays.includes(item) && {
-                    borderColor: colors.DAY_SELECTED,
-                    backgroundColor: colors.DAY_SELECTED,
-                  },
+                  fields.weekDays.includes(item)
+                    ? {
+                        borderColor: colors.TEXT,
+                        backgroundColor: colors.SUCCESS,
+                      }
+                    : {
+                        borderColor: colors.TEXT,
+                        backgroundColor: nowTheme.COLORS.PRIMARY,
+                      },
                 ]}
                 onPress={() => handleChangeWeekDay({ day: item })}
               >
@@ -184,7 +189,7 @@ export function ConfigForm({ navigation }) {
                   bold
                   size={12}
                   center
-                  color={fields.weekDays.includes(item) && colors.WEEK_DAYS}
+                  color={!fields.weekDays.includes(item) && colors.TEXT}
                 >
                   {item}
                 </Text>

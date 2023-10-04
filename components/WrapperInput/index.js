@@ -21,7 +21,9 @@ export const WrapperInput = ({ placeholder, labelText, value, icon }) => {
       </Text>
       <Block row style={styles.container}>
         <Icon size={16} name={icon} color={colors.ICON} />
-        <Text color={colors.PLACEHOLDER}>{value || placeholder}</Text>
+        <Text style={{ width: "90%" }}>
+          <Text color={colors.PLACEHOLDER}>{value || placeholder}</Text>
+        </Text>
       </Block>
     </View>
   );
