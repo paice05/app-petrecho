@@ -271,6 +271,8 @@ const ScheduleList = ({ route, navigation }) => {
         items={[
           {
             title: "Lista",
+            count: schedules.filter((item) => item.status !== "awaiting")
+              .length,
             children: (
               <Block style={{ marginVertical: 10 }}>
                 {schedules.length === 0 && (
@@ -333,6 +335,7 @@ const ScheduleList = ({ route, navigation }) => {
           },
           {
             title: "Horários",
+            count: 0,
             children: (
               <ScheduleCard
                 payload={schedules
@@ -348,18 +351,21 @@ const ScheduleList = ({ route, navigation }) => {
           },
           {
             title: "Espera",
+            count: schedules.filter((item) => item.status === "awaiting")
+              .length,
             children: (
               <Block style={{ marginVertical: 10 }}>
-                {schedules.length === 0 && (
+                {!schedules.filter((item) => item.status === "awaiting")
+                  .length ? (
                   <Text
                     size={18}
                     center
                     style={{ marginTop: 20, marginBottom: 20 }}
                     color={colors.TEXT}
                   >
-                    Nenhum registro encontrado
+                    Nenhum registro em espera encontrado.
                   </Text>
-                )}
+                ) : null}
                 {schedules
                   .filter((item) => item.status === "awaiting")
                   .map((item) => {

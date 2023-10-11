@@ -17,9 +17,16 @@ export const Navigation = ({ items = [], refreshing, onRefresh }) => {
 
   return (
     <Block flex={1}>
-      <Block row center gap={20} style={styles.container}>
+      <Block row center gap={40} style={styles.container}>
         {items.map((item, index) => (
-          <Block key={index}>
+          <Block key={index} row>
+            {item.count > 0 ? (
+              <Block style={styles.badge}>
+                <Text size={16} bold>
+                  {item.count}
+                </Text>
+              </Block>
+            ) : null}
             <TouchableOpacity
               onPress={() => {
                 const vibrationDuration = 100;
@@ -31,7 +38,6 @@ export const Navigation = ({ items = [], refreshing, onRefresh }) => {
               }}
             >
               <Text
-                style={[index !== items.length - 1 && styles.divider]}
                 size={22}
                 color={index === active ? colors.ICON : colors.TEXT}
               >
@@ -56,9 +62,18 @@ const styles = StyleSheet.create({
   divider: {
     borderColor: "gray",
     borderRightWidth: 1,
-    paddingRight: 20,
   },
   container: {
-    padding: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 25,
+  },
+  badge: {
+    backgroundColor: "white",
+    color: "black",
+    position: "absolute",
+    top: -20,
+    right: -20,
+    padding: 5,
+    borderRadius: 60,
   },
 });
