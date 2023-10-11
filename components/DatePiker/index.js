@@ -8,7 +8,14 @@ import { formartDate } from "../../utils/formartDate";
 import { nowTheme } from "../../constants";
 import { useColorContext } from "../../context/colors";
 
-export const DateTimePicker = ({ onChange, value = new Date() }) => {
+export const DateTimePicker = ({
+  onChange,
+  value = new Date(),
+  noInput,
+  formart = "dd-MM-YYY",
+  mode,
+  icon,
+}) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const { colors } = useColorContext();
@@ -22,7 +29,11 @@ export const DateTimePicker = ({ onChange, value = new Date() }) => {
   return (
     <Block>
       <TouchableOpacity
-        style={styles.buttonDate}
+        style={
+          noInput
+            ? { alignItems: "center", paddingVertical: 20 }
+            : styles.buttonDate
+        }
         onPress={() => setShowDatePicker(true)}
       >
         <Block
@@ -33,18 +44,18 @@ export const DateTimePicker = ({ onChange, value = new Date() }) => {
           <IconExtra
             size={16}
             color={colors.ICON}
-            name="clock"
+            name={icon}
             family="feather"
           />
-          <Text size={15} color={colors.SUB_TEXT}>
-            {formartDate(value, "HH:mm")}
+          <Text size={noInput ? 18 : 15} color={colors.SUB_TEXT}>
+            {formartDate(value, mode === "time" ? "HH:mm" : formart)}
           </Text>
         </Block>
       </TouchableOpacity>
       {showDatePicker && (
         <RNDateTimePicker
           value={value}
-          mode={"time"}
+          mode={mode}
           display={"default"}
           is24Hour={true}
           onChange={onTimeSelected}

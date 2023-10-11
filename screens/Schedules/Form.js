@@ -1,7 +1,6 @@
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Block, Text, Switch } from "galio-framework";
-import { Calendar } from "react-native-calendars";
 import { useNavigation } from "@react-navigation/native";
 
 import { useValidateRequiredFields } from "../../components/hooks/useValidateRequiredFields";
@@ -11,9 +10,7 @@ import { useRequestUpdate } from "../../components/hooks/useRequestUpdate";
 import { LoadingOverlay } from "../../components/LoadingOverlay";
 import { WrapperInput } from "../../components/WrapperInput";
 import { DateTimePicker } from "../../components/DatePiker";
-import { Button, Icon } from "../../components";
-import { useToggle } from "../../components/hooks/useToggle";
-import { Modal } from "../../components/Modal";
+import { Button } from "../../components";
 
 import { formartDate } from "../../utils/formartDate";
 import { nowTheme } from "../../constants";
@@ -36,7 +33,7 @@ const SchedulesForm = ({ route }) => {
       value: user?.id,
       label: user?.name,
     },
-    date: formartDate(new Date(), "dd-MM-yyyy"),
+    date: new Date(),
     time: new Date(),
     discount: 0,
     addition: 0,
@@ -49,8 +46,6 @@ const SchedulesForm = ({ route }) => {
   const { validate, errors } = useValidateRequiredFields({
     fields: ["user", "services", "employee", "date", "time"],
   });
-
-  const { toggle, onChangeToggle } = useToggle();
 
   const {
     execute: execFindOne,
@@ -97,7 +92,7 @@ const SchedulesForm = ({ route }) => {
           value: response?.employee?.id,
           label: response?.employee?.name,
         },
-        date: formartDate(response.scheduleAt, "dd-MM-yyyy"),
+        date: new Date(response.scheduleAt),
         time: new Date(response.scheduleAt),
         discount:
           Number(response.discount).toLocaleString("pt-BR", {
@@ -127,9 +122,11 @@ const SchedulesForm = ({ route }) => {
   const handleSubmitCreate = async () => {
     if (Object.values(errors).filter(Boolean).length) return;
 
-    const [day, month, year] = fields.date.split("-");
     const scheduleAt = new Date(
-      `${year}-${month}-${day} ${formartDate(fields.time, "HH:mm")}:00`
+      `${formartDate(fields.date, "YYY-MM-dd")} ${formartDate(
+        fields.time,
+        "HH:mm"
+      )}:00`
     );
     const discount = fields.discount
       .toString()
@@ -159,10 +156,13 @@ const SchedulesForm = ({ route }) => {
   const handleSubmitUpdate = async () => {
     if (Object.values(errors).filter(Boolean).length) return;
 
-    const [day, month, year] = fields.date.split("-");
     const scheduleAt = new Date(
-      `${year}-${month}-${day} ${formartDate(fields.time, "HH:mm")}:00`
+      `${formartDate(fields.date, "YYY-MM-dd")} ${formartDate(
+        fields.time,
+        "HH:mm"
+      )}:00`
     );
+
     const discount = fields?.discount.replace("R$", "").replace(",", ".");
     const addition = fields?.addition.replace("R$", "").replace(",", ".");
 
@@ -264,26 +264,12 @@ const SchedulesForm = ({ route }) => {
               >
                 Data
               </Text>
-              <TouchableOpacity
-                onPress={onChangeToggle}
-                style={[styles.buttonDate, { backgroundColor: "transparent" }]}
-              >
-                <Block row gap={10} style={{ alignItems: "center" }}>
-                  <Icon
-                    size={16}
-                    color={colors.ICON}
-                    name="calendar"
-                    family="feather"
-                  />
-                  <Text
-                    size={16}
-                    style={{ height: 20 }}
-                    color={colors.SUB_TEXT}
-                  >
-                    {fields.date}
-                  </Text>
-                </Block>
-              </TouchableOpacity>
+              <DateTimePicker
+                value={fields.date}
+                onChange={(date) => setFields({ ...fields, date })}
+                mode="date"
+                icon="calendar"
+              />
             </Block>
             {!fields.status && (
               <Block flex={1}>
@@ -298,6 +284,8 @@ const SchedulesForm = ({ route }) => {
                 <DateTimePicker
                   value={fields.time}
                   onChange={(time) => setFields({ ...fields, time })}
+                  mode="time"
+                  icon="clock"
                 />
               </Block>
             )}
@@ -342,26 +330,6 @@ const SchedulesForm = ({ route }) => {
           </Text>
         </Button>
       </Block>
-
-      <Modal
-        title="Selecione uma data"
-        isVisible={toggle}
-        onRequestClose={onChangeToggle}
-        handleCancel={onChangeToggle}
-      >
-        <Calendar
-          onDayPress={(value) => {
-            const [year, month, day] = value.dateString.split("-");
-
-            setFields({ ...fields, date: `${day}-${month}-${year}` });
-            onChangeToggle();
-          }}
-          style={{
-            color: colors.SUB_TEXT,
-            //backgroundColor: colors.BACKGROUND_CARD,
-          }}
-        />
-      </Modal>
     </View>
   );
 };

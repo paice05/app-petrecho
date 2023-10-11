@@ -3,19 +3,17 @@ import { Block, Text } from "galio-framework";
 import { addDays, setHours, setMinutes, subDays } from "date-fns";
 import {
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
   Alert,
   Platform,
   View,
-  RefreshControl,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import * as Notifications from "expo-notifications";
 
 import Tabs from "../../components/Tabs";
 import { Modal } from "../../components/Modal";
-import { Calendar } from "../../components/Calendar";
+
 import CardSchedule from "../../components/CardSchedule";
 import { Navigation } from "../../components/Navigation";
 import { ScheduleCard } from "../../components/ScheduleCard/ScheduleCard";
@@ -29,6 +27,7 @@ import { LoadingOverlay } from "../../components/LoadingOverlay";
 import { useRequestUpdate } from "../../components/hooks/useRequestUpdate";
 import { useUserContext } from "../../context/user";
 import { useColorContext } from "../../context/colors";
+import { DateTimePicker } from "../../components/DatePiker";
 
 async function registerForPushNotificationsAsync() {
   const { status: existingStatus } = await Notifications.getPermissionsAsync();
@@ -58,11 +57,8 @@ async function registerForPushNotificationsAsync() {
 }
 
 const ScheduleList = ({ route, navigation }) => {
-  const params = route.params;
-
   const { user } = useUserContext();
 
-  const [openCalendar, setOpenCalendar] = useState(false);
   const [date, setDate] = useState(new Date());
   const [selectedScheduleAwating, setSelectedScheduleAwating] = useState({
     open: false,
@@ -246,14 +242,14 @@ const ScheduleList = ({ route, navigation }) => {
     <View style={[styles.card, { backgroundColor: colors.BACKGROUND }]}>
       <LoadingOverlay visible={loading || loadingUpdate} />
 
-      <TouchableOpacity
-        style={styles.dateStyle}
-        onPress={() => setOpenCalendar(true)}
-      >
-        <Text bold color={colors.TEXT} size={18}>
-          {formartDate(date, "dd  MMMM YYY")}
-        </Text>
-      </TouchableOpacity>
+      <DateTimePicker
+        noInput
+        value={date}
+        onChange={(date) => setDate(date)}
+        mode="date"
+        icon="calendar"
+        formart="dd  MMMM YYY"
+      />
 
       <Block row center>
         <Tabs
@@ -453,23 +449,7 @@ const ScheduleList = ({ route, navigation }) => {
         refreshing={loading}
         onRefresh={findMany}
       />
-      <Modal
-        isVisible={openCalendar}
-        handleCancel={() => setOpenCalendar(false)}
-        handleConfirm={() => setOpenCalendar(false)}
-        title="Selecione uma data para buscar seus agendamentos"
-        onRequestClose={() => {
-          Alert.alert("Modal será fechado.");
-          setOpenCalendar(!openCalendar);
-        }}
-      >
-        <Calendar
-          onChange={(value) => {
-            setDate(new Date(`${value} 00:00:00`));
-            setOpenCalendar(false);
-          }}
-        />
-      </Modal>
+
       {schedules.length > 0 ? (
         <PaginationSimple
           currentPage={pagination.currentPage}
