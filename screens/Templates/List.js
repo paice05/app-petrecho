@@ -29,6 +29,7 @@ const Templates = ({ navigation }) => {
     response,
     loading,
   } = useRequestFindMany({ path: "/templates" });
+
   const { execute: destroy } = useRequestDestroy({
     path: "/templates",
     callbackSuccess: findMany,

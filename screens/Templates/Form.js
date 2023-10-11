@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { ScrollView, StyleSheet, Dimensions, View } from "react-native";
-
 import { Text, Block } from "galio-framework";
+
 import { useValidateRequiredFields } from "../../components/hooks/useValidateRequiredFields";
-import { useColorContext } from "../../context/colors";
 import CustomInput from "../../components/CustomInput";
 import { Button, Icon } from "../../components";
 import CustomTextInput from "../../components/CustomTextInput";
 import { nowTheme } from "../../constants";
+import { useColorContext } from "../../context/colors";
 import { api } from "../../services/api";
 
 const TemplatesForm = ({ route, navigation }) => {
@@ -16,8 +16,7 @@ const TemplatesForm = ({ route, navigation }) => {
 
   const [fields, setFields] = useState({
     title: "",
-    content: `Olá {{contato}}, estou passando para te dizer que seu agendamento está marcado: 
-    dia {{dia}} {{dia-da-semana}} ás {{horário}}. Aguardo sua presença! `,
+    content: `Olá {{contato}},\n\nestou passando para te dizer que seu agendamento está marcado:\n\ndia {{dia}} {{dia-da-semana}} ás {{horario}}.\n\nAguardo sua presença! `,
   });
 
   const { validate, errors } = useValidateRequiredFields({
@@ -67,7 +66,6 @@ const TemplatesForm = ({ route, navigation }) => {
       const fecthTemplates = async () => {
         try {
           const response = await api.request().get(`/templates/${isEditing}`);
-          console.log({ response });
           setFields({
             title: response.data.title,
             content: response.data.content,
@@ -93,7 +91,7 @@ const TemplatesForm = ({ route, navigation }) => {
         >
           <Block>
             <CustomInput
-              placeholder="Novo agendamento"
+              placeholder="Título do template"
               labelText="Título"
               value={fields.title}
               onChangeText={(value) => setFields({ ...fields, title: value })}
@@ -117,10 +115,8 @@ const TemplatesForm = ({ route, navigation }) => {
           <Block>
             <CustomTextInput
               labelText="Conteúdo"
-              rows={8}
+              rows={16}
               numbersOfLines={8}
-              maxLength={200}
-              //placeholder="Digite o conteúdo do template"
               onChangeText={(value) => setFields({ ...fields, content: value })}
               value={fields.content}
             />

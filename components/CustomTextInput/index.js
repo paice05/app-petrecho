@@ -29,7 +29,10 @@ const CustomTextInput = ({
         placeholder={placeholder}
         onChangeText={onChangeText}
         value={value}
-        style={[styles.textInput, { backgroundColor: "transparent" }]}
+        style={[
+          styles.textInput,
+          { color: colors.TEXT, backgroundColor: "transparent" },
+        ]}
       />
     </Block>
   );
@@ -40,8 +43,8 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     borderWidth: 1,
     borderColor: nowTheme.COLORS.BORDER,
-    height: 130,
     fontSize: 15,
+    maxHeight: 300,
     padding: 10,
     verticalAlign: "top",
   },

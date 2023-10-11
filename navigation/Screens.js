@@ -497,16 +497,16 @@ function AppStack(props) {
       />
 
       <Drawer.Screen
-        name="Configurações"
-        component={ConfigStack}
+        name="Templates"
+        component={TemplatesStack}
         options={{
           headerShown: false,
         }}
       />
 
       <Drawer.Screen
-        name="Templates"
-        component={TemplatesStack}
+        name="Configurações"
+        component={ConfigStack}
         options={{
           headerShown: false,
         }}
