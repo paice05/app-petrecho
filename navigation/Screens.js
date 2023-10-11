@@ -21,9 +21,12 @@ import ServiceList from "../screens/Service/List";
 import ServiceForm from "../screens/Service/Form";
 import RegisterExitForm from "../screens/Reports/FormRegisterExit";
 import Login from "../screens/Login";
+import Template from "../screens/Templates/List";
+import TemplatesForm from "../screens/Templates/Form";
 import { ImportContacts } from "../screens/Clients/components/ImportContacts";
 import { Config } from "../screens/Config";
 import { ConfigForm } from "../screens/Config/Form";
+
 import { useColorContext } from "../context/colors";
 
 import { Clients as ScheduleComponentsClients } from "../screens/Schedules/components/Clients";
@@ -384,6 +387,52 @@ function ConfigStack(props) {
   );
 }
 
+function TemplatesStack(props) {
+  return (
+    <Stack.Navigator
+      initialRouteName="Templates"
+      screenOptions={{
+        mode: "card",
+        headerShown: "screen",
+      }}
+    >
+      <Stack.Screen
+        name="Templates"
+        component={Template}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header title="Templates" navigation={navigation} scene={scene} />
+          ),
+          cardStyle: {
+            backgroundColor: nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR,
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="TemplatesForm"
+        component={TemplatesForm}
+        options={{
+          header: ({ route, navigation, scene }) => {
+            const params = route.params;
+
+            const isEditing = params?.itemId;
+
+            return (
+              <Header
+                title={isEditing ? "Atualizar template" : "Criando template"}
+                back
+                navigation={navigation}
+                scene={scene}
+              />
+            );
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
 function AppStack(props) {
   return (
     <Drawer.Navigator
@@ -450,6 +499,14 @@ function AppStack(props) {
       <Drawer.Screen
         name="Configurações"
         component={ConfigStack}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Drawer.Screen
+        name="Templates"
+        component={TemplatesStack}
         options={{
           headerShown: false,
         }}

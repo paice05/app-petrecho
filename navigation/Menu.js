@@ -12,8 +12,15 @@ function CustomDrawerContent({ navigation, state }) {
   const { colors } = useColorContext();
 
   const screens = user.isAdmin
-    ? ["Relatorios", "Agendamentos", "Clientes", "Serviços", "Configurações"]
-    : ["Agendamentos", "Clientes", "Serviços", "Configurações"];
+    ? [
+        "Relatorios",
+        "Agendamentos",
+        "Clientes",
+        "Serviços",
+        "Templates",
+        "Configurações",
+      ]
+    : ["Agendamentos", "Clientes", "Serviços", "Templates", "Configurações"];
 
   return (
     <Block

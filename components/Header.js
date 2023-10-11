@@ -133,6 +133,29 @@ const EditConfig = ({ navigation }) => {
   );
 };
 
+const NewTemplate = ({ navigation }) => {
+  const { colors } = useColorContext();
+
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        const vibrationDuration = 100;
+
+        Vibration.vibrate(vibrationDuration);
+
+        navigation.navigate("TemplatesForm");
+      }}
+    >
+      <Block row center gap={3}>
+        <Icon size={20} name="plus-circle" color={colors.ICON} />
+        <Text bold size={16} color={colors.TEXT}>
+          NOVO
+        </Text>
+      </Block>
+    </TouchableOpacity>
+  );
+};
+
 const handleLeftPress = (back, navigation) => {
   const vibrationDuration = 100;
 
@@ -159,6 +182,8 @@ const RenderRight = (props) => {
       return [<NewService navigation={navigation} />];
     case "Configurações":
       return [<EditConfig navigation={navigation} />];
+    case "Templates":
+      return [<NewTemplate navigation={navigation} />];
     default:
       break;
   }

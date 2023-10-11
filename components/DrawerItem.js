@@ -67,6 +67,16 @@ class DrawerItem extends React.Component {
             color={focused ? colors.BACKGROUND : colors.ICON}
           />
         );
+
+      case "Templates":
+        return (
+          <Icon
+            name="clipboard"
+            size={22}
+            style={{ opacity: 0.5 }}
+            color={focused ? colors.BACKGROUND : colors.ICON}
+          />
+        );
       default:
         return null;
     }
