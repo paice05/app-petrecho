@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Block, Text } from "galio-framework";
 import { addDays, setHours, setMinutes, subDays } from "date-fns";
 import {
@@ -9,6 +9,7 @@ import {
   View,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
+import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 
 import Tabs from "../../components/Tabs";
@@ -30,30 +31,42 @@ import { useColorContext } from "../../context/colors";
 import { DateTimePicker } from "../../components/DatePiker";
 
 async function registerForPushNotificationsAsync() {
-  const { status: existingStatus } = await Notifications.getPermissionsAsync();
-  let finalStatus = existingStatus;
-  if (existingStatus !== "granted") {
-    const { status } = await Notifications.requestPermissionsAsync();
-    finalStatus = status;
-  }
-  if (finalStatus !== "granted") {
-    alert("Failed to get push token for push notification!");
-    return;
-  }
-  const token = await Notifications.getExpoPushTokenAsync({
-    projectId: "7d33f38e-42ec-417e-ae63-e519783cf260",
-  });
+  let token;
 
   if (Platform.OS === "android") {
-    Notifications.setNotificationChannelAsync("default", {
-      name: "default",
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "Meu petrecho",
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
       lightColor: "#FF231F7C",
     });
   }
 
-  return token.data;
+  if (Device.isDevice) {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
+      return;
+    }
+    // Learn more about projectId:
+    // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
+    token = (
+      await Notifications.getExpoPushTokenAsync({
+        projectId: "7d33f38e-42ec-417e-ae63-e519783cf260",
+      })
+    ).data;
+    console.log(token);
+  } else {
+    alert("Must use physical device for Push Notifications");
+  }
+
+  return token;
 }
 
 const ScheduleList = ({ route, navigation }) => {
@@ -73,6 +86,9 @@ const ScheduleList = ({ route, navigation }) => {
   });
 
   const { colors } = useColorContext();
+
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
   const {
     execute: findMany,
@@ -129,6 +145,26 @@ const ScheduleList = ({ route, navigation }) => {
       Alert.alert(token);
       execUpdateToken({ token });
     });
+
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        Alert.alert(JSON.stringify(notification));
+        findMany();
+        console.log({ notification });
+      });
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        Alert.alert(JSON.stringify(response));
+        console.log({ response });
+      });
+
+    return () => {
+      Notifications.removeNotificationSubscription(
+        notificationListener.current
+      );
+      Notifications.removeNotificationSubscription(responseListener.current);
+    };
   }, []);
 
   useEffect(() => {

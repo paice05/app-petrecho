@@ -67,7 +67,9 @@ function CustomDrawerContent({ navigation, state }) {
         </ScrollView>
       </Block>
 
-      <Text center>versão {version}</Text>
+      <Text color={colors.TEXT} center>
+        versão {version}
+      </Text>
     </Block>
   );
 }
