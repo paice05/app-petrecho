@@ -91,6 +91,14 @@ const ScheduleList = ({ route, navigation }) => {
   const responseListener = useRef();
 
   const {
+    execute: findManyTemplates,
+    response: responseTemplates,
+    loading: loadingTemplates,
+  } = useRequestFindMany({
+    path: "/templates",
+  });
+
+  const {
     execute: findMany,
     response,
     loading,
@@ -125,13 +133,17 @@ const ScheduleList = ({ route, navigation }) => {
     id: null,
     callbackSuccess: () => {
       findMany();
+      findManyTemplates();
       handleCloseScheduleAwating();
     },
   });
 
   const { execute: destroy } = useRequestDestroy({
     path: "/schedules",
-    callbackSuccess: findMany,
+    callbackSuccess: () => {
+      findMany();
+      findManyTemplates();
+    },
   });
 
   const { execute: execUpdateToken } = useRequestUpdate({
@@ -150,6 +162,7 @@ const ScheduleList = ({ route, navigation }) => {
       Notifications.addNotificationReceivedListener((notification) => {
         Alert.alert(JSON.stringify(notification));
         findMany();
+        findManyTemplates();
         console.log({ notification });
       });
 
@@ -188,12 +201,14 @@ const ScheduleList = ({ route, navigation }) => {
       .put(`/schedules/${id}/status`, payload)
       .then(() => {
         findMany();
+        findManyTemplates();
       });
   };
 
   useFocusEffect(
     useCallback(() => {
       findMany();
+      findManyTemplates();
     }, [date])
   );
 
@@ -224,12 +239,14 @@ const ScheduleList = ({ route, navigation }) => {
     if (pagination.currentPage === pagination.lastPage) return;
 
     findMany({ page: pagination.currentPage + 1 });
+    findManyTemplates();
   };
 
   const handlePreviousPage = () => {
     if (pagination.currentPage === 1) return;
 
     findMany({ page: pagination.currentPage - 1 });
+    findManyTemplates();
   };
 
   const handleFinished = (scheduleId) => {
@@ -259,6 +276,7 @@ const ScheduleList = ({ route, navigation }) => {
       .get(`/schedules/${id}/revert`)
       .then(() => {
         findMany();
+        findManyTemplates();
       });
   };
 
@@ -270,13 +288,9 @@ const ScheduleList = ({ route, navigation }) => {
     });
   };
 
-  const onRefresh = React.useCallback(() => {
-    findMany();
-  }, []);
-
   return (
     <View style={[styles.card, { backgroundColor: colors.BACKGROUND }]}>
-      <LoadingOverlay visible={loading || loadingUpdate} />
+      <LoadingOverlay visible={loading || loadingUpdate || loadingTemplates} />
 
       <DateTimePicker
         noInput
@@ -363,6 +377,8 @@ const ScheduleList = ({ route, navigation }) => {
                         onCanceled={() => handleCanceled(item.id)}
                         onDeleted={() => handleConfirmDelete(item.id)}
                         onRevert={() => handleRestore(item.id)}
+                        templates={responseTemplates?.data || []}
+                        telefone={item?.user?.cellPhone}
                       />
                     );
                   })}
@@ -436,6 +452,8 @@ const ScheduleList = ({ route, navigation }) => {
                             hour: "",
                           })
                         }
+                        templates={responseTemplates?.data || []}
+                        telefone={item?.user?.cellPhone}
                       />
                     );
                   })}
@@ -489,7 +507,10 @@ const ScheduleList = ({ route, navigation }) => {
           },
         ]}
         refreshing={loading}
-        onRefresh={findMany}
+        onRefresh={() => {
+          findMany();
+          findManyTemplates();
+        }}
       />
 
       {schedules.length > 0 ? (

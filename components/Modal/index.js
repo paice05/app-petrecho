@@ -8,8 +8,11 @@ import {
   Pressable,
   View,
   TouchableOpacity,
+  Dimensions,
 } from "react-native";
 import { useColorContext } from "../../context/colors";
+
+const width = Dimensions.get("screen").width;
 
 export const Modal = ({
   isVisible,
@@ -36,9 +39,11 @@ export const Modal = ({
                 { backgroundColor: colors.BACKGROUND_CARD },
               ]}
             >
-              <Text style={[styles.modalText, { color: colors.TEXT }]}>
-                {title}
-              </Text>
+              {title && (
+                <Text style={[styles.modalText, { color: colors.TEXT }]}>
+                  {title}
+                </Text>
+              )}
               <View style={styles.modalButton}>
                 {!children ? (
                   <Block flex row>
@@ -86,7 +91,7 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     borderRadius: 20,
-    padding: 35,
+    padding: 16,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -98,12 +103,14 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   modalButton: {
+    minHeight: 400,
+    width: width * 0.8,
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     //paddingHorizontal: theme.SIZES.BASE,
-    marginRight: 20,
+    // marginRight: 20,
   },
   button: {
     height: 40,

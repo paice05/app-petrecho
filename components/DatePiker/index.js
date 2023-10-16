@@ -47,7 +47,7 @@ export const DateTimePicker = ({
             name={icon}
             family="feather"
           />
-          <Text size={noInput ? 18 : 15} color={colors.SUB_TEXT}>
+          <Text size={noInput ? 18 : 15} color={colors.TEXT}>
             {formartDate(value, mode === "time" ? "HH:mm" : formart)}
           </Text>
         </Block>

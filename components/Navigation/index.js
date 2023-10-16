@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ScrollView,
   StyleSheet,
@@ -8,12 +8,20 @@ import {
 } from "react-native";
 import { Block, Text } from "galio-framework";
 
-import { nowTheme } from "../../constants";
 import { useColorContext } from "../../context/colors";
 
-export const Navigation = ({ items = [], refreshing, onRefresh }) => {
-  const [active, setActive] = useState(0);
+export const Navigation = ({
+  items = [],
+  refreshing,
+  onRefresh,
+  manualActive,
+}) => {
+  const [active, setActive] = useState(manualActive || 0);
   const { colors } = useColorContext();
+
+  useEffect(() => {
+    if (manualActive || manualActive === 0) setActive(manualActive);
+  }, [manualActive]);
 
   return (
     <Block flex={1}>
@@ -29,6 +37,8 @@ export const Navigation = ({ items = [], refreshing, onRefresh }) => {
             ) : null}
             <TouchableOpacity
               onPress={() => {
+                if (item?.disabled) return;
+
                 const vibrationDuration = 100;
 
                 // Faz o dispositivo vibrar
@@ -38,7 +48,8 @@ export const Navigation = ({ items = [], refreshing, onRefresh }) => {
               }}
             >
               <Text
-                size={22}
+                center={item?.center}
+                size={item?.size || 22}
                 color={index === active ? colors.ICON : colors.TEXT}
               >
                 {item.title}
@@ -49,7 +60,9 @@ export const Navigation = ({ items = [], refreshing, onRefresh }) => {
       </Block>
       <ScrollView
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          onRefresh && (
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          )
         }
       >
         {items[active].children}

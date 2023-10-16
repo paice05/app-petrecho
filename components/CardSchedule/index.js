@@ -8,6 +8,24 @@ import Icon from "../Icon";
 import Menu from "../Menu";
 import { Modal } from "../Modal";
 import { useColorContext } from "../../context/colors";
+import { useToggle } from "../hooks/useToggle";
+import { ModalTemplates } from "../ModalTemplates";
+
+const statusText = {
+  pending: "Pendente",
+  finished: "Finalizado",
+  canceled: "Cancelado",
+  awaiting: "Aguardando",
+  "awaiting-payment": "A pagar",
+};
+
+const icon = {
+  pending: "alert-circle",
+  finished: "check-circle",
+  canceled: "x-circle",
+  awaiting: "alert-circle",
+  "awaiting-payment": "thumbs-down",
+};
 
 const CardSchedule = ({
   navigation,
@@ -25,26 +43,14 @@ const CardSchedule = ({
   onDeleted,
   onRevert,
   onAwaiting,
+  templates,
+  telefone,
 }) => {
   const isLargeName = nome?.length > 30;
 
-  const statusText = {
-    pending: "Pendente",
-    finished: "Finalizado",
-    canceled: "Cancelado",
-    awaiting: "Aguardando",
-    "awaiting-payment": "A pagar",
-  };
-
-  const icon = {
-    pending: "alert-circle",
-    finished: "check-circle",
-    canceled: "x-circle",
-    awaiting: "alert-circle",
-    "awaiting-payment": "thumbs-down",
-  };
-
   const { colors } = useColorContext();
+
+  const { onChangeToggle, toggle } = useToggle();
 
   return (
     <Block
@@ -93,6 +99,12 @@ const CardSchedule = ({
         <Block>
           <Menu
             items={[
+              {
+                text: "Enviar mensagem",
+                icon: "phone",
+                color: colors.SUCCESS,
+                onSelect: onChangeToggle,
+              },
               {
                 onSelect: () =>
                   navigation.navigate("ScheduleForm", {
@@ -214,6 +226,13 @@ const CardSchedule = ({
           </TouchableOpacity>
         </Block>
       )}
+
+      <ModalTemplates
+        changeVisible={onChangeToggle}
+        isVisible={toggle}
+        templates={templates}
+        cellPhone={telefone}
+      />
     </Block>
   );
 };

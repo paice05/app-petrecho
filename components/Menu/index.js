@@ -66,12 +66,12 @@ const SimpleMenu = ({ children, styleContainer, items = [] }) => {
                       {item.icon && (
                         <Icon
                           size={18}
-                          color={colors.TEXT}
+                          color={item?.color || colors.TEXT}
                           name={item.icon}
-                          family="feather"
+                          family={item?.family || "Feather"}
                         />
                       )}
-                      <Text size={18} color={colors.TEXT}>
+                      <Text size={18} color={item?.color || colors.TEXT}>
                         {item.text}
                       </Text>
                     </Block>
