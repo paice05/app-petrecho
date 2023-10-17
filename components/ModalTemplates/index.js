@@ -22,6 +22,10 @@ export function ModalTemplates({
   changeVisible,
   templates,
   cellPhone,
+  clientName,
+  selectDay,
+  selectHour,
+  dayOfWeek,
 }) {
   const { colors } = useColorContext();
 
@@ -59,14 +63,14 @@ export function ModalTemplates({
 
     const response = handleReplaceAll({
       mensagem: textTemplate,
-      contato: "Matheus",
-      dia: "04/11",
-      diaDaSemana: "Sábado",
-      horario: "14:00",
+      contato: clientName,
+      dia: selectDay,
+      diaDaSemana: dayOfWeek,
+      horario: selectHour,
     });
 
     setTextTemplate(response);
-  }, [textTemplate]);
+  }, [textTemplate, clientName, selectDay, dayOfWeek, selectHour]);
 
   return (
     <Modal

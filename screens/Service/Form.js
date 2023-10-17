@@ -22,10 +22,11 @@ const ServiceForm = ({ route, navigation }) => {
   const [fields, setFields] = useState({
     name: "",
     price: "",
+    averageTime: "",
   });
 
   const { validate, errors } = useValidateRequiredFields({
-    fields: ["name", "price"],
+    fields: ["name", "price", "averageTime"],
   });
 
   useEffect(() => {
@@ -40,6 +41,7 @@ const ServiceForm = ({ route, navigation }) => {
     const payload = {
       name: fields.name,
       price,
+      averageTime: fields.averageTime,
     };
 
     try {
@@ -59,6 +61,7 @@ const ServiceForm = ({ route, navigation }) => {
     const payload = {
       name: fields.name,
       price,
+      averageTime: fields.averageTime,
     };
 
     try {
@@ -82,6 +85,7 @@ const ServiceForm = ({ route, navigation }) => {
               style: "currency",
               currency: "BRL",
               currencyDisplay: "symbol",
+              averageTime: response.data.averageTime,
             }),
           });
         } catch (error) {
@@ -148,6 +152,30 @@ const ServiceForm = ({ route, navigation }) => {
               onChangeText={(text) => setFields({ ...fields, price: text })}
             />
             {errors?.["price"] && (
+              <Text center size={14} color={colors.DANGER}>
+                campo obrigatório
+              </Text>
+            )}
+          </Block>
+          <Block>
+            <CustomInput
+              placeholder="Digite o tempo médio do serviço"
+              labelText="Tempo médio"
+              value={fields.averageTime}
+              onChangeText={(value) =>
+                setFields({ ...fields, averageTime: value })
+              }
+              iconContent={
+                <Icon
+                  size={16}
+                  name="clock"
+                  family="feather"
+                  style={styles.inputIcons}
+                  color={colors.ICON}
+                />
+              }
+            />
+            {errors?.["averageTime"] && (
               <Text center size={14} color={colors.DANGER}>
                 campo obrigatório
               </Text>

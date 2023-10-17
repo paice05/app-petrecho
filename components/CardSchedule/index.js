@@ -45,6 +45,10 @@ const CardSchedule = ({
   onAwaiting,
   templates,
   telefone,
+  clientName,
+  selectDay,
+  dayOfWeek,
+  selectHour,
 }) => {
   const isLargeName = nome?.length > 30;
 
@@ -232,6 +236,10 @@ const CardSchedule = ({
         isVisible={toggle}
         templates={templates}
         cellPhone={telefone}
+        clientName={clientName}
+        selectDay={selectDay}
+        dayOfWeek={dayOfWeek}
+        selectHour={selectHour}
       />
     </Block>
   );

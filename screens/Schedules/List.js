@@ -379,6 +379,14 @@ const ScheduleList = ({ route, navigation }) => {
                         onRevert={() => handleRestore(item.id)}
                         templates={responseTemplates?.data || []}
                         telefone={item?.user?.cellPhone}
+                        clientName={
+                          item?.user?.name ||
+                          item?.shortName ||
+                          "(Esse cliente não existe)"
+                        }
+                        selectDay={formartDate(item.scheduleAt, "dd/MM")}
+                        dayOfWeek={formartDate(item.scheduleAt, "cccc")}
+                        selectHour={formartDate(item.scheduleAt, "HH:mm")}
                       />
                     );
                   })}

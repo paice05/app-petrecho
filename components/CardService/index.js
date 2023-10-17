@@ -6,7 +6,14 @@ import Menu from "../Menu";
 import IconExtra from "../Icon";
 import { useColorContext } from "../../context/colors";
 
-const CardService = ({ navigation, id, nome, valor, onDeleted }) => {
+const CardService = ({
+  navigation,
+  id,
+  nome,
+  valor,
+  onDeleted,
+  tempoMedio,
+}) => {
   const isLargeName = nome.length > 20;
 
   const { colors } = useColorContext();
@@ -44,6 +51,9 @@ const CardService = ({ navigation, id, nome, valor, onDeleted }) => {
           </TouchableOpacity>
           <Text size={16} color={colors.SUB_TEXT}>
             R$ {Number(valor).toFixed(2).replace(".", ",")}
+          </Text>
+          <Text size={16} color={colors.SUB_TEXT}>
+            {tempoMedio}
           </Text>
         </Block>
         <Menu
