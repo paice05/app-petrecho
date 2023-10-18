@@ -12,6 +12,7 @@ import { api } from "../../services/api";
 import { useValidateRequiredFields } from "../../components/hooks/useValidateRequiredFields";
 import { CustomInputMask } from "../../components/CustomInputMask";
 import { useColorContext } from "../../context/colors";
+import { CustomInputMaskHours } from "../../components/CustomInputMaskHours";
 
 const ServiceForm = ({ route, navigation }) => {
   const params = route.params;
@@ -158,21 +159,19 @@ const ServiceForm = ({ route, navigation }) => {
             )}
           </Block>
           <Block>
-            <CustomInput
+            <Text
+              color={colors.TEXT}
+              size={16}
+              bold
+              style={{ marginLeft: 20, marginBottom: 5 }}
+            >
+              Tempo médio
+            </Text>
+            <CustomInputMaskHours
               placeholder="Digite o tempo médio do serviço"
-              labelText="Tempo médio"
               value={fields.averageTime}
-              onChangeText={(value) =>
-                setFields({ ...fields, averageTime: value })
-              }
-              iconContent={
-                <Icon
-                  size={16}
-                  name="clock"
-                  family="feather"
-                  style={styles.inputIcons}
-                  color={colors.ICON}
-                />
+              onChangeText={(text) =>
+                setFields({ ...fields, averageTime: text })
               }
             />
             {errors?.["averageTime"] && (
