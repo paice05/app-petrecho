@@ -86,8 +86,8 @@ const ServiceForm = ({ route, navigation }) => {
               style: "currency",
               currency: "BRL",
               currencyDisplay: "symbol",
-              averageTime: response.data.averageTime,
             }),
+            averageTime: response.data.averageTime,
           });
         } catch (error) {
           console.log(error);

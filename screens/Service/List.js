@@ -100,6 +100,7 @@ const Services = ({ navigation }) => {
               id={item.id}
               nome={item.name}
               valor={item.price}
+              tempoMedio={item.averageTime}
               onDeleted={() => handleConfirmDelete(item.id)}
             />
           );

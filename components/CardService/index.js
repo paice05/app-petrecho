@@ -52,9 +52,6 @@ const CardService = ({
           <Text size={16} color={colors.SUB_TEXT}>
             R$ {Number(valor).toFixed(2).replace(".", ",")}
           </Text>
-          <Text size={16} color={colors.SUB_TEXT}>
-            {tempoMedio}
-          </Text>
         </Block>
         <Menu
           items={[
@@ -84,6 +81,14 @@ const CardService = ({
             />
           </Block>
         </Menu>
+      </Block>
+      <Block center row>
+        {tempoMedio && <Block row gap={5} style={{ alignItems: "center" }}>
+          <IconExtra color={colors.ICON} name="clock" family="feather" />
+          <Text bold size={16} color={colors.TEXT}>
+            {tempoMedio}
+          </Text>
+        </Block>}
       </Block>
     </Block>
   );
