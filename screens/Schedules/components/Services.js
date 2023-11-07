@@ -20,7 +20,8 @@ export function Services() {
   const [allServices, setAllServices] = useState([]);
   const [serviceSelected, setServiceSelected] = useState([]);
   const [typeView, setTypeView] = useState("all"); // all | selected
-
+  const [averageTime, setAverageTime] = useState("");
+  console.log({ serviceSelected });
   const {
     execute: execServices,
     response: responseServices,
@@ -43,7 +44,12 @@ export function Services() {
     setServiceSelected(fields.services);
   }, []);
 
-  const handleChangeServiceSelected = ({ serviceId, name }) => {
+  useEffect(() => {
+    // Atualiza o estado averageTime quando há mudanças em serviceSelected
+    setAverageTime(serviceSelected.map((item) => item.averageTime).join("; "));
+  }, [serviceSelected]);
+
+  const handleChangeServiceSelected = ({ serviceId, name, averageTime }) => {
     if (serviceSelected.findIndex((item) => item.id === serviceId) !== -1) {
       setServiceSelected(
         serviceSelected.filter((item) => item.id !== serviceId)
@@ -59,12 +65,15 @@ export function Services() {
 
     setServiceSelected([
       ...serviceSelected,
-      { id: serviceId, isPackage: false, name },
+      { id: serviceId, isPackage: false, name, averageTime },
     ]);
 
     setFields({
       ...fields,
-      services: [...serviceSelected, { id: serviceId, isPackage: false, name }],
+      services: [
+        ...serviceSelected,
+        { id: serviceId, isPackage: false, name, averageTime },
+      ],
     });
   };
 
@@ -166,6 +175,7 @@ export function Services() {
                           handleChangeServiceSelected({
                             serviceId: item.id,
                             name: item.name,
+                            averageTime: item.averageTime,
                           });
                         }}
                       >
