@@ -206,7 +206,8 @@ export function Services() {
                               style: "currency",
                               currency: "BRL",
                               currencyDisplay: "symbol",
-                            })}
+                            })}{" "}
+                            - TM: {item.averageTime}
                           </Text>
                         </Block>
                       </TouchableOpacity>

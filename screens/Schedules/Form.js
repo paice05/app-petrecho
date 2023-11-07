@@ -40,6 +40,7 @@ const SchedulesForm = ({ route }) => {
       value: user?.id,
       label: user?.name,
     },
+    averageTime: 0,
     date: new Date(),
     time: new Date(),
     discount: 0,
@@ -79,6 +80,22 @@ const SchedulesForm = ({ route }) => {
     path: "/schedules",
     id: params?.itemId,
   });
+
+  useEffect(() => {
+    if (fields.services.length === 0) {
+      setFields({
+        ...fields,
+        averageTime: 0,
+      });
+
+      return;
+    }
+
+    setFields({
+      ...fields,
+      averageTime: calculateTotalAverageTime(fields.services),
+    });
+  }, [fields.services]);
 
   useEffect(() => {
     if (responseCreated) navigation.goBack();
@@ -198,28 +215,18 @@ const SchedulesForm = ({ route }) => {
   };
 
   const handleAddFiveMinutes = () => {
-    const updateAverageTime = fields.services.map((service) => ({
-      ...service,
-      averageTime: (parseFloat(service.averageTime) || 0) + 5,
-    }));
-    console.log("updateAverageTime ===> ", updateAverageTime);
-
     setFields({
       ...fields,
-      services: updateAverageTime,
+      averageTime: fields.averageTime + 5,
     });
   };
 
   const handleRemoveFiveMinutes = () => {
-    const updateAverageTime = fields.services.map((service) => ({
-      ...service,
-      averageTime: Math.max(0, (parseFloat(service.averageTime) || 0) - 5),
-    }));
-    console.log("updateAverageTime ===> ", updateAverageTime);
+    if (fields.averageTime === 0) return;
 
     setFields({
       ...fields,
-      services: updateAverageTime,
+      averageTime: fields.averageTime - 5,
     });
   };
 
@@ -298,22 +305,9 @@ const SchedulesForm = ({ route }) => {
               >
                 +
               </ButtonAverageTime>
-              <Block>
-                <CustomInputAverageTime
-                  value={calculateTotalAverageTime(fields.services).toString()}
-                  onChangeText={(averageTime) =>
-                    setFields({ ...fields, averageTime: averageTime })
-                  }
-                  iconContent={
-                    <Icon
-                      size={16}
-                      name="clock"
-                      family="feather"
-                      style={[styles.inputIcons, { color: colors.ICON }]}
-                    />
-                  }
-                />
-              </Block>
+              <Text size={22} color="#fff">
+                {fields.averageTime} minutos
+              </Text>
               <ButtonAverageTime
                 color={colors.TEXT}
                 style={[
