@@ -8,7 +8,7 @@ import { useColorContext } from "../../../context/colors";
 import { useRequestFindMany } from "../../../components/hooks/useRequestFindMany";
 import { LoadingOverlay } from "../../../components/LoadingOverlay";
 import { nowTheme } from "../../../constants";
-import { Switch } from "../../../components";
+import { Icon, Switch } from "../../../components";
 
 export function Services() {
   const { colors } = useColorContext();
@@ -21,7 +21,7 @@ export function Services() {
   const [serviceSelected, setServiceSelected] = useState([]);
   const [typeView, setTypeView] = useState("all"); // all | selected
   const [averageTime, setAverageTime] = useState("");
-  console.log({ serviceSelected });
+
   const {
     execute: execServices,
     response: responseServices,
@@ -201,14 +201,30 @@ export function Services() {
                           <Text color={itemSelected ? "white" : ""}>
                             {item.name}
                           </Text>
-                          <Text color={itemSelected ? "white" : ""}>
-                            {Number(item.price).toLocaleString("pt-BR", {
-                              style: "currency",
-                              currency: "BRL",
-                              currencyDisplay: "symbol",
-                            })}{" "}
-                            - TM: {item.averageTime}
-                          </Text>
+                          <Block row gap={20}>
+                            <Text color={itemSelected ? "white" : ""}>
+                              {Number(item.price).toLocaleString("pt-BR", {
+                                style: "currency",
+                                currency: "BRL",
+                                currencyDisplay: "symbol",
+                              })}{" "}
+                            </Text>
+
+                            <Block row space="between">
+                              <Icon
+                                size={16}
+                                name="clock"
+                                family="feather"
+                                style={[
+                                  styles.inputIcons,
+                                  { color: colors.ICON },
+                                ]}
+                              />
+                              <Text color={itemSelected ? "white" : ""}>
+                                {item.averageTime}
+                              </Text>
+                            </Block>
+                          </Block>
                         </Block>
                       </TouchableOpacity>
                       {itemSelected && (
@@ -329,5 +345,9 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
     alignItems: "center",
+  },
+  inputIcons: {
+    marginRight: 5,
+    marginTop: 3,
   },
 });

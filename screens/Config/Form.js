@@ -140,6 +140,9 @@ export function ConfigForm({ navigation }) {
             <DateTimePicker
               value={fields.startTime}
               onChange={(time) => setFields({ ...fields, startTime: time })}
+              mode="time"
+              icon="clock"
+              style={{ space: "center" }}
             />
           </Block>
           <Block flex={1}>
@@ -147,13 +150,15 @@ export function ConfigForm({ navigation }) {
               size={16}
               bold
               color={colors.TEXT}
-              style={{ marginLeft: 20, marginBottom: 5 }}
+              style={{ marginBottom: 5 }}
             >
               Horário de fim
             </Text>
             <DateTimePicker
               value={fields.endTime}
               onChange={(time) => setFields({ ...fields, endTime: time })}
+              mode="time"
+              icon="clock"
             />
           </Block>
         </Block>

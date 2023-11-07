@@ -22,7 +22,6 @@ import { nowTheme } from "../../constants";
 import { Config } from "./Config";
 import { useColorContext } from "../../context/colors";
 import { useUserContext } from "../../context/user";
-import { CustomInputAverageTime } from "../../components/CustomInputAverageTime";
 import { parse } from "date-fns";
 
 const SchedulesForm = ({ route }) => {
@@ -305,9 +304,18 @@ const SchedulesForm = ({ route }) => {
               >
                 +
               </ButtonAverageTime>
-              <Text size={22} color="#fff">
-                {fields.averageTime} minutos
-              </Text>
+              <Block row space="between">
+                <Icon
+                  size={18}
+                  name="clock"
+                  family="feather"
+                  style={[styles.inputIcons, { color: colors.ICON }]}
+                />
+                <Text size={22} color={colors.TEXT} style={{ marginBottom: 8 }}>
+                  {fields.averageTime} minutos
+                </Text>
+              </Block>
+
               <ButtonAverageTime
                 color={colors.TEXT}
                 style={[
@@ -480,7 +488,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   inputIcons: {
-    marginRight: 12,
+    marginRight: 10,
+    marginTop: 7,
     color: nowTheme.COLORS.PRIMARY,
   },
   buttonAverageTime: {
@@ -495,6 +504,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     alignItems: "center",
     gap: 10,
+    marginTop: 5,
   },
 });
 
