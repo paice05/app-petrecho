@@ -1,6 +1,11 @@
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Block, Text, Switch } from "galio-framework";
+import {
+  Block,
+  Text,
+  Switch,
+  Button as ButtonAverageTime,
+} from "galio-framework";
 import { useNavigation } from "@react-navigation/native";
 
 import { useValidateRequiredFields } from "../../components/hooks/useValidateRequiredFields";
@@ -10,13 +15,15 @@ import { useRequestUpdate } from "../../components/hooks/useRequestUpdate";
 import { LoadingOverlay } from "../../components/LoadingOverlay";
 import { WrapperInput } from "../../components/WrapperInput";
 import { DateTimePicker } from "../../components/DatePiker";
-import { Button } from "../../components";
+import { Button, Icon } from "../../components";
 
 import { formartDate } from "../../utils/formartDate";
 import { nowTheme } from "../../constants";
 import { Config } from "./Config";
 import { useColorContext } from "../../context/colors";
 import { useUserContext } from "../../context/user";
+import { CustomInputAverageTime } from "../../components/CustomInputAverageTime";
+import { parse } from "date-fns";
 
 const SchedulesForm = ({ route }) => {
   const params = route.params;
@@ -87,6 +94,7 @@ const SchedulesForm = ({ route }) => {
           id: item.id,
           isPackage: item.ServiceSchedule.isPackage,
           name: item.name,
+          averageTime: item.averageTime,
         })),
         employee: {
           value: response?.employee?.id,
@@ -182,6 +190,39 @@ const SchedulesForm = ({ route }) => {
     execUpdate(payload);
   };
 
+  const calculateTotalAverageTime = (services) => {
+    return services.reduce(
+      (total, service) => total + parseFloat(service.averageTime || 0),
+      0
+    );
+  };
+
+  const handleAddFiveMinutes = () => {
+    const updateAverageTime = fields.services.map((service) => ({
+      ...service,
+      averageTime: (parseFloat(service.averageTime) || 0) + 5,
+    }));
+    console.log("updateAverageTime ===> ", updateAverageTime);
+
+    setFields({
+      ...fields,
+      services: updateAverageTime,
+    });
+  };
+
+  const handleRemoveFiveMinutes = () => {
+    const updateAverageTime = fields.services.map((service) => ({
+      ...service,
+      averageTime: Math.max(0, (parseFloat(service.averageTime) || 0) - 5),
+    }));
+    console.log("updateAverageTime ===> ", updateAverageTime);
+
+    setFields({
+      ...fields,
+      services: updateAverageTime,
+    });
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: colors.BACKGROUND }]}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -232,7 +273,59 @@ const SchedulesForm = ({ route }) => {
               </Text>
             )}
           </TouchableOpacity>
-
+          <Block>
+            <Text
+              size={16}
+              bold
+              style={{ marginLeft: 20, marginBottom: 5 }}
+              color={colors.TEXT}
+            >
+              Tempo médio
+            </Text>
+            <Block
+              row
+              space="around"
+              gap={3}
+              style={styles.containerAverageTime}
+            >
+              <ButtonAverageTime
+                color={colors.TEXT}
+                style={[
+                  styles.buttonAverageTime,
+                  { backgroundColor: "transparent" },
+                ]}
+                onPress={handleAddFiveMinutes}
+              >
+                +
+              </ButtonAverageTime>
+              <Block>
+                <CustomInputAverageTime
+                  value={calculateTotalAverageTime(fields.services).toString()}
+                  onChangeText={(averageTime) =>
+                    setFields({ ...fields, averageTime: averageTime })
+                  }
+                  iconContent={
+                    <Icon
+                      size={16}
+                      name="clock"
+                      family="feather"
+                      style={[styles.inputIcons, { color: colors.ICON }]}
+                    />
+                  }
+                />
+              </Block>
+              <ButtonAverageTime
+                color={colors.TEXT}
+                style={[
+                  styles.buttonAverageTime,
+                  { backgroundColor: "transparent" },
+                ]}
+                onPress={handleRemoveFiveMinutes}
+              >
+                -
+              </ButtonAverageTime>
+            </Block>
+          </Block>
           <TouchableOpacity
             onPress={() => {
               navigation.navigate("ScheduleComponentsEmployees", {
@@ -391,6 +484,23 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 0,
     borderTopRightRadius: 0,
     alignItems: "center",
+  },
+  inputIcons: {
+    marginRight: 12,
+    color: nowTheme.COLORS.PRIMARY,
+  },
+  buttonAverageTime: {
+    width: "20%",
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: nowTheme.COLORS.BORDER,
+    height: 44,
+    marginTop: -5,
+  },
+  containerAverageTime: {
+    paddingHorizontal: 10,
+    alignItems: "center",
+    gap: 10,
   },
 });
 
