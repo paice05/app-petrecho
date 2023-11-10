@@ -2,7 +2,7 @@
   "expo": {
     "name": "meupetrecho",
     "slug": "test",
-    "version": "1.29.0",
+    "version": "1.30.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -21,7 +21,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "versionCode": 29,
+      "versionCode": 30,
       "package": "com.mpaice.meupetrechoapp",
       "googleServicesFile": "./google-services.json"
     },

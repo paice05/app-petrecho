@@ -10,6 +10,7 @@ import { Modal } from "../Modal";
 import { useColorContext } from "../../context/colors";
 import { useToggle } from "../hooks/useToggle";
 import { ModalTemplates } from "../ModalTemplates";
+import { adicionarMinutos } from "../../helpers/addMinutes";
 
 const statusText = {
   pending: "Pendente",
@@ -30,6 +31,7 @@ const icon = {
 const CardSchedule = ({
   navigation,
   id,
+  tempoMedio,
   nome,
   funcionario,
   servico,
@@ -158,14 +160,15 @@ const CardSchedule = ({
             {dia}
           </Text>
         </Block>
-        {status !== "awaiting" ? (
+        {status !== "awaiting" && !tempoMedio && (
           <Block row gap={5} style={styles.actionIcon}>
             <Icon color={colors.ICON} name="clock" family="feather" />
             <Text bold size={16} color={colors.TEXT}>
-              {horario}
+              {horario}{" "}
+              {tempoMedio && `- ${adicionarMinutos(horario, tempoMedio)}`}
             </Text>
           </Block>
-        ) : null}
+        )}
 
         <Block row gap={5} style={styles.actionIcon}>
           <Icon
@@ -178,6 +181,16 @@ const CardSchedule = ({
           </Text>
         </Block>
       </Block>
+      {status !== "awaiting" && tempoMedio && (
+        <Block center row gap={5} style={styles.actionIcon}>
+          <Icon color={colors.ICON} name="clock" family="feather" />
+          <Text bold size={16} color={colors.TEXT}>
+            {horario}
+            {" - "}
+            {adicionarMinutos(horario, tempoMedio)}
+          </Text>
+        </Block>
+      )}
 
       {status === "pending" && (
         <Block row style={styles.wrapperButtons}>

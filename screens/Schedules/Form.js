@@ -81,19 +81,21 @@ const SchedulesForm = ({ route }) => {
   });
 
   useEffect(() => {
-    if (fields.services.length === 0) {
+    if (!isEditing) {
+      if (fields.services.length === 0) {
+        setFields({
+          ...fields,
+          averageTime: 0,
+        });
+
+        return;
+      }
+
       setFields({
         ...fields,
-        averageTime: 0,
+        averageTime: calculateTotalAverageTime(fields.services),
       });
-
-      return;
     }
-
-    setFields({
-      ...fields,
-      averageTime: calculateTotalAverageTime(fields.services),
-    });
   }, [fields.services]);
 
   useEffect(() => {
@@ -131,6 +133,7 @@ const SchedulesForm = ({ route }) => {
             currencyDisplay: "symbol",
           }) || null,
         status: response.status === "awaiting",
+        averageTime: response.averageTime,
       });
     }
   }, [response]);
@@ -286,7 +289,7 @@ const SchedulesForm = ({ route }) => {
               style={{ marginLeft: 20, marginBottom: 5 }}
               color={colors.TEXT}
             >
-              Tempo médio
+              Tempo médio de atendimento
             </Text>
             <Block
               row
