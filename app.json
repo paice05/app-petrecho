@@ -2,7 +2,7 @@
   "expo": {
     "name": "meupetrecho",
     "slug": "test",
-    "version": "1.27.0",
+    "version": "1.29.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -11,9 +11,7 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.mpaice.meupetrechoapp"
@@ -23,7 +21,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "versionCode": 27,
+      "versionCode": 29,
       "package": "com.mpaice.meupetrechoapp",
       "googleServicesFile": "./google-services.json"
     },
