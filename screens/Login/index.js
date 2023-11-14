@@ -4,6 +4,8 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   Keyboard,
+  TouchableOpacity,
+  Vibration,
 } from "react-native";
 import * as Notifications from "expo-notifications";
 import { Block, Text, theme } from "galio-framework";
@@ -211,6 +213,34 @@ const Login = ({ navigation }) => {
                           Entrar
                         </Text>
                       </Button>
+                    </Block>
+                    <Block center style={{ marginTop: 15 }}>
+                      <TouchableOpacity
+                        onPress={() => {
+                          navigation.navigate({ name: "Cadastro" });
+                        }}
+                      >
+                        <Text
+                          size={16}
+                          style={{
+                            textDecorationLine: "underline",
+                            textAlign: "center",
+                          }}
+                          color={nowTheme.COLORS.INFO}
+                        >
+                          Ainda não tem conta?
+                        </Text>
+                        <Text
+                          size={16}
+                          style={{
+                            textDecorationLine: "underline",
+                            textAlign: "center",
+                          }}
+                          color={nowTheme.COLORS.INFO}
+                        >
+                          Criar agora
+                        </Text>
+                      </TouchableOpacity>
                     </Block>
                   </Block>
                 </Block>

@@ -21,6 +21,7 @@ import ServiceList from "../screens/Service/List";
 import ServiceForm from "../screens/Service/Form";
 import RegisterExitForm from "../screens/Reports/FormRegisterExit";
 import Login from "../screens/Login";
+import RegisterForm from "../screens/Login/Form";
 import Template from "../screens/Templates/List";
 import TemplatesForm from "../screens/Templates/Form";
 import { ImportContacts } from "../screens/Clients/components/ImportContacts";
@@ -51,6 +52,15 @@ function LoginStack(props) {
         name="Login"
         component={Login}
         options={{
+          headerShown: false,
+          backgroundColor: nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR,
+        }}
+      />
+      <Stack.Screen
+        name="Cadastro"
+        component={RegisterForm}
+        options={{
+          headerShown: false,
           backgroundColor: nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR,
         }}
       />
