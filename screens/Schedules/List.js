@@ -350,6 +350,7 @@ const ScheduleList = ({ route, navigation }) => {
                         key={item.id}
                         navigation={navigation}
                         id={item.id}
+                        tempoMedio={item.averageTime || ""}
                         nome={
                           item?.user?.name ||
                           item?.shortName ||
@@ -405,7 +406,10 @@ const ScheduleList = ({ route, navigation }) => {
                       item.status === "finished" ||
                       item.status === "awaiting-payment"
                   )
-                  .map((item) => formartDate(item.scheduleAt, "HH:mm"))}
+                  .map((item) => ({
+                    scheduleAt: formartDate(item.scheduleAt, "HH:mm"),
+                    averageTime: item.averageTime,
+                  }))}
               />
             ),
           },
@@ -434,6 +438,7 @@ const ScheduleList = ({ route, navigation }) => {
                         key={item.id}
                         navigation={navigation}
                         id={item.id}
+                        tempoMedio={item.averageTime || ""}
                         nome={
                           item?.user?.name ||
                           item?.shortName ||

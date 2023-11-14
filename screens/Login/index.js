@@ -64,8 +64,6 @@ const Login = ({ navigation }) => {
             getCache("user").then((userRaw) => {
               const user = JSON.parse(userRaw);
 
-              console.log({ user });
-
               changeUser({
                 name: user.name,
                 id: user.id,
