@@ -24,7 +24,7 @@ const OpenURLButton = ({ url, children }) => {
       // by some browser in the mobile
       await Linking.openURL(url);
     } else {
-      Alert.alert(`Don't know how to open this URL: ${url}`);
+      console.log(`Don't know how to open this URL: ${url}`);
     }
   }, [url]);
 
