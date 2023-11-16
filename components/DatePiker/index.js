@@ -10,7 +10,8 @@ import { useColorContext } from "../../context/colors";
 
 export const DateTimePicker = ({
   onChange,
-  value = new Date(),
+  value,
+  placeholder,
   noInput,
   formart = "dd-MM-YYY",
   mode,
@@ -47,14 +48,19 @@ export const DateTimePicker = ({
             name={icon}
             family="feather"
           />
-          <Text size={noInput ? 18 : 15} color={colors.TEXT}>
-            {formartDate(value, mode === "time" ? "HH:mm" : formart)}
-          </Text>
+          {placeholder && !value && (
+            <Text color={colors.PLACEHOLDER}>{placeholder}</Text>
+          )}
+          {value && (
+            <Text size={noInput ? 18 : 15} color={colors.TEXT}>
+              {formartDate(value, mode === "time" ? "HH:mm" : formart)}
+            </Text>
+          )}
         </Block>
       </TouchableOpacity>
       {showDatePicker && (
         <RNDateTimePicker
-          value={value}
+          value={value ?? new Date()}
           mode={mode}
           display={"default"}
           is24Hour={true}

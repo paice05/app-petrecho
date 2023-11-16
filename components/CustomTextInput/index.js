@@ -17,7 +17,12 @@ const CustomTextInput = ({
 
   return (
     <Block>
-      <Text size={16} bold style={{ marginLeft: 20 }} color={colors.TEXT}>
+      <Text
+        size={16}
+        bold
+        style={{ marginLeft: 20, marginBottom: 10 }}
+        color={colors.TEXT}
+      >
         {labelText}
       </Text>
       <TextInput
@@ -27,6 +32,7 @@ const CustomTextInput = ({
         numbersOfLines={numbersOfLines}
         maxLength={maxLength}
         placeholder={placeholder}
+        placeholderTextColor={colors.PLACEHOLDER}
         onChangeText={onChangeText}
         value={value}
         style={[

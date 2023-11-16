@@ -285,7 +285,13 @@ export function Services() {
 
       <Block row center gap={20}>
         <TouchableOpacity
-          onPress={() => navigation.goBack()}
+          onPress={() => {
+            setFields({
+              ...fields,
+              services: fields.services,
+            });
+            navigation.goBack();
+          }}
           style={[
             styles.button,
             {

@@ -16,12 +16,12 @@ import { nowTheme } from "../../constants";
 import Icon from "../Icon";
 import { useColorContext } from "../../context/colors";
 
-export const UserSearch = ({
+export const TemplateSearch = ({
   path,
   query,
   placeholder,
   labelText,
-  onSelectUser,
+  onSelectTemplate,
 }) => {
   const [items, setItems] = useState([]);
   const [textName, setTextName] = useState("");
@@ -40,20 +40,27 @@ export const UserSearch = ({
         .get(path, {
           params: {
             where: {
-              name: { $iLike: `%${debouncedValue.trim()}%` },
+              title: { $iLike: `%${debouncedValue.trim()}%` },
               ...query,
             },
           },
         })
         .then(({ data }) => {
-          setItems(data.data.map((item) => ({ id: item.id, name: item.name })));
+          setItems(
+            data.data.map((item) => ({ id: item.id, name: item.title }))
+          );
+          setLoading(false);
+        })
+        .catch(() => {
+          setItems([]);
           setLoading(false);
         });
     }
   }, [debouncedValue]);
 
   const handleSelectUser = (user) => {
-    onSelectUser(user);
+    onSelectTemplate(user);
+    setItems([]);
   };
 
   return (

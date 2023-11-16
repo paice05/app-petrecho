@@ -367,6 +367,7 @@ const SchedulesForm = ({ route }) => {
                 onChange={(date) => setFields({ ...fields, date })}
                 mode="date"
                 icon="calendar"
+                formart="dd MMMM"
               />
             </Block>
             {!fields.status && (
