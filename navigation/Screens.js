@@ -60,14 +60,6 @@ function LoginStack(props) {
           backgroundColor: nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR,
         }}
       />
-      <Stack.Screen
-        name="Cadastro"
-        component={RegisterForm}
-        options={{
-          headerShown: false,
-          backgroundColor: nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR,
-        }}
-      />
     </Stack.Navigator>
   );
 }
@@ -638,6 +630,14 @@ export default function OnboardingStack(props) {
         component={Login}
         option={{
           headerTransparent: true,
+        }}
+      />
+      <Stack.Screen
+        name="Cadastro"
+        component={RegisterForm}
+        options={{
+          headerShown: false,
+          backgroundColor: nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR,
         }}
       />
       <Stack.Screen name="App" component={AppStack} />
