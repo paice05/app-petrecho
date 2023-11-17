@@ -33,6 +33,10 @@ import { useColorContext } from "../context/colors";
 import { Clients as ScheduleComponentsClients } from "../screens/Schedules/components/Clients";
 import { Services as ScheduleComponentsServices } from "../screens/Schedules/components/Services";
 import { Employees as ScheduleComponentsEmployees } from "../screens/Schedules/components/Employees";
+import { CampaignList } from "../screens/Campaign/List";
+import { CampaignForm } from "../screens/Campaign/Form";
+import { Templates as CampaignComponentsTemplates } from "../screens/Campaign/components/Templates";
+import { Clients as CampaignComponentsClients } from "../screens/Campaign/components/Clients";
 
 const { width } = Dimensions.get("screen");
 
@@ -271,6 +275,86 @@ function ServicesStack(props) {
     </Stack.Navigator>
   );
 }
+function CampaignsStack(props) {
+  return (
+    <Stack.Navigator
+      initialRouteName="Campanhas"
+      screenOptions={{
+        mode: "card",
+        headerShown: "screen",
+      }}
+    >
+      <Stack.Screen
+        name="Campaign"
+        component={CampaignList}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header title="Campanhas" navigation={navigation} scene={scene} />
+          ),
+          cardStyle: {
+            backgroundColor: nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR,
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="CampaignForm"
+        component={CampaignForm}
+        options={{
+          header: ({ route, navigation, scene }) => {
+            const params = route.params;
+
+            const isEditing = params?.itemId;
+
+            return (
+              <Header
+                title={isEditing ? "Atualizar campanha" : "Nova campanha"}
+                back
+                navigation={navigation}
+                scene={scene}
+              />
+            );
+          },
+          // headerTransparent: true,
+        }}
+      />
+
+      <Stack.Screen
+        name="CampaignComponentsTemplates"
+        component={CampaignComponentsTemplates}
+        options={{
+          header: ({ navigation, scene }) => {
+            return (
+              <Header
+                title="Pesquisando templates"
+                back
+                navigation={navigation}
+                scene={scene}
+              />
+            );
+          },
+        }}
+      />
+
+      <Stack.Screen
+        name="CampaignComponentsClients"
+        component={CampaignComponentsClients}
+        options={{
+          header: ({ navigation, scene }) => {
+            return (
+              <Header
+                title="Pesquisando clientes"
+                back
+                navigation={navigation}
+                scene={scene}
+              />
+            );
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
 
 function ReportsStack(props) {
   return (
@@ -501,6 +585,14 @@ function AppStack(props) {
       <Drawer.Screen
         name="Templates"
         component={TemplatesStack}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Drawer.Screen
+        name="Campanhas"
+        component={CampaignsStack}
         options={{
           headerShown: false,
         }}

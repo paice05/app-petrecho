@@ -7,20 +7,21 @@ import { version } from "../package.json";
 import { useUserContext } from "../context/user";
 import { useColorContext } from "../context/colors";
 
+const menus = [
+  "Relatorios",
+  "Agendamentos",
+  "Clientes",
+  "Serviços",
+  "Templates",
+  "Campanhas",
+  "Configurações",
+];
+
 function CustomDrawerContent({ navigation, state }) {
   const { user } = useUserContext();
   const { colors } = useColorContext();
 
-  const screens = user.isAdmin
-    ? [
-        "Relatorios",
-        "Agendamentos",
-        "Clientes",
-        "Serviços",
-        "Templates",
-        "Configurações",
-      ]
-    : ["Agendamentos", "Clientes", "Serviços", "Templates", "Configurações"];
+  const screens = user.isAdmin ? menus : menus.splice(1);
 
   return (
     <Block

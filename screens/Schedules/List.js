@@ -51,7 +51,7 @@ async function registerForPushNotificationsAsync() {
       finalStatus = status;
     }
     if (finalStatus !== "granted") {
-      alert("Failed to get push token for push notification!");
+      console.log("Failed to get push token for push notification!");
       return;
     }
     // Learn more about projectId:
@@ -63,7 +63,7 @@ async function registerForPushNotificationsAsync() {
     ).data;
     console.log(token);
   } else {
-    alert("Must use physical device for Push Notifications");
+    console.log("Must use physical device for Push Notifications");
   }
 
   return token;
@@ -154,23 +154,18 @@ const ScheduleList = ({ route, navigation }) => {
 
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
-      Alert.alert(token);
       execUpdateToken({ token });
     });
 
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
-        Alert.alert(JSON.stringify(notification));
         findMany();
         findManyTemplates();
         console.log({ notification });
       });
 
     responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        Alert.alert(JSON.stringify(response));
-        console.log({ response });
-      });
+      Notifications.addNotificationResponseReceivedListener((response) => {});
 
     return () => {
       Notifications.removeNotificationSubscription(

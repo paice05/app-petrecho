@@ -20,7 +20,14 @@ export const CustomSelectBottom = ({
 
   return (
     <SafeAreaView>
-      <Text bold>{labelText}</Text>
+      <Text
+        size={16}
+        bold
+        style={{ marginLeft: 20, marginBottom: 10 }}
+        color={colors.TEXT}
+      >
+        {labelText}
+      </Text>
 
       <SelectList
         style={Platform.OS === "ios" ? styles.inputIOS : [styles.input]}
@@ -30,7 +37,10 @@ export const CustomSelectBottom = ({
         data={options}
         headerTitle={labelText}
         listHeight={300}
-        textStyle={[styles.textStyleChange, { color: colors.PLACEHOLDER }]}
+        textStyle={[
+          styles.textStyleChange,
+          { color: placeholder && !value ? colors.PLACEHOLDER : colors.TEXT },
+        ]}
         itemStyle={{ fontSize: 24, color: colors.TEXT }}
         renderIcon={() => (
           <Icon family="feather" name="user" color={colors.ICON} />

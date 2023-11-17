@@ -156,6 +156,29 @@ const NewTemplate = ({ navigation }) => {
   );
 };
 
+const NewCampaign = ({ navigation }) => {
+  const { colors } = useColorContext();
+
+  return (
+    <TouchableOpacity
+      onPress={() => {
+        const vibrationDuration = 100;
+
+        Vibration.vibrate(vibrationDuration);
+
+        navigation.navigate("CampaignForm");
+      }}
+    >
+      <Block row center gap={3}>
+        <Icon size={20} name="plus-circle" color={colors.ICON} />
+        <Text bold size={16} color={colors.TEXT}>
+          NOVO
+        </Text>
+      </Block>
+    </TouchableOpacity>
+  );
+};
+
 const handleLeftPress = (back, navigation) => {
   const vibrationDuration = 100;
 
@@ -184,6 +207,8 @@ const RenderRight = (props) => {
       return [<EditConfig navigation={navigation} />];
     case "Templates":
       return [<NewTemplate navigation={navigation} />];
+    case "Campanhas":
+      return [<NewCampaign navigation={navigation} />];
     default:
       break;
   }

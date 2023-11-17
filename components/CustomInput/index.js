@@ -21,8 +21,6 @@ const CustomInput = ({
       </Text>
       <Input
         placeholder={placeholder}
-        // labelText={labelText}
-        // label={labelText}
         options={options}
         value={value}
         onChangeText={onChangeText}
