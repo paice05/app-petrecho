@@ -23,7 +23,6 @@ const RegisterForm = ({ navigation }) => {
     confirmPassword: "",
   });
 
-  const [isError, setIsError] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const { changeUser } = useUserContext();
@@ -45,19 +44,19 @@ const RegisterForm = ({ navigation }) => {
       return;
     }
 
-    setIsError(false);
     setLoading(true);
 
+    const cellPhone = fields.cellPhone.replace(/\D/g, "");
     const payload = {
       name: fields.name,
-      cellPhone: fields.cellPhone,
+      cellPhone,
       password: fields.password,
     };
 
     try {
       api
         .request()
-        .post("public/account/trial", payload)
+        .post("/public/account/trial", payload)
         .then(({ data }) => {
           if (data.token) {
             api.setToken(data.token);
@@ -80,7 +79,7 @@ const RegisterForm = ({ navigation }) => {
           }
         });
     } catch (error) {
-      console.log(error);
+      Alert.alert(error.toString());
     }
   };
 
@@ -134,16 +133,23 @@ const RegisterForm = ({ navigation }) => {
             >
               Telefone
             </Text>
-            <MaskInput
-              placeholder="Telefone Celular "
-              keyboardType="numeric"
-              value={fields.cellPhone}
-              onChangeText={(value) =>
-                setFields({ ...fields, cellPhone: value })
-              }
-              mask={Masks.BRL_PHONE}
-              style={styles.inputMaskPhone}
-            />
+            <Block row alignItems="center" style={styles.inputMaskPhone}>
+              <Icon
+                size={16}
+                name="phone"
+                style={styles.inputIcons}
+                color="gray"
+              />
+              <MaskInput
+                placeholder="Telefone Celular "
+                keyboardType="numeric"
+                value={fields.cellPhone}
+                onChangeText={(value) =>
+                  setFields({ ...fields, cellPhone: value })
+                }
+                mask={Masks.BRL_PHONE}
+              />
+            </Block>
             {errors?.["cellPhone"] && (
               <Text center size={14} color={nowTheme.COLORS.ERROR}>
                 Campo obrigatório
@@ -270,7 +276,7 @@ const styles = StyleSheet.create({
     borderColor: nowTheme.COLORS.BORDER,
     height: 44,
     fontSize: 14,
-    paddingHorizontal: 70,
+    paddingHorizontal: 15,
     //color: nowTheme.COLORS.BORDER,
     backgroundColor: nowTheme.COLORS.WHITE,
   },

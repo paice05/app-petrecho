@@ -42,6 +42,8 @@ export const ImportContacts = ({ navigation }) => {
           );
 
           setLoading(false);
+        } else {
+          setLoading(false);
         }
       }
     })();
@@ -108,6 +110,9 @@ export const ImportContacts = ({ navigation }) => {
           Selecionados ({selected.length})
         </Text>
       </Block>
+
+      {contacts.length === 0 && <Text>Nenhum contato encontrado.</Text>}
+
       <ScrollView style={{ flexGrow: 1 }}>
         <FlatList
           data={contacts}

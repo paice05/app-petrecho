@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
-import { Alert, StyleSheet, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, View } from "react-native";
 import { Block, Text } from "galio-framework";
 
 import { useColorContext } from "../../context/colors";
@@ -90,7 +90,7 @@ export function CampaignList() {
   return (
     <View style={[styles.card, { backgroundColor: colors.BACKGROUND }]}>
       <LoadingOverlay visible={loading || loadingStart} />
-      <Block>
+      <ScrollView showsVerticalScrollIndicator={true}>
         {campaigns.length === 0 && (
           <Text
             color={colors.TEXT}
@@ -117,7 +117,7 @@ export function CampaignList() {
             />
           );
         })}
-      </Block>
+      </ScrollView>
 
       <PaginationSimple
         currentPage={pagination.currentPage}
