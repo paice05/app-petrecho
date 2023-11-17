@@ -18,6 +18,12 @@ import { LoadingOverlay } from "../../components/LoadingOverlay";
 import { useRequestFindOne } from "../../components/hooks/useRequestFindOne";
 import { useRequestUpdate } from "../../components/hooks/useRequestUpdate";
 
+const optionsTimes = [
+  { title: "30 minutos", data: 0.5 },
+  { title: "1 hora", data: 1 },
+  { title: "2 horas", data: 2 },
+];
+
 export function CampaignForm({ route }) {
   const { colors } = useColorContext();
   const navigation = useNavigation();
@@ -29,7 +35,6 @@ export function CampaignForm({ route }) {
     name: "",
     type: "clients", // clients | schedules
     clients: [],
-    schedules: [],
     scheduleAt: null,
     timeBeforeSchedule: null,
     typeContent: "manual", // manual | template,
@@ -85,14 +90,12 @@ export function CampaignForm({ route }) {
         clients: response.users.length
           ? response.users.map((item) => ({ label: item.name, value: item.id }))
           : [],
-        schedules: response.schedules.length
-          ? response.schedules.map((item) => ({
-              label: item.name,
-              value: item.id,
-            }))
-          : [],
-        scheduleAt: response.scheduleAt,
-        timeBeforeSchedule: response.timeBeforeSchedule,
+        scheduleAt: response.scheduleAt ? new Date(response.scheduleAt) : null,
+        timeBeforeSchedule: response.timeBeforeSchedule
+          ? optionsTimes.find(
+              (item) => item.data === Number(response.timeBeforeSchedule)
+            )
+          : null,
         typeContent: response.templateId ? "template" : "manual",
         content: response.content,
         template: response.templateId
@@ -114,11 +117,12 @@ export function CampaignForm({ route }) {
     if (payload.type === "clients") {
       payload.users = payload.clients.map((item) => item.value);
 
-      delete payload.schedules;
+      delete payload.timeBeforeSchedule;
+      delete payload.scheduleAt;
     }
 
     if (payload.type === "schedules") {
-      payload.schedules = payload.schedules.map((item) => item.value);
+      payload.timeBeforeSchedule = payload.timeBeforeSchedule.data;
 
       delete payload.clients;
     }
@@ -130,7 +134,7 @@ export function CampaignForm({ route }) {
     }
 
     if (payload.typeContent === "manual") {
-      delete payload.template;
+      payload.templateId = null;
     }
 
     if (isEditing) execUpdate(payload);
@@ -241,11 +245,7 @@ export function CampaignForm({ route }) {
                   onChange={(item) =>
                     setFields({ ...fields, timeBeforeSchedule: item })
                   }
-                  options={[
-                    { title: "30 minutos", data: 0.5 },
-                    { title: "1 hora", data: 1 },
-                    { title: "2 horas", data: 2 },
-                  ]}
+                  options={optionsTimes}
                 />
               </Block>
             )}
