@@ -45,12 +45,6 @@ const CardSchedule = ({
   onDeleted,
   onRevert,
   onAwaiting,
-  templates,
-  telefone,
-  clientName,
-  selectDay,
-  dayOfWeek,
-  selectHour,
 }) => {
   const isLargeName = nome?.length > 30;
 
@@ -105,12 +99,12 @@ const CardSchedule = ({
         <Block>
           <Menu
             items={[
-              {
-                text: "Enviar mensagem",
-                icon: "phone",
-                color: colors.SUCCESS,
-                onSelect: onChangeToggle,
-              },
+              // {
+              //   text: "Enviar mensagem",
+              //   icon: "phone",
+              //   color: colors.SUCCESS,
+              //   onSelect: onChangeToggle,
+              // },
               {
                 onSelect: () =>
                   navigation.navigate("ScheduleForm", {
@@ -244,7 +238,7 @@ const CardSchedule = ({
         </Block>
       )}
 
-      <ModalTemplates
+      {/* <ModalTemplates
         changeVisible={onChangeToggle}
         isVisible={toggle}
         templates={templates}
@@ -253,7 +247,7 @@ const CardSchedule = ({
         selectDay={selectDay}
         dayOfWeek={dayOfWeek}
         selectHour={selectHour}
-      />
+      /> */}
     </Block>
   );
 };

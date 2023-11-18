@@ -43,8 +43,10 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     borderWidth: 1,
     borderColor: nowTheme.COLORS.BORDER,
-    height: 44,
+    height: "auto",
+    minHeight: 44,
     fontSize: 16,
     paddingHorizontal: 12,
+    paddingVertical: 5,
   },
 });

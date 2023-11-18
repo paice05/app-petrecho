@@ -6,7 +6,6 @@ import { useNavigation } from "@react-navigation/native";
 import { useColorContext } from "../../context/colors";
 import CustomInput from "../../components/CustomInput";
 import { Icon, Button } from "../../components";
-import CustomTextInput from "../../components/CustomTextInput";
 import { nowTheme } from "../../constants";
 import { DateTimePicker } from "../../components/DatePiker";
 import { CustomSelectBottom } from "../../components/CustomSelectBottom";
@@ -33,17 +32,13 @@ export function CampaignForm({ route }) {
 
   const [fields, setFields] = useState({
     name: "",
-    type: "clients", // clients | schedules
-    clients: [],
     scheduleAt: null,
     timeBeforeSchedule: null,
-    typeContent: "manual", // manual | template,
-    content: "",
     template: null,
   });
 
   const { validate, errors } = useValidateRequiredFields({
-    fields: ["name"],
+    fields: ["name", "scheduleAt", "timeBeforeSchedule", "template"],
   });
 
   const {
@@ -73,6 +68,10 @@ export function CampaignForm({ route }) {
   });
 
   useEffect(() => {
+    validate(fields);
+  }, [fields]);
+
+  useEffect(() => {
     if (isEditing) execFindOne();
   }, []);
 
@@ -86,18 +85,12 @@ export function CampaignForm({ route }) {
       setFields({
         ...fields,
         name: response.name,
-        type: response.users.length ? "clients" : "schedules",
-        clients: response.users.length
-          ? response.users.map((item) => ({ label: item.name, value: item.id }))
-          : [],
         scheduleAt: response.scheduleAt ? new Date(response.scheduleAt) : null,
         timeBeforeSchedule: response.timeBeforeSchedule
           ? optionsTimes.find(
               (item) => item.data === Number(response.timeBeforeSchedule)
             )
           : null,
-        typeContent: response.templateId ? "template" : "manual",
-        content: response.content,
         template: response.templateId
           ? { label: response.template.title, value: response.template.id }
           : null,
@@ -105,37 +98,14 @@ export function CampaignForm({ route }) {
     }
   }, [response]);
 
-  console.log(response);
-
   const handleSubmit = () => {
     if (Object.values(errors).filter(Boolean).length) return;
 
     // payload
     const payload = fields;
     payload.status = "pending";
-
-    if (payload.type === "clients") {
-      payload.users = payload.clients.map((item) => item.value);
-
-      delete payload.timeBeforeSchedule;
-      delete payload.scheduleAt;
-    }
-
-    if (payload.type === "schedules") {
-      payload.timeBeforeSchedule = payload.timeBeforeSchedule.data;
-
-      delete payload.clients;
-    }
-
-    if (payload.typeContent === "template") {
-      payload.templateId = payload.template.value;
-
-      payload.content = "";
-    }
-
-    if (payload.typeContent === "manual") {
-      payload.templateId = null;
-    }
+    payload.timeBeforeSchedule = payload.timeBeforeSchedule.data;
+    payload.templateId = payload.template.value;
 
     if (isEditing) execUpdate(payload);
     else execCreate(payload);
@@ -176,123 +146,69 @@ export function CampaignForm({ route }) {
           </Block>
 
           <Block gap={10}>
-            <Block row gap={20} style={{ marginLeft: 20 }}>
-              <CustomInputRadio
-                label="Clientes"
-                onChange={() => setFields({ ...fields, type: "clients" })}
-                checked={fields.type === "clients"}
-              />
-              <CustomInputRadio
-                label="Agendamentos"
-                onChange={() => setFields({ ...fields, type: "schedules" })}
-                checked={fields.type === "schedules"}
-              />
-            </Block>
-
-            {fields.type === "clients" && (
-              <CustomInputTouch
-                label="Clientes"
-                value={
-                  fields.clients.length > 3
-                    ? `${fields.clients
-                        .slice(0, 3)
-                        .map((item) => item.label)
-                        .join(" - ")} + ${fields.clients.length - 3}`
-                    : fields.clients.map((item) => item.label).join(" - ")
-                }
-                placeholder="Selecione alguns clientes"
-                icon="users"
-                onPress={() => {
-                  navigation.navigate("CampaignComponentsClients", {
-                    fields,
-                    setFields,
-                  });
-                }}
-              />
-            )}
-
-            {fields.type === "schedules" && (
-              <Block>
-                <Block flex={1}>
-                  <Text
-                    size={16}
-                    bold
-                    style={{ marginLeft: 20, marginBottom: 5 }}
-                    color={colors.TEXT}
-                  >
-                    Data dos agendamentos
-                  </Text>
-                  <DateTimePicker
-                    value={fields.scheduleAt}
-                    onChange={(date) =>
-                      setFields({ ...fields, scheduleAt: date })
-                    }
-                    placeholder="Selecione uma data"
-                    mode="date"
-                    icon="calendar"
-                    formart="dd MMMM"
-                  />
-                </Block>
-              </Block>
-            )}
-
-            {fields.type === "schedules" && (
-              <Block>
-                <CustomSelectBottom
-                  labelText="Tempo antes de envio"
-                  placeholder="Escolha tempo antes para enviar"
-                  value={fields.timeBeforeSchedule}
-                  onChange={(item) =>
-                    setFields({ ...fields, timeBeforeSchedule: item })
+            <Block>
+              <Block flex={1}>
+                <Text
+                  size={16}
+                  bold
+                  style={{ marginLeft: 20, marginBottom: 5 }}
+                  color={colors.TEXT}
+                >
+                  Data dos agendamentos
+                </Text>
+                <DateTimePicker
+                  value={fields.scheduleAt}
+                  onChange={(date) =>
+                    setFields({ ...fields, scheduleAt: date })
                   }
-                  options={optionsTimes}
+                  placeholder="Selecione uma data"
+                  mode="date"
+                  icon="calendar"
+                  formart="dd MMMM"
                 />
               </Block>
-            )}
+              {errors?.["scheduleAt"] && (
+                <Text center size={14} color={colors.DANGER}>
+                  campo obrigatório
+                </Text>
+              )}
+            </Block>
+
+            <Block>
+              <CustomSelectBottom
+                labelText="Tempo antes de envio"
+                placeholder="Escolha tempo antes para enviar"
+                value={fields.timeBeforeSchedule}
+                onChange={(item) =>
+                  setFields({ ...fields, timeBeforeSchedule: item })
+                }
+                options={optionsTimes}
+              />
+              {errors?.["timeBeforeSchedule"] && (
+                <Text center size={14} color={colors.DANGER}>
+                  campo obrigatório
+                </Text>
+              )}
+            </Block>
           </Block>
 
           <Block gap={10}>
-            <Block row gap={20} style={{ marginLeft: 20 }}>
-              <CustomInputRadio
-                onChange={() => setFields({ ...fields, typeContent: "manual" })}
-                label="Escrever"
-                checked={fields.typeContent === "manual"}
-              />
-              <CustomInputRadio
-                onChange={() =>
-                  setFields({ ...fields, typeContent: "template" })
-                }
-                label="Template"
-                checked={fields.typeContent === "template"}
-              />
-            </Block>
-
-            {fields.typeContent === "manual" && (
-              <CustomTextInput
-                labelText="Conteúdo"
-                rows={8}
-                numbersOfLines={8}
-                placeholder="Digite aqui o conteúdo que deseja enviar..."
-                onChangeText={(value) =>
-                  setFields({ ...fields, content: value })
-                }
-                value={fields.content}
-              />
-            )}
-
-            {fields.typeContent === "template" && (
-              <CustomInputTouch
-                label="Template"
-                value={fields.template?.label}
-                placeholder="Selecione um template"
-                icon="book"
-                onPress={() => {
-                  navigation.navigate("CampaignComponentsTemplates", {
-                    fields,
-                    setFields,
-                  });
-                }}
-              />
+            <CustomInputTouch
+              label="Template"
+              value={fields.template?.label}
+              placeholder="Selecione um template"
+              icon="book"
+              onPress={() => {
+                navigation.navigate("CampaignComponentsTemplates", {
+                  fields,
+                  setFields,
+                });
+              }}
+            />
+            {errors?.["template"] && (
+              <Text center size={14} color={colors.DANGER}>
+                campo obrigatório
+              </Text>
             )}
           </Block>
         </Block>

@@ -205,8 +205,8 @@ const RenderRight = (props) => {
       return [<NewService navigation={navigation} />];
     case "Configurações":
       return [<EditConfig navigation={navigation} />];
-    case "Templates":
-      return [<NewTemplate navigation={navigation} />];
+    // case "Templates":
+    //   return [<NewTemplate navigation={navigation} />];
     case "Campanhas":
       return [<NewCampaign navigation={navigation} />];
     default:

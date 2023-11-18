@@ -90,13 +90,13 @@ const ScheduleList = ({ route, navigation }) => {
   const notificationListener = useRef();
   const responseListener = useRef();
 
-  const {
-    execute: findManyTemplates,
-    response: responseTemplates,
-    loading: loadingTemplates,
-  } = useRequestFindMany({
-    path: "/templates",
-  });
+  // const {
+  //   execute: findManyTemplates,
+  //   response: responseTemplates,
+  //   loading: loadingTemplates,
+  // } = useRequestFindMany({
+  //   path: "/templates",
+  // });
 
   const {
     execute: findMany,
@@ -133,7 +133,7 @@ const ScheduleList = ({ route, navigation }) => {
     id: null,
     callbackSuccess: () => {
       findMany();
-      findManyTemplates();
+      // findManyTemplates();
       handleCloseScheduleAwating();
     },
   });
@@ -142,7 +142,7 @@ const ScheduleList = ({ route, navigation }) => {
     path: "/schedules",
     callbackSuccess: () => {
       findMany();
-      findManyTemplates();
+      // findManyTemplates();
     },
   });
 
@@ -160,7 +160,7 @@ const ScheduleList = ({ route, navigation }) => {
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         findMany();
-        findManyTemplates();
+        // findManyTemplates();
         console.log({ notification });
       });
 
@@ -196,14 +196,14 @@ const ScheduleList = ({ route, navigation }) => {
       .put(`/schedules/${id}/status`, payload)
       .then(() => {
         findMany();
-        findManyTemplates();
+        // findManyTemplates();
       });
   };
 
   useFocusEffect(
     useCallback(() => {
       findMany();
-      findManyTemplates();
+      // findManyTemplates();
     }, [date])
   );
 
@@ -234,14 +234,14 @@ const ScheduleList = ({ route, navigation }) => {
     if (pagination.currentPage === pagination.lastPage) return;
 
     findMany({ page: pagination.currentPage + 1 });
-    findManyTemplates();
+    // findManyTemplates();
   };
 
   const handlePreviousPage = () => {
     if (pagination.currentPage === 1) return;
 
     findMany({ page: pagination.currentPage - 1 });
-    findManyTemplates();
+    // findManyTemplates();
   };
 
   const handleFinished = (scheduleId) => {
@@ -271,7 +271,7 @@ const ScheduleList = ({ route, navigation }) => {
       .get(`/schedules/${id}/revert`)
       .then(() => {
         findMany();
-        findManyTemplates();
+        // findManyTemplates();
       });
   };
 
@@ -285,7 +285,7 @@ const ScheduleList = ({ route, navigation }) => {
 
   return (
     <View style={[styles.card, { backgroundColor: colors.BACKGROUND }]}>
-      <LoadingOverlay visible={loading || loadingUpdate || loadingTemplates} />
+      <LoadingOverlay visible={loading || loadingUpdate} />
 
       <DateTimePicker
         noInput
@@ -373,7 +373,7 @@ const ScheduleList = ({ route, navigation }) => {
                         onCanceled={() => handleCanceled(item.id)}
                         onDeleted={() => handleConfirmDelete(item.id)}
                         onRevert={() => handleRestore(item.id)}
-                        templates={responseTemplates?.data || []}
+                        templates={[]}
                         telefone={item?.user?.cellPhone}
                         clientName={
                           item?.user?.name ||
@@ -517,7 +517,7 @@ const ScheduleList = ({ route, navigation }) => {
         refreshing={loading}
         onRefresh={() => {
           findMany();
-          findManyTemplates();
+          // findManyTemplates();
         }}
       />
 

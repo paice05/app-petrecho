@@ -23,7 +23,7 @@ import RegisterExitForm from "../screens/Reports/FormRegisterExit";
 import Login from "../screens/Login";
 import RegisterForm from "../screens/Login/Form";
 import Template from "../screens/Templates/List";
-import TemplatesForm from "../screens/Templates/Form";
+import TemplatesView from "../screens/Templates/View";
 import { ImportContacts } from "../screens/Clients/components/ImportContacts";
 import { Config } from "../screens/Config";
 import { ConfigForm } from "../screens/Config/Form";
@@ -496,8 +496,8 @@ function TemplatesStack(props) {
       />
 
       <Stack.Screen
-        name="TemplatesForm"
-        component={TemplatesForm}
+        name="TemplatesView"
+        component={TemplatesView}
         options={{
           header: ({ route, navigation, scene }) => {
             const params = route.params;

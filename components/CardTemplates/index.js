@@ -8,8 +8,8 @@ import IconExtra from "../Icon";
 import Menu from "../Menu";
 
 const CardTemplates = ({ navigation, id, title, content, onDeleted }) => {
-  const isLargeTitle = title.length > 20;
-  const isLargeContent = content.length > 40;
+  const isLargeTitle = title.length > 30;
+  const isLargeContent = content.length > 50;
   const { colors } = useColorContext();
 
   return (
@@ -25,17 +25,22 @@ const CardTemplates = ({ navigation, id, title, content, onDeleted }) => {
               const vibrationDuration = 100;
 
               Vibration.vibrate(vibrationDuration);
-              navigation.navigate("TemplatesForm", { itemId: id });
+              navigation.navigate("TemplatesView", { itemId: id });
             }}
           >
-            <Text size={18} bold color={colors.TEXT}>
-              {title?.slice(0, 20)}
+            <Text
+              size={18}
+              bold
+              color={colors.TEXT}
+              style={{ textDecorationLine: "underline" }}
+            >
+              {title?.slice(0, 30)}
               {isLargeTitle ? "..." : ""}
             </Text>
           </TouchableOpacity>
 
           <Text size={15} color={colors.SUB_TEXT}>
-            {content?.slice(0, 40)}
+            {content?.slice(0, 50)}
             {isLargeContent ? "..." : ""}
           </Text>
         </Block>
@@ -43,17 +48,11 @@ const CardTemplates = ({ navigation, id, title, content, onDeleted }) => {
           items={[
             {
               onSelect: () =>
-                navigation.navigate("TemplatesForm", {
+                navigation.navigate("TemplatesView", {
                   itemId: id,
                 }),
-              text: "Editar",
-              icon: "edit",
-              color: colors.TEXT,
-            },
-            {
-              onSelect: onDeleted,
-              text: "Deletar",
-              icon: "trash-2",
+              text: "Visualizar mensagem",
+              icon: "eye",
               color: colors.TEXT,
             },
           ]}
