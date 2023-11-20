@@ -37,6 +37,7 @@ import { CampaignList } from "../screens/Campaign/List";
 import { CampaignForm } from "../screens/Campaign/Form";
 import { Templates as CampaignComponentsTemplates } from "../screens/Campaign/components/Templates";
 import { Clients as CampaignComponentsClients } from "../screens/Campaign/components/Clients";
+import { CampaignReport } from "../screens/Campaign/Report";
 
 const { width } = Dimensions.get("screen");
 
@@ -309,6 +310,24 @@ function CampaignsStack(props) {
             return (
               <Header
                 title={isEditing ? "Atualizar campanha" : "Nova campanha"}
+                back
+                navigation={navigation}
+                scene={scene}
+              />
+            );
+          },
+          // headerTransparent: true,
+        }}
+      />
+
+      <Stack.Screen
+        name="CampaignReport"
+        component={CampaignReport}
+        options={{
+          header: ({ route, navigation, scene }) => {
+            return (
+              <Header
+                title="Relatório da campanha"
                 back
                 navigation={navigation}
                 scene={scene}

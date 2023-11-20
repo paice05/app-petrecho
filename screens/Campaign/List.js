@@ -109,8 +109,9 @@ export function CampaignList() {
               name={item.name}
               content={item.content}
               status={item.status}
-              countUsers={item.users.length}
-              countSchedules={item.schedules.length}
+              countUsers={0}
+              scheduleAt={item.scheduleAt}
+              countSchedules={item?.schedules?.length || 0}
               template={item?.template?.title}
               start={() => handleStartCampaign({ campaignId: item.id })}
               onDeleted={() => handleConfirmDelete(item.id)}

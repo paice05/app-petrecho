@@ -5,6 +5,8 @@ import { useNavigation } from "@react-navigation/native";
 import { useColorContext } from "../../context/colors";
 import Icon from "../Icon";
 import Menu from "../Menu";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
 
 const statusViewd = {
   pending: "Pendente",
@@ -18,7 +20,7 @@ export function CardCampaign({
   name,
   content,
   status,
-  countUsers,
+  scheduleAt,
   countSchedules,
   template,
   start,
@@ -62,6 +64,16 @@ export function CardCampaign({
           items={[
             {
               onSelect: () => {
+                navigation.navigate("CampaignReport", {
+                  itemId: id,
+                });
+              },
+              text: "Relatório",
+              icon: "eye",
+              color: colors.TEXT,
+            },
+            {
+              onSelect: () => {
                 navigation.navigate("CampaignForm", {
                   itemId: id,
                 });
@@ -93,8 +105,13 @@ export function CardCampaign({
         <Block row gap={10}>
           <Icon size={18} color={colors.ICON} name="users" />
           <Text size={16} bold color={colors.TEXT}>
-            {countUsers > 0 && `${countUsers} clientes`}
-            {countSchedules > 0 && `${countSchedules} agendamentos`}
+            {countSchedules}
+          </Text>
+        </Block>
+        <Block row gap={10}>
+          <Icon size={18} color={colors.ICON} name="calendar" />
+          <Text size={16} bold color={colors.TEXT}>
+            {format(new Date(scheduleAt), "dd/MMMM", { locale: ptBR })}
           </Text>
         </Block>
         <Block row gap={10}>

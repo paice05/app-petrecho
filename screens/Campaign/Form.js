@@ -12,7 +12,6 @@ import { CustomSelectBottom } from "../../components/CustomSelectBottom";
 import { CustomInputTouch } from "../../components/CustomInputTouch";
 import { useValidateRequiredFields } from "../../components/hooks/useValidateRequiredFields";
 import { useRequestCreate } from "../../components/hooks/useRequestCreate";
-import { CustomInputRadio } from "../../components/CustomInputRadio";
 import { LoadingOverlay } from "../../components/LoadingOverlay";
 import { useRequestFindOne } from "../../components/hooks/useRequestFindOne";
 import { useRequestUpdate } from "../../components/hooks/useRequestUpdate";

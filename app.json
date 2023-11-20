@@ -2,7 +2,7 @@
   "expo": {
     "name": "Meu Petrecho",
     "slug": "test",
-    "version": "1.36.0",
+    "version": "1.37.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -21,7 +21,7 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#47141e"
       },
-      "versionCode": 36,
+      "versionCode": 37,
       "package": "com.mpaice.meupetrechoapp",
       "googleServicesFile": "./google-services.json"
     },
