@@ -17,9 +17,9 @@ import { useRequestFindOne } from "../../components/hooks/useRequestFindOne";
 import { useRequestUpdate } from "../../components/hooks/useRequestUpdate";
 
 const optionsTimes = [
-  { title: "30 minutos", data: 0.5 },
   { title: "1 hora", data: 1 },
   { title: "2 horas", data: 2 },
+  { title: "1 dia", data: 24 },
 ];
 
 export function CampaignForm({ route }) {
