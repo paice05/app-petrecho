@@ -145,7 +145,7 @@ const Login = ({ navigation }) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss()}>
+      <TouchableWithoutFeedback>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           <LoadingOverlay visible={loading} />
           <StatusBar style="light" />

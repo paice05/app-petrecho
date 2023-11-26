@@ -61,12 +61,12 @@ export const BlockModal = ({
                     <Text style={styles.textStyle}>Voltar</Text>
                   </Pressable>
                   <Pressable
-                    style={[styles.button, styles.buttonRedirect]}
+                    style={styles.buttonRedirect}
                     onPress={handleRedirect}
                   >
                     <OpenURLButton
                       url={redirectWhatsApp}
-                      style={styles.textStyle}
+                      style={styles.textGetInTouch}
                     >
                       Entrar em contato
                     </OpenURLButton>
@@ -127,9 +127,22 @@ const styles = StyleSheet.create({
   },
   buttonRedirect: {
     backgroundColor: "#1be611",
+    height: 40,
+    marginHorizontal: 5,
+    width: "50%",
+    borderRadius: 20,
+    elevation: 3,
+    alignItems: "center",
+    justifyContent: "center",
   },
   textStyle: {
     color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  textGetInTouch: {
+    color: "white",
+    fontSize: 12,
     fontWeight: "bold",
     textAlign: "center",
   },
