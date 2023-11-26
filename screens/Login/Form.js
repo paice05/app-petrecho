@@ -1,4 +1,4 @@
-import { Block, Text, theme } from "galio-framework";
+import { Text, theme } from "galio-framework";
 import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
@@ -130,7 +130,7 @@ const RegisterForm = ({ navigation }) => {
             <View style={styles.secondaryImageContainer}>
               <Animated.Image
                 style={styles.secondaryImage}
-                entering={FadeInUp.delay(200).duration(1000).springify()}
+                entering={FadeInUp.delay(300).duration(1000).springify()}
                 source={require("../../assets/meu-petrecho.png")}
               />
             </View>
@@ -139,7 +139,7 @@ const RegisterForm = ({ navigation }) => {
           <View style={styles.formContainer}>
             <View>
               <Animated.View
-                entering={FadeInDown.duration(1000).springify()}
+                entering={FadeInDown.delay(200).duration(1000).springify()}
                 style={styles.inputContainer}
               >
                 <Text size={16} bold style={{ marginLeft: 20, marginTop: 5 }}>
@@ -176,8 +176,7 @@ const RegisterForm = ({ navigation }) => {
               </Animated.View>
 
               <Animated.View
-                entering={FadeInDown.delay(200).duration(1000).springify()}
-                //style={{ width: width * 0.8 }}
+                entering={FadeInDown.delay(300).duration(1000).springify()}
               >
                 <Text
                   size={16}
@@ -212,8 +211,7 @@ const RegisterForm = ({ navigation }) => {
               </Animated.View>
 
               <Animated.View
-                entering={FadeInDown.delay(200).duration(1000).springify()}
-                //style={{ width: width * 0.8 }}
+                entering={FadeInDown.delay(400).duration(1000).springify()}
               >
                 <Text size={16} bold style={{ marginLeft: 20, marginTop: 10 }}>
                   Senha
@@ -245,8 +243,7 @@ const RegisterForm = ({ navigation }) => {
               </Animated.View>
 
               <Animated.View
-                entering={FadeInDown.delay(200).duration(1000).springify()}
-                //style={{ width: width * 0.8 }}
+                entering={FadeInDown.delay(500).duration(1000).springify()}
               >
                 <Text size={16} bold style={{ marginLeft: 20, marginTop: 5 }}>
                   Confirmar senha
@@ -278,8 +275,7 @@ const RegisterForm = ({ navigation }) => {
               </Animated.View>
 
               <Animated.View
-                entering={FadeInDown.delay(400).duration(1000).springify()}
-                style={{ width: "100%" }}
+                entering={FadeInDown.delay(600).duration(1000).springify()}
               >
                 <TouchableOpacity
                   style={styles.buttonLogin}
@@ -314,94 +310,6 @@ const RegisterForm = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  registerContainer: {
-    width: width * 0.9,
-    height: height < 812 ? height * 0.8 : height * 0.8,
-    backgroundColor: "#335c67", //nowTheme.COLORS.WHITE, //"#8d99ae"
-    borderRadius: 10,
-    shadowColor: nowTheme.COLORS.BLACK,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowRadius: 8,
-    shadowOpacity: 0.1,
-    elevation: 1,
-    overflow: "hidden",
-  },
-  containerX: {
-    padding: 20,
-    marginTop: 40,
-    marginRight: 30,
-    marginBottom: 50,
-    marginLeft: 30,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#fff3b0", //nowTheme.COLORS.BORDER,
-  },
-  inputIcons: {
-    marginRight: 12,
-    color: nowTheme.COLORS.PRIMARY,
-  },
-  inputMaskPhone: {
-    width: 340,
-    height: 44,
-    borderRadius: 16,
-    fontSize: 16,
-    paddingHorizontal: 15,
-    backgroundColor: "#ece7e8",
-    alignItems: "center",
-    flexDirection: "row",
-    marginLeft: 30,
-    marginRight: 20,
-  },
-  inputPassword: {
-    width: 340,
-    height: 44,
-    borderRadius: 16,
-    backgroundColor: "#ece7e8",
-    marginLeft: 30,
-    marginRight: 20,
-    fontSize: 18,
-  },
-  containerMaskPhone: {
-    borderRadius: 30,
-    borderWidth: 1,
-    borderColor: nowTheme.COLORS.BORDER,
-    height: 44,
-    paddingHorizontal: 10,
-    alignItems: "center",
-  },
-  registerButton: {
-    marginBottom: nowTheme.SIZES.BASE,
-    borderRadius: 10,
-    width: 120,
-    height: 40,
-    backgroundColor: nowTheme.COLORS.PRIMARY,
-  },
-  inputsX: {
-    borderWidth: 1,
-    borderColor: "#E3E3E3",
-    borderRadius: 21.5,
-  },
-  cardTitle: {
-    //height: 10,
-    width: "82%",
-    padding: 10,
-    marginTop: 30,
-    marginLeft: 35,
-    marginBottom: -8,
-    borderRadius: 4,
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderColor: nowTheme.COLORS.PRIMARY,
-    backgroundColor: nowTheme.COLORS.PRIMARY,
-  },
-  titleStyle: {
-    textAlign: "center",
-    marginTop: 10,
-    color: nowTheme.COLORS.WHITE,
-  },
   container: {
     flex: 1,
     backgroundColor: "white",
@@ -486,14 +394,26 @@ const styles = StyleSheet.create({
     marginRight: 20,
     fontSize: 18,
   },
-  passwordCheck: {
-    paddingLeft: 2,
-    paddingTop: 6,
+  inputMaskPhone: {
+    width: 340,
+    height: 44,
+    borderRadius: 16,
+    fontSize: 16,
+    paddingHorizontal: 15,
+    backgroundColor: "#ece7e8",
+    alignItems: "center",
+    flexDirection: "row",
+    marginLeft: 30,
+    marginRight: 20,
   },
-  errorText: {
-    textAlign: "center",
-    paddingHorizontal: 20,
-    marginTop: 15,
+  inputPassword: {
+    width: 340,
+    height: 44,
+    borderRadius: 16,
+    backgroundColor: "#ece7e8",
+    marginLeft: 30,
+    marginRight: 20,
+    fontSize: 18,
   },
 });
 

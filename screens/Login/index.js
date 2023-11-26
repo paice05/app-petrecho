@@ -174,7 +174,7 @@ const Login = ({ navigation }) => {
           <View style={styles.formContainer}>
             <View>
               <Animated.View
-                entering={FadeInDown.duration(1000).springify()}
+                entering={FadeInDown.delay(200).duration(1000).springify()}
                 style={styles.inputContainer}
               >
                 <Input
@@ -197,8 +197,7 @@ const Login = ({ navigation }) => {
               </Animated.View>
 
               <Animated.View
-                entering={FadeInDown.delay(200).duration(1000).springify()}
-                //style={{ width: width * 0.8 }}
+                entering={FadeInDown.delay(300).duration(1000).springify()}
               >
                 <Input
                   placeholder="Senha"
@@ -233,7 +232,6 @@ const Login = ({ navigation }) => {
 
               <Animated.View
                 entering={FadeInDown.delay(400).duration(1000).springify()}
-                style={{ width: "100%" }}
               >
                 <TouchableOpacity
                   style={styles.buttonLogin}
