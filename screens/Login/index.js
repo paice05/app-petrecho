@@ -5,12 +5,24 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   TouchableOpacity,
-  Vibration,
+  Image,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
 } from "react-native";
 import * as Notifications from "expo-notifications";
 import { Block, Text, theme } from "galio-framework";
 
-import { Button, Icon, Input } from "../../components";
+import Animated, {
+  FadeIn,
+  FadeInDown,
+  FadeInUp,
+} from "react-native-reanimated";
+
+import { StatusBar } from "expo-status-bar";
+
+import { Icon, Input } from "../../components";
 import { nowTheme } from "../../constants";
 import { api } from "../../services/api";
 import { clearCache, getCache, setCache } from "../../services/cache";
@@ -129,207 +141,230 @@ const Login = ({ navigation }) => {
   };
 
   return (
-    <DismissKeyboard>
-      <Block flex middle>
-        <LoadingOverlay visible={loading} />
-        <Block flex middle>
-          <Block style={styles.registerContainer}>
-            <Block flex space="evenly">
-              <Block flex={0.4} middle style={styles.socialConnect}>
-                <Block flex={0.5} middle style={styles.cardTitle}>
-                  <Text
-                    style={{
-                      textAlign: "center",
-                    }}
-                    color="#FFF"
-                    size={24}
-                  >
-                    Meu Petrecho
-                  </Text>
-                </Block>
-              </Block>
-              <Block flex={1} middle>
-                <Block center flex={0.9}>
-                  <Block flex>
-                    <Block>
-                      <Block width={width * 0.8} style={{ marginBottom: 5 }}>
-                        <Input
-                          placeholder="Digite seu usuário"
-                          style={styles.inputs}
-                          value={fields.username}
-                          onChangeText={(value) =>
-                            setFields({ ...fields, username: value })
-                          }
-                          type="number-pad"
-                          iconContent={
-                            <Icon
-                              size={16}
-                              color="#ADB5BD"
-                              name="user"
-                              style={styles.inputIcons}
-                            />
-                          }
-                        />
-                      </Block>
-                      <Block width={width * 0.8}>
-                        <Input
-                          placeholder="Senha"
-                          password
-                          viewPass
-                          value={fields.password}
-                          onChangeText={(value) =>
-                            setFields({ ...fields, password: value })
-                          }
-                          style={styles.inputs}
-                          iconContent={
-                            <Icon
-                              size={16}
-                              color="#ADB5BD"
-                              name="lock"
-                              family="feather"
-                              style={styles.inputIcons}
-                            />
-                          }
-                        />
-                      </Block>
-                      {isError && (
-                        <Text center size={12} color="red">
-                          Desculpe, mas as informações de login que você inseriu
-                          estão incorretas. Por favor, verifique o nome de
-                          usuário e senha e tente novamente.
-                        </Text>
-                      )}
-                    </Block>
-                    <Block center>
-                      <Button
-                        onPress={submitLogin}
-                        color="primary"
-                        round
-                        style={styles.createButton}
-                      >
-                        <Text bold size={14} color={nowTheme.COLORS.WHITE}>
-                          Entrar
-                        </Text>
-                      </Button>
-                    </Block>
-                    <Block center style={{ marginTop: 15 }}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          navigation.navigate({ name: "Cadastro" });
-                        }}
-                      >
-                        <Text
-                          size={16}
-                          style={{
-                            textDecorationLine: "underline",
-                            textAlign: "center",
-                          }}
-                          color={nowTheme.COLORS.INFO}
-                        >
-                          Ainda não tem conta?
-                        </Text>
-                        <Text
-                          size={16}
-                          style={{
-                            textDecorationLine: "underline",
-                            textAlign: "center",
-                          }}
-                          color={nowTheme.COLORS.INFO}
-                        >
-                          Criar agora
-                        </Text>
-                      </TouchableOpacity>
-                    </Block>
-                  </Block>
-                </Block>
-              </Block>
-            </Block>
-          </Block>
-        </Block>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss()}>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <LoadingOverlay visible={loading} />
+          <StatusBar style="light" />
+          <View>
+            <Image
+              style={styles.backgroundImage}
+              source={require("../../assets/background.png")}
+            />
 
-        <BlockModal
-          title="Conta bloqueada"
-          description="Caro cliente, sua conta esta bloqueada!!!
-            Entre em contato com a administração para mais detalhes."
-          isVisible={toggle}
-          onRequestClose={onChangeToggle}
-          handleReturn={onChangeToggle}
-        />
-      </Block>
-    </DismissKeyboard>
+            <View style={styles.logoContainer}>
+              <Animated.Image
+                style={styles.logoImage}
+                entering={FadeInUp.delay(200).duration(1000).springify()}
+                source={require("../../assets/logo-meu-petrecho.png")}
+              />
+            </View>
+            <View style={styles.secondaryImageContainer}>
+              <Animated.Image
+                style={styles.secondaryImage}
+                entering={FadeInUp.delay(200).duration(1000).springify()}
+                source={require("../../assets/meu-petrecho.png")}
+              />
+            </View>
+          </View>
+
+          <View style={styles.formContainer}>
+            <View>
+              <Animated.View
+                entering={FadeInDown.duration(1000).springify()}
+                style={styles.inputContainer}
+              >
+                <Input
+                  placeholder="Digite seu usuário"
+                  style={styles.inputs}
+                  value={fields.username}
+                  onChangeText={(value) =>
+                    setFields({ ...fields, username: value })
+                  }
+                  type="number-pad"
+                  iconContent={
+                    <Icon
+                      size={16}
+                      color="#ADB5BD"
+                      name="user"
+                      style={styles.inputIcons}
+                    />
+                  }
+                />
+              </Animated.View>
+
+              <Animated.View
+                entering={FadeInDown.delay(200).duration(1000).springify()}
+                //style={{ width: width * 0.8 }}
+              >
+                <Input
+                  placeholder="Senha"
+                  password
+                  viewPass
+                  value={fields.password}
+                  onChangeText={(value) =>
+                    setFields({ ...fields, password: value })
+                  }
+                  style={styles.inputs}
+                  iconContent={
+                    <Icon
+                      size={16}
+                      color="#ADB5BD"
+                      name="lock"
+                      family="feather"
+                      style={styles.inputIcons}
+                    />
+                  }
+                />
+              </Animated.View>
+
+              <View style={styles.errorText}>
+                {isError && (
+                  <Text center size={12} color="red">
+                    Desculpe, mas as informações de login que você inseriu estão
+                    incorretas. Por favor, verifique o nome de usuário e senha e
+                    tente novamente.
+                  </Text>
+                )}
+              </View>
+
+              <Animated.View
+                entering={FadeInDown.delay(400).duration(1000).springify()}
+                style={{ width: "100%" }}
+              >
+                <TouchableOpacity
+                  style={styles.buttonLogin}
+                  onPress={submitLogin}
+                >
+                  <Text style={styles.textLogin}>Entrar</Text>
+                </TouchableOpacity>
+              </Animated.View>
+            </View>
+
+            <Animated.View
+              entering={FadeInDown.delay(600).duration(1000).springify()}
+              style={styles.textNotAccount}
+            >
+              <Text>Ainda não tem conta?</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate({ name: "Cadastro" });
+                }}
+              >
+                <Text color="#0284c7">Criar agora</Text>
+              </TouchableOpacity>
+            </Animated.View>
+
+            <BlockModal
+              title="Conta bloqueada"
+              description="Caro cliente, sua conta esta bloqueada!!!
+                  Entre em contato com a administração para mais detalhes."
+              isVisible={toggle}
+              onRequestClose={onChangeToggle}
+              handleReturn={onChangeToggle}
+            />
+          </View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
-  imageBackgroundContainer: {
-    width: width,
-    height: height,
-    padding: 0,
-    zIndex: 1,
+  container: {
+    flex: 1,
+    backgroundColor: "white",
   },
-  imageBackground: {
-    width: width,
-    height: height,
+  scrollContainer: {
+    flexGrow: 1,
   },
-  registerContainer: {
-    width: width * 0.9,
-    height: height < 812 ? height * 0.8 : height * 0.8,
-    backgroundColor: nowTheme.COLORS.WHITE,
-    borderRadius: 4,
-    shadowColor: nowTheme.COLORS.BLACK,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowRadius: 8,
-    shadowOpacity: 0.1,
-    elevation: 1,
-    overflow: "hidden",
+  backgroundImage: {
+    height: "310%",
+    width: "100%",
+    position: "absolute",
   },
-  socialConnect: {
-    backgroundColor: nowTheme.COLORS.WHITE,
+  contentContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  socialButtons: {
-    width: 120,
-    height: 40,
-    backgroundColor: "#fff",
-    shadowColor: nowTheme.COLORS.BLACK,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowRadius: 8,
-    shadowOpacity: 0.1,
-    elevation: 1,
+  logoContainer: {
+    width: "100%",
+    alignItems: "center",
+    paddingVertical: 80,
+  },
+  logoImage: {
+    height: 90,
+    width: 70,
+  },
+  secondaryImageContainer: {
+    width: "100%",
+    position: "absolute",
+    padding: theme.SIZES.BASE * 4,
+    alignItems: "center",
+    paddingVertical: 195,
+  },
+  secondaryImage: {
+    height: 50,
+    width: "120%",
+  },
+  formContainer: {
+    alignItems: "center",
+  },
+  textNotAccount: {
+    flexDirection: "row",
+    gap: 10,
+    justifyContent: "center",
+    display: "flex",
+    marginTop: 15,
+  },
+  buttonLogin: {
+    width: 340,
+    height: 50,
+    backgroundColor: nowTheme.COLORS.PRIMARY,
+    padding: 3,
+    borderRadius: 16,
+    marginBottom: 15,
+    marginTop: 25,
+    marginLeft: 30,
+    marginRight: 20,
+  },
+  textLogin: {
+    fontSize: 16,
+    fontWeight: "bold",
+    lineHeight: 34,
+    color: nowTheme.COLORS.WHITE,
+    textAlign: "center",
   },
   inputIcons: {
     marginRight: 12,
     color: nowTheme.COLORS.PRIMARY,
   },
+  inputContainer: {
+    marginTop: 160,
+    marginBottom: 5,
+    width: width * 0.8,
+  },
   inputs: {
-    borderWidth: 1,
-    borderColor: "#E3E3E3",
-    borderRadius: 21.5,
+    width: 340,
+    height: 50,
+    borderRadius: 16,
+    backgroundColor: "#ece7e8",
+    marginLeft: 30,
+    marginRight: 20,
+    fontSize: 18,
   },
   passwordCheck: {
     paddingLeft: 2,
     paddingTop: 6,
   },
-  createButton: {
-    marginBottom: nowTheme.SIZES.BASE,
-    borderRadius: 10,
-    width: 120,
-    height: 40,
-    backgroundColor: nowTheme.COLORS.PRIMARY,
-  },
-  cardTitle: {
-    padding: theme.SIZES.BASE * 2,
-    borderRadius: 4,
-    borderStyle: "solid",
-    borderWidth: 1,
-    borderColor: nowTheme.COLORS.PRIMARY,
-    marginBottom: 16,
-    backgroundColor: nowTheme.COLORS.PRIMARY,
+  errorText: {
+    textAlign: "center",
+    paddingHorizontal: 20,
+    marginTop: 15,
   },
 });
 

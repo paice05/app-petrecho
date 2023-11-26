@@ -1,6 +1,27 @@
-import { Block, Text } from "galio-framework";
+import { Block, Text, theme } from "galio-framework";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Dimensions, Alert } from "react-native";
+import {
+  StyleSheet,
+  Dimensions,
+  TouchableWithoutFeedback,
+  Keyboard,
+  TouchableOpacity,
+  Image,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Alert,
+} from "react-native";
+
+import { StatusBar } from "expo-status-bar";
+
+import Animated, {
+  FadeIn,
+  FadeInDown,
+  FadeInUp,
+} from "react-native-reanimated";
+
 import MaskInput, { Masks } from "react-native-mask-input";
 
 import { LoadingOverlay } from "../../components/LoadingOverlay";
@@ -24,6 +45,7 @@ const RegisterForm = ({ navigation }) => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [buttonClicked, setButtonClicked] = useState(false);
 
   const { changeUser } = useUserContext();
   const { changeColor } = useColorContext();
@@ -84,159 +106,210 @@ const RegisterForm = ({ navigation }) => {
   };
 
   return (
-    <Block flex middle>
-      <LoadingOverlay visible={loading} />
-      <Block style={styles.registerContainer}>
-        <Block flex={0.1} style={styles.cardTitle}>
-          <Text style={styles.titleStyle} size={18} bold>
-            Meu Petrecho - Cadastro
-          </Text>
-        </Block>
-
-        <Block flex space="between" style={styles.container}>
-          <Block>
-            <Text
-              size={16}
-              bold
-              style={{ marginLeft: 20, marginTop: 15 }}
-              color="#e09f3e"
-            >
-              Nome da empresa
-            </Text>
-            <Input
-              placeholder="Digite o nome da empresa"
-              style={styles.inputs}
-              value={fields.name}
-              onChangeText={(value) => setFields({ ...fields, name: value })}
-              type="text"
-              iconContent={
-                <Icon
-                  size={16}
-                  name="home"
-                  family="feather"
-                  style={styles.inputIcons}
-                  color="gray"
-                />
-              }
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <TouchableWithoutFeedback>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <LoadingOverlay visible={loading} />
+          <StatusBar style="light" />
+          <View>
+            <Image
+              style={styles.backgroundImage}
+              source={require("../../assets/background.png")}
             />
-            {errors?.["name"] && (
-              <Text center size={14} color={nowTheme.COLORS.ERROR}>
-                Campo obrigatório
-              </Text>
-            )}
 
-            <Text
-              size={16}
-              bold
-              style={{ marginLeft: 20, marginBottom: 5 }}
-              color="#e09f3e"
-            >
-              Telefone
-            </Text>
-            <Block row alignItems="center" style={styles.inputMaskPhone}>
-              <Icon
-                size={16}
-                name="phone"
-                style={styles.inputIcons}
-                color="gray"
+            <View style={styles.logoContainer}>
+              <Animated.Image
+                style={styles.logoImage}
+                entering={FadeInUp.delay(200).duration(1000).springify()}
+                source={require("../../assets/logo-meu-petrecho.png")}
               />
-              <MaskInput
-                placeholder="Telefone Celular "
-                keyboardType="numeric"
-                value={fields.cellPhone}
-                onChangeText={(value) =>
-                  setFields({ ...fields, cellPhone: value })
-                }
-                mask={Masks.BRL_PHONE}
+            </View>
+            <View style={styles.secondaryImageContainer}>
+              <Animated.Image
+                style={styles.secondaryImage}
+                entering={FadeInUp.delay(200).duration(1000).springify()}
+                source={require("../../assets/meu-petrecho.png")}
               />
-            </Block>
-            {errors?.["cellPhone"] && (
-              <Text center size={14} color={nowTheme.COLORS.ERROR}>
-                Campo obrigatório
-              </Text>
-            )}
+            </View>
+          </View>
 
-            <Text
-              size={16}
-              bold
-              style={{ marginLeft: 20, marginTop: 10 }}
-              color="#e09f3e"
-            >
-              Senha
-            </Text>
-            <Input
-              placeholder="Senha"
-              password
-              viewPass
-              value={fields.password}
-              onChangeText={(value) =>
-                setFields({ ...fields, password: value })
-              }
-              style={styles.inputPassword}
-              iconContent={
-                <Icon
-                  size={16}
-                  color="#ADB5BD"
-                  name="lock"
-                  family="feather"
-                  style={styles.inputIcons}
+          <View style={styles.formContainer}>
+            <View>
+              <Animated.View
+                entering={FadeInDown.duration(1000).springify()}
+                style={styles.inputContainer}
+              >
+                <Text size={16} bold style={{ marginLeft: 20, marginTop: 5 }}>
+                  Nome da empresa
+                </Text>
+                <Input
+                  placeholder="Digite o nome da empresa"
+                  style={styles.inputs}
+                  value={fields.name}
+                  onChangeText={(value) =>
+                    setFields({ ...fields, name: value })
+                  }
+                  type="text"
+                  iconContent={
+                    <Icon
+                      size={16}
+                      color="#ADB5BD"
+                      family="feather"
+                      name="home"
+                      style={styles.inputIcons}
+                    />
+                  }
                 />
-              }
-            />
-            {errors?.["password"] && (
-              <Text center size={14} color={nowTheme.COLORS.ERROR}>
-                Campo obrigatório
-              </Text>
-            )}
+                {buttonClicked && errors?.["name"] && (
+                  <Text
+                    center
+                    size={14}
+                    style={{ marginLeft: 60 }}
+                    color={nowTheme.COLORS.ERROR}
+                  >
+                    Campo obrigatório
+                  </Text>
+                )}
+              </Animated.View>
 
-            <Text
-              size={16}
-              bold
-              style={{ marginLeft: 20, marginTop: 5 }}
-              color="#e09f3e"
-            >
-              Confirmar senha
-            </Text>
-            <Input
-              placeholder="Senha"
-              password
-              viewPass
-              value={fields.confirmPassword}
-              onChangeText={(value) =>
-                setFields({ ...fields, confirmPassword: value })
-              }
-              style={styles.inputPassword}
-              iconContent={
-                <Icon
+              <Animated.View
+                entering={FadeInDown.delay(200).duration(1000).springify()}
+                //style={{ width: width * 0.8 }}
+              >
+                <Text
                   size={16}
-                  color="#ADB5BD"
-                  name="lock"
-                  family="feather"
-                  style={styles.inputIcons}
+                  bold
+                  style={{ marginLeft: 20, marginBottom: 5 }}
+                >
+                  Telefone
+                </Text>
+                <View style={styles.inputMaskPhone}>
+                  <Icon
+                    size={16}
+                    color="#ADB5BD"
+                    name="phone"
+                    family="feather"
+                    style={styles.inputIcons}
+                  />
+                  <MaskInput
+                    placeholder="Telefone Celular "
+                    keyboardType="numeric"
+                    value={fields.cellPhone}
+                    onChangeText={(value) =>
+                      setFields({ ...fields, cellPhone: value })
+                    }
+                    mask={Masks.BRL_PHONE}
+                  />
+                </View>
+                {buttonClicked && errors?.["cellPhone"] && (
+                  <Text center size={14} color={nowTheme.COLORS.ERROR}>
+                    Campo obrigatório
+                  </Text>
+                )}
+              </Animated.View>
+
+              <Animated.View
+                entering={FadeInDown.delay(200).duration(1000).springify()}
+                //style={{ width: width * 0.8 }}
+              >
+                <Text size={16} bold style={{ marginLeft: 20, marginTop: 10 }}>
+                  Senha
+                </Text>
+                <Input
+                  placeholder="Senha"
+                  password
+                  viewPass
+                  value={fields.password}
+                  onChangeText={(value) =>
+                    setFields({ ...fields, password: value })
+                  }
+                  style={styles.inputPassword}
+                  iconContent={
+                    <Icon
+                      size={16}
+                      color="#ADB5BD"
+                      name="lock"
+                      family="feather"
+                      style={styles.inputIcons}
+                    />
+                  }
                 />
-              }
-            />
-            {errors?.["confirmPassword"] && (
-              <Text center size={14} color={nowTheme.COLORS.ERROR}>
-                Campo obrigatório
-              </Text>
-            )}
-          </Block>
-          <Block center style={{ marginBottom: 15 }}>
-            <Button
-              color="primary"
-              round
-              style={styles.registerButton}
-              onPress={submitRegister}
+                {buttonClicked && errors?.["password"] && (
+                  <Text center size={14} color={nowTheme.COLORS.ERROR}>
+                    Campo obrigatório
+                  </Text>
+                )}
+              </Animated.View>
+
+              <Animated.View
+                entering={FadeInDown.delay(200).duration(1000).springify()}
+                //style={{ width: width * 0.8 }}
+              >
+                <Text size={16} bold style={{ marginLeft: 20, marginTop: 5 }}>
+                  Confirmar senha
+                </Text>
+                <Input
+                  placeholder="Senha"
+                  password
+                  viewPass
+                  value={fields.confirmPassword}
+                  onChangeText={(value) =>
+                    setFields({ ...fields, confirmPassword: value })
+                  }
+                  style={styles.inputPassword}
+                  iconContent={
+                    <Icon
+                      size={16}
+                      color="#ADB5BD"
+                      name="lock"
+                      family="feather"
+                      style={styles.inputIcons}
+                    />
+                  }
+                />
+                {buttonClicked && errors?.["confirmPassword"] && (
+                  <Text center size={14} color={nowTheme.COLORS.ERROR}>
+                    Campo obrigatório
+                  </Text>
+                )}
+              </Animated.View>
+
+              <Animated.View
+                entering={FadeInDown.delay(400).duration(1000).springify()}
+                style={{ width: "100%" }}
+              >
+                <TouchableOpacity
+                  style={styles.buttonLogin}
+                  onPress={() => {
+                    setButtonClicked(true);
+                    submitRegister();
+                  }}
+                >
+                  <Text style={styles.textLogin}>Cadastrar</Text>
+                </TouchableOpacity>
+              </Animated.View>
+            </View>
+
+            <Animated.View
+              entering={FadeInDown.delay(600).duration(1000).springify()}
+              style={styles.textNotAccount}
             >
-              <Text bold size={14} color={nowTheme.COLORS.WHITE}>
-                Cadastrar
-              </Text>
-            </Button>
-          </Block>
-        </Block>
-      </Block>
-    </Block>
+              <Text>Já tem uma conta?</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate({ name: "Onboarding" });
+                }}
+              >
+                <Text color="#0284c7">Login</Text>
+              </TouchableOpacity>
+            </Animated.View>
+          </View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -256,7 +329,7 @@ const styles = StyleSheet.create({
     elevation: 1,
     overflow: "hidden",
   },
-  container: {
+  containerX: {
     padding: 20,
     marginTop: 40,
     marginRight: 30,
@@ -271,22 +344,25 @@ const styles = StyleSheet.create({
     color: nowTheme.COLORS.PRIMARY,
   },
   inputMaskPhone: {
-    borderRadius: 30,
-    borderWidth: 1,
-    borderColor: nowTheme.COLORS.BORDER,
+    width: 340,
     height: 44,
-    fontSize: 14,
+    borderRadius: 16,
+    fontSize: 16,
     paddingHorizontal: 15,
-    //color: nowTheme.COLORS.BORDER,
-    backgroundColor: nowTheme.COLORS.WHITE,
+    backgroundColor: "#ece7e8",
+    alignItems: "center",
+    flexDirection: "row",
+    marginLeft: 30,
+    marginRight: 20,
   },
   inputPassword: {
-    borderRadius: 30,
-    borderWidth: 1,
-    borderColor: nowTheme.COLORS.BORDER,
+    width: 340,
     height: 44,
-    fontSize: 14,
-    paddingHorizontal: 15,
+    borderRadius: 16,
+    backgroundColor: "#ece7e8",
+    marginLeft: 30,
+    marginRight: 20,
+    fontSize: 18,
   },
   containerMaskPhone: {
     borderRadius: 30,
@@ -303,7 +379,7 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: nowTheme.COLORS.PRIMARY,
   },
-  inputs: {
+  inputsX: {
     borderWidth: 1,
     borderColor: "#E3E3E3",
     borderRadius: 21.5,
@@ -325,6 +401,99 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 10,
     color: nowTheme.COLORS.WHITE,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: "white",
+  },
+  scrollContainer: {
+    flexGrow: 1,
+  },
+  backgroundImage: {
+    height: "300%",
+    width: "100%",
+    position: "absolute",
+  },
+  contentContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  logoContainer: {
+    width: "100%",
+    alignItems: "center",
+    paddingVertical: 80,
+  },
+  logoImage: {
+    height: 90,
+    width: 70,
+  },
+  secondaryImageContainer: {
+    width: "100%",
+    position: "absolute",
+    padding: theme.SIZES.BASE * 4,
+    alignItems: "center",
+    paddingVertical: 195,
+  },
+  secondaryImage: {
+    height: 50,
+    width: "120%",
+  },
+  formContainer: {
+    alignItems: "center",
+  },
+  textNotAccount: {
+    flexDirection: "row",
+    gap: 10,
+    justifyContent: "center",
+    display: "flex",
+    marginTop: 15,
+    marginBottom: 40,
+  },
+  buttonLogin: {
+    width: 340,
+    height: 50,
+    backgroundColor: nowTheme.COLORS.PRIMARY,
+    padding: 3,
+    borderRadius: 16,
+    marginBottom: 15,
+    marginTop: 25,
+    marginLeft: 30,
+    marginRight: 20,
+  },
+  textLogin: {
+    fontSize: 16,
+    fontWeight: "bold",
+    lineHeight: 34,
+    color: nowTheme.COLORS.WHITE,
+    textAlign: "center",
+  },
+  inputIcons: {
+    marginRight: 12,
+    color: nowTheme.COLORS.PRIMARY,
+  },
+  inputContainer: {
+    marginTop: 125,
+    marginBottom: 5,
+    width: width * 0.8,
+  },
+  inputs: {
+    width: 340,
+    height: 44,
+    borderRadius: 16,
+    backgroundColor: "#ece7e8",
+    marginLeft: 30,
+    marginRight: 20,
+    fontSize: 18,
+  },
+  passwordCheck: {
+    paddingLeft: 2,
+    paddingTop: 6,
+  },
+  errorText: {
+    textAlign: "center",
+    paddingHorizontal: 20,
+    marginTop: 15,
   },
 });
 

@@ -6,6 +6,8 @@ import { DrawerItem as DrawerCustomItem } from "../components";
 import { version } from "../package.json";
 import { useUserContext } from "../context/user";
 import { useColorContext } from "../context/colors";
+import { formartDate } from "../utils/formartDate";
+import { nowTheme } from "../constants";
 
 const menus = [
   "Relatorios",
@@ -22,6 +24,7 @@ function CustomDrawerContent({ navigation, state }) {
   const { colors } = useColorContext();
 
   const screens = user.isAdmin ? menus : menus.splice(1);
+  const isLargeName = user.account.name.length > 20;
 
   return (
     <Block
@@ -31,6 +34,13 @@ function CustomDrawerContent({ navigation, state }) {
       <Block style={styles.header}></Block>
       <Block flex style={{ paddingLeft: 8, paddingRight: 14 }}>
         <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+          <Text color={colors.TEXT} style={styles.accountText}>
+            {user.account.name.slice(0, 20)}
+            {isLargeName ? "..." : ""}
+          </Text>
+          <Text color={colors.TEXT} style={styles.dueText}>
+            Vencimento: {formartDate(user.account.dueDate, "dd/MM/YYY")}
+          </Text>
           {screens.map((item, index) => {
             return (
               <DrawerCustomItem
@@ -92,6 +102,19 @@ const styles = StyleSheet.create({
     height: 40,
     width: 37,
     tintColor: "black",
+  },
+  accountText: {
+    marginLeft: 20,
+    borderBottomColor: "#6c757d",
+    borderBottomWidth: 2,
+    borderBottomRightRadius: 18,
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  dueText: {
+    marginLeft: 20,
+    fontSize: 10,
+    marginBottom: 10,
   },
 });
 
