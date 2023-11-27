@@ -102,7 +102,11 @@ const Clients = ({ navigation }) => {
                 navigation={navigation}
                 id={item.id}
                 nome={item.name}
-                telefone={item.cellPhone}
+                telefone={item.cellPhone
+                  .replace(/\D/g, "")
+                  .replace(/(\d{2})(\d)/, "($1) $2")
+                  .replace(/(\d{5})(\d)/, "$1-$2")
+                  .replace(/(-\d{4})\d+?$/, "$1")}
                 aniversario={item.birthDate}
                 tipo={item.type === "pj" ? "Funcionário" : "Cliente"}
                 isAdmin={item.isSuperAdmin}

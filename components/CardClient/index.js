@@ -102,7 +102,7 @@ const CardClient = ({
       <Block row style={styles.wrapperInfo}>
         <Block row gap={5} style={{ alignItems: "center" }}>
           <Icon size={18} color={colors.ICON} name="phone" family="feather" />
-          <Text size={16} bold color={colors.TEXT}>
+          <Text size={14} bold color={colors.TEXT}>
             {telefone}
           </Text>
         </Block>
