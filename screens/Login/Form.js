@@ -194,7 +194,8 @@ const RegisterForm = ({ navigation }) => {
                     style={styles.inputIcons}
                   />
                   <MaskInput
-                    placeholder="Telefone Celular "
+                    placeholder="Telefone Celular"
+                    placeholderTextColor="#8898AA"
                     keyboardType="numeric"
                     value={fields.cellPhone}
                     onChangeText={(value) =>

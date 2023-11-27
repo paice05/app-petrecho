@@ -32,6 +32,7 @@ import { useUserContext } from "../../context/user";
 import { LoadingOverlay } from "../../components/LoadingOverlay";
 import { useColorContext } from "../../context/colors";
 import { colorsByName } from "../../constants/colors";
+import MaskInput, { Masks } from "react-native-mask-input";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -98,14 +99,21 @@ const Login = ({ navigation }) => {
   }, []);
 
   const submitLogin = () => {
-    if (!fields.username || !fields.password) return;
+    const username = fields.username.replace(/\D/g, "");
+
+    if (!username || !fields.password) return;
+
+    const payload = {
+      username,
+      password: fields.password,
+    };
 
     setIsError(false);
     setLoading(true);
 
     api
       .request()
-      .post("/auth", fields)
+      .post("/auth", payload)
       .then(({ data }) => {
         /** verificar se a conta esta habilitada */
         if (!data.user.account.enable) {
@@ -177,23 +185,25 @@ const Login = ({ navigation }) => {
                 entering={FadeInDown.delay(200).duration(1000).springify()}
                 style={styles.inputContainer}
               >
-                <Input
-                  placeholder="Digite seu usuário"
-                  style={styles.inputs}
-                  value={fields.username}
-                  onChangeText={(value) =>
-                    setFields({ ...fields, username: value })
-                  }
-                  type="number-pad"
-                  iconContent={
-                    <Icon
-                      size={16}
-                      color="#ADB5BD"
-                      name="user"
-                      style={styles.inputIcons}
-                    />
-                  }
-                />
+                <View style={styles.inputMaskPhone}>
+                  <Icon
+                    size={16}
+                    color="#ADB5BD"
+                    name="user"
+                    style={styles.inputIcons}
+                  />
+                  <MaskInput
+                    placeholder="Digite seu usuário"
+                    placeholderTextColor="#8898AA"
+                    style={{ fontSize: 16 }}
+                    Keyboard="numeric"
+                    value={fields.username}
+                    onChangeText={(value) =>
+                      setFields({ ...fields, username: value })
+                    }
+                    mask={Masks.BRL_PHONE}
+                  />
+                </View>
               </Animated.View>
 
               <Animated.View
@@ -208,6 +218,7 @@ const Login = ({ navigation }) => {
                     setFields({ ...fields, password: value })
                   }
                   style={styles.inputs}
+                  fontSize={16}
                   iconContent={
                     <Icon
                       size={16}
@@ -353,7 +364,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#ece7e8",
     marginLeft: 30,
     marginRight: 20,
-    fontSize: 18,
   },
   passwordCheck: {
     paddingLeft: 2,
@@ -363,6 +373,18 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingHorizontal: 20,
     marginTop: 15,
+  },
+  inputMaskPhone: {
+    width: 340,
+    height: 44,
+    borderRadius: 16,
+    fontSize: 20,
+    paddingHorizontal: 15,
+    backgroundColor: "#ece7e8",
+    alignItems: "center",
+    flexDirection: "row",
+    marginLeft: 30,
+    marginRight: 20,
   },
 });
 
