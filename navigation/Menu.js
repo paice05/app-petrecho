@@ -39,7 +39,8 @@ function CustomDrawerContent({ navigation, state }) {
             {isLargeName ? "..." : ""}
           </Text>
           <Text color={colors.TEXT} style={styles.dueText}>
-            Vencimento: {formartDate(user.account.dueDate, "dd/MM/YYY")}
+            {user.account.dueDate &&
+              `Vencimento: ${formartDate(user.account.dueDate, "dd/MM/YYY")}`}
           </Text>
           {screens.map((item, index) => {
             return (
