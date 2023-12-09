@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
-import { Block, Switch, Text } from "galio-framework";
+import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
+import { Block, Switch, Text, Accordion } from "galio-framework";
 
 import { nowTheme } from "../../constants";
 import { useUserContext } from "../../context/user";
@@ -12,8 +12,19 @@ import { DateTimePicker } from "../../components/DatePiker";
 import { LoadingOverlay } from "../../components/LoadingOverlay";
 import { formartDate } from "../../utils/formartDate";
 import { useColorContext } from "../../context/colors";
+import {
+  DayOfWeek,
+  DOMINGO,
+  SEGUNDA,
+  TERCA,
+  QUARTA,
+  QUINTA,
+  SEXTA,
+  SABADO,
+} from "./components/DayOfWeek";
 
 const weekDays = ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SAB"];
+const weekHours = [DOMINGO, SEGUNDA, TERCA, QUARTA, QUINTA, SEXTA, SABADO];
 
 export function ConfigForm({ navigation }) {
   const [fields, setFields] = useState({
@@ -21,6 +32,7 @@ export function ConfigForm({ navigation }) {
     startTime: new Date(),
     endTime: new Date(),
     weekDays: [],
+    weekHours: {},
   });
 
   const { validate, errors } = useValidateRequiredFields({
@@ -61,6 +73,23 @@ export function ConfigForm({ navigation }) {
             .filter(([key, value]) => Boolean(value))
             .map(([key]) => key.toUpperCase())
         : [],
+      weekHours: weekHours.reduce((acc, cur) => {
+        return {
+          ...acc,
+          [cur]:
+            Array.isArray(user.account.config.weekHours?.[cur]) &&
+            user.account.config.weekHours?.[cur].length
+              ? [
+                  user.account.config.weekHours[cur][0].map(
+                    (item) => new Date(`2023-01-01 ${item}:00`)
+                  ),
+                  user.account.config.weekHours[cur][1].map(
+                    (item) => new Date(`2023-01-01 ${item}:00`)
+                  ),
+                ]
+              : null,
+        };
+      }, {}),
     });
   }, []);
 
@@ -72,6 +101,16 @@ export function ConfigForm({ navigation }) {
       });
 
     setFields({ ...fields, weekDays: [...fields.weekDays, day] });
+  };
+
+  const handleChangeWeekHour = ({ day, startAt, endAt }) => {
+    setFields((prevState) => ({
+      ...prevState,
+      weekHours: {
+        ...prevState.weekHours,
+        [day]: [startAt, endAt],
+      },
+    }));
   };
 
   const handleSubmit = () => {
@@ -92,6 +131,24 @@ export function ConfigForm({ navigation }) {
           sex: fields.weekDays.includes("SEX"),
           sab: fields.weekDays.includes("SAB"),
         },
+        weekHours: weekHours.reduce((acc, cur) => {
+          return {
+            ...acc,
+            [cur]:
+              Array.isArray(fields.weekHours?.[cur]) &&
+              fields.weekHours?.[cur]?.[0].length &&
+              fields.weekHours?.[cur]?.[1].length
+                ? [
+                    fields.weekHours[cur][0].map((item) =>
+                      formartDate(item, "HH:mm")
+                    ),
+                    fields.weekHours[cur][1].map((item) =>
+                      formartDate(item, "HH:mm")
+                    ),
+                  ]
+                : [],
+          };
+        }, {}),
       },
     };
 
@@ -101,109 +158,78 @@ export function ConfigForm({ navigation }) {
   return (
     <Block style={[styles.card, { backgroundColor: colors.BACKGROUND }]}>
       <LoadingOverlay visible={loading} />
-      <Block
-        style={[styles.container, { backgroundColor: colors.BACKGROUND_CARD }]}
-        gap={20}
-      >
-        <Block>
-          <CustomInput
-            placeholder="Digite o nome da sua empresa"
-            labelText="Nome da empresa"
-            value={fields.name}
-            onChangeText={(value) => setFields({ ...fields, name: value })}
-            iconContent={
-              <Icon
-                size={16}
-                name="user"
-                family="feather"
-                style={[styles.inputIcons, { color: colors.ICON }]}
-              />
-            }
-          />
-          {errors?.["name"] && (
-            <Text center size={14} color={colors.DANGER}>
-              campo obrigatório
-            </Text>
-          )}
-        </Block>
-
-        <Block row gap={10}>
-          <Block flex={1}>
-            <Text
-              size={16}
-              bold
-              color={colors.TEXT}
-              style={{ marginLeft: 20, marginBottom: 5 }}
-            >
-              Horário de início
-            </Text>
-            <DateTimePicker
-              value={fields.startTime}
-              onChange={(time) => setFields({ ...fields, startTime: time })}
-              mode="time"
-              icon="clock"
-              style={{ space: "center" }}
+      <ScrollView>
+        <Block
+          style={[
+            styles.container,
+            { backgroundColor: colors.BACKGROUND_CARD },
+          ]}
+          gap={20}
+        >
+          <Block>
+            <CustomInput
+              placeholder="Digite o nome da sua empresa"
+              labelText="Nome da empresa"
+              value={fields.name}
+              onChangeText={(value) => setFields({ ...fields, name: value })}
+              iconContent={
+                <Icon
+                  size={16}
+                  name="user"
+                  family="feather"
+                  style={[styles.inputIcons, { color: colors.ICON }]}
+                />
+              }
             />
+            {errors?.["name"] && (
+              <Text center size={14} color={colors.DANGER}>
+                campo obrigatório
+              </Text>
+            )}
           </Block>
-          <Block flex={1}>
-            <Text
-              size={16}
-              bold
-              color={colors.TEXT}
-              style={{ marginBottom: 5 }}
-            >
-              Horário de fim
-            </Text>
-            <DateTimePicker
-              value={fields.endTime}
-              onChange={(time) => setFields({ ...fields, endTime: time })}
-              mode="time"
-              icon="clock"
-            />
-          </Block>
-        </Block>
 
-        <Block>
-          <Text
-            size={16}
-            bold
-            color={colors.TEXT}
-            style={{ marginLeft: 20, marginBottom: 5 }}
-          >
-            Dias de atendimento
-          </Text>
-          <Block row space="between" style={{ paddingHorizontal: 20 }}>
-            {weekDays.map((item) => (
-              <TouchableOpacity
-                key={item}
-                style={[
-                  styles.day,
-                  fields.weekDays.includes(item)
-                    ? {
-                        borderColor: colors.TEXT,
-                        backgroundColor: colors.SUCCESS,
-                      }
-                    : {
-                        borderColor: colors.TEXT,
-                        backgroundColor: nowTheme.COLORS.PRIMARY,
-                      },
-                ]}
-                onPress={() => handleChangeWeekDay({ day: item })}
-              >
-                <Text
-                  bold
-                  size={12}
-                  center
-                  color={!fields.weekDays.includes(item) && colors.TEXT}
+          <Block gap={20}>
+            <Text size={16} bold color={colors.TEXT}>
+              Dias de atendimento
+            </Text>
+            <Block row space="between">
+              {weekDays.map((item) => (
+                <TouchableOpacity
+                  key={item}
+                  style={[
+                    styles.day,
+                    fields.weekDays.includes(item)
+                      ? {
+                          borderColor: colors.TEXT,
+                          backgroundColor: colors.SUCCESS,
+                        }
+                      : {
+                          borderColor: colors.TEXT,
+                          backgroundColor: nowTheme.COLORS.PRIMARY,
+                        },
+                  ]}
+                  onPress={() => handleChangeWeekDay({ day: item })}
                 >
-                  {item}
-                </Text>
-              </TouchableOpacity>
-            ))}
+                  <Text
+                    bold
+                    size={12}
+                    center
+                    color={!fields.weekDays.includes(item) && colors.TEXT}
+                  >
+                    {item}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </Block>
           </Block>
-        </Block>
 
-        {/* <Block row style={{ alignItems: "center" }}>
+          <DayOfWeek
+            visibleDays={fields.weekDays}
+            handleChangeWeekHour={handleChangeWeekHour}
+            weekHours={fields.weekHours}
+          />
+
+          {/* <Block row style={{ alignItems: "center" }}>
           <Switch
             //   value={}
             onChange={() => {}}
@@ -216,28 +242,28 @@ export function ConfigForm({ navigation }) {
             trabalha em feriados
           </Text>
         </Block> */}
-
-        <Block row center>
-          <Button
-            style={styles.button}
-            backgroundColor={colors.BUTTON_BACK}
-            onPress={() => navigation.goBack()}
-          >
-            <Text size={16} color={colors.TEXT_BUTTON_BACK} bold>
-              Voltar
-            </Text>
-          </Button>
-          <Button
-            style={styles.primary}
-            backgroundColor={colors.BUTTON_REGISTER_OR_UPDATE}
-            onPress={handleSubmit}
-            loading={loading}
-          >
-            <Text size={16} bold color={colors.TEXT_BUTTON_REGISTER_UPDATE}>
-              Atualizar
-            </Text>
-          </Button>
         </Block>
+      </ScrollView>
+      <Block row center>
+        <Button
+          style={styles.button}
+          backgroundColor={colors.BUTTON_BACK}
+          onPress={() => navigation.goBack()}
+        >
+          <Text size={16} color={colors.TEXT_BUTTON_BACK} bold>
+            Voltar
+          </Text>
+        </Button>
+        <Button
+          style={styles.primary}
+          backgroundColor={colors.BUTTON_REGISTER_OR_UPDATE}
+          onPress={handleSubmit}
+          loading={loading}
+        >
+          <Text size={16} bold color={colors.TEXT_BUTTON_REGISTER_UPDATE}>
+            Atualizar
+          </Text>
+        </Button>
       </Block>
     </Block>
   );

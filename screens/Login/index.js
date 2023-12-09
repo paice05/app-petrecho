@@ -195,7 +195,10 @@ const Login = ({ navigation }) => {
                   <MaskInput
                     placeholder="Digite seu usuário"
                     placeholderTextColor="#8898AA"
-                    style={{ fontSize: 16 }}
+                    style={{
+                      fontSize: 16,
+                      width: "90%",
+                    }}
                     keyboardType="numeric"
                     value={fields.username}
                     onChangeText={(value) =>
