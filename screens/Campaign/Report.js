@@ -69,7 +69,7 @@ export function CampaignReport({ route, navigation }) {
               <Block key={item.id} flex space="between">
                 <Block row space="between" style={{ paddingTop: 15 }}>
                   <Text size={18} color={colors.TEXT}>
-                    {item?.user?.name.length > 20
+                    {item?.shortName || item?.user?.name.length > 20
                       ? `${item?.user?.name.slice(0, 20)}...`
                       : item?.user?.name || "Indefinido"}
                   </Text>
