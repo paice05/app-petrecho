@@ -65,55 +65,51 @@ export function CampaignReport({ route, navigation }) {
           ]}
         >
           {Array.isArray(response?.schedules) &&
-            response?.schedules.map((item) => (
-              <Block key={item.id} flex space="between">
-                <Block row space="between" style={{ paddingTop: 15 }}>
-                  <Text size={18} color={colors.TEXT}>
-                    {item?.shortName || item?.user?.name.length > 20
-                      ? `${item?.user?.name.slice(0, 20)}...`
-                      : item?.user?.name || "Indefinido"}
-                  </Text>
-                  <Text size={18} color={colors.TEXT}>
-                    {" "}
-                    {status[item.CampaignSchedule.status] || "indefinido"}
-                  </Text>
+            response?.schedules
+              .sort((a, b) => (a.scheduleAt > b.scheduleAt ? 1 : -1))
+              .map((item) => (
+                <Block key={item.id} flex space="between">
+                  <Block row space="between" style={{ paddingTop: 15 }}>
+                    <Text size={18} color={colors.TEXT}>
+                      {item?.user?.name || item?.shortName || ""}
+                    </Text>
+                    <Text size={18} color={colors.TEXT}>
+                      {" "}
+                      {status[item.CampaignSchedule.status] || "indefinido"}
+                    </Text>
+                  </Block>
+                  <Block row space="between">
+                    <Text size={14} color={colors.SUB_TEXT}>
+                      {item?.user?.cellPhone}
+                    </Text>
+                    <Text size={14} color={colors.SUB_TEXT}>
+                      {formartDate(item?.scheduleAt, "dd/MM/YYY - HH:mm")}
+                    </Text>
+                  </Block>
+                  <Block style={styles.separate}>
+                    {item.CampaignSchedule.status === "falied" ? (
+                      <Block center>
+                        <TouchableOpacity
+                          onPress={() =>
+                            handleResendCampaign({ campaignId: item.id })
+                          }
+                          style={[
+                            styles.button,
+                            {
+                              backgroundColor: colors.BUTTON_REGISTER_OR_UPDATE,
+                              marginTop: 15,
+                            },
+                          ]}
+                        >
+                          <Text bold size={16} color="#fff">
+                            Reenviar
+                          </Text>
+                        </TouchableOpacity>
+                      </Block>
+                    ) : null}
+                  </Block>
                 </Block>
-                <Block row space="between">
-                  <Text size={14} color={colors.SUB_TEXT}>
-                    {item?.user?.cellPhone
-                      .replace(/\D/g, "")
-                      .replace(/(\d{2})(\d)/, "($1) $2")
-                      .replace(/(\d{5})(\d)/, "$1-$2")
-                      .replace(/(-\d{4})\d+?$/, "$1")}
-                  </Text>
-                  <Text size={14} color={colors.SUB_TEXT}>
-                    {formartDate(item?.scheduleAt, "dd/MM/YYY - HH:mm")}
-                  </Text>
-                </Block>
-                <Block style={styles.separate}>
-                  {item.CampaignSchedule.status === "falied" ? (
-                    <Block center>
-                      <TouchableOpacity
-                        onPress={() =>
-                          handleResendCampaign({ campaignId: item.id })
-                        }
-                        style={[
-                          styles.button,
-                          {
-                            backgroundColor: colors.BUTTON_REGISTER_OR_UPDATE,
-                            marginTop: 15,
-                          },
-                        ]}
-                      >
-                        <Text bold size={16} color="#fff">
-                          Reenviar
-                        </Text>
-                      </TouchableOpacity>
-                    </Block>
-                  ) : null}
-                </Block>
-              </Block>
-            ))}
+              ))}
         </Block>
         <Block row center style={styles.buttonContainer}>
           <Button
