@@ -11,7 +11,6 @@ import {
   Platform,
   ScrollView,
 } from "react-native";
-import * as Notifications from "expo-notifications";
 import { Block, Text, theme } from "galio-framework";
 
 import Animated, {
@@ -35,14 +34,6 @@ import { colorsByName } from "../../constants/colors";
 import MaskInput, { Masks } from "react-native-mask-input";
 
 const { width, height } = Dimensions.get("screen");
-
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-    shouldShowAlert: true,
-  }),
-});
 
 const DismissKeyboard = ({ children }) => (
   <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>

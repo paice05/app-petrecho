@@ -30,6 +30,14 @@ import { useUserContext } from "../../context/user";
 import { useColorContext } from "../../context/colors";
 import { DateTimePicker } from "../../components/DatePiker";
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
+
 async function registerForPushNotificationsAsync() {
   let token;
 
@@ -54,8 +62,7 @@ async function registerForPushNotificationsAsync() {
       console.log("Failed to get push token for push notification!");
       return;
     }
-    // Learn more about projectId:
-    // https://docs.expo.dev/push-notifications/push-notifications-setup/#configure-projectid
+
     token = (
       await Notifications.getExpoPushTokenAsync({
         projectId: "7d33f38e-42ec-417e-ae63-e519783cf260",
@@ -160,7 +167,6 @@ const ScheduleList = ({ route, navigation }) => {
     notificationListener.current =
       Notifications.addNotificationReceivedListener((notification) => {
         findMany();
-        // findManyTemplates();
         console.log({ notification });
       });
 
