@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "877343064305",
+    "project_id": "meupetrecholatestapp",
+    "storage_bucket": "meupetrecholatestapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:877343064305:android:24814ade45a9d38318e950",
+        "android_client_info": {
+          "package_name": "com.mpaice.meupetrecholatestapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWBtNC5F6zjAdnDNqM3qmBZLT3mdzylRY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -11,6 +11,7 @@ import {
 import { useFocusEffect } from "@react-navigation/native";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
+import Constants from "expo-constants";
 
 import Tabs from "../../components/Tabs";
 import { Modal } from "../../components/Modal";
@@ -42,8 +43,8 @@ async function registerForPushNotificationsAsync() {
   let token;
 
   if (Platform.OS === "android") {
-    await Notifications.setNotificationChannelAsync("default", {
-      name: "Meu petrecho",
+    Notifications.setNotificationChannelAsync("default", {
+      name: "default",
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
       lightColor: "#FF231F7C",
@@ -59,21 +60,18 @@ async function registerForPushNotificationsAsync() {
       finalStatus = status;
     }
     if (finalStatus !== "granted") {
-      console.log("Failed to get push token for push notification!");
+      alert("Failed to get push token for push notification!");
       return;
     }
-
-    token = (
-      await Notifications.getExpoPushTokenAsync({
-        projectId: "7d33f38e-42ec-417e-ae63-e519783cf260",
-      })
-    ).data;
+    token = await Notifications.getExpoPushTokenAsync({
+      projectId: Constants.expoConfig.extra.eas.projectId,
+    });
     console.log(token);
   } else {
-    console.log("Must use physical device for Push Notifications");
+    alert("Must use physical device for Push Notifications");
   }
 
-  return token;
+  return token.data;
 }
 
 const ScheduleList = ({ route, navigation }) => {
