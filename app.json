@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "Meu Petrecho",
-    "slug": "test",
-    "version": "1.45.0",
+    "slug": "meupetrecholatestapp",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -11,28 +11,26 @@
       "resizeMode": "contain",
       "backgroundColor": "#47141e"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.mpaice.meupetrechoapp"
+      "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#47141e"
       },
-      "versionCode": 45,
-      "package": "com.mpaice.meupetrechoapp",
-      "googleServicesFile": "./google-services.json"
+      "package": "com.mpaice.meupetrecholatestapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {
-        "projectId": "7d33f38e-42ec-417e-ae63-e519783cf260"
+        "projectId": "87f50058-d72f-4b85-a5cc-65f1688abdba"
       }
-    },
-    "owner": "mpaice"
+    }
   }
 }
