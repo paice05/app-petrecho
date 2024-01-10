@@ -2,7 +2,7 @@
   "expo": {
     "name": "Meu Petrecho",
     "slug": "meupetrecholatestapp",
-    "version": "1.0.0",
+    "version": "1.0.50",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -11,14 +11,13 @@
       "resizeMode": "contain",
       "backgroundColor": "#47141e"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.mpaice.meupetrecholatestapp"
     },
     "android": {
+      "versionCode": 50,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
