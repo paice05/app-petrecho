@@ -2,10 +2,18 @@
   "expo": {
     "name": "Meu Petrecho",
     "slug": "meupetrecholatestapp",
-    "version": "1.0.50",
+    "version": "1.0.51",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "sounds": ["./assets/sounds/notification.mp3"]
+        }
+      ]
+    ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -17,7 +25,7 @@
       "bundleIdentifier": "com.mpaice.meupetrecholatestapp"
     },
     "android": {
-      "versionCode": 50,
+      "versionCode": 51,
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
