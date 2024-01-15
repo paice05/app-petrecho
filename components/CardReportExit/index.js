@@ -1,13 +1,12 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 
-import { Text, Block } from "galio-framework";
+import { Text, Block, theme, Icon } from "galio-framework";
 
-import { theme } from "galio-framework";
-import { nowTheme } from "../../constants";
 import { useColorContext } from "../../context/colors";
+import Menu from "../Menu";
 
-const CardReportExit = ({ navigation, id, data, nome, value }) => {
+const CardReportExit = ({ navigation, id, data, nome, value, onDeleted }) => {
   const { colors } = useColorContext();
 
   return (
@@ -16,14 +15,33 @@ const CardReportExit = ({ navigation, id, data, nome, value }) => {
       space="between"
       style={[styles.container, { backgroundColor: colors.BACKGROUND_CARD }]}
     >
-      <Text
-        size={18}
-        center
-        color={colors.SUB_TEXT}
-        style={{ marginBottom: 16 }}
-      >
-        {data}
-      </Text>
+      <Block row space="between">
+        <Block>
+          <Text
+            size={18}
+            center
+            color={colors.SUB_TEXT}
+            bold
+            style={{ marginBottom: 16 }}
+          >
+            {data}
+          </Text>
+        </Block>
+        <Menu
+          items={[
+            {
+              onSelect: onDeleted,
+              text: "Deletar",
+              icon: "trash-2",
+              color: colors.TEXT,
+            },
+          ]}
+        >
+          <Block>
+            <Icon size={22} color="#d90429" name="trash-2" family="feather" />
+          </Block>
+        </Menu>
+      </Block>
       <Block row space="between">
         <Text size={18} color={colors.TEXT}>
           {nome}

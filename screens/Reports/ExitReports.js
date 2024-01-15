@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View, Alert } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { Block, Text } from "galio-framework";
 import { lastDayOfMonth } from "date-fns";
@@ -9,6 +9,7 @@ import { useRequestFindMany } from "../../components/hooks/useRequestFindMany";
 import { formartDate } from "../../utils/formartDate";
 import { optionsBirthDate } from "../../constants/month";
 import { useColorContext } from "../../context/colors";
+import { useRequestDestroy } from "../../components/hooks/useRequestDestroy";
 
 const ExitReport = ({ route }) => {
   const { date } = route.params;
@@ -16,6 +17,9 @@ const ExitReport = ({ route }) => {
   const [valueOut, setValueOut] = useState([]);
 
   const { execute, response } = useRequestFindMany({ path: "/reports" });
+  const { execute: destroy } = useRequestDestroy({
+    path: "/reports",
+  });
 
   const { colors } = useColorContext();
 
@@ -44,6 +48,16 @@ const ExitReport = ({ route }) => {
     }, [date])
   );
 
+  const handleConfirmDelete = (id) =>
+    Alert.alert("Cuidado", "você deseja remover esta saída?", [
+      {
+        text: "Cancelar",
+        onPress: () => {},
+        style: "cancel",
+      },
+      { text: "Confirmar", onPress: () => destroy(id) },
+    ]);
+
   return (
     <View style={[styles.card, { backgroundColor: colors.BACKGROUND }]}>
       <ScrollView showsVerticalScrollIndicator={true}>
@@ -56,9 +70,12 @@ const ExitReport = ({ route }) => {
         {valueOut.map((item, index) => (
           <Block key={index}>
             <CardReportExit
+              key={item.id}
+              id={item.id}
               data={formartDate(item.createdAt, "dd/MM/YYY")}
               nome={item.description}
               value={`R$ ${Number(item.out).toFixed(2).replace(".", ",")}`}
+              onDeleted={() => handleConfirmDelete(item.id)}
             />
           </Block>
         ))}
