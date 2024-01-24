@@ -583,7 +583,7 @@ const ScheduleList = ({ route, navigation }) => {
           component={ListScreen}
           options={{
             tabBarLabel: "",
-            tabBarIcon: ({ color, size, focused }) => (
+            tabBarIcon: ({ color, focused }) => (
               <Block row marginTop={5}>
                 <FontAwesome
                   name="list-alt"
@@ -613,11 +613,11 @@ const ScheduleList = ({ route, navigation }) => {
           component={HourScreen}
           options={{
             tabBarLabel: "",
-            tabBarIcon: ({ color, size }) => (
+            tabBarIcon: ({ color, focused }) => (
               <MaterialCommunityIcons
                 name="calendar-clock"
-                color={color}
-                size={30}
+                color={focused ? colors.ICON : color}
+                size={32}
               />
             ),
             headerShown: false,
@@ -628,11 +628,11 @@ const ScheduleList = ({ route, navigation }) => {
           component={AwaitingScreen}
           options={{
             tabBarLabel: "",
-            tabBarIcon: ({ color, size }) => (
+            tabBarIcon: ({ color, focused }) => (
               <MaterialCommunityIcons
                 name="account-clock-outline"
-                color={color}
-                size={30}
+                color={focused ? colors.ICON : color}
+                size={32}
               />
             ),
             headerShown: false,
