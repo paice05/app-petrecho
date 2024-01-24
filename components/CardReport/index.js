@@ -4,7 +4,14 @@ import { theme, Block, Text, Button } from "galio-framework";
 import { nowTheme } from "../../constants";
 import { useColorContext } from "../../context/colors";
 
-const CardReport = ({ navigation, date, entryValue, outPutValue, id }) => {
+const CardReport = ({
+  navigation,
+  selectedMonth,
+  selectedYear,
+  entryValue,
+  outPutValue,
+  id,
+}) => {
   const { colors } = useColorContext();
 
   return (
@@ -19,7 +26,8 @@ const CardReport = ({ navigation, date, entryValue, outPutValue, id }) => {
           <TouchableOpacity
             onPress={() =>
               navigation.navigate("EntryReports", {
-                date,
+                selectedMonth,
+                selectedYear,
               })
             }
           >
@@ -42,7 +50,8 @@ const CardReport = ({ navigation, date, entryValue, outPutValue, id }) => {
           <TouchableOpacity
             onPress={() =>
               navigation.navigate("ExitReports", {
-                date,
+                selectedMonth,
+                selectedYear,
               })
             }
           >

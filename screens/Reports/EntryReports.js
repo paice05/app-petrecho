@@ -2,9 +2,10 @@ import React, { useCallback, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Block, Text } from "galio-framework";
 import { useFocusEffect } from "@react-navigation/native";
-import { lastDayOfMonth } from "date-fns";
+import { endOfDay, lastDayOfMonth, startOfMonth } from "date-fns";
 
 import CardReportEntry from "../../components/CardReportEntry";
+import { LoadingOverlay } from "../../components/LoadingOverlay";
 import { useRequestFindMany } from "../../components/hooks/useRequestFindMany";
 import { formartDate } from "../../utils/formartDate";
 import { nowTheme } from "../../constants";
@@ -12,11 +13,13 @@ import { optionsBirthDate } from "../../constants/month";
 import { useColorContext } from "../../context/colors";
 
 const EntryReport = ({ route }) => {
-  const { date } = route.params;
+  const { selectedMonth, selectedYear } = route.params;
 
   const [valueEntry, setValueEntry] = useState([]);
 
-  const { execute, response } = useRequestFindMany({ path: "/reports" });
+  const { execute, response, loading } = useRequestFindMany({
+    path: "/reports",
+  });
 
   const { colors } = useColorContext();
 
@@ -29,11 +32,12 @@ const EntryReport = ({ route }) => {
   useFocusEffect(
     useCallback(() => {
       const month =
-        optionsBirthDate.findIndex((item) => item.title === date) + 1;
+        optionsBirthDate.findIndex((item) => item.title === selectedMonth) + 1;
 
-      const start = new Date(`${new Date().getFullYear()}-${month}-1 00:00:00`);
-      const lastDay = formartDate(lastDayOfMonth(start), "YYY-MM-dd");
-      const end = new Date(`${lastDay} 23:59:59`);
+      const start = startOfMonth(
+        new Date(`${selectedYear}-${month}-1 00:00:00`)
+      );
+      const end = endOfDay(lastDayOfMonth(start));
 
       execute({
         where: {
@@ -42,11 +46,12 @@ const EntryReport = ({ route }) => {
           },
         },
       });
-    }, [date])
+    }, [])
   );
 
   return (
     <View style={[styles.card, { backgroundColor: colors.BACKGROUND }]}>
+      <LoadingOverlay visible={loading} />
       <ScrollView showsVerticalScrollIndicator={true}>
         <Block>
           {valueEntry.length === 0 ? (

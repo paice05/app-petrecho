@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View, Alert } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { Block, Text } from "galio-framework";
-import { lastDayOfMonth } from "date-fns";
+import { endOfDay, lastDayOfMonth, startOfMonth } from "date-fns";
 
 import CardReportExit from "../../components/CardReportExit";
 import { useRequestFindMany } from "../../components/hooks/useRequestFindMany";
@@ -10,15 +10,21 @@ import { formartDate } from "../../utils/formartDate";
 import { optionsBirthDate } from "../../constants/month";
 import { useColorContext } from "../../context/colors";
 import { useRequestDestroy } from "../../components/hooks/useRequestDestroy";
+import { LoadingOverlay } from "../../components/LoadingOverlay";
 
-const ExitReport = ({ route }) => {
-  const { date } = route.params;
+const ExitReport = ({ route, navigation }) => {
+  const { selectedMonth, selectedYear } = route.params;
 
   const [valueOut, setValueOut] = useState([]);
 
-  const { execute, response } = useRequestFindMany({ path: "/reports" });
+  const { execute, response, loading } = useRequestFindMany({
+    path: "/reports",
+  });
   const { execute: destroy } = useRequestDestroy({
     path: "/reports",
+    callbackSuccess: () => {
+      navigation.goBack();
+    },
   });
 
   const { colors } = useColorContext();
@@ -32,11 +38,11 @@ const ExitReport = ({ route }) => {
   useFocusEffect(
     useCallback(() => {
       const month =
-        optionsBirthDate.findIndex((item) => item.title === date) + 1;
-
-      const start = new Date(`${new Date().getFullYear()}-${month}-1 00:00:00`);
-      const lastDay = formartDate(lastDayOfMonth(start), "YYY-MM-dd");
-      const end = new Date(`${lastDay} 23:59:59`);
+        optionsBirthDate.findIndex((item) => item.title === selectedMonth) + 1;
+      const start = startOfMonth(
+        new Date(`${selectedYear}-${month}-1 00:00:00`)
+      );
+      const end = endOfDay(lastDayOfMonth(start));
 
       execute({
         where: {
@@ -45,14 +51,14 @@ const ExitReport = ({ route }) => {
           },
         },
       });
-    }, [date])
+    }, [])
   );
 
   const handleConfirmDelete = (id) =>
     Alert.alert("Cuidado", "você deseja remover esta saída?", [
       {
         text: "Cancelar",
-        onPress: () => {},
+        onPress: () => destroy(id),
         style: "cancel",
       },
       { text: "Confirmar", onPress: () => destroy(id) },
@@ -60,6 +66,7 @@ const ExitReport = ({ route }) => {
 
   return (
     <View style={[styles.card, { backgroundColor: colors.BACKGROUND }]}>
+      <LoadingOverlay visible={loading} />
       <ScrollView showsVerticalScrollIndicator={true}>
         {valueOut.length === 0 ? (
           <Text color={colors.TEXT}>

@@ -2,14 +2,14 @@ import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, ScrollView, View } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { Block, Text } from "galio-framework";
-import { lastDayOfMonth } from "date-fns";
+import { endOfDay, lastDayOfMonth, startOfMonth } from "date-fns";
 
 import CardReport from "../../components/CardReport";
 import SimpleMenu from "../../components/Menu";
 import { useRequestFindMany } from "../../components/hooks/useRequestFindMany";
-import { nowTheme } from "../../constants";
-import { formartDate } from "../../utils/formartDate";
+
 import { useColorContext } from "../../context/colors";
+import { LoadingOverlay } from "../../components/LoadingOverlay";
 
 const optionsBirthDate = [
   { title: "Janeiro", data: "Janeiro" },
@@ -37,7 +37,9 @@ const ReportList = ({ navigation }) => {
   const [valueEntry, setValueEntry] = useState(0);
   const [valueExit, setValueExit] = useState(0);
 
-  const { execute, response } = useRequestFindMany({ path: "/reports" });
+  const { execute, response, loading } = useRequestFindMany({
+    path: "/reports",
+  });
 
   const { colors } = useColorContext();
 
@@ -53,9 +55,10 @@ const ReportList = ({ navigation }) => {
       const month =
         optionsBirthDate.findIndex((item) => item.title === selectedMonth) + 1;
 
-      const start = new Date(`${selectedYear}-${month}-1 00:00:00`);
-      const lastDay = formartDate(lastDayOfMonth(start), "YYY-MM-dd");
-      const end = new Date(`${lastDay} 23:59:59`);
+      const start = startOfMonth(
+        new Date(`${selectedYear}-${month}-1 00:00:00`)
+      );
+      const end = endOfDay(lastDayOfMonth(start));
 
       execute({
         where: {
@@ -69,6 +72,7 @@ const ReportList = ({ navigation }) => {
 
   return (
     <View style={[styles.card, { backgroundColor: colors.BACKGROUND }]}>
+      <LoadingOverlay visible={loading} />
       <ScrollView showsVerticalScrollIndicator={true}>
         <Block
           style={{
@@ -109,7 +113,8 @@ const ReportList = ({ navigation }) => {
 
         <CardReport
           navigation={navigation}
-          date={`${selectedMonth} ${selectedYear}`}
+          selectedMonth={selectedMonth}
+          selectedYear={selectedYear}
           entryValue={valueEntry}
           outPutValue={valueExit}
         />
