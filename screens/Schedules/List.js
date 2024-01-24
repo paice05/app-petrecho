@@ -76,7 +76,7 @@ async function registerForPushNotificationsAsync() {
     });
     console.log(token);
   } else {
-    alert("Must use physical device for Push Notifications");
+    console.log("Must use physical device for Push Notifications");
   }
 
   return token.data;
@@ -582,9 +582,28 @@ const ScheduleList = ({ route, navigation }) => {
           name="Lista"
           component={ListScreen}
           options={{
-            tabBarLabel: "Lista",
-            tabBarIcon: ({ color, size }) => (
-              <FontAwesome name="list-alt" color={color} size={size} />
+            tabBarLabel: "",
+            tabBarIcon: ({ color, size, focused }) => (
+              <Block row marginTop={5}>
+                <FontAwesome
+                  name="list-alt"
+                  color={focused ? colors.ICON : color}
+                  size={32}
+                />
+                <Text
+                  style={[
+                    styles.iconCount,
+                    { backgroundColor: colors.BACKGROUND },
+                  ]}
+                  color="#fff"
+                  size={18}
+                >
+                  {
+                    schedules.filter((item) => item.status !== "awaiting")
+                      .length
+                  }
+                </Text>
+              </Block>
             ),
             headerShown: false,
           }}
@@ -593,7 +612,7 @@ const ScheduleList = ({ route, navigation }) => {
           name="Horários"
           component={HourScreen}
           options={{
-            tabBarLabel: "Horários",
+            tabBarLabel: "",
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
                 name="calendar-clock"
@@ -608,7 +627,7 @@ const ScheduleList = ({ route, navigation }) => {
           name="Espera"
           component={AwaitingScreen}
           options={{
-            tabBarLabel: "Espera",
+            tabBarLabel: "",
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons
                 name="account-clock-outline"
@@ -678,6 +697,15 @@ const styles = StyleSheet.create({
   },
   primary: {
     backgroundColor: nowTheme.COLORS.PRIMARY,
+  },
+
+  iconCount: {
+    position: "absolute",
+    top: -30,
+    left: 10,
+    borderRadius: 50,
+
+    padding: 7,
   },
 });
 
