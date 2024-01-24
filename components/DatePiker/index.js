@@ -16,6 +16,8 @@ export const DateTimePicker = ({
   formart = "dd-MM-YYY",
   mode,
   icon,
+  clear = false,
+  onClickClear,
 }) => {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -40,21 +42,41 @@ export const DateTimePicker = ({
         <Block
           row
           gap={10}
-          style={{ alignItems: "center", paddingHorizontal: 4 }}
+          style={{
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
         >
-          <IconExtra
-            size={16}
-            color={colors.ICON}
-            name={icon}
-            family="feather"
-          />
-          {placeholder && !value && (
-            <Text color={colors.PLACEHOLDER}>{placeholder}</Text>
-          )}
-          {value && (
-            <Text size={noInput ? 18 : 15} color={colors.TEXT}>
-              {formartDate(value, mode === "time" ? "HH:mm" : formart)}
-            </Text>
+          <Block row middle padding={4}>
+            <IconExtra
+              size={16}
+              color={colors.ICON}
+              name={icon}
+              family="feather"
+            />
+            {placeholder && !value && (
+              <Text marginLeft={14} color={colors.ICON}>
+                {placeholder}
+              </Text>
+            )}
+            {value && (
+              <Text
+                marginLeft={14}
+                size={noInput ? 18 : 15}
+                color={colors.TEXT}
+              >
+                {formartDate(value, mode === "time" ? "HH:mm" : formart)}
+              </Text>
+            )}
+          </Block>
+          {value && clear && (
+            <Block justifyContent="flex-end">
+              <TouchableOpacity onPress={onClickClear}>
+                <Text size={16} color={colors.TEXT}>
+                  limpar
+                </Text>
+              </TouchableOpacity>
+            </Block>
           )}
         </Block>
       </TouchableOpacity>
@@ -76,7 +98,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     borderWidth: 1,
     borderColor: nowTheme.COLORS.BORDER,
-    height: 44,
+    height: 50,
     backgroundColor: "transparent",
     padding: 9,
   },

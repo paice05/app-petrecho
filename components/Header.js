@@ -22,6 +22,7 @@ import Input from "./Input";
 import Tabs from "./Tabs";
 import nowTheme from "../constants/Theme";
 import { useColorContext } from "../context/colors";
+import { useClientContext } from "../context/clients";
 
 const { width } = Dimensions.get("window");
 
@@ -61,6 +62,28 @@ const ImportContacts = ({ navigation }) => {
     >
       <Icon size={20} name="download" color={colors.ICON} />
     </TouchableOpacity>
+  );
+};
+
+const FilterContacts = () => {
+  const { colors } = useColorContext();
+  const { setOpenFilter, openFilter, countFilters } = useClientContext();
+  return (
+    <Block row>
+      <TouchableOpacity
+        onPress={() => {
+          const vibrationDuration = 100;
+          Vibration.vibrate(vibrationDuration);
+          setOpenFilter(!openFilter);
+        }}
+        style={{}}
+      >
+        <Icon size={20} name="filter" color={colors.ICON} />
+      </TouchableOpacity>
+      <Text size={18} color={colors.ICON}>
+        {countFilters > 0 ? countFilters : null}
+      </Text>
+    </Block>
   );
 };
 
@@ -196,7 +219,8 @@ const RenderRight = (props) => {
       return [<NewSchedule navigation={navigation} />];
     case "Clientes":
       return [
-        <Block row gap={20}>
+        <Block marginLeft={-50} row gap={20}>
+          <FilterContacts />
           <ImportContacts navigation={navigation} />
           <NewClient navigation={navigation} />
         </Block>,

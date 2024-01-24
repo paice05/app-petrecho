@@ -8,13 +8,18 @@ import { PaginationSimple } from "../../components/PaginationSimple";
 import { useRequestFindMany } from "../../components/hooks/useRequestFindMany";
 import { useRequestDestroy } from "../../components/hooks/useRequestDestroy";
 import { LoadingOverlay } from "../../components/LoadingOverlay";
+import { DateTimePicker } from "../../components/DatePiker";
+import CustomInput from "../../components/CustomInput";
+import { Button, Icon } from "../../components";
 import { nowTheme } from "../../constants";
 import { useColorContext } from "../../context/colors";
+import { useClientContext } from "../../context/clients";
+import { endOfDay, startOfDay } from "date-fns";
 
 const Clients = ({ navigation }) => {
   const [clients, setClients] = useState([]);
   const [hasClean, setHasClean] = useState(false);
-
+  const [filters, setFilters] = useState({});
   const [pagination, setPagination] = useState({
     currentPage: 0,
     total: 0,
@@ -22,6 +27,7 @@ const Clients = ({ navigation }) => {
   });
 
   const { colors } = useColorContext();
+  const { openFilter, setOpenFilter, setCountFilters } = useClientContext();
 
   const {
     execute: findMany,
@@ -48,6 +54,9 @@ const Clients = ({ navigation }) => {
     useCallback(() => {
       setHasClean(!hasClean);
       findMany();
+      setFilters({});
+      setOpenFilter(false);
+      setCountFilters(0);
     }, [])
   );
 
@@ -72,6 +81,43 @@ const Clients = ({ navigation }) => {
       },
       { text: "Confirmar", onPress: () => destroy(id) },
     ]);
+
+  const handleSubmitFilters = (clear = false) => {
+    const countFilters = Object.values(filters).filter(Boolean).length;
+
+    if (clear) {
+      findMany();
+      setCountFilters(0);
+      setFilters({});
+
+      return;
+    }
+
+    setCountFilters(countFilters);
+    findMany({
+      where: {
+        ...(filters.name ? { name: { $iLike: `%${filters.name}%` } } : {}),
+      },
+      ...(filters.scheduleAt
+        ? {
+            include: [
+              {
+                model: "Schedule",
+                as: "schedules",
+                where: {
+                  scheduleAt: {
+                    $between: [
+                      startOfDay(filters.scheduleAt),
+                      endOfDay(filters.scheduleAt),
+                    ],
+                  },
+                },
+              },
+            ],
+          }
+        : {}),
+    });
+  };
 
   return (
     <View
@@ -123,6 +169,93 @@ const Clients = ({ navigation }) => {
         handleNextPage={handleNextPage}
         handlePreviousPage={handlePreviousPage}
       />
+
+      {openFilter && (
+        <Block style={styles.wrapperFilters}>
+          <Block height="100%" justifyContent="flex-end">
+            <Block
+              style={[
+                styles.contentFilters,
+                { backgroundColor: colors.BACKGROUND },
+              ]}
+            >
+              <Block>
+                <CustomInput
+                  placeholder="Digite o nome do cliente"
+                  labelText="Nome"
+                  value={filters.name}
+                  onChangeText={(value) =>
+                    setFilters({ ...filters, name: value })
+                  }
+                  iconContent={
+                    <Icon
+                      size={16}
+                      name="user"
+                      family="feather"
+                      style={[styles.inputIcons, { color: colors.ICON }]}
+                    />
+                  }
+                />
+              </Block>
+              <Block>
+                <Text
+                  size={16}
+                  bold
+                  style={{ marginLeft: 20, marginBottom: 5 }}
+                  color={colors.TEXT}
+                >
+                  Agendados no dia
+                </Text>
+                <DateTimePicker
+                  value={filters.scheduleAt}
+                  onChange={(value) =>
+                    setFilters({ ...filters, scheduleAt: value })
+                  }
+                  mode="date"
+                  icon="calendar"
+                  formart="dd MMMM"
+                  placeholder="Informe uma data"
+                  clear
+                  onClickClear={() =>
+                    setFilters({ ...filters, scheduleAt: null })
+                  }
+                />
+              </Block>
+              <Block row center>
+                <Button
+                  style={styles.button}
+                  backgroundColor={colors.BUTTON_BACK}
+                  onPress={() => {
+                    setOpenFilter(false);
+
+                    handleSubmitFilters(true);
+                  }}
+                >
+                  <Text size={16} bold color={colors.TEXT_BUTTON_BACK}>
+                    Limpar
+                  </Text>
+                </Button>
+                <Button
+                  style={styles.primary}
+                  backgroundColor={colors.BUTTON_REGISTER_OR_UPDATE}
+                  onPress={() => {
+                    setOpenFilter(false);
+                    handleSubmitFilters();
+                  }}
+                >
+                  <Text
+                    size={16}
+                    bold
+                    color={colors.TEXT_BUTTON_REGISTER_UPDATE}
+                  >
+                    Filtrar
+                  </Text>
+                </Button>
+              </Block>
+            </Block>
+          </Block>
+        </Block>
+      )}
     </View>
   );
 };
@@ -131,6 +264,41 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 15,
+    position: "relative",
+  },
+
+  wrapperFilters: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    paddingVertical: 14,
+    paddingHorizontal: 14,
+  },
+
+  contentFilters: {
+    height: "auto",
+    padding: 14,
+  },
+  inputIcons: {
+    marginRight: 12,
+  },
+  button: {
+    marginBottom: nowTheme.SIZES.BASE,
+    borderRadius: 10,
+    width: 120,
+    height: 40,
+    //backgroundColor: "#eee",
+    borderWidth: 1,
+    borderColor: nowTheme.COLORS.BORDER,
+  },
+  primary: {
+    marginBottom: nowTheme.SIZES.BASE,
+    borderRadius: 10,
+    width: 120,
+    height: 40,
   },
 });
 

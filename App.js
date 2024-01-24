@@ -9,6 +9,7 @@ import Screens from "./navigation/Screens";
 import { nowTheme } from "./constants";
 import { UserContextProvider } from "./context/user";
 import { ColorContextProvider, useColorContext } from "./context/colors";
+import { ClientContextProvider } from "./context/clients";
 
 export default function App() {
   const { colors } = useColorContext();
@@ -17,20 +18,22 @@ export default function App() {
     <NavigationContainer>
       <GalioProvider theme={nowTheme}>
         <UserContextProvider>
-          <ColorContextProvider>
-            <MenuProvider customStyles={menuProviderStyles}>
-              <StatusBar
-                style={
-                  colors?.BACKGROUND ===
-                  nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR
-                    ? "dark"
-                    : "light"
-                }
-                backgroundColor={colors?.BACKGROUND}
-              />
-              <Screens />
-            </MenuProvider>
-          </ColorContextProvider>
+          <ClientContextProvider>
+            <ColorContextProvider>
+              <MenuProvider customStyles={menuProviderStyles}>
+                <StatusBar
+                  style={
+                    colors?.BACKGROUND ===
+                    nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR
+                      ? "dark"
+                      : "light"
+                  }
+                  backgroundColor={colors?.BACKGROUND}
+                />
+                <Screens />
+              </MenuProvider>
+            </ColorContextProvider>
+          </ClientContextProvider>
         </UserContextProvider>
       </GalioProvider>
     </NavigationContainer>

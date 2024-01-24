@@ -1,8 +1,7 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity, Vibration } from "react-native";
+import * as Clipboard from "expo-clipboard";
 import { Block, Text } from "galio-framework";
-
-import { nowTheme } from "../../constants";
 
 import Icon from "../Icon";
 import Menu from "../Menu";
@@ -102,9 +101,13 @@ const CardClient = ({
       <Block row style={styles.wrapperInfo}>
         <Block row gap={5} style={{ alignItems: "center" }}>
           <Icon size={18} color={colors.ICON} name="phone" family="feather" />
-          <Text size={14} bold color={colors.TEXT}>
-            {telefone}
-          </Text>
+          <TouchableOpacity
+            onPress={async () => await Clipboard.setStringAsync(telefone)}
+          >
+            <Text size={14} bold color={colors.TEXT}>
+              {telefone}
+            </Text>
+          </TouchableOpacity>
         </Block>
 
         <Block row gap={5} style={{ alignItems: "center" }}>
