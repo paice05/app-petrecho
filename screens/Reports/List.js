@@ -26,8 +26,11 @@ const optionsBirthDate = [
   { title: "Dezembro", data: "Dezembro" },
 ];
 
+const years = [2023, 2024];
+
 const ReportList = ({ navigation }) => {
-  const [date, setDate] = useState(
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [selectedMonth, setSelectedMonth] = useState(
     optionsBirthDate[new Date().getMonth()].title
   );
 
@@ -48,9 +51,9 @@ const ReportList = ({ navigation }) => {
   useFocusEffect(
     useCallback(() => {
       const month =
-        optionsBirthDate.findIndex((item) => item.title === date) + 1;
+        optionsBirthDate.findIndex((item) => item.title === selectedMonth) + 1;
 
-      const start = new Date(`${new Date().getFullYear()}-${month}-1 00:00:00`);
+      const start = new Date(`${selectedYear}-${month}-1 00:00:00`);
       const lastDay = formartDate(lastDayOfMonth(start), "YYY-MM-dd");
       const end = new Date(`${lastDay} 23:59:59`);
 
@@ -61,23 +64,44 @@ const ReportList = ({ navigation }) => {
           },
         },
       });
-    }, [date])
+    }, [selectedYear, selectedMonth])
   );
 
   return (
     <View style={[styles.card, { backgroundColor: colors.BACKGROUND }]}>
       <ScrollView showsVerticalScrollIndicator={true}>
-        <Block style={{ marginBottom: 16 }}>
+        <Block
+          style={{
+            marginBottom: 5,
+            marginLeft: 2,
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <SimpleMenu
+            items={years.map((year) => ({
+              text: year.toString(),
+              onSelect: (value) => setSelectedYear(Number(value)),
+            }))}
+          >
+            <Text size={18} bold color={colors.TEXT}>
+              Ano:{" "}
+              <Text size={18} bold color={colors.BUTTON}>
+                {selectedYear}
+              </Text>
+            </Text>
+          </SimpleMenu>
+
           <SimpleMenu
             items={optionsBirthDate.map((item) => ({
               text: item.title,
-              onSelect: (value) => setDate(value),
+              onSelect: (value) => setSelectedMonth(value),
             }))}
           >
-            <Text size={18} color={colors.TEXT}>
-              Relatório de{" "}
-              <Text size={18} style={styles.text} color={colors.BUTTON}>
-                {date}
+            <Text size={18} bold color={colors.TEXT}>
+              Mês:{" "}
+              <Text size={18} bold color={colors.BUTTON}>
+                {selectedMonth}
               </Text>
             </Text>
           </SimpleMenu>
@@ -85,7 +109,7 @@ const ReportList = ({ navigation }) => {
 
         <CardReport
           navigation={navigation}
-          date={date}
+          date={`${selectedMonth} ${selectedYear}`}
           entryValue={valueEntry}
           outPutValue={valueExit}
         />
