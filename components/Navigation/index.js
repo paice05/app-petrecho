@@ -24,7 +24,7 @@ export const Navigation = ({
   }, [manualActive]);
 
   return (
-    <Block flex={1}>
+    <Block flex={1} style={{ backgroundColor: "transparent", marginTop: -70 }}>
       <Block row center gap={40} style={styles.container}>
         {items.map((item, index) => (
           <Block key={index} row>
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingHorizontal: 8,
-    paddingVertical: 25,
+    paddingVertical: 20,
   },
   badge: {
     backgroundColor: "white",

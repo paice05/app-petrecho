@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Block, Text } from "galio-framework";
+import { Block, Icon, Text } from "galio-framework";
 import { addDays, setHours, setMinutes, subDays } from "date-fns";
 import {
   StyleSheet,
@@ -9,9 +9,16 @@ import {
   View,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import Constants from "expo-constants";
+import {
+  MaterialCommunityIcons,
+  FontAwesome,
+  Ionicons,
+} from "@expo/vector-icons";
 
 import Tabs from "../../components/Tabs";
 import { Modal } from "../../components/Modal";
@@ -30,6 +37,7 @@ import { useRequestUpdate } from "../../components/hooks/useRequestUpdate";
 import { useUserContext } from "../../context/user";
 import { useColorContext } from "../../context/colors";
 import { DateTimePicker } from "../../components/DatePiker";
+import { createStackNavigator } from "@react-navigation/stack";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -102,6 +110,8 @@ const ScheduleList = ({ route, navigation }) => {
   // } = useRequestFindMany({
   //   path: "/templates",
   // });
+
+  const Tab = createBottomTabNavigator();
 
   const {
     execute: findMany,
@@ -287,43 +297,19 @@ const ScheduleList = ({ route, navigation }) => {
     });
   };
 
-  return (
-    <View style={[styles.card, { backgroundColor: colors.BACKGROUND }]}>
-      <LoadingOverlay visible={loading || loadingUpdate} />
-
-      <DateTimePicker
-        noInput
-        value={date}
-        onChange={(date) => setDate(date)}
-        mode="date"
-        icon="calendar"
-        formart="dd  MMMM YYY"
-      />
-
-      <Block row center>
-        <Tabs
-          data={tabs.week}
-          selected={tabs.week[date.getDay()].id}
-          onChange={(id) => {
-            const currentDay = date.getDay();
-            const result = currentDay - id;
-
-            if (result > 0) setDate(subDays(date, result));
-            if (result < 0) setDate(addDays(date, result * -1));
-          }}
-          date={date}
-          colors={colors}
-        />
-      </Block>
-
+  function ListScreen({ navigation, count }) {
+    return (
       <Navigation
         items={[
           {
-            title: "Lista",
-            count: schedules.filter((item) => item.status !== "awaiting")
-              .length,
+            //title: "Lista",
+            //count: schedules.filter((item) => item.status !== "awaiting").length,
             children: (
-              <Block style={{ marginVertical: 10 }}>
+              <Block
+                style={{
+                  marginVertical: 2,
+                }}
+              >
                 {schedules.length === 0 && (
                   <Text
                     size={18}
@@ -393,8 +379,21 @@ const ScheduleList = ({ route, navigation }) => {
               </Block>
             ),
           },
+        ]}
+        refreshing={loading}
+        onRefresh={() => {
+          findMany();
+        }}
+      />
+    );
+  }
+
+  function HourScreen() {
+    return (
+      <Navigation
+        items={[
           {
-            title: "Horários",
+            //title: "Horários",
             count: 0,
             children: (
               <ScheduleCard
@@ -412,10 +411,22 @@ const ScheduleList = ({ route, navigation }) => {
               />
             ),
           },
+        ]}
+        refreshing={loading}
+        onRefresh={() => {
+          findMany();
+        }}
+      />
+    );
+  }
+
+  function AwaitingScreen({ navigation }) {
+    return (
+      <Navigation
+        items={[
           {
-            title: "Espera",
-            count: schedules.filter((item) => item.status === "awaiting")
-              .length,
+            //title: "Espera",
+            //count: schedules.filter((item) => item.status === "awaiting").length,
             children: (
               <Block style={{ marginVertical: 10 }}>
                 {!schedules.filter((item) => item.status === "awaiting")
@@ -464,7 +475,7 @@ const ScheduleList = ({ route, navigation }) => {
                             hour: "",
                           })
                         }
-                        templates={responseTemplates?.data || []}
+                        templates={[]}
                         telefone={item?.user?.cellPhone}
                       />
                     );
@@ -521,19 +532,94 @@ const ScheduleList = ({ route, navigation }) => {
         refreshing={loading}
         onRefresh={() => {
           findMany();
-          // findManyTemplates();
         }}
       />
+    );
+  }
 
-      {schedules.length > 0 ? (
-        <PaginationSimple
-          currentPage={pagination.currentPage}
-          total={pagination.total}
-          lastPage={pagination.lastPage}
-          handleNextPage={handleNextPage}
-          handlePreviousPage={handlePreviousPage}
+  return (
+    <View style={[styles.card, { backgroundColor: colors.BACKGROUND }]}>
+      <LoadingOverlay visible={loading || loadingUpdate} />
+
+      <DateTimePicker
+        noInput
+        value={date}
+        onChange={(date) => setDate(date)}
+        mode="date"
+        icon="calendar"
+        formart="dd  MMMM YYY"
+      />
+
+      <Block row center style={{ marginBottom: 5 }}>
+        <Tabs
+          data={tabs.week}
+          selected={tabs.week[date.getDay()].id}
+          onChange={(id) => {
+            const currentDay = date.getDay();
+            const result = currentDay - id;
+
+            if (result > 0) setDate(subDays(date, result));
+            if (result < 0) setDate(addDays(date, result * -1));
+          }}
+          date={date}
+          colors={colors}
         />
-      ) : null}
+      </Block>
+      <Tab.Navigator
+        initialRouteName="Lista"
+        screenOptions={{
+          tabBarStyle: {
+            borderRadius: 15,
+            height: "9%",
+          },
+          tabBarLabel: {
+            fontSize: 16,
+          },
+        }}
+        sceneContainerStyle={{ backgroundColor: "transparent" }}
+      >
+        <Tab.Screen
+          name="Lista"
+          component={ListScreen}
+          options={{
+            tabBarLabel: "Lista",
+            tabBarIcon: ({ color, size }) => (
+              <FontAwesome name="list-alt" color={color} size={size} />
+            ),
+            headerShown: false,
+          }}
+        />
+        <Tab.Screen
+          name="Horários"
+          component={HourScreen}
+          options={{
+            tabBarLabel: "Horários",
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons
+                name="calendar-clock"
+                color={color}
+                size={30}
+              />
+            ),
+            headerShown: false,
+          }}
+        />
+        <Tab.Screen
+          name="Espera"
+          component={AwaitingScreen}
+          options={{
+            tabBarLabel: "Espera",
+            tabBarIcon: ({ color, size }) => (
+              <MaterialCommunityIcons
+                name="account-clock-outline"
+                color={color}
+                size={30}
+              />
+            ),
+            headerShown: false,
+          }}
+        />
+      </Tab.Navigator>
     </View>
   );
 };
