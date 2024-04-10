@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Dimensions, View } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  View,
+  Image,
+  TextInput,
+  Modal,
+} from "react-native";
 
 // Galio components
 import { Block, Text, theme } from "galio-framework";
@@ -20,10 +27,14 @@ const ServiceForm = ({ route, navigation }) => {
 
   const isEditing = params?.itemId;
 
+  const [imageUrlModalVisible, setImageUrlModalVisible] = useState(false);
+  const [tempImageUrl, setTempImageUrl] = useState("");
+
   const [fields, setFields] = useState({
     name: "",
     price: "",
     averageTime: "",
+    image: "",
   });
 
   const { validate, errors } = useValidateRequiredFields({
@@ -43,6 +54,7 @@ const ServiceForm = ({ route, navigation }) => {
       name: fields.name,
       price,
       averageTime: fields.averageTime,
+      image: fields.image,
     };
 
     try {
@@ -63,6 +75,7 @@ const ServiceForm = ({ route, navigation }) => {
       name: fields.name,
       price,
       averageTime: fields.averageTime,
+      image: fields.image,
     };
 
     try {
@@ -88,6 +101,7 @@ const ServiceForm = ({ route, navigation }) => {
               currencyDisplay: "symbol",
             }),
             averageTime: response.data.averageTime,
+            image: response.data.image,
           });
         } catch (error) {
           console.log(error);
@@ -97,6 +111,20 @@ const ServiceForm = ({ route, navigation }) => {
       fecthServices();
     } // busca dados da API
   }, []);
+
+  const handleOpenModal = () => {
+    setTempImageUrl("");
+    setImageUrlModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setImageUrlModalVisible(false);
+  };
+
+  const handleConfirmImageUrl = () => {
+    setFields({ ...fields, image: tempImageUrl });
+    setImageUrlModalVisible(false);
+  };
 
   return (
     <View
@@ -180,6 +208,22 @@ const ServiceForm = ({ route, navigation }) => {
               </Text>
             )}
           </Block>
+          <Block style={styles.imageContainer}>
+            <Button
+              style={styles.buttonService}
+              backgroundColor={colors.BUTTON_BACK}
+              onPress={handleOpenModal}
+            >
+              <Text>Carregar Imagem</Text>
+            </Button>
+            {fields.image && (
+              <Image
+                style={styles.image}
+                source={{ uri: fields.image }}
+                resizeMode="contain"
+              />
+            )}
+          </Block>
         </Block>
       </ScrollView>
       <Block row center>
@@ -202,6 +246,47 @@ const ServiceForm = ({ route, navigation }) => {
           </Text>
         </Button>
       </Block>
+
+      <Modal
+        visible={imageUrlModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={handleCloseModal}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Digite a URL da imagem:</Text>
+            <TextInput
+              style={styles.modalInput}
+              placeholder="Insira a URL da imagem"
+              value={tempImageUrl}
+              onChangeText={setTempImageUrl}
+              multiline={true}
+              numberOfLines={4}
+            />
+            <Block row center>
+              <Button
+                style={styles.button}
+                backgroundColor={colors.BUTTON_BACK}
+                onPress={() => navigation.goBack()}
+              >
+                <Text size={12} bold color={colors.TEXT_BUTTON_BACK}>
+                  Voltar
+                </Text>
+              </Button>
+              <Button
+                style={styles.primary}
+                backgroundColor={colors.BUTTON_REGISTER_OR_UPDATE}
+                onPress={handleConfirmImageUrl}
+              >
+                <Text size={12} bold color={colors.TEXT_BUTTON_REGISTER_UPDATE}>
+                  Ok
+                </Text>
+              </Button>
+            </Block>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -226,6 +311,16 @@ const styles = StyleSheet.create({
     borderColor: nowTheme.COLORS.BORDER,
     backgroundColor: "white",
   },
+  buttonService: {
+    marginBottom: nowTheme.SIZES.BASE,
+    borderRadius: 10,
+    width: 280,
+    height: 40,
+    backgroundColor: "#eee",
+    borderWidth: 1,
+    borderColor: nowTheme.COLORS.BORDER,
+    backgroundColor: "white",
+  },
   primary: {
     marginBottom: nowTheme.SIZES.BASE,
     borderRadius: 10,
@@ -234,6 +329,58 @@ const styles = StyleSheet.create({
   },
   inputIcons: {
     marginRight: 12,
+  },
+  imageContainer: {
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  image: {
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: nowTheme.COLORS.BORDER,
+    width: "80%",
+    height: 170,
+    borderRadius: 10,
+    marginLeft: 20,
+    marginRight: 20,
+  },
+  input: {
+    height: 40,
+    width: "80%",
+    borderColor: "gray",
+    borderWidth: 1,
+    marginTop: 10,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+  },
+  modalTitle: {
+    fontSize: 16,
+    marginBottom: 10,
+  },
+  modalInput: {
+    borderRadius: 30,
+    borderWidth: 1,
+    borderColor: nowTheme.COLORS.BORDER,
+    height: 44,
+    maxWidth: "80%",
+    maxHeight: 100,
+    fontSize: 12,
+    marginBottom: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 2,
+    paddingBottom: 2,
   },
 });
 

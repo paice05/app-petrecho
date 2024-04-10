@@ -5,11 +5,14 @@ import { Block, Text } from "galio-framework";
 import Menu from "../Menu";
 import IconExtra from "../Icon";
 import { useColorContext } from "../../context/colors";
+import Avatar from "../Avatar";
+//import { Avatar } from "../Avatar";
 
 const CardService = ({
   navigation,
   id,
   nome,
+  image,
   valor,
   onDeleted,
   tempoMedio,
@@ -20,12 +23,13 @@ const CardService = ({
 
   return (
     <Block
-      flex
-      space="between"
       style={[styles.container, { backgroundColor: colors.BACKGROUND_CARD }]}
     >
-      <Block row space="between">
-        <Block gap={5} style={styles.wrapperName}>
+      <Block row space="between" alignItems="flex-start">
+        <Block style={styles.avatarContainer}>
+          <Avatar url={image || ""} />
+        </Block>
+        <Block gap={5} style={styles.detailsContainer}>
           <TouchableOpacity
             onPress={() => {
               const vibrationDuration = 100;
@@ -38,57 +42,57 @@ const CardService = ({
               });
             }}
           >
-            <Text
-              size={18}
-              style={[
-                { color: colors.TEXT },
-                { textDecorationLine: "underline" },
-              ]}
-            >
+            <Text size={17} style={[styles.name, { color: colors.TEXT }]}>
               {nome?.slice(0, 20)}
               {isLargeName ? "..." : ""}
             </Text>
           </TouchableOpacity>
-          <Text size={16} color={colors.SUB_TEXT}>
+
+          <Text size={15} bold color={colors.SUB_TEXT}>
             R$ {Number(valor).toFixed(2).replace(".", ",")}
           </Text>
-        </Block>
-        <Menu
-          items={[
-            {
-              onSelect: () =>
-                navigation.navigate("ServiceForm", {
-                  itemId: id,
-                }),
-              text: "Editar",
-              icon: "edit",
-              color: colors.TEXT,
-            },
-            {
-              onSelect: onDeleted,
-              text: "Deletar",
-              icon: "trash-2",
-              color: colors.TEXT,
-            },
-          ]}
-        >
-          <Block center style={[styles.more, { borderColor: colors.TEXT }]}>
-            <IconExtra
-              size={20}
-              color={colors.TEXT}
-              name="more-vertical"
-              family="feather"
-            />
+
+          <Block>
+            {tempoMedio && (
+              <Block row gap={5} style={{ alignItems: "center" }}>
+                <IconExtra color={colors.ICON} name="clock" family="feather" />
+                <Text bold size={15} color={colors.TEXT}>
+                  {tempoMedio}
+                </Text>
+              </Block>
+            )}
           </Block>
-        </Menu>
-      </Block>
-      <Block center row>
-        {tempoMedio && <Block row gap={5} style={{ alignItems: "center" }}>
-          <IconExtra color={colors.ICON} name="clock" family="feather" />
-          <Text bold size={16} color={colors.TEXT}>
-            {tempoMedio}
-          </Text>
-        </Block>}
+        </Block>
+        <Block>
+          <Menu
+            items={[
+              {
+                onSelect: () =>
+                  navigation.navigate("ServiceForm", {
+                    itemId: id,
+                  }),
+                text: "Editar",
+                icon: "edit",
+                color: colors.TEXT,
+              },
+              {
+                onSelect: onDeleted,
+                text: "Deletar",
+                icon: "trash-2",
+                color: colors.TEXT,
+              },
+            ]}
+          >
+            <Block center style={[styles.more, { borderColor: colors.TEXT }]}>
+              <IconExtra
+                size={20}
+                color={colors.TEXT}
+                name="more-vertical"
+                family="feather"
+              />
+            </Block>
+          </Menu>
+        </Block>
       </Block>
     </Block>
   );
@@ -111,6 +115,15 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     alignItems: "center",
     justifyContent: "center",
+  },
+  avatarContainer: {
+    marginRight: 10,
+  },
+  detailsContainer: {
+    flex: 1,
+  },
+  name: {
+    textDecorationLine: "underline",
   },
 });
 

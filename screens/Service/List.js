@@ -99,6 +99,7 @@ const Services = ({ navigation }) => {
               navigation={navigation}
               id={item.id}
               nome={item.name}
+              image={item.image}
               valor={item.price}
               tempoMedio={item.averageTime}
               onDeleted={() => handleConfirmDelete(item.id)}
