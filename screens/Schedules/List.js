@@ -337,9 +337,11 @@ const ScheduleList = ({ route, navigation }) => {
                         id={item.id}
                         tempoMedio={item.averageTime || ""}
                         nome={
-                          item?.user?.name ||
-                          item?.shortName ||
-                          "(Esse cliente não existe)"
+                          item?.user?.name && item?.shortName
+                            ? `${item?.user?.name} (${item?.shortName})`
+                            : item?.user?.name ||
+                              item?.shortName ||
+                              "(Esse cliente não existe)"
                         }
                         funcionario={
                           item?.employee?.name ||
