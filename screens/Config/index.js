@@ -72,8 +72,8 @@ export function Config() {
 
   const greenStyle = () => {
     changeColor({
-      BACKGROUND: "#3D5A6C",
-      BACKGROUND_CARD: "#72A98F",
+      BACKGROUND: "#72A98F",
+      BACKGROUND_CARD: "#3D5A6C",
       BUTTON: "#433A3F",
       TEXT: "#CDDDDD",
       SUB_TEXT: "#433A3F",

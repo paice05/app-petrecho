@@ -38,6 +38,7 @@ import { CampaignForm } from "../screens/Campaign/Form";
 import { Templates as CampaignComponentsTemplates } from "../screens/Campaign/components/Templates";
 import { Clients as CampaignComponentsClients } from "../screens/Campaign/components/Clients";
 import { CampaignReport } from "../screens/Campaign/Report";
+import { Notifications } from "../screens/Notifications";
 
 const { width } = Dimensions.get("screen");
 
@@ -538,6 +539,35 @@ function TemplatesStack(props) {
   );
 }
 
+function NotificationsStack(props) {
+  return (
+    <Stack.Navigator
+      initialRouteName="Notifications"
+      screenOptions={{
+        mode: "card",
+        headerShown: "screen",
+      }}
+    >
+      <Stack.Screen
+        name="Notifications"
+        component={Notifications}
+        options={{
+          header: ({ navigation, scene }) => (
+            <Header
+              title="Notificações"
+              navigation={navigation}
+              scene={scene}
+            />
+          ),
+          cardStyle: {
+            backgroundColor: nowTheme.COLORS.PRIMARY_BACK_GROUND_COLOR,
+          },
+        }}
+      />
+    </Stack.Navigator>
+  );
+}
+
 function AppStack(props) {
   return (
     <Drawer.Navigator
@@ -628,6 +658,14 @@ function AppStack(props) {
       <Drawer.Screen
         name="Login"
         component={LoginStack}
+        options={{
+          headerShown: false,
+        }}
+      />
+
+      <Drawer.Screen
+        name="Notifications"
+        component={NotificationsStack}
         options={{
           headerShown: false,
         }}

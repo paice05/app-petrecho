@@ -1,8 +1,8 @@
 import React from "react";
 import { Block, Text, theme } from "galio-framework";
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 
-import { DrawerItem as DrawerCustomItem } from "../components";
+import { DrawerItem as DrawerCustomItem, Icon } from "../components";
 import { version } from "../package.json";
 import { useUserContext } from "../context/user";
 import { useColorContext } from "../context/colors";
@@ -34,14 +34,41 @@ function CustomDrawerContent({ navigation, state }) {
       <Block style={styles.header}></Block>
       <Block flex style={{ paddingLeft: 8, paddingRight: 14 }}>
         <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-          <Text color={colors.TEXT} style={styles.accountText}>
-            {user.account.name.slice(0, 20)}
-            {isLargeName ? "..." : ""}
-          </Text>
+          <Block row space="between" style={styles.accountText}>
+            <Text size={18} bold color={colors.TEXT}>
+              {user.account.name.slice(0, 20)}
+              {isLargeName ? "..." : ""}
+            </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Notifications")}
+            >
+              <Block row>
+                <Icon name="bell" size={28} color="#fff" />
+                <Text
+                  bold
+                  style={{
+                    backgroundColor: "red",
+                    color: "#fff",
+                    paddingHorizontal: 8,
+                    paddingVertical: 3,
+                    borderRadius: 50,
+                    fontSize: 16,
+
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  9+
+                </Text>
+              </Block>
+            </TouchableOpacity>
+          </Block>
           <Text color={colors.TEXT} style={styles.dueText}>
             {user.account.dueDate &&
               `Vencimento: ${formartDate(user.account.dueDate, "dd/MM/YYY")}`}
           </Text>
+
           {screens.map((item, index) => {
             return (
               <DrawerCustomItem
