@@ -23,7 +23,7 @@ function CustomDrawerContent({ navigation, state }) {
   const { user } = useUserContext();
   const { colors } = useColorContext();
 
-  const screens = user.isAdmin ? menus : menus.splice(1);
+  const screens = menus;
   const isLargeName = user.account.name.length > 20;
 
   return (
@@ -48,11 +48,7 @@ function CustomDrawerContent({ navigation, state }) {
                 title={item}
                 key={index}
                 navigation={navigation}
-                focused={
-                  state.index === (user.isAdmin ? index : index + 1)
-                    ? true
-                    : false
-                }
+                focused={state.index === index ? true : false}
                 colors={colors}
               />
             );

@@ -22,6 +22,7 @@ import {
   SEXTA,
   SABADO,
 } from "./components/DayOfWeek";
+import { setCache } from "../../services/cache";
 
 const weekDays = ["DOM", "SEG", "TER", "QUA", "QUI", "SEX", "SAB"];
 const weekHours = [DOMINGO, SEGUNDA, TERCA, QUARTA, QUINTA, SEXTA, SABADO];
@@ -54,6 +55,8 @@ export function ConfigForm({ navigation }) {
         ...user,
         account: response,
       });
+
+      setCache("user", JSON.stringify({ ...user, account: response }));
 
       navigation.goBack();
     }
